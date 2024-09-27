@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Krka.MoveOn", "Krka.MoveOn\Krka.MoveOn.csproj", "{76CD6E1A-82EA-4AAB-A599-416F0D468153}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76CD6E1A-82EA-4AAB-A599-416F0D468153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CD6E1A-82EA-4AAB-A599-416F0D468153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CD6E1A-82EA-4AAB-A599-416F0D468153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CD6E1A-82EA-4AAB-A599-416F0D468153}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25B7F995-E97A-4F8B-AB02-AE11C80A7CCE}
+	EndGlobalSection
+EndGlobal

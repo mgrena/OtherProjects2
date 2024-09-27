@@ -1,0 +1,67 @@
+﻿@using Microsoft.Extensions.Localization
+@using Krka.MoveOn.Resources;
+@using System.Globalization
+@inject IStringLocalizer<Resource> localizer
+
+<div id="sidebar">
+    <DxGridLayout CssClass="page-layout" RowSpacing="1.5rem">
+        <Rows>
+            <DxGridLayoutRow Areas="header menu-button" Height="auto"></DxGridLayoutRow>
+            <DxGridLayoutRow Areas="navigation navigation"></DxGridLayoutRow>
+            <DxGridLayoutRow Areas="footer footer" Height="auto"></DxGridLayoutRow>
+        </Rows>
+        <Columns>
+            <DxGridLayoutColumn></DxGridLayoutColumn>
+            <DxGridLayoutColumn Width="auto"></DxGridLayoutColumn>
+        </Columns>
+        <Items>
+            <DxGridLayoutItem Area="header" CssClass="sidebar-header">
+                <Template>
+                    <img class="logo" src="images/logo.svg" alt="DevExpress logo" />
+                </Template>
+            </DxGridLayoutItem>
+            <DxGridLayoutItem Area="menu-button" CssClass="sidebar-header menu-button-container">
+                <Template>
+                    <div class="menu-button" onclick="(document.getElementById('sidebar').classList.toggle('auto-expanded'), document.getElementById('menu-top').classList.toggle('hidden'))"></div>
+                </Template>
+            </DxGridLayoutItem>
+            <DxGridLayoutItem Area="navigation" CssClass="layout-item">
+                <Template>
+                    <div class="menu-closeonclick-placeholder" onclick="document.getElementById('sidebar').classList.remove('auto-expanded')">
+                    </div>
+                    <DxMenu Orientation="@Orientation.Vertical" CssClass="menu display-mobile">
+                        <Items>
+                            <AuthorizeView>
+                                <Authorized>
+                                    <DxMenuItem NavigateUrl="Account/Manage" Text="@context.User.Identity?.Name" CssClass="menu-item" IconCssClass="icon user-icon"></DxMenuItem>
+                                    <DxMenuItem NavigateUrl="Account/Logout" Text="Log out" CssClass="menu-item" IconCssClass="icon log-out-icon"></DxMenuItem>
+                                </Authorized>
+                                <NotAuthorized>
+                                    <DxMenuItem NavigateUrl="Account/Login" Text="Log in" CssClass="menu-item" IconCssClass="icon log-in-icon"></DxMenuItem>
+                                </NotAuthorized>
+                            </AuthorizeView>
+                        </Items>
+                    </DxMenu>
+                  <DxMenu Orientation="@Orientation.Vertical" CssClass="menu">
+                        <Items>
+                            <DxMenuItem NavigateUrl="/" Text="Home" CssClass="menu-item" IconCssClass="icon home-icon"></DxMenuItem>
+                            <DxMenuItem NavigateUrl="/counter" Text="Counter" CssClass="menu-item" IconCssClass="icon counter-icon"></DxMenuItem>
+                            <DxMenuItem NavigateUrl="/weather" Text="Weather" CssClass="menu-item" IconCssClass="icon weather-icon"></DxMenuItem>
+                            <DxMenuItem NavigateUrl="/Account/Manage" Text="Settings" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
+                        </Items>
+                    </DxMenu>
+                </Template>
+            </DxGridLayoutItem>
+            <DxGridLayoutItem Area="footer" CssClass="footer">
+                <Template>
+                    <NavLink href="https://docs.devexpress.com/Blazor/400725/blazor-components" class="button-link">
+                        <DxButton Text="Docs" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="footer-button" RenderStyle="@ButtonRenderStyle.Light" IconCssClass="icon docs-icon"></DxButton>
+                    </NavLink>
+                    <NavLink href="https://demos.devexpress.com/blazor/" class="button-link">
+                        <DxButton Text="Demos" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="footer-button" RenderStyle="@ButtonRenderStyle.Light" IconCssClass="icon demos-icon"></DxButton>
+                    </NavLink>
+                </Template>
+            </DxGridLayoutItem>
+        </Items>
+    </DxGridLayout>
+</div>

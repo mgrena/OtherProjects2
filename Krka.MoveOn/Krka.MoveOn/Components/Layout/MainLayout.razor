@@ -1,0 +1,73 @@
+﻿@implements IDisposable
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<div class="page">
+    <DxGridLayout CssClass="page-layout">
+        <Rows>
+            <DxGridLayoutRow Areas="sidebar header" Height="auto"></DxGridLayoutRow>
+            <DxGridLayoutRow Areas="sidebar content"></DxGridLayoutRow>
+        </Rows>
+        <Columns>
+            <DxGridLayoutColumn Width="auto" />
+            <DxGridLayoutColumn />
+        </Columns>
+        <Items>
+            <DxGridLayoutItem Area="sidebar" CssClass="layout-sidebar">
+                <Template>
+                    <NavMenu />
+                </Template>
+            </DxGridLayoutItem>
+            <DxGridLayoutItem Area="content" CssClass="content px-4">
+                <Template>
+                    <CultureSelector/>
+                    <div class="w-100 nav-buttons-container">
+                        <NavLink id="menu-top" class="button-link hidden" onclick="(document.getElementById('sidebar').classList.toggle('auto-expanded'), document.getElementById('menu-top').classList.toggle('hidden'))">
+                            <DxButton RenderStyle="@ButtonRenderStyle.Dark" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-menu"></DxButton>
+                        </NavLink>
+                        @if(!string.IsNullOrEmpty(NavigationManager.ToBaseRelativePath(NavigationManager.Uri))) {
+                            <NavLink href="/" class="button-link">
+                                <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="Back to Home" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-back"></DxButton>
+                            </NavLink>
+                        }
+                        <AuthorizeView>
+                            <Authorized>
+                                <NavLink href="Account/Manage" class="button-link menubutton-float-end display-desktop">
+                                    <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="@context.User.Identity?.Name" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-user"></DxButton>
+                                </NavLink>
+                                <form action="Account/Logout" method="post" class="display-desktop">
+                                    <AntiforgeryToken />
+                                    <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                                    <DxButton RenderStyle="@ButtonRenderStyle.Dark" SubmitFormOnClick="true" Text="Log out" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-log-out"></DxButton>
+                                </form>
+                            </Authorized>
+                            <NotAuthorized>
+                                <NavLink href="Account/Login" class="button-link menubutton-float-end display-desktop">
+                                    <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="Log in" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-log-in"></DxButton>
+                                </NavLink>
+                            </NotAuthorized>
+                        </AuthorizeView>
+                    </div>
+                    @Body
+                </Template>
+            </DxGridLayoutItem>
+        </Items>
+    </DxGridLayout>
+</div>
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized() {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e) {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose() {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
