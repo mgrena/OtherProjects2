@@ -4,7 +4,7 @@
 
 @code {
     [Parameter] public bool Value { get; set; }
-    [Parameter] public string InputId { get; set; }
-    [Parameter] public string Name { get; set; }
-    [Parameter] public string LabelText { get; set; }
+    [Parameter] public required string InputId { get; set; }
+    [Parameter] public required string Name { get; set; }
+    [Parameter] public required string LabelText { get; set; }
 }

@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using static System.Reflection.Metadata.BlobBuilder;
+using Krka.MoveOn.Interfaces;
+using Krka.MoveOn.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddLocalization();
 builder.Services.AddControllers();
+builder.Services.AddLocalization();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -52,6 +55,9 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpOptions"));
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
+
+builder.Logging.AddDbLogger();
+builder.Services.AddSingleton<ILogs, LogRepository>();
 
 var app = builder.Build();
 

@@ -71,14 +71,14 @@
         // To enable password failures to trigger account lockout, set lockoutOnFailure: true
         var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
         if(result.Succeeded) {
-            Logger.LogInformation("User logged in.");
+            Logger.LogInformation("User {email} logged in.", Input.Email);
             RedirectManager.RedirectTo(ReturnUrl);
         } else if(result.RequiresTwoFactor) {
             RedirectManager.RedirectTo(
                 "Account/LoginWith2fa",
                 new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
         } else if(result.IsLockedOut) {
-            Logger.LogWarning("User account locked out.");
+            Logger.LogWarning("User account {email} locked out.", Input.Email);
             RedirectManager.RedirectTo("Account/Lockout");
         } else {
             errorMessage = "Error: Invalid login attempt.";
