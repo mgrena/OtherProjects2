@@ -14,7 +14,7 @@ using Krka.MoveOn.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddLocalization();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

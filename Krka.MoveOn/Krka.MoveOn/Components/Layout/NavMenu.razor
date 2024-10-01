@@ -1,7 +1,7 @@
 ﻿@using Microsoft.Extensions.Localization
 @using Krka.MoveOn.Resources;
 @using System.Globalization
-@inject IStringLocalizer<Resource> localizer
+@inject IStringLocalizer<NavMenu> localizer
 
 <div id="sidebar">
     <DxGridLayout CssClass="page-layout" RowSpacing="1.5rem">
@@ -45,7 +45,7 @@
                   <DxMenu Orientation="@Orientation.Vertical" CssClass="menu">
                         <Items>
                             <DxMenuItem NavigateUrl="/" Text="Home" CssClass="menu-item" IconCssClass="icon home-icon"></DxMenuItem>
-                            <DxMenuItem NavigateUrl="/counter" Text="Counter" CssClass="menu-item" IconCssClass="icon counter-icon"></DxMenuItem>
+                            <DxMenuItem NavigateUrl="/counter" Text="@localizer["CounterText"]" CssClass="menu-item" IconCssClass="icon counter-icon"></DxMenuItem>
                             <DxMenuItem NavigateUrl="/weather" Text="Weather" CssClass="menu-item" IconCssClass="icon weather-icon"></DxMenuItem>
                             <DxMenuItem NavigateUrl="/Account/Manage" Text="Settings" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
                         </Items>
