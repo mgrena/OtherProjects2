@@ -1,7 +1,10 @@
-﻿@using Microsoft.Extensions.Localization
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
 @using Krka.MoveOn.Resources;
 @using System.Globalization
 @inject IStringLocalizer<NavMenu> localizer
+
+@attribute [Authorize]
 
 <div id="sidebar">
     <DxGridLayout CssClass="page-layout" RowSpacing="1.5rem">
@@ -48,6 +51,12 @@
                             <DxMenuItem NavigateUrl="/counter" Text="@localizer["CounterText"]" CssClass="menu-item" IconCssClass="icon counter-icon"></DxMenuItem>
                             <DxMenuItem NavigateUrl="/weather" Text="Weather" CssClass="menu-item" IconCssClass="icon weather-icon"></DxMenuItem>
                             <DxMenuItem NavigateUrl="/Account/Manage" Text="Settings" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
+                            <AuthorizeView Roles="Admin, Office">
+                                <DxMenuItem NavigateUrl="/Account/Manage" Text="Lekári" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
+                            </AuthorizeView>
+                            <AuthorizeView Roles="Admin">
+                                <DxMenuItem NavigateUrl="/Account/Manage" Text="Používatelia" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
+                            </AuthorizeView>
                         </Items>
                     </DxMenu>
                 </Template>

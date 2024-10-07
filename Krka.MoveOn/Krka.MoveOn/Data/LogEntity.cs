@@ -28,8 +28,8 @@ public class LogEntity
     /// Id of caller user
     /// </summary>
     [Required]
-    [Column("id_user")]
-    public int UserId { get; set; }
+    [Column("id_user", TypeName = "nvarchar"), StringLength(450)]
+    public string? UserId { get; set; }
 
     /// <summary>
     /// Items source - class, ...

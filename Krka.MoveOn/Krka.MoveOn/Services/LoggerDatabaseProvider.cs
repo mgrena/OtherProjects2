@@ -2,28 +2,26 @@
 using System.Reflection;
 using Krka.MoveOn.Interfaces;
 using Krka.MoveOn.Data;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.IdentityModel.Claims;
+using static System.Formats.Asn1.AsnWriter;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace Krka.MoveOn.Services;
 
 /// <summary>
 /// Custom logger provider to store log entries in database
 /// </summary>
-public class LoggerDatabaseProvider : ILoggerProvider
+public class LoggerDatabaseProvider(ILogs logs, IServiceProvider serviceProvider) : ILoggerProvider
 {
-    private readonly ILogs myLogs;
-
-    /// <summary>
-    /// Custom logger provider to store log entries in database
-    /// </summary>
-    public LoggerDatabaseProvider(ILogs logs)
-    {
-        this.myLogs = logs;
-    }
+    private readonly ILogs myLogs = logs;
+    private readonly IServiceProvider myServiceProvider = serviceProvider;
 
     /// <inheritdoc/>
     public ILogger CreateLogger(string categoryName)
     {
-        return new DbLogger(categoryName, myLogs);
+        return new DbLogger(categoryName, myLogs, serviceProvider);
     }
 
     /// <inheritdoc/>
@@ -35,21 +33,13 @@ public class LoggerDatabaseProvider : ILoggerProvider
     /// <summary>
     /// Custom logger to store log entries in database
     /// </summary>
-    public class DbLogger : ILogger
+    /// <param name="category">name of log category (e.g. class name)</param>
+    /// <param name="logs">interface to repository</param>
+    public class DbLogger(string category, ILogs logs, IServiceProvider serviceProvider) : ILogger
     {
-        private readonly string myCategoryName;
-        private readonly ILogs myLogs;
-
-        /// <summary>
-        /// Custom logger to store log entries in database
-        /// </summary>
-        /// <param name="category">name of log category (e.g. class name)</param>
-        /// <param name="logs">interface to repository</param>
-        public DbLogger(string category, ILogs logs)
-        {
-            this.myCategoryName = category;
-            this.myLogs = logs;
-        }
+        private readonly string myCategoryName = category;
+        private readonly ILogs myLogs = logs;
+        private readonly IServiceProvider myServiceProvider = serviceProvider;
 
         /// <inheritdoc/>
         public bool IsEnabled(LogLevel logLevel)
@@ -58,30 +48,24 @@ public class LoggerDatabaseProvider : ILoggerProvider
         }
 
         /// <inheritdoc/>
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        public async void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
             if (!IsEnabled(logLevel))
             {
                 // Don't log the entry if it's not enabled.
                 return;
             }
-            //var threadId = Thread.CurrentThread.ManagedThreadId; // Get the current thread ID to use in the log file. 
 
-            int anUserId = 0;
-            if (state != null)
+            using var scope = myServiceProvider.CreateScope();
+
+            var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+            var httpContextAccessor = scope.ServiceProvider.GetService<IHttpContextAccessor>();
+            string anUserId = "0";
+            if (userManager != null && httpContextAccessor != null && httpContextAccessor.HttpContext != null)
             {
-                FieldInfo[] anInfos = state.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-                FieldInfo? aProps = anInfos.FirstOrDefault(o => o.Name == "_values");
-                if (aProps != null)
-                {
-                    object? aPropValue = aProps.GetValue(state);
-                    if (aPropValue != null)
-                    {
-                        object[] aValues = (object[])aPropValue;
-                        if (aValues != null && aValues.Length > 0 && aValues.Last() is int @int)
-                            anUserId = @int;
-                    }
-                }
+                var user = userManager.GetUserAsync(httpContextAccessor.HttpContext.User).Result;
+                if (user != null)
+                    anUserId = user.Id;
             }
 
             var aLog = new LogEntity()
@@ -92,7 +76,7 @@ public class LoggerDatabaseProvider : ILoggerProvider
                 CreatedAt = DateTime.Now,
                 Message = formatter(state, exception)
             };
-            myLogs.Log(aLog);
+            await myLogs.Log(aLog);
 
             // handle exceptions
             if (exception != null)
@@ -107,7 +91,7 @@ public class LoggerDatabaseProvider : ILoggerProvider
                         CreatedAt = DateTime.Now,
                         Message = exception.Message
                     };
-                    myLogs.Log(aLog);
+                    _ = myLogs.Log(aLog);
                     aLog = new LogEntity()
                     {
                         LogLevel = logLevel.ToString(),
@@ -116,10 +100,10 @@ public class LoggerDatabaseProvider : ILoggerProvider
                         CreatedAt = DateTime.Now,
                         Message = exception.StackTrace
                     };
-                    myLogs.Log(aLog);
+                    _ = myLogs.Log(aLog);
                     exception = exception.InnerException;
                 }
-            }
+            } // if (exception != null)
         }
 
         /// <inheritdoc/>
