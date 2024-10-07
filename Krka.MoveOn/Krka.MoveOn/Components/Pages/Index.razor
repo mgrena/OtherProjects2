@@ -1,8 +1,11 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
 @using Krka.MoveOn.Resources;
 @using System.Globalization
-@inject IStringLocalizer<Resource> localizer
+@inject IStringLocalizer<Index> localizer
+
+@attribute [Authorize(Roles = "Admin")]
 
 <PageTitle>Welcome</PageTitle>
 

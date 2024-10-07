@@ -487,8 +487,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("message");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("id_user");
 
                     b.HasKey("Id");
