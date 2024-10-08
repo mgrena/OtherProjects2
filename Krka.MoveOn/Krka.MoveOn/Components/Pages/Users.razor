@@ -18,10 +18,10 @@ else
 {
     <DxGrid Data="@users" CssClass="mw-1100">
         <Columns>
-            <DxGridDataColumn Caption="Date" FieldName="Date" />
-            <DxGridDataColumn Caption="Temperature (C)" FieldName="TemperatureC" />
-            <DxGridDataColumn Caption="Temperature (F)" FieldName="TemperatureF" />
-            <DxGridDataColumn Caption="Summary" FieldName="Summary" />
+            <DxGridDataColumn Caption="Používateľ" FieldName="FullName" />
+            <DxGridDataColumn Caption="Úroveň" FieldName="Role" />
+            <DxGridDataColumn Caption="Last Name" FieldName="LastName" />
+            <DxGridDataColumn Caption="UserName" FieldName="UserName" />
         </Columns>
     </DxGrid>
 }
@@ -32,5 +32,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         users = await Task.Run(() => UserManager.Users.ToArray());
+        var tasks = users.Select(async user =>
+        {
+            var roles = await UserManager.GetRolesAsync(user);
+            user.Role = roles.First();
+        });
+        await Task.WhenAll(tasks);
     }
 }

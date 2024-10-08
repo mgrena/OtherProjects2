@@ -13,7 +13,7 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Resend email confirmation</PageTitle>
+<PageTitle>Znova odoslať potvrdenie e-mailom</PageTitle>
 
 <div class="main-content">
     <div class="block-content">
@@ -26,7 +26,7 @@
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
             <DxFormLayout CaptionPosition=@CaptionPosition.Vertical>
-                <DxFormLayoutItem Caption="Email" ColSpanMd="12" BeginRow="true">
+                <DxFormLayoutItem Caption="E-mail" ColSpanMd="12" BeginRow="true">
                     <DxTextBox ShowValidationIcon="true" @bind-Text="Input.Email" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
@@ -35,7 +35,7 @@
             </DxFormLayout>
         </EditForm>
         <div class="links-container">
-            <span>Vrátiť sa na <a href="Account/Login">Prihlásenie</a>?</span>
+            <span>Späť na <a href="Account/Login">stránku prihlásenia</a>?</span>
         </div>
     </div>
 </div>
@@ -49,7 +49,7 @@
     private async Task OnValidSubmitAsync() {
         var user = await UserManager.FindByEmailAsync(Input.Email!);
         if(user is null) {
-            message = "Verification email sent. Please check your email.";
+            message = "Overovací e-mail bol odoslaný. Skontrolujte svoj mailbox.";
             return;
         }
 
@@ -61,7 +61,7 @@
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
         await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
-        message = "Verification email sent. Please check your email.";
+        message = "Overovací e-mail bol odoslaný. Skontrolujte svoj mailbox.";
     }
 
     private sealed class InputModel {

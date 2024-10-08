@@ -21,17 +21,17 @@ public class EmailSender(IOptions<SmtpOptions> optionsAccessor, ILogger<EmailSen
     public SmtpOptions Options { get; } = optionsAccessor.Value;
 
     public Task SendConfirmationLinkAsync(ApplicationUser user, string email,
-        string confirmationLink) => SendEmailAsync(email, "Confirm your email",
-        "Please confirm your account by " +
-        $"<a href='{confirmationLink}'>clicking here</a>.");
+        string confirmationLink) => SendEmailAsync(email, "Potvrďte svoj e-mail",
+        "Potvrďte svoj účet " +
+        $"<a href='{confirmationLink}'>kliknutím sem</a>.");
 
     public Task SendPasswordResetLinkAsync(ApplicationUser user, string email,
-        string resetLink) => SendEmailAsync(email, "Reset your password",
-        $"Please reset your password by <a href='{resetLink}'>clicking here</a>.");
+        string resetLink) => SendEmailAsync(email, "Obnovte svoje heslo",
+        $"Obnovte si heslo <a href='{resetLink}'>kliknutím sem</a>.");
 
     public Task SendPasswordResetCodeAsync(ApplicationUser user, string email,
-        string resetCode) => SendEmailAsync(email, "Reset your password",
-        $"Please reset your password using the following code: {resetCode}");
+        string resetCode) => SendEmailAsync(email, "Obnovte svoje heslo",
+        $"Obnovte svoje heslo pomocou nasledujúceho kódu: {resetCode}");
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)
     {
