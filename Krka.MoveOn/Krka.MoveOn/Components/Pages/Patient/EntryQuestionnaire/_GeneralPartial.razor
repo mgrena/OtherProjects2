@@ -1,4 +1,4 @@
-﻿@page "/EntryQuestionnaire/Entry/"
+﻿@page "/EntryQuestionnaire/_GeneralPartial/"
 
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services
@@ -17,7 +17,8 @@
                     <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                               RenderStyleMode="@ButtonRenderStyleMode.Outline"
                               Text="Detekcia príznakov"
-                              CssClass="w-100 rectangular-button" />
+                              CssClass="w-100 rectangular-button"
+                               />
                 </div>
                 <div class="me-2 mb-2">
                     <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
@@ -52,7 +53,16 @@
     </DxFormLayoutTabPages> *@
 </DxFormLayout>
 
+
+<div>
+    <Weather />
+</div>
+
+
+
 @code {
+
+
 
     // private QuestionnaireGeneral01 q1 { get; set; } = new QuestionnaireGeneral01
     // {
