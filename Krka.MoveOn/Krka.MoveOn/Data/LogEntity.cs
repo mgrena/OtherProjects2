@@ -22,21 +22,21 @@ public class LogEntity
     /// </summary>
     [Required]
     [Column("log_level", TypeName = "varchar"), StringLength(100)]
-    public string? LogLevel { get; set; }
+    public required string LogLevel { get; set; }
 
     /// <summary>
     /// Id of caller user
     /// </summary>
     [Required]
     [Column("id_user", TypeName = "nvarchar"), StringLength(450)]
-    public string? UserId { get; set; }
+    public required string UserId { get; set; }
 
     /// <summary>
     /// Items source - class, ...
     /// </summary>
     [Required]
     [Column("category", TypeName = "varchar"), StringLength(100)]
-    public string? Category { get; set; }
+    public required string Category { get; set; }
 
     /// <summary>
     /// Time of item creation
@@ -50,5 +50,5 @@ public class LogEntity
     /// </summary>
     [Required]
     [Column("message", TypeName = "nvarchar")]
-    public string? Message { get; set; }
+    public required string Message { get; set; }
 }

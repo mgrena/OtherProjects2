@@ -8,22 +8,22 @@
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<Disable2fa> Logger
 
-<PageTitle>Disable two-factor authentication (2FA)</PageTitle>
+<PageTitle>Vypnutie dvojfaktorového overenia (2FA)</PageTitle>
 
 <StatusMessage />
 
 <div class="title title-secondary">
-    <div class="title-content-text-secondary">Disable two-factor authentication (2FA)</div>
+    <div class="title-content-text-secondary">Vypnutie dvojfaktorového overenia (2FA)</div>
 </div>
-<span>This action only disables 2FA.</span>
+<span>Táto akcia iba vypne 2FA.</span>
 <span>
-    Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
-    used in an authenticator app you should <a href="Account/Manage/ResetAuthenticator">reset your authenticator keys.</a>
+    Vypnutím 2FA sa nezmenia kľúče používané v aplikáciách na overovanie totožnosti. Ak chcete zmeniť kľúč
+    používaný v autentifikačnej aplikácii, mali by ste <a href="Account/Manage/ResetAuthenticator">resetovať svoje overovacie kľúče.</a>
 </span>
 <div class="block-content">
     <form @formname="disable-2fa" @onsubmit="OnSubmitAsync" method="post">
         <AntiforgeryToken />
-        <DxButton CssClass="w-100" Text="Disable 2FA" RenderStyle="ButtonRenderStyle.Danger" SubmitFormOnClick="true"></DxButton>
+        <DxButton CssClass="w-100" Text="Vypnúť 2FA" RenderStyle="ButtonRenderStyle.Danger" SubmitFormOnClick="true"></DxButton>
     </form>
 </div>
 
@@ -39,21 +39,21 @@
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
 
         if(HttpMethods.IsGet(HttpContext.Request.Method) && !await UserManager.GetTwoFactorEnabledAsync(user)) {
-            throw new InvalidOperationException("Cannot disable 2FA for user as it's not currently enabled.");
+            throw new InvalidOperationException("Nie je možné vypnúť 2FA pre používateľa, pretože momentálne nie je povolená.");
         }
     }
 
     private async Task OnSubmitAsync() {
         var disable2faResult = await UserManager.SetTwoFactorEnabledAsync(user, false);
         if(!disable2faResult.Succeeded) {
-            throw new InvalidOperationException("Unexpected error occurred disabling 2FA.");
+            throw new InvalidOperationException("Pri vypínaní 2FA sa vyskytla neočakávaná chyba.");
         }
 
         var userId = await UserManager.GetUserIdAsync(user);
         Logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", userId);
         RedirectManager.RedirectToWithStatus(
             "Account/Manage/TwoFactorAuthentication",
-            "2fa has been disabled. You can reenable 2fa when you setup an authenticator app",
+            "2fa bola vypnutá. 2fa môžete znova povoliť pri nastavovaní autentifikačnej aplikácie",
             HttpContext);
     }
 }

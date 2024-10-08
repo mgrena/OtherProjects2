@@ -9,30 +9,30 @@
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
-<PageTitle>Log in</PageTitle>
+<PageTitle>Prihlásenie</PageTitle>
 
 <div class="main-content">
     <div class="block-content">
         <div class="title">
-            <div class="title-header-text">Log in</div>
-            <div class="title-content-text">Use a local account to log in.</div>
+            <div class="title-header-text">Prihlásenie</div>
+            <div class="title-content-text">Na prihlásenie použite lokálny účet.</div>
         </div>
         <StatusMessage Message="@errorMessage" />
         <EditForm Model="@Input" method="post" OnValidSubmit="LoginUser" FormName="login" Context="Login">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
             <DxFormLayout CaptionPosition=@CaptionPosition.Vertical>
-                <DxFormLayoutItem Caption="Email" ColSpanMd="12" BeginRow="true">
+                <DxFormLayoutItem Caption="E-mail" ColSpanMd="12" BeginRow="true">
                     <InteractiveServerTextBox Name="Input.Email" Value="@Input.Email" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Password" ColSpanMd="12" BeginRow="true">
+                <DxFormLayoutItem Caption="Heslo" ColSpanMd="12" BeginRow="true">
                     <InteractiveServerTextBox Name="Input.Password" Value="@Input.Password" Password="true" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                    <InteractiveServerCheckbox Name="Input.RememberMe" InputId="rememberme" Value="@Input.RememberMe" LabelText="Remember me?"></InteractiveServerCheckbox>
+                    <InteractiveServerCheckbox Name="Input.RememberMe" InputId="rememberme" Value="@Input.RememberMe" LabelText="Zapamätať?"></InteractiveServerCheckbox>
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Login"></DxButton>
+                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Prihlásiť"></DxButton>
                 </DxFormLayoutItem>
             </DxFormLayout>
         </EditForm>
@@ -42,13 +42,13 @@
             <div class="or-line"></div>
         </div>
         <ExternalLoginPicker /> *@
-        <div class="links-container">
+@*         <div class="links-container">
             <span>Do not have a Account?</span><a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Create an account</a>
         </div>
-        <div class="links-container">
-            <a href="Account/ResendEmailConfirmation">Resend email confirmation</a>
+ *@        <div class="links-container">
+            <a href="Account/ResendEmailConfirmation">Znova odoslať potvrdenie e-mailom</a>
             <div class="dot"></div>
-            <a href="Account/ForgotPassword">Forgot your password?</a>
+            <a href="Account/ForgotPassword">Zabudli ste heslo?</a>
         </div>
     </div>
 </div>
@@ -81,7 +81,7 @@
             Logger.LogWarning("User account {email} locked out.", Input.Email);
             RedirectManager.RedirectTo("Account/Lockout");
         } else {
-            errorMessage = "Error: Invalid login attempt.";
+            errorMessage = "Chyba: Neplatný pokus o prihlásenie.";
         }
     }
 
@@ -94,7 +94,7 @@
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Zapamätať?")]
         public bool RememberMe { get; set; }
     }
 }

@@ -38,4 +38,7 @@
       <LastGenOutput>Components.Layout.NavMenu.en-US.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Pages\" />
+  </ItemGroup>
 </Project>
