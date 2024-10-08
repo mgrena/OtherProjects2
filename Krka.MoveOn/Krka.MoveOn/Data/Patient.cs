@@ -28,5 +28,10 @@ namespace Krka.MoveOn.Data
         [Column("created_at")]
         public required DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public Patient Clone()
+        {
+            return (Patient)MemberwiseClone();
+        }
+
     }
 }

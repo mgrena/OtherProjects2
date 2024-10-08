@@ -20,16 +20,16 @@
         <StatusMessage Message="@statusMessage" />
         @if(emailConfirmationLink is not null) {
             <div>
-                This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-                Normally this would be emailed.
+                Táto aplikácia momentálne nemá zaregistrovaného skutočného odosielateľa e-mailu. Informácie o konfigurácii skutočného odosielateľa e-mailu nájdete v <a href="https://aka.ms/aspaccountconf">týchto dokumentoch</a>.
+                Normálne by to bolo odoslané e-mailom.
             </div>
             <div>
                 <NavLink href="@emailConfirmationLink" class="button-link confirm-button">
-                    <DxButton CssClass="w-100" Text="Confirm your account"></DxButton>
+                    <DxButton CssClass="w-100" Text="Potvrďte svoj účet"></DxButton>
                 </NavLink>
             </div>
         } else {
-            <p>Please check your email to confirm your account.</p>
+            <p>Skontrolujte svoj e-mail a potvrďte svoj účet.</p>
         }
     </div>
 </div>

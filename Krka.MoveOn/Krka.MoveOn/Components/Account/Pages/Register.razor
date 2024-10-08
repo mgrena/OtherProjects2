@@ -20,8 +20,8 @@
 <div class="main-content">
     <div class="block-content">
         <div class="title">
-            <div class="title-header-text">Register</div>
-            <div class="title-content-text">Create a new Account.</div>
+            <div class="title-header-text">Registrovať sa</div>
+            <div class="title-content-text">Vytvoriť nový účet.</div>
         </div>
         <StatusMessage Message="@Message" />
         <EditForm Model="@Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register" Context="register">
@@ -31,14 +31,14 @@
                 <DxFormLayoutItem Caption="Email" ColSpanMd="12" BeginRow="true">
                     <InteractiveServerTextBox Name="Input.Email" Value="@Input.Email" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Password" ColSpanMd="12" BeginRow="true">
+                <DxFormLayoutItem Caption="Heslo" ColSpanMd="12" BeginRow="true">
                     <InteractiveServerTextBox Name="Input.Password" Value="@Input.Password" Password="true" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Confirm Password" ColSpanMd="12" BeginRow="true">
+                <DxFormLayoutItem Caption="Potvrdenie hesla" ColSpanMd="12" BeginRow="true">
                     <InteractiveServerTextBox Name="Input.ConfirmPassword" Value="@Input.ConfirmPassword" Password="true" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Register"></DxButton>
+                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Registrovať sa"></DxButton>
                 </DxFormLayoutItem>
             </DxFormLayout>
         </EditForm>
@@ -49,7 +49,7 @@
         </div>
         <ExternalLoginPicker /> *@
         <div class="links-container">
-            <span>Already have an account?</span><a href="@(NavigationManager.GetUriWithQueryParameters("Account/Login", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Login</a>
+            <span>Už máte účet?</span><a href="@(NavigationManager.GetUriWithQueryParameters("Account/Login", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Prihlásiť sa</a>
         </div>
     </div>
 </div>

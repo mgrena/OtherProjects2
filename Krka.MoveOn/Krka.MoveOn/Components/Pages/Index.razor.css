@@ -1,4 +1,11 @@
-﻿::deep .welcome-gridlayout {
+﻿:: .grid-toolbar-new {
+    height: 4px;
+    width: 4px;
+    opacity: 0.7;
+}
+
+
+::deep .welcome-gridlayout {
     margin: auto;
     width: auto;
     height: auto;
