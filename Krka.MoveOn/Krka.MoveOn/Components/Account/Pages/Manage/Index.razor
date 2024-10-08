@@ -7,7 +7,7 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
-<PageTitle>Profile</PageTitle>
+<PageTitle>Profil</PageTitle>
 
 <div class="block-content">
     <StatusMessage Message="@message" />
@@ -15,14 +15,26 @@
         <DataAnnotationsValidator />
         <ValidationSummary class="text-danger" role="alert" />
         <DxFormLayout CaptionPosition=@CaptionPosition.Vertical>
-            <DxFormLayoutItem Caption="Username" ColSpanMd="12" BeginRow="true">
+            <DxFormLayoutItem Caption="Používateľské meno" ColSpanMd="12" BeginRow="true">
                 <InteractiveServerTextBox Name="username" Value="@username" Enabled="false" />
             </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Phone number" ColSpanMd="12" BeginRow="true">
+            <DxFormLayoutItem Caption="Telefónne číslo" ColSpanMd="12" BeginRow="true">
                 <InteractiveServerMaskedInput Name="Input.PhoneNumber" Value="@Input.PhoneNumber" Mask="(999)000-0000"></InteractiveServerMaskedInput>
             </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Titul pred menom" ColSpanMd="12" BeginRow="true">
+                <InteractiveServerMaskedInput Name="Input.TitleBefore" Value="@Input.TitleBefore"></InteractiveServerMaskedInput>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Krstné meno" ColSpanMd="12" BeginRow="true">
+                <InteractiveServerMaskedInput Name="Input.FirstName" Value="@Input.FirstName"></InteractiveServerMaskedInput>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Priezvisko" ColSpanMd="12" BeginRow="true">
+                <InteractiveServerMaskedInput Name="Input.LastName" Value="@Input.LastName"></InteractiveServerMaskedInput>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Titul za menom" ColSpanMd="12" BeginRow="true">
+                <InteractiveServerMaskedInput Name="Input.TitleAfter" Value="@Input.TitleAfter"></InteractiveServerMaskedInput>
+            </DxFormLayoutItem>
             <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Save"></DxButton>
+                <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Uložiť"></DxButton>
             </DxFormLayoutItem>
         </DxFormLayout>
     </EditForm>
@@ -32,6 +44,10 @@
     private ApplicationUser user = default!;
     private string? username;
     private string? phoneNumber;
+    private string? firstName;
+    private string? lastName;
+    private string? titleBefore;
+    private string? titleAfter;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -44,24 +60,52 @@
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
         username = await UserManager.GetUserNameAsync(user);
         phoneNumber = await UserManager.GetPhoneNumberAsync(user);
+        firstName = user.FirstName;
+        lastName = user.LastName;
+        titleBefore = user.TitleBefore;
+        titleAfter = user.TitleAfter;
 
         Input.PhoneNumber ??= phoneNumber;
+        Input.FirstName ??= firstName;
+        Input.LastName ??= lastName;
+        Input.TitleBefore ??= titleBefore;
+        Input.TitleAfter ??= titleAfter;
     }
 
     private async Task OnValidSubmitAsync() {
         if(Input.PhoneNumber != phoneNumber) {
             var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
             if(!setPhoneResult.Succeeded) {
-                message = "Error: Failed to set phone number.";
+                message = "Chyba: Zlyhala zmena telefónneho čísla.";
+            }
+        }
+        if (Input.FirstName != firstName || Input.LastName != lastName || Input.TitleBefore != titleBefore || Input.TitleAfter != titleAfter)
+        {
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.TitleBefore = Input.TitleBefore;
+            user.TitleAfter = Input.TitleAfter;
+            var setUserResult = await UserManager.UpdateAsync(user);
+            if (!setUserResult.Succeeded)
+            {
+                message = "Chyba: Zlyhalo uloženie nastavení účtu.";
             }
         }
 
-        message = "Your profile has been updated";
+        message = "Váš profil bol aktualizovaný";
     }
 
     private sealed class InputModel {
         [Phone]
-        [Display(Name = "Phone number")]
+        [Display(Name = "Telefónne číslo")]
         public string? PhoneNumber { get; set; }
+        [Display(Name = "Krstné meno")]
+        public string? FirstName { get; set; }
+        [Display(Name = "Priezvisko")]
+        public string? LastName { get; set; }
+        [Display(Name = "Titul pred menom")]
+        public string? TitleBefore { get; set; }
+        [Display(Name = "Titul za menom")]
+        public string? TitleAfter { get; set; }
     }
 }

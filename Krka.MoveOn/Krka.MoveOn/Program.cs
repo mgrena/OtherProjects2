@@ -53,6 +53,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
+builder.Services.AddScoped<UserManager<ApplicationUser>>();
 
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpOptions"));
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();

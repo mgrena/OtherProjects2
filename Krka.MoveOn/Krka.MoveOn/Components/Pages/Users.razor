@@ -1,0 +1,36 @@
+﻿@page "/users"
+
+@using Krka.MoveOn.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>Používatelia</PageTitle>
+<h3>Používatelia</h3>
+
+@if (users == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <DxGrid Data="@users" CssClass="mw-1100">
+        <Columns>
+            <DxGridDataColumn Caption="Date" FieldName="Date" />
+            <DxGridDataColumn Caption="Temperature (C)" FieldName="TemperatureC" />
+            <DxGridDataColumn Caption="Temperature (F)" FieldName="TemperatureF" />
+            <DxGridDataColumn Caption="Summary" FieldName="Summary" />
+        </Columns>
+    </DxGrid>
+}
+
+@code {
+    private ApplicationUser[]? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Task.Run(() => UserManager.Users.ToArray());
+    }
+}
