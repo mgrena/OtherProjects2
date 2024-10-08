@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "Components/EntryQuestionnaire/GeneralQ.razor.min.css",
+    "inputFiles": [
+      "Components/EntryQuestionnaire/GeneralQ.razor.css"
+    ]
+  },
+  {
+    "outputFileName": "Components/Pages/Patient/EntryQuestionnaire/GeneralQ.razor.min.css",
+    "inputFiles": [
+      "Components/Pages/Patient/EntryQuestionnaire/GeneralQ.razor.css"
+    ]
+  }
+]

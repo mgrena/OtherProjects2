@@ -1,0 +1,95 @@
+﻿@page "/EntryQuestionnaire/Entry/"
+
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Q01Service Q01Service
+
+<PageTitle>q1</PageTitle>
+
+<DxFormLayout CssClass="w-100">
+    <DxFormLayoutItem>
+        <div class="buttons-group mb-2">
+            <div class="d-flex flex-row flex-wrap">
+                <div class="me-2 mb-2">
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Detekcia príznakov"
+                              CssClass="w-100 rectangular-button" />
+                </div>
+                <div class="me-2 mb-2">
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Detekcia príznakov"
+                              CssClass="w-100 rectangular-button" />
+                </div>
+            </div>
+        </div>
+    </DxFormLayoutItem>
+@*     <DxFormLayoutTabPages @bind-ActiveTabIndex="@ActiveTabIndex">
+        <DxFormLayoutTabPage Caption="Detekcia príznakov">       
+            <DxFormLayoutItem Caption="Hire Date:" >
+                <DxDateEdit @bind-Date="@q1.Gen_1" ShowValidationIcon="true" />
+                <
+            </DxFormLayoutItem>
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="Začiatočná liečba">
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="Liečba pridružených problémov">
+            <!-- Obsah pre Liečba pridružených problémov -->
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="Modifikovaná škála podľa Hoehenovej a Yahra">
+            <!-- Obsah pre Modifikovaná škála podľa Hoehenovej a Yahra -->
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="MOCA">
+            <!-- Obsah pre MOCA -->
+        </DxFormLayoutTabPage>
+        <DxFormLayoutTabPage Caption="Údaje o predčasnom vylúčení">
+            <!-- Obsah pre Údaje o predčasnom vylúčení -->
+        </DxFormLayoutTabPage>
+    </DxFormLayoutTabPages> *@
+</DxFormLayout>
+
+@code {
+
+    // private QuestionnaireGeneral01 q1 { get; set; } = new QuestionnaireGeneral01
+    // {
+    //     Id = 0, 
+    //     PatientId = 0,
+    //     Gen_1 = DateTime.Now,
+    //     Gen_2_DG = 0,
+    //     Gen_3_DG = 0,
+    //     Gen_4_DG = 0,
+    //     Gen_5_D = 0,
+    //     Gen_6_DG = 0,
+    //     Gen_7_DG = 0,
+    //     Gen_7_1_DM = 0,
+    //     Gen_7_2 = 0,
+    //     Gen_7_3_DU = 0,
+    //     Gen_7_4 = 0,
+    //     Gen_8 = 0,
+    //     Gen_9_DS = 0,
+    //     Gen_10 = 0,
+    //     Gen_11 = 0,
+    //     Gen_12 = 0,
+    //     Gen_13 = 0,
+    //     ModifiedAt = DateTime.Now,
+    //     CreatedAt = DateTime.Now
+    // };
+
+    // int ActiveTabIndex { get; set; } = 1;
+
+
+    // Data.Questionnaires.QuestionnaireGeneral01 g01 = new() ;
+    
+
+   
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     q01 = await Q01Service.GetQuestionnairesAsync();
+    // }
+
+}
