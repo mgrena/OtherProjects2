@@ -13,6 +13,10 @@ namespace Krka.MoveOn.Data {
         public string? TitleBefore { get; set; }
         [Column("title_after", TypeName = "nvarchar"), StringLength(50)]
         public string? TitleAfter { get; set; }
+        [NotMapped]
+        public string? FullName { get { return string.Join(" ", new[] { TitleBefore, FirstName, LastName, TitleAfter }.Where(i => !string.IsNullOrWhiteSpace(i))) ; } }
+        [NotMapped]
+        public string? Role { get; set; }
     }
 
 }
