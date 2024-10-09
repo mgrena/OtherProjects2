@@ -1,4 +1,4 @@
-﻿@page "/EntryQuestionnaire/Entry/"
+﻿@page "/entrybtn"
 
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services
@@ -7,7 +7,7 @@
 
 @inject Q01Service Q01Service
 
-<PageTitle>q1</PageTitle>
+<PageTitle>EntryBtn</PageTitle>
 
 <DxFormLayout CssClass="w-100">
     <DxFormLayoutItem>
@@ -18,14 +18,21 @@
                               RenderStyleMode="@ButtonRenderStyleMode.Outline"
                               Text="Detekcia príznakov"
                               CssClass="w-100 rectangular-button"
-                              NavigateUrl="/EntryQuestionnaire/_GeneralPartial"
-                              />
+                              NavigateUrl="/entryQ/gen" />
                 </div>
                 <div class="me-2 mb-2">
                     <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                               RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Detekcia príznakov"
-                              CssClass="w-100 rectangular-button" />
+                              Text="Začiatočná liečba"
+                              CssClass="w-100 rectangular-button"
+                              NavigateUrl="/entryQ/init" />
+                </div>
+                <div class="me-2 mb-2">
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Liečba pridružených problémov"
+                              CssClass="w-100 rectangular-button"
+                              NavigateUrl="/entryQ/treat" />
                 </div>
             </div>
         </div>
