@@ -10,11 +10,13 @@
 
 <PageTitle>MoveOn - Detekcia pacientov s príznakmi PC</PageTitle>
 
-<div>
-    <_EntryBtn />
-</div>
+<div class="cw-880" style="width: 90%; margin: 0 auto;">
 
-<div class="cw-880">
+    <div>
+        <_EntryBtn />
+    </div>
+
+
     <EditForm Model="@gen"
               OnValidSubmit="@HandleValidSubmit"
               OnInvalidSubmit="@HandleInvalidSubmit"
@@ -27,25 +29,175 @@
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Pohlavie">
+                    <InputRadioGroup @bind-Value="@gen.Gen_2_DG" class="d-flex flex-wrap">
+                        @foreach (var item in gen_2_DGAnswer)
+                        {
+                    
+                            <InputRadio class="m-2" Value="@item.Id" /> @item.Name
+                          
+                        }
+                    </InputRadioGroup>
+                    <ValidationMessage For="@(() => gen.Gen_2_DG)" />
+                </DxFormLayoutItem>
+
+
+@*                 <DxFormLayoutItem Caption="Pohlavie">
                     <DxComboBox Data="@gen_2_DGAnswer"
                                 TextFieldName="Name"
                                 ValueFieldName="Id"
                                 @bind-Value="@gen.Gen_2_DG"
                                 ShowValidationIcon="true" 
                                 />                   
-                </DxFormLayoutItem>
+                </DxFormLayoutItem> *@
 
                 <DxFormLayoutItem Caption="Rodinný stav">
                     <DxComboBox Data="@gen_3_DGAnswer"
                                 TextFieldName="Name"
-                                ValueFieldName="Id"
-                                @bind-Value="@gen.Gen_2_DG"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_3_DG"
                                 ShowValidationIcon="true" />
                 </DxFormLayoutItem>
 
+                <DxFormLayoutItem Caption="Rodinný stav">
+                    <DxComboBox Data="@gen_4_DGAnswer"
+                                TextFieldName="Name"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_4_DG"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Fajčenie">
+                    <DxComboBox Data="@gen_5_DGAnswer"
+                                TextFieldName="Name"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_5_D"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Pozitívna rodinná anamnéza Parkinsonovej choroby">
+                    <DxComboBox Data="@gen_6_DGAnswer"
+                                TextFieldName="Name"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_6_DG"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Anamnéza užívania antipsychotík ">
+                    <DxComboBox Data="@gen_7_DGAnswer"
+                                TextFieldName="Name"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_7_DG"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutGroup Caption="Ak áno, ktoré lieky (názov, denná dávka)?"> 
+                    <DxFormLayoutItem Caption="Nazov lieku ">
+                        <DxComboBox Data="@gen_7_1_DMAnswer"
+                                    TextFieldName="Name"
+                                    ValueFieldName="Type_q"
+                                    @bind-Value="@gen.Gen_7_1_DM"
+                                    ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+
+                    <DxFormLayoutItem Caption="Dávka">
+                        <DxSpinEdit @bind-Value="@gen.Gen_7_2" ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+
+                    <DxFormLayoutItem Caption="Jednotka">
+                        <DxComboBox Data="@gen_7_3_DU_Answer"
+                                    TextFieldName="Name"
+                                    ValueFieldName="Type_q"
+                                    @bind-Value="@gen.Gen_7_3_DU"
+                                    ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+
+                    <DxFormLayoutItem Caption="Dĺžka užívania (v rokoch)">
+                        <DxSpinEdit @bind-Value="@gen.Gen_7_4" ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+                <DxFormLayoutGroup Caption="Iné...">
+                    <DxFormLayoutItem Caption="Názov lieku">
+                        <DxTextBox @bind-Text="@gen.Gen_7_1_1" ShowValidationIcon="true" />
+                     </DxFormLayoutItem>
+
+                    <DxFormLayoutItem Caption="Dávka">
+                        <DxSpinEdit @bind-Value="@gen.Gen_7_1_2" ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+
+                    <DxFormLayoutItem Caption="Jednotka">
+                        <DxComboBox Data="@gen_7_1_3_DUAnswer"
+                                    TextFieldName="Name"
+                                    ValueFieldName="Type_q"
+                                    @bind-Value="@gen.Gen_7_1_3_DU"
+                                    ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+
+                    <DxFormLayoutItem Caption="Dĺžka užívania (v rokoch)">
+                        <DxSpinEdit @bind-Value="@gen.Gen_7_1_4" ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+                <DxFormLayoutItem Caption="Dĺžka trvania ťažkostí (v mesiacoch)">
+                    <DxSpinEdit @bind-Value="@gen.Gen_8" ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Prvý príznak Parkinsonovej choroby ">
+                    <DxComboBox Data="@gen_9_DSAnswer"
+                                TextFieldName="Name"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_9_DS"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Bol pacient už kvôli tomuto príznaku vyšetrený .ortopédom, psychiatrom a pod.? ">
+                    <DxComboBox Data="@gen_10_Answer"
+                                TextFieldName="Name"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_10"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutGroup Caption="Ak áno, ktorá špecializácia?">
+                    <DxFormLayoutItem Caption="Špecializácia ">
+                        <DxComboBox Data="@gen_10_1_Answer"
+                                    TextFieldName="Name"
+                                    ValueFieldName="Type_q"
+                                    @bind-Value="@gen.Gen_10_1"
+                                    ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+                <DxFormLayoutItem Caption="Stal sa pacientovi pred objavením príznaku úraz hlavy?">
+                    <DxComboBox Data="@gen_11_Answer"
+                                TextFieldName="Name"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_11"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Stal sa pacientovi pred objavením príznaku úraz hlavy?">
+                    <DxComboBox Data="@gen_12_Answer"
+                                TextFieldName="Name"
+                                ValueFieldName="Type_q"
+                                @bind-Value="@gen.Gen_12"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutGroup Caption="Iný parkinsonský syndróm ">
+                    <DxFormLayoutItem Caption="Uveďte">
+                        <DxTextBox @bind-Text="@gen.Gen_13_1" ShowValidationIcon="true" />
+                    </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+
+                  
                 <DxFormLayoutItem ColSpanMd="12">
                     <DxButton SubmitFormOnClick="true"
-                              Text="Submit"
+                              Text="Uložiť"
+                              RenderStyle="ButtonRenderStyle.Primary" />
+
+                    <DxButton SubmitFormOnClick="false"
+                              Text="Dalšia záložka"
                               RenderStyle="ButtonRenderStyle.Secondary" />
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
@@ -62,17 +214,64 @@
 @code {
     string FormValidationState = @"Press the ""Submit"" button to validate the form.";
 
-    Data.Questionnaires.QuestionnaireGeneral01? gen = null;
+    Data.Questionnaires.QuestionnaireGeneral01 gen = new()
+    {
+        Questionnaire_id = 1
+    };
+
+
+
+    /// <summary>
+    /// DialQGeneral
+    /// </summary>
     List<Data.Dials.DialQGeneral> dialQGenerals = new();
-    List<Data.Dials.DialQGeneral> gen_2_DGAnswer = new();
-    List<Data.Dials.DialQGeneral> gen_3_DGAnswer = new();
+    List<Data.Dials.DialQGeneral> gen_2_DGAnswer = new(); //Pohlavie
+    List<Data.Dials.DialQGeneral> gen_3_DGAnswer = new(); //Rodinný stav
+    List<Data.Dials.DialQGeneral> gen_4_DGAnswer = new(); //Pracovný pomer
+    List<Data.Dials.DialQGeneral> gen_5_DGAnswer = new(); //Fajčenie  
+    List<Data.Dials.DialQGeneral> gen_6_DGAnswer = new(); //Pozitívna rodinná anamnéza Parkinsonovej choroby
+
+    List<Data.Dials.DialQGeneral> gen_7_DGAnswer = new(); //Anamnéza užívania antipsychotík
+    List<Data.Dials.DialQGeneral> gen_7_1_DMAnswer = new(); //Názov lieku 
+    List<Data.Dials.DialQGeneral> gen_7_3_DU_Answer = new();
+    List<Data.Dials.DialQGeneral> gen_7_1_3_DUAnswer = new(); //Jednotka (ine)
+
+    List<Data.Dials.DialQGeneral> gen_9_DSAnswer = new(); //Prvý príznak Parkinsonovej choroby
+    List<Data.Dials.DialQGeneral> gen_10_Answer = new(); //Bol pacient už kvôli tomuto príznaku vyšetrený .ortopédom, psychiatrom a pod.?
+    List<Data.Dials.DialQGeneral> gen_10_1_Answer = new(); //Ak áno, ktorá špecializácia? 
+
+    List<Data.Dials.DialQGeneral> gen_11_Answer = new(); //Stal sa pacientovi pred objavením príznaku úraz hlavy?
+    List<Data.Dials.DialQGeneral> gen_12_Answer = new(); //Celková anestézia pred objavením sa príznaku?
+
+    List<Data.Dials.DialQGeneral> gen_13_Answer = new(); //Pacientovi je diagnostikované/je podozrenie na
+
+
 
 
     protected override async Task OnInitializedAsync()
     {
+        //DialQGeneral
         dialQGenerals = await Q01Service.GetDialQGeneralsAsync();
         gen_2_DGAnswer = dialQGenerals.Where(d => d.Type_q == 1).ToList();
         gen_3_DGAnswer = dialQGenerals.Where(d => d.Type_q == 2).ToList();
+        gen_4_DGAnswer = dialQGenerals.Where(d => d.Type_q == 3).ToList();
+        gen_5_DGAnswer = dialQGenerals.Where(d => d.Type_q == 4).ToList();
+        gen_6_DGAnswer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
+
+        gen_7_DGAnswer = dialQGenerals.Where(d => d.Type_q == 6).ToList();
+        gen_7_1_DMAnswer = dialQGenerals.Where(d => d.Type_q == 7).ToList();
+        gen_7_3_DU_Answer = dialQGenerals.Where(d => d.Type_q == 8).ToList();
+        gen_7_1_3_DUAnswer = dialQGenerals.Where(d => d.Type_q == 8).ToList();
+
+        gen_9_DSAnswer = dialQGenerals.Where(d => d.Type_q == 9).ToList();
+
+        gen_10_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
+        gen_10_1_Answer = dialQGenerals.Where(d => d.Type_q == 10).ToList();
+
+        gen_11_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
+        gen_12_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
+
+        gen_13_Answer = dialQGenerals.Where(d => d.Type_q == 11).ToList();
     }
 
     void HandleValidSubmit()
