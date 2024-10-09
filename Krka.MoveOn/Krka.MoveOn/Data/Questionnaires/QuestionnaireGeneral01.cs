@@ -6,55 +6,55 @@ namespace Krka.MoveOn.Data.Questionnaires
     [Table("questionnaire_general01")]
     public class QuestionnaireGeneral01
     {
-       
+        private static int _lastId = 0;
+
         [Key]
         [Column("id")]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
-        [Column("id_patient")]
-        public required int PatientId { get; set; }
-
+        [Column("questionnaire_id")]
+        public required int Questionnaire_id { get; set; }
         /// <summary>
         /// Dátum (DD/MM/RRRR) 
         /// </summary>
         [Column("gen_1")]
-        public required DateTime Gen_1 { get; set; } = DateTime.Now;
+        public DateTime Gen_1 { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Pohlavie
         /// </summary>
         [Column("gen_2_dg")]
-        public required int Gen_2_DG { get; set; }
+        public int Gen_2_DG { get; set; }
 
         /// <summary>
         /// Rodinný stav
         /// </summary>
         [Column("gen_3_dg")]
-        public required int Gen_3_DG { get; set; }
+        public int Gen_3_DG { get; set; }
 
         /// <summary>
         /// Pracovný pomer 
         /// </summary>
         [Column("gen_4_dg")]
-        public required int Gen_4_DG { get; set; }
+        public int Gen_4_DG { get; set; }
 
         /// <summary>
         /// Fajčenie
         /// </summary>
         [Column("gen_5_dg")]
-        public required int Gen_5_D { get; set; }
+        public int Gen_5_D { get; set; }
 
         /// <summary>
         /// Pozitívna rodinná anamnéza Parkinsonovej choroby 
         /// </summary>
         [Column("gen_6_dg")]
-        public required int Gen_6_DG { get; set; }
+        public int Gen_6_DG { get; set; }
 
         /// <summary>
         /// Anamnéza užívania antipsychotík 
         /// </summary>
         [Column("gen_7_dg")]
-        public required int Gen_7_DG { get; set; }
+        public int Gen_7_DG { get; set; }
 
         /// <summary>
         ///   -Ak áno názov mediciny (číselnik na DialMedicines) !!!!!!!!!!
@@ -109,19 +109,19 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// Dĺžka trvania ťažkostí (v mesiacoch)
         /// </summary>
         [Column("gen_8")]
-        public required int Gen_8 { get; set; }
+        public int Gen_8 { get; set; }
 
         /// <summary>
         /// Prvý príznak Parkinsonovej choroby (číselnik na DialSymptoms) !!!!!!!! 
         /// </summary>
         [Column("gen_9_ds")]
-        public required int Gen_9_DS { get; set; }
+        public int Gen_9_DS { get; set; }
 
         /// <summary>
         /// Bol pacient už kvôli tomuto príznaku vyšetrený .ortopédom, psychiatrom a pod.?
         /// </summary>
         [Column("gen_10")]
-        public required int Gen_10 { get; set; }
+        public int Gen_10 { get; set; }
 
         /// <summary>
         /// 10.1 - Ak áno, ktorá špecializácia?   
@@ -133,19 +133,19 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// Stal sa pacientovi pred objavením príznaku úraz hlavy? 
         /// </summary>
         [Column("gen_11")]
-        public required int Gen_11 { get; set; }
+        public int Gen_11 { get; set; }
 
         /// <summary>
         /// Celková anestézia pred objavením sa príznaku? 
         /// </summary>
         [Column("gen_12")]
-        public required int Gen_12 { get; set; }
+        public int Gen_12 { get; set; }
 
         /// <summary>
         /// Pacientovi je diagnostikované/je podozrenie na
         /// </summary>
         [Column("gen_13")]
-        public required int Gen_13 { get; set; }
+        public int Gen_13 { get; set; }
 
         /// <summary>
         /// Pacientovi je diagnostikované/je podozrenie na (Ak zada "Iný parkinsonský syndróm ")
@@ -155,9 +155,15 @@ namespace Krka.MoveOn.Data.Questionnaires
 
 
         [Column("modified_at")]
-        public required DateTime ModifiedAt { get; set; } = DateTime.Now;
+        public  DateTime ModifiedAt { get; set; } = DateTime.Now;
 
         [Column("created_at")]
-        public required DateTime CreatedAt { get; set; } = DateTime.Now;
+        public  DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public QuestionnaireGeneral01()
+        {
+            Id = ++_lastId;
+        }
+
     }
 }

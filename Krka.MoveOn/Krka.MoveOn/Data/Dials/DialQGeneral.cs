@@ -10,8 +10,8 @@ namespace Krka.MoveOn.Data.Dials
         [Column("id")]
         public required int Id { get; set; }
 
-        [Column("id_user")]
-        public required int UserId { get; set; }
+        [Column("type_q")]
+        public required int Type_q { get; set; }
 
         [Column(TypeName = "nvarchar"), StringLength(50)]
         public required string Name { get; set; }

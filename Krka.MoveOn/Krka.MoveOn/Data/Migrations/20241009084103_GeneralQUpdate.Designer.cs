@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241009084103_GeneralQUpdate")]
+    partial class GeneralQUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -189,9 +192,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -220,9 +223,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -251,9 +254,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -282,9 +285,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -313,9 +316,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -344,9 +347,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -375,31 +378,13 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
                     b.ToTable("dial_q_general");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Muž",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Žena",
-                            Type_q = 1
-                        });
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialSpecialization", b =>
@@ -424,9 +409,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -455,9 +440,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -486,9 +471,9 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar");
 
-                    b.Property<int>("Type_q")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
-                        .HasColumnName("type_q");
+                        .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
@@ -559,49 +544,13 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("varchar")
                         .HasColumnName("patient_code");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar")
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
                         .HasColumnName("id_user");
 
                     b.HasKey("Id");
 
                     b.ToTable("patients");
-                });
-
-            modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.Questionnaire", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("questionnaire_date");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("modified_at");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int")
-                        .HasColumnName("order_num");
-
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int")
-                        .HasColumnName("id_patient");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("questionnaires");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireDrugEffect09", b =>
@@ -641,9 +590,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.HasKey("Id");
 
@@ -683,9 +632,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.HasKey("Id");
 
@@ -803,9 +752,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.HasKey("Id");
 
@@ -845,9 +794,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.HasKey("Id");
 
@@ -919,9 +868,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.HasKey("Id");
 
@@ -997,9 +946,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("mot_9");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.HasKey("Id");
 
@@ -1159,9 +1108,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("motskill_9");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.HasKey("Id");
 
@@ -1237,9 +1186,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("nonmot_9");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.HasKey("Id");
 
@@ -1263,9 +1212,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.Property<int>("SF_1")
                         .HasColumnType("int")
@@ -1305,9 +1254,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int")
-                        .HasColumnName("questionnaire_id");
+                        .HasColumnName("id_patient");
 
                     b.Property<int?>("TreatQ1")
                         .HasColumnType("int")

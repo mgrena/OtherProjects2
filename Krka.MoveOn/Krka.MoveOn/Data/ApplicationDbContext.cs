@@ -26,6 +26,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     /// <summary>
     /// Questionnaires
     /// </summary>
+
+    public DbSet<Questionnaire> Questionnaires { get; set; }
     public DbSet<QuestionnaireGeneral01> QuestionnaireGeneral01s { get; set; }
 
     public DbSet<QuestionnaireInitial02> QuestionnaireInitial02s { get; set; }
@@ -78,5 +80,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         {
             entity.Property(e => e.Message).HasColumnType("nvarchar(max)");
         });
+
+        modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 1, Type_q = 1, Name = "Muž", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+        modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 2, Type_q = 1, Name = "Žena", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
     }
 }

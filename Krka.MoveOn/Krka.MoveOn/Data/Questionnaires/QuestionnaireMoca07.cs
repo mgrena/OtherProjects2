@@ -10,8 +10,8 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("id")]
         public required int Id { get; set; }
 
-        [Column("id_patient")]
-        public required int PatientId { get; set; }
+        [Column("questionnaire_id")]
+        public required int Questionnaire_id { get; set; }
 
         /// <summary>
         /// Vizuálno-priestorové schopnosti - "Test cesty"

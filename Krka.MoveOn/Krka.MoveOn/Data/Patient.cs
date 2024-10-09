@@ -13,8 +13,8 @@ namespace Krka.MoveOn.Data
         /// <summary>
         /// User id -> "AspNetUser"
         /// </summary>
-        [Column("id_user")]
-        public required int UserId { get; set; }
+        [Column("id_user", TypeName ="nvarchar"), StringLength(450)]
+        public required string UserId { get; set; }
 
         /// <summary>
         ///  Patient code   

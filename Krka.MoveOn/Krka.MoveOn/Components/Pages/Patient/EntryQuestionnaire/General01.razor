@@ -2,6 +2,7 @@
 
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services
+@using Microsoft.AspNetCore.Components
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
@@ -13,56 +14,73 @@
     <_EntryBtn />
 </div>
 
-@* <DxFormLayout CssClass="w-100">
-    <DxFormLayoutItem>
-        <div class="buttons-group mb-2">
-            <div class="d-flex flex-row flex-wrap">
-                <div class="me-2 mb-2">
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Detekcia príznakovvv"
-                              CssClass="w-100 rectangular-button"
-                               />
-                </div>
-                <div class="me-2 mb-2">
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Detekcia príznakov"
-                              CssClass="w-100 rectangular-button" />
-                </div>
-            </div>
-        </div>
-    </DxFormLayoutItem>
-@*     <DxFormLayoutTabPages @bind-ActiveTabIndex="@ActiveTabIndex">
-        <DxFormLayoutTabPage Caption="Detekcia príznakov">       
-            <DxFormLayoutItem Caption="Hire Date:" >
-                <DxDateEdit @bind-Date="@q1.Gen_1" ShowValidationIcon="true" />
-                <
-            </DxFormLayoutItem>
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="Začiatočná liečba">
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="Liečba pridružených problémov">
-            <!-- Obsah pre Liečba pridružených problémov -->
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="Modifikovaná škála podľa Hoehenovej a Yahra">
-            <!-- Obsah pre Modifikovaná škála podľa Hoehenovej a Yahra -->
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="MOCA">
-            <!-- Obsah pre MOCA -->
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="Údaje o predčasnom vylúčení">
-            <!-- Obsah pre Údaje o predčasnom vylúčení -->
-        </DxFormLayoutTabPage>
-    </DxFormLayoutTabPages> 
-</DxFormLayout> *@
+<div class="cw-880">
+    <EditForm Model="@gen"
+              OnValidSubmit="@HandleValidSubmit"
+              OnInvalidSubmit="@HandleInvalidSubmit"
+              Context="EditFormContext">
+        <DataAnnotationsValidator />
+        <DxFormLayout>
+            <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment ">
+                <DxFormLayoutItem Caption="Dátum">
+                    <DxDateEdit @bind-Date="@gen.Gen_1" ShowValidationIcon="true" />
+                </DxFormLayoutItem>
 
-<div>
-    <Weather />
+                <DxFormLayoutItem Caption="Pohlavie">
+                    <DxComboBox Data="@gen_2_DGAnswer"
+                                TextFieldName="Name"
+                                ValueFieldName="Id"
+                                @bind-Value="@gen.Gen_2_DG"
+                                ShowValidationIcon="true" 
+                                />                   
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Rodinný stav">
+                    <DxComboBox Data="@gen_3_DGAnswer"
+                                TextFieldName="Name"
+                                ValueFieldName="Id"
+                                @bind-Value="@gen.Gen_2_DG"
+                                ShowValidationIcon="true" />
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem ColSpanMd="12">
+                    <DxButton SubmitFormOnClick="true"
+                              Text="Submit"
+                              RenderStyle="ButtonRenderStyle.Secondary" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+        <div class="row w-100 mx-0">
+            <p class="demo-text col-12 mt-2">
+                Form Validation State:
+                <b>@FormValidationState</b>
+            </p>
+        </div>
+    </EditForm>
 </div>
 
-
-
 @code {
+    string FormValidationState = @"Press the ""Submit"" button to validate the form.";
 
+    Data.Questionnaires.QuestionnaireGeneral01? gen = null;
+    List<Data.Dials.DialQGeneral> dialQGenerals = new();
+    List<Data.Dials.DialQGeneral> gen_2_DGAnswer = new();
+    List<Data.Dials.DialQGeneral> gen_3_DGAnswer = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        dialQGenerals = await Q01Service.GetDialQGeneralsAsync();
+        gen_2_DGAnswer = dialQGenerals.Where(d => d.Type_q == 1).ToList();
+        gen_3_DGAnswer = dialQGenerals.Where(d => d.Type_q == 2).ToList();
+    }
+
+    void HandleValidSubmit()
+    {
+        FormValidationState = @"Form data is valid";
+    }
+    void HandleInvalidSubmit()
+    {
+        FormValidationState = @"Form data is invalid";
+    }
 }
