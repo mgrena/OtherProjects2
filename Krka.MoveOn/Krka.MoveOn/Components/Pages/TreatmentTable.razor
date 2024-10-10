@@ -3,8 +3,10 @@
 @using Krka.MoveOn.Data
 @using Krka.MoveOn.Data.Dials
 @using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services.Questionnaires
+@using Microsoft.EntityFrameworkCore
 
-@inject ApplicationDbContext DbContext
+@inject Treatment03Service DataService
 
 <DxGrid Data="@Treat" CssClass="mw-1100">
     <Columns>
@@ -22,14 +24,15 @@
 
 @code {
     private List<QuestionnaireTreatment03> Treat = new List<QuestionnaireTreatment03>();
-    private List<DialQGeneral> ActiveIngredients = new List<DialQGeneral>();
+    private List<DialActiveIngredient> ActiveIngredients = new List<DialActiveIngredient>();
 
     protected override async Task OnInitializedAsync()
     {
-        // // Загружаем активные ингредиенты из базы данных
-        // ActiveIngredients = await DbContext.DialActiveIngredients.ToListAsync();
+        // Загружаем активные ингредиенты из базы данных
+        ActiveIngredients = await DataService.GetActiveIngredient();
 
-        // // Инициализация данных для Treat
-        // Treat = await DbContext.DialActiveIngredients.ToListAsync();
+        // Инициализация данных для Treat
+        // Treat = await DbContext.QuestionnaireTreatment03s.Where(i => i.Questionnaire_id == 1).ToListAsync();
+
     }
 }
