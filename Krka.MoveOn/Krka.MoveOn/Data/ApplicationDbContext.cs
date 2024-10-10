@@ -81,6 +81,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.Message).HasColumnType("nvarchar(max)");
         });
 
+        // seed data
 
         // Dial General Questionnaire
         #region "DialQGenerals_Answers"
@@ -156,7 +157,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 54, Type_q = 11, Name = "Idiopatická PCH", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 55, Type_q = 11, Name = "Iný parkinsonský syndróm ", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 56, Type_q = 11, Name = "Niè z vyššie uvedeného ", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+        #endregion
 
+        #region "DialActiveIngredient"
             //init_1
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 1, Type_q = 1, Name = "levodopa/karbidopa", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 2, Type_q = 1, Name = "levodopa/benserazid", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
