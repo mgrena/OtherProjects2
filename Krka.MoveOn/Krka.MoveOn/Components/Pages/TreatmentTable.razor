@@ -1,0 +1,35 @@
+﻿@page "/treatment"
+
+@using Krka.MoveOn.Data
+@using Krka.MoveOn.Data.Dials
+@using Krka.MoveOn.Data.Questionnaires
+
+@inject ApplicationDbContext DbContext
+
+<DxGrid Data="@Treat" CssClass="mw-1100">
+    <Columns>
+        <DxGridCommandColumn />
+        <DxGridDataColumn Caption="Treatment 1 (Active Ingredient)" FieldName="Treat_1">
+            <EditSettings>
+                <DxComboBox @bind-Value="Treat" Data="@ActiveIngredients"
+                            ValueField="Id" TextField="Name" />
+            </EditSettings>
+        </DxGridDataColumn>
+        <DxGridDataColumn Caption="Dosage (mg)" FieldName="Treat_2" />
+        <DxGridDataColumn Caption="Indication" FieldName="Treat_3" />
+    </Columns>
+</DxGrid>
+
+@code {
+    private List<QuestionnaireTreatment03> Treat = new List<QuestionnaireTreatment03>();
+    private List<DialQGeneral> ActiveIngredients = new List<DialQGeneral>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // // Загружаем активные ингредиенты из базы данных
+        // ActiveIngredients = await DbContext.DialActiveIngredients.ToListAsync();
+
+        // // Инициализация данных для Treat
+        // Treat = await DbContext.DialActiveIngredients.ToListAsync();
+    }
+}
