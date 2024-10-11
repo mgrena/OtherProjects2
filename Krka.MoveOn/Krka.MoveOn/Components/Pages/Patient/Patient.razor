@@ -18,12 +18,24 @@
 @inject PatientService PatientService
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
+@inject IToastNotificationService ToastService
 
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
 
-<PageTitle>Welcome</PageTitle>
 
 <div style="display: flex; justify-content: space-between; width: 100%;">
     <div class="grid-container" style="width: 52%;">
+
+        <PageTitle>Welcome</PageTitle>
+
+        
         <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
             Pacienti
         </div>
@@ -45,7 +57,9 @@
                 HighlightRowOnHover="true"
                 CustomizeEditModel="Grid_CustomizeEditModel_New"
                 EditModelSaving="Grid_EditModelSaving"
-                DataItemDeleting="Grid_DataItemDeleting">
+                DataItemDeleting="Grid_DataItemDeleting"
+                FocusedRowEnabled ="true"
+                > 
 
             <ToolbarTemplate Context="toolbarContext">
                 <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
@@ -69,6 +83,7 @@
                                       Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
                                 <img src="images/delete.svg" width="20" height="20" alt="Vymazať" />
                             </DxButton>
+                         
                         </div>
                     </CellDisplayTemplate>
                     <CellEditTemplate Context="editContext">
@@ -78,7 +93,8 @@
                                       CssClass="grid-disabled-button"
                                       IconCssClass="grid-icon grid-icon-delete"
                                       RenderStyle="ButtonRenderStyle.Link"
-                                       />
+                                      />
+
                         </div>
                     </CellEditTemplate>
                 </DxGridCommandColumn>
@@ -94,11 +110,16 @@
         </DxGrid>
     </div>
 
+
+
     <div style="width: 45%">
         <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
             Vybraný pacient
         </div>
         <div class="simple-table" style=" border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
+            <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
+                Pacient č.@selectedPatientCode
+            </div>
             <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
                 Udalosti
             </div>
@@ -137,12 +158,34 @@
 @code {
     IGrid patientsGrid { get; set; }    
     public List<Data.Patient> Patients { get; set; }
-
+    private string selectedPatientCode;
 
     protected override async Task OnInitializedAsync()
     {
-
         Patients = await PatientService.GetPatientsAsync();
+    }
+
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+        {
+            ProviderName = "Overview",
+            Title = "Pacient bol úspešne odstránený",
+            ThemeMode = ToastThemeMode.Saturated,
+            RenderStyle = ToastRenderStyle.Success,
+        });
+    }
+
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+        {
+            ProviderName = "Overview",
+            Title = "Pacient bol úspešne pridaný",
+
+            ThemeMode = ToastThemeMode.Saturated,
+            RenderStyle = ToastRenderStyle.Success,
+        });
     }
 
     void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
@@ -177,6 +220,7 @@
             await PatientService.SavePatientAsync(patient);
         }
         await UpdateDataAsync();
+        AddToast();
     }
 
     async Task UpdateDataAsync()
@@ -201,6 +245,21 @@
         var patient = (Data.Patient)e.DataItem;
         await PatientService.DeletePatientAsync(patient.Id);
         await UpdateDataAsync();
+        DeleteToast();
     }
+
+    // private void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
+    // {
+    //     if (e.VisibleIndex >= 0)
+    //     {
+    //         var patient = patientsGrid.GetRowByVisibleIndex(e.VisibleIndex) as Patient;
+    //         selectedPatientCode = patient?.PatientCode;
+    //     }
+    //     else
+    //     {
+    //         selectedPatientCode = string.Empty;
+    //     }
+    // }
+
 
 }

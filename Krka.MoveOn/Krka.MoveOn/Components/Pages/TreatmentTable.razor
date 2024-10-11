@@ -1,5 +1,4 @@
-﻿@page "/treatment"
-
+﻿
 @using Krka.MoveOn.Data
 @using Krka.MoveOn.Data.Dials
 @using Krka.MoveOn.Data.Questionnaires
@@ -12,10 +11,10 @@
     <Columns>
         <DxGridCommandColumn />
         <DxGridDataColumn Caption="Treatment 1 (Active Ingredient)" FieldName="Treat_1">
-            <EditSettings>
+@*             <EditSettings>
                 <DxComboBox @bind-Value="Treat" Data="@ActiveIngredients"
                             ValueField="Id" TextField="Name" />
-            </EditSettings>
+            </EditSettings> *@
         </DxGridDataColumn>
         <DxGridDataColumn Caption="Dosage (mg)" FieldName="Treat_2" />
         <DxGridDataColumn Caption="Indication" FieldName="Treat_3" />
