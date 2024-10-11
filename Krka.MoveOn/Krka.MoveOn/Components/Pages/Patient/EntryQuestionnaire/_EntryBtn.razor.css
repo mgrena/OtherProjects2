@@ -5,3 +5,7 @@
     border-color: #dfdfdf;
 }
 
+::deep .style-btn {
+    width: 100%;
+}
+

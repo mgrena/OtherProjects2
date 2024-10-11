@@ -12,25 +12,27 @@ namespace Krka.MoveOn.Services
             return await _context.Patients.ToListAsync();
         }
 
-        public Task InsertEmployeeAsync(IDictionary<string, object> newValues)
+        public async Task SavePatientAsync(Patient patient)
         {
-            return null;
+            if (patient.Id == 0)
+            {
+                _context.Patients.Add(patient);
+            }
+            else
+            {
+                _context.Patients.Update(patient);
+            }
+            await _context.SaveChangesAsync();
         }
-        public Task InsertEmployeeAsync(Patient newDataItem)
+
+        public async Task DeletePatientAsync(int patientId)
         {
-            return null;
-        }
-        public Task RemoveEmployeeAsync(Patient dataItem)
-        {
-            return null;
-        }
-        public Task UpdateEmployeeAsync(Patient dataItem, IDictionary<string, object> newValues)
-        {
-            return null;
-        }
-        public Task UpdateEmployeeAsync(Patient dataItem, Patient newDataItem)
-        {
-            return null;
+            var patient = await _context.Patients.FindAsync(patientId);
+            if (patient != null)
+            {
+                _context.Patients.Remove(patient);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

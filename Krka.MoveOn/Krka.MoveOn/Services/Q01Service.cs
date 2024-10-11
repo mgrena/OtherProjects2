@@ -19,6 +19,18 @@ namespace Krka.MoveOn.Services
             return await _context.DialQGenerals.ToListAsync();
         }
 
+        public async Task SavePatientAsync(Patient patient)
+        {
+            if (patient.Id == 0)
+            {
+                _context.Patients.Add(patient);
+            }
+            else
+            {
+                _context.Patients.Update(patient);
+            }
+            await _context.SaveChangesAsync();
+        }
 
 
     }    

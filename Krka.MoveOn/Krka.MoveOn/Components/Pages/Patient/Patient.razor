@@ -1,0 +1,206 @@
+﻿@page "/patients"
+
+@using Krka.MoveOn.Data
+@using Krka.MoveOn.Services
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Localization
+@using Krka.MoveOn.Resources;
+@using System.Globalization
+
+
+@attribute [Authorize(Roles = "Admin")]
+@attribute [StreamRendering(true)]
+
+@rendermode InteractiveServer
+
+@inject IStringLocalizer<Patient> localizer
+@inject PatientService PatientService
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+
+<PageTitle>Welcome</PageTitle>
+
+<div style="display: flex; justify-content: space-between; width: 100%;">
+    <div class="grid-container" style="width: 52%;">
+        <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+            Pacienti
+        </div>
+        <DxGrid @ref="patientsGrid"
+                Data="Patients"
+                PageSize="20"
+                PagerPosition="GridPagerPosition.Bottom"
+                PageSizeSelectorVisible="true"
+                PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                PageSizeSelectorAllRowsItemVisible="true"
+                PagerSwitchToInputBoxButtonCount="10"
+                PagerVisibleNumericButtonCount="10"
+                KeyFieldName="Id"
+                ValidationEnabled="false"
+                EditMode="GridEditMode.EditForm"
+                FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                TextWrapEnabled="false"
+                HighlightRowOnHover="true"
+                CustomizeEditModel="Grid_CustomizeEditModel_New"
+                EditModelSaving="Grid_EditModelSaving"
+                DataItemDeleting="Grid_DataItemDeleting">
+
+            <ToolbarTemplate Context="toolbarContext">
+                <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+                    <DxToolbarItem Text="Pridať pacienta" Click="New_Click" Enabled="true">
+                        <img src="images/newPatient.svg" width="24" height="24" alt="Pridať" />
+                        <span style="margin-left: 2px">Pridať pacienta</span>
+                    </DxToolbarItem>
+                </DxToolbar>
+            </ToolbarTemplate>
+
+            <Columns>
+                <DxGridDataColumn FieldName="PatientCode" Caption="Identifikačný kód pacienta" />
+                <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
+
+                <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+                    <CellDisplayTemplate Context="gridContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                      RenderStyle="ButtonRenderStyle.Link"
+                                      aria-label="Delete"
+                                      Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                <img src="images/delete.svg" width="20" height="20" alt="Vymazať" />
+                            </DxButton>
+                        </div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="editContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton Enabled="false"
+                                      aria-label="Delete"
+                                      CssClass="grid-disabled-button"
+                                      IconCssClass="grid-icon grid-icon-delete"
+                                      RenderStyle="ButtonRenderStyle.Link"
+                                       />
+                        </div>
+                    </CellEditTemplate>
+                </DxGridCommandColumn>
+            </Columns>
+
+            <EditFormTemplate Context="editFormContext">
+                <DxFormLayout>
+                    <DxFormLayoutItem Caption="Identifikačný kód pacienta">
+                        @editFormContext.GetEditor("PatientCode")
+                    </DxFormLayoutItem>  
+                </DxFormLayout>
+            </EditFormTemplate>
+        </DxGrid>
+    </div>
+
+    <div style="width: 45%">
+        <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+            Vybraný pacient
+        </div>
+        <div class="simple-table" style=" border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
+            <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
+                Udalosti
+            </div>
+            <div class="simple-table" style=" border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
+                <div style="margin-bottom: 6px;">
+                    <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
+                        <Items>
+                            <DxMenuItem NavigateUrl="/entryQ/gen" Text="1. Vstupný klinický dotazník"></DxMenuItem>
+                        </Items>
+                    </DxMenu>
+                </div>
+                <div style="margin-bottom: 6px;">
+                    <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
+                        <Items>
+                            <DxMenuItem NavigateUrl="/EntryQuestionnaire/GeneralQ" Text="2. Priebežný klinický dotazník"></DxMenuItem>
+                        </Items>
+                    </DxMenu>
+                </div>
+                <div>
+                    <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
+                        <Items>
+                            <DxMenuItem NavigateUrl="/EntryQuestionnaire/GeneralQ" Text="3. Výstupný klinický dotazník"></DxMenuItem>
+                        </Items>
+                    </DxMenu>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+@code {
+    IGrid patientsGrid { get; set; }    
+    public List<Data.Patient> Patients { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        Patients = await PatientService.GetPatientsAsync();
+    }
+
+    void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
+    {
+        if (e.IsNew)
+        {
+            var newPatient = (Data.Patient)e.EditModel;
+            newPatient.PatientCode = "newCode";
+            newPatient.CreatedAt = DateTime.Now;
+        }
+    }
+
+    async Task New_Click() => await patientsGrid.StartEditNewRowAsync();
+
+    async Task Grid_CustomizeEditModel_New(GridCustomizeEditModelEventArgs e)
+    {
+
+        if (e.IsNew)
+        {
+            var newPatient = (Data.Patient)e.EditModel;
+            newPatient.UserId = await GetCurrentUserIdAsync();
+            newPatient.CreatedAt = DateTime.Now;
+            newPatient.ModifiedAt = DateTime.Now;
+        }
+    }
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var patient = (Data.Patient)e.EditModel;
+        if (e.IsNew)
+        {
+            await PatientService.SavePatientAsync(patient);
+        }
+        await UpdateDataAsync();
+    }
+
+    async Task UpdateDataAsync()
+    {
+        Patients = await PatientService.GetPatientsAsync();
+        patientsGrid.Reload();
+    }
+
+    async Task<string> GetCurrentUserIdAsync()
+    {
+        var user = await UserManager.GetUserAsync(SignInManager.Context.User);
+        if (user != null) 
+        { 
+            return user.Id; 
+        }
+        return null;
+    }
+
+
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var patient = (Data.Patient)e.DataItem;
+        await PatientService.DeletePatientAsync(patient.Id);
+        await UpdateDataAsync();
+    }
+
+}
