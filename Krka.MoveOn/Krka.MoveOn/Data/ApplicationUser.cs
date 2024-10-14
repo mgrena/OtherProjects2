@@ -18,5 +18,4 @@ namespace Krka.MoveOn.Data {
         [NotMapped]
         public string? Role { get; set; }
     }
-
 }

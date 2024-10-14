@@ -97,4 +97,5 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.MapAdditionalIdentityEndpoints();
+DevExpress.Utils.Localization.XtraLocalizer.EnableTraceSource();
 app.Run();
