@@ -9,7 +9,7 @@ namespace Krka.MoveOn.Data.Questionnaires
 
         public enum QuestionnaireOrderEnum
         {
-            entrz = 1,
+            entry = 1,
             ongoing = 2,
             result = 3
         }

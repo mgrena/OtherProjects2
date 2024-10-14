@@ -18,8 +18,6 @@
 
 
     <EditForm Model="@gen"
-              OnValidSubmit="@HandleValidSubmit"
-              OnInvalidSubmit="@HandleInvalidSubmit"
               Context="EditFormContext">
         <DataAnnotationsValidator />
             <DxFormLayout>
@@ -262,18 +260,11 @@
                     </DxFormLayoutItem>
                 </DxFormLayoutGroup>
             </DxFormLayout>        
-        <div class="row w-100 mx-0">
-            <p class="demo-text col-12 mt-2">
-                Form Validation State:
-                <b>@FormValidationState</b>
-            </p>
-        </div>
     </EditForm>
 </div>
 
 @code {
-    string FormValidationState = @"Press the ""Submit"" button to validate the form.";
-
+   
     bool isGen7_1_DM = false;
     bool isGen7_1_1 = false;
     bool isGen10_1 = false;
@@ -365,14 +356,5 @@
     {
         gen.Gen_13 = value;
         isGen13_1 = (gen.Gen_13 == 55);
-    }
-
-    void HandleValidSubmit()
-    {
-        FormValidationState = @"Form data is valid";
-    }
-    void HandleInvalidSubmit()
-    {
-        FormValidationState = @"Form data is invalid";
     }
 }

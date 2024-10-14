@@ -59,7 +59,7 @@
                 EditModelSaving="Grid_EditModelSaving"
                 DataItemDeleting="Grid_DataItemDeleting"
                 FocusedRowEnabled ="true"
-                > 
+                FocusedRowChanged="OnFocusedRowChanged"> 
 
             <ToolbarTemplate Context="toolbarContext">
                 <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
@@ -78,10 +78,10 @@
                     <CellDisplayTemplate Context="gridContext">
                         <div class="grid-cell-align-center">
                             <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                      RenderStyle="ButtonRenderStyle.Link"
+                                      RenderStyle="ButtonRenderStyle.Link"                                     
                                       aria-label="Delete"
                                       Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                                <img src="images/delete.svg" width="20" height="20" alt="Vymazať" />
+                                <img src="images/delete.svg" width="20" height="20" alt="Vymazať"  />
                             </DxButton>
                          
                         </div>
@@ -118,7 +118,8 @@
         </div>
         <div class="simple-table" style=" border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
             <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
-                Pacient č.@selectedPatientCode
+                Pacient č.  <span style="color:#6e7de8; font-weight: bold;">@selectedPatientCode</span>
+
             </div>
             <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
                 Udalosti
@@ -158,7 +159,7 @@
 @code {
     IGrid patientsGrid { get; set; }    
     public List<Data.Patient> Patients { get; set; }
-    private string selectedPatientCode;
+    private string? selectedPatientCode;
 
     protected override async Task OnInitializedAsync()
     {
@@ -248,18 +249,13 @@
         DeleteToast();
     }
 
-    // private void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
-    // {
-    //     if (e.VisibleIndex >= 0)
-    //     {
-    //         var patient = patientsGrid.GetRowByVisibleIndex(e.VisibleIndex) as Patient;
-    //         selectedPatientCode = patient?.PatientCode;
-    //     }
-    //     else
-    //     {
-    //         selectedPatientCode = string.Empty;
-    //     }
-    // }
+
+
+    private void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
+    {
+        var patient = e.DataItem as Data.Patient;
+        selectedPatientCode = patient?.PatientCode;
+    }
 
 
 }
