@@ -229,3 +229,76 @@ html, body {
         display: block;
     }
 }
+.grid-toolbar-new,
+.grid-toolbar-delete,
+.grid-toolbar-save,
+.grid-toolbar-cancel {
+    background-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    background-position: center center;
+    background-color: currentColor;
+    height: 16px;
+    width: 16px;
+    opacity: 0.7;
+}
+
+.grid-toolbar-new {
+    -webkit-mask-image: url("/images/newPatient.svg");
+    mask-image: url("/images/newPatient.svg");
+    mask-size: 16px 16px;
+}
+
+.grid-toolbar-delete {
+    -webkit-mask-image: url("/images/delete.svg");
+    mask-image: url("/images/delete.svg");
+}
+
+.grid-toolbar-save {
+    -webkit-mask-image: url("/images/save.svg");
+    mask-image: url("/images/save.svg");
+    mask-size: 16px 16px;
+}
+
+.grid-toolbar-cancel {
+    -webkit-mask-image: url("/images/cancel.svg");
+    mask-image: url("/images/cancel.svg");
+    mask-size: 16px 16px;
+}
+
+.grid-modified-cell {
+    background-color: rgba(var(--bs-primary-rgb), 0.15) !important;
+}
+
+.grid-container {
+    display: contents;
+}
+
+.grid-cell-align-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -4px;
+    margin-bottom: -4px;
+}
+.grid-icon {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    min-width: 1rem;
+    min-height: 1rem;
+    background-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    background-position: center center;
+    background-color: currentColor;
+    vertical-align: middle;
+}
+.grid-icon-delete {
+    -webkit-mask-image: url("/images/delete.svg");
+    mask-image: url("/images/delete.svg");
+}
+.grid-icon-add {
+    -webkit-mask-image: url("/images/add.svg");
+    mask-image: url("/images/add.svg");
+}

@@ -1,6 +1,8 @@
 ﻿@page "/users"
 
 @using Krka.MoveOn.Data
+@using Krka.MoveOn.Services
+@using Krka.MoveOn.Services.Pages
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
@@ -14,151 +16,210 @@
 <PageTitle>Používatelia</PageTitle>
 <h3>Používatelia</h3>
 
-@if (users == null)
+@if (DataSource == null)
 {
     <p><em>Načítavanie...</em></p>
 }
 else
 {
-    <DxGrid @ref="usersGrid" Data="@users" CssClass="mw-1100"
-            PageSize="20"
-            PagerPosition="GridPagerPosition.Bottom"
-            PageSizeSelectorVisible="true"
-            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-            PageSizeSelectorAllRowsItemVisible="true"
-            PagerSwitchToInputBoxButtonCount="10"
-            PagerVisibleNumericButtonCount="10"
-            ValidationEnabled="true"
-            EditMode="GridEditMode.EditCell"
-            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-            ColumnResizeMode="GridColumnResizeMode.NextColumn"
-            TextWrapEnabled="false"
-            HighlightRowOnHover="true">
-        <ToolbarTemplate Context="toolbarContext">
-            <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
-                <DxToolbarItem Text="Pridať používateľa" Click="New_Click" Enabled="true">
-                    <img src="images/newPatient.svg" width="24" height="24" alt="Pridať" />
-                    <span style="margin-left: 2px">Pridať používateľa</span>
-                </DxToolbarItem>
-                <DxToolbarItem Text="Uložiť" Click="Save_Click" IconCssClass="grid-toolbar-save" Enabled="BatchItemsEnabled" BeginGroup="true">
-                    <img src="images/save.svg" width="22" height="22" alt="Uložiť" />
-                    <span style="margin-left: 2px">Uložiť</span>
-                </DxToolbarItem>
+    <style>
+        .grid-popup {
+            min-width: 1200px;
+        }
+    </style>
+    <div class="grid-container">
+        <DxGrid @ref="Grid" 
+                Data="@DataSource" 
+                CssClass="mw-1100"
+                ValidationEnabled="false"
+                PageSize="20"
+                PagerPosition="GridPagerPosition.Bottom"
+                PageSizeSelectorVisible="true"
+                PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                PageSizeSelectorAllRowsItemVisible="true"
+                PagerSwitchToInputBoxButtonCount="10"
+                PagerVisibleNumericButtonCount="10"
+                PopupEditFormCssClass="grid-popup"
+                EditMode="GridEditMode.PopupEditForm"
+                FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                CustomizeEditModel="Grid_CustomizeEditModel"
+                EditModelSaving="Grid_EditModelSaving"
+                DataItemDeleting="Grid_DataItemDeleting"
+                TextWrapEnabled="false"
+                HighlightRowOnHover="true">
+            @* <ToolbarTemplate Context="toolbarContext">
+                <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+                    <DxToolbarItem Text="Pridať" Click="New_Click" IconCssClass="grid-toolbar-new" Enabled="true"/>
+                    <DxToolbarItem Text="Uložiť" Click="Save_Click" IconCssClass="grid-toolbar-save" Enabled="BatchItemsEnabled" BeginGroup="true"/>
+                    <DxToolbarItem Text="Zrušiť" Click="Cancel_Click" IconCssClass="grid-toolbar-cancel" Enabled="BatchItemsEnabled"/>
+                </DxToolbar>
+            </ToolbarTemplate> *@
+            <Columns>
+                <DxGridDataColumn Caption="Používateľ" FieldName="FullName" />
+                <DxGridDataColumn Caption="Úroveň" FieldName="Role">
+                    <EditSettings>
+                        <DxComboBoxSettings Data="@roles" ValueFieldName="Id" TextFieldName="Name" />
+                    </EditSettings>
+                </DxGridDataColumn>
+                <DxGridDataColumn Caption="E-mail" FieldName="Email" />
+                <DxGridDataColumn Caption="Telefón" FieldName="PhoneNumber" />
+                <DxGridCommandColumn Width="30px">
+                    <HeaderTemplate>
+                        <DxButton IconCssClass="grid-icon grid-icon-add"
+                                  RenderStyle="ButtonRenderStyle.Link"
+                                  aria-label="Add"
+                                  Click="@(() => Grid.StartEditNewRowAsync())" />
+                    </HeaderTemplate>
+                    <CellDisplayTemplate>
+                        <div class="grid-cell-align-center">
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                      RenderStyle="ButtonRenderStyle.Link"
+                                      aria-label="Delete"
+                                      Click="@(() => Grid.ShowRowDeleteConfirmation(context.VisibleIndex))" />
+                        </div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate>
+                        <div class="grid-cell-align-center">
+                            <DxButton Enabled="false"
+                                      CssClass="grid-disabled-button"
+                                      IconCssClass="grid-icon grid-icon-delete"
+                                      aria-label="Delete"
+                                      RenderStyle="ButtonRenderStyle.Link" />
+                        </div>
+                    </CellEditTemplate>
+                </DxGridCommandColumn>
+                @* <DxGridCommandColumn Width="100px" NewButtonVisible="false">
+                    <CellDisplayTemplate Context="gridContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                      RenderStyle="ButtonRenderStyle.Link"
+                                      aria-label="Delete"
+                                      Click="@(() => DeleteDataItem(context.DataItem))">
+                            </DxButton>
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                      RenderStyle="ButtonRenderStyle.Link"
+                                      aria-label="Reset Password"
+                                      Click="@(() => usersGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                            </DxButton>
+                        </div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="editContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton Enabled="false"
+                                      aria-label="Delete"
+                                      CssClass="grid-disabled-button"
+                                      IconCssClass="grid-icon grid-icon-delete"
+                                      RenderStyle="ButtonRenderStyle.Link" />
+                        </div>
+                    </CellEditTemplate>
+                </DxGridCommandColumn> *@
+            </Columns>
+            <EditFormTemplate Context="EditFormContext">
+                @{
+                    var user = (ApplicationEditUser)EditFormContext.EditModel;
 
-                <DxToolbarItem Text="Zrušiť" Click="Cancel_Click" IconCssClass="grid-toolbar-cancel" Enabled="BatchItemsEnabled">
-                    <img src="images/cancel.svg" width="22" height="22" alt="Zrušiť" />
-                    <span style="margin-left: 2px">Zrušiť</span>
-                </DxToolbarItem>
-            </DxToolbar>
-            </ToolbarTemplate>
-        <Columns>
-            <DxGridDataColumn Caption="Používateľ" FieldName="FullName" />
-            @* <DxGridDataColumn Caption="Úroveň">
-                <CellDisplayTemplate>
-                    @{
-                        var user = (ApplicationUser)((GridDataColumnCellDisplayTemplateContext)context).DataItem;
-                        bool isEditing = editingRoles.Contains(user.Id);
-                    }
-                    @if (isEditing)
-                    {
-                        <DxComboBox Data="@roles" TextField="@nameof(IdentityRole.Name)" ValueField="@nameof(IdentityRole.Name)"
-                        Value="@(userRoles[user.Id])"
-                        @onchange="(e) => ChangeUserRole(user, e.Value?.ToString())">
+                }
+                <DxFormLayout CssClass="w-100">
+                    <DxFormLayoutItem Caption="Používateľské meno / e-mail:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("UserName")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Úroveň:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("Role")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Úroveň:" ColSpanMd="6">
+                        <DxComboBox Data="@roles"
+                                    NullText="Vyberte úroveň..."
+                                    SearchMode="ListSearchMode.AutoSearch"
+                                    SearchFilterCondition="ListSearchFilterCondition.Contains"
+                                    TextFieldName="Name"
+                                    ValueFieldName="Name"
+                                    Value="@user.Role"
+                                    ValueChanged="(RoleObject newCellValue) => { user.Role = newCellValue; }">
                         </DxComboBox>
-                    }
-                    else
-                    {
-                        <span @onclick="() => StartEditRole(user.Id)">@userRoles[user.Id]</span>
-                    }
-                </CellDisplayTemplate>
-            </DxGridDataColumn> *@
-            <DxGridDataColumn Caption="Úroveň" FieldName="Role">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@roles"/>
-                </EditSettings>
-            </DxGridDataColumn>
-            <DxGridDataColumn Caption="E-mail" FieldName="Email" />
-            <DxGridDataColumn Caption="Telefón" FieldName="PhoneNumber" />
-            <DxGridCommandColumn Width="100px" NewButtonVisible="false">
-                <CellDisplayTemplate Context="gridContext">
-                    <div class="grid-cell-align-center">
-                        <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                  RenderStyle="ButtonRenderStyle.Link"
-                                  aria-label="Delete"
-                                  Click="@(() => usersGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                            <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                        </DxButton>
-                        <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                  RenderStyle="ButtonRenderStyle.Link"
-                                  aria-label="Delete"
-                                  Click="@(() => usersGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                            <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                        </DxButton>
-                    </div>
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="editContext">
-                    <div class="grid-cell-align-center">
-                        <DxButton Enabled="false"
-                                  aria-label="Delete"
-                                  CssClass="grid-disabled-button"
-                                  IconCssClass="grid-icon grid-icon-delete"
-                                  RenderStyle="ButtonRenderStyle.Link" />
-                    </div>
-                </CellEditTemplate>
-            </DxGridCommandColumn>
-        </Columns>
-    </DxGrid>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Heslo:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("Password")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Potvrdenie hesla:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("ConfirmPassword")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Titul pred menom:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("TitleBefore")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Titul pred menom:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("TitleBefore")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Krstné meno:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("FirstName")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Priezvisko:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("LastName")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Titul za menom:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("TitleAfter")
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Phone:" ColSpanMd="6">
+                        @EditFormContext.GetEditor("Phone")
+                    </DxFormLayoutItem>
+                </DxFormLayout>
+            </EditFormTemplate>
+        </DxGrid>
+    </div>
 }
 
 @code {
+    private IGrid Grid { get; set; }
+    private List<ApplicationEditUser> DataSource = [];
+    private List<IdentityRole> roles = [];
+    protected override async Task OnInitializedAsync()
+    {
+        DataSource = [];
+    }
+    void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
+    {
+        if (e.IsNew)
+        {
+            // var newSupplier = (Supplier)e.EditModel;
+            // newSupplier.CompanyName = "DevExpress";
+            // newSupplier.ContactName = "John Doe";
+        }
+    }
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        // if (e.IsNew)
+        //     await NwindDataService.InsertSupplierAsync((Supplier)e.EditModel);
+        // else
+        //     await NwindDataService.UpdateSupplierAsync((Supplier)e.DataItem, (Supplier)e.EditModel);
+        // await UpdateDataAsync();
+    }
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        // await NwindDataService.RemoveSupplierAsync((Supplier)e.DataItem);
+        // await UpdateDataAsync();
+    }
+
+    /*
     private IGrid? usersGrid { get; set; }
-    private ApplicationUser[]? users;
+    private List<ApplicationEditUser> users = new();
     private List<IdentityRole> roles = new();
     private Dictionary<string, string?> userRoles = new Dictionary<string, string?>(); // UserID to Role mapping
     private Dictionary<string, string?> updatedRoles = new Dictionary<string, string?>(); // Store updated roles temporarily
     private HashSet<string> editingRoles = new HashSet<string>(); // Keeps track of which users are in editing mode
 
-    private Dictionary<ApplicationUser, DataChange> UnsavedChanges { get; } = new();
+    private Dictionary<ApplicationEditUser, DataChange> UnsavedChanges { get; } = new();
     private bool BatchItemsEnabled => UnsavedChanges.Count > 0 || usersGrid!.IsEditing();
 
-    protected override async Task OnInitializedAsync()
-    {
-        users = await UserManager.Users.ToArrayAsync();
-        roles = await RoleManager.Roles.ToListAsync();
-        foreach (var user in users)
-        {
-            var roles = await UserManager.GetRolesAsync(user);
-            user.Role = roles.FirstOrDefault();
-            userRoles[user.Id] = roles.FirstOrDefault();
-        }
-
-        // var tasks = users.Select(async user =>
-        // {
-        // });
-        // await Task.WhenAll(tasks);
-    }
-    private void StartEditRole(string userId)
-    {
-        editingRoles.Add(userId); // Enable editing mode for this user
-    }
-    private void ChangeUserRole(ApplicationUser user, string? newRole)
-    {
-        updatedRoles[user.Id] = newRole; // Store the updated role temporarily
-        editingRoles.Remove(user.Id); // Exit editing mode for this user
-    }
-
-
-
-
-    async Task New_Click() => await usersGrid!.StartEditNewRowAsync();
-    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
-    async Task Save_Click()
+    protected override async Task OnInitializedAsync() => await UpdateDataAsync();
+    private async Task New_Click() => await usersGrid!.StartEditNewRowAsync();
+    private async Task Cancel_Click() => await ClearUnsavedChangesAsync();
+    private async Task Save_Click()
     {
         foreach (var unsavedChange in UnsavedChanges)
         {
             var changedItem = unsavedChange.Key;
             var changeType = unsavedChange.Value.Type;
-            // var dataItem = await FindDataItem(changedItem);
+            var dataItem = await FindDataItem(changedItem);
             // switch (changeType)
             // {
             //     case DataChangeType.Addition:
@@ -174,6 +235,82 @@ else
         }
         await ClearUnsavedChangesAsync();
     }
+
+    private void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
+    {
+        if (e.IsNew)
+        {
+            var newUser = (ApplicationEditUser)e.EditModel;
+            //newUser.Role = new RoleObject() { Name = "Doctor" };
+        }
+    }
+    private void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var editableUser = (ApplicationEditUser)e.EditModel;
+        var changedUser = (ApplicationEditUser)e.DataItem;
+        if (e.IsNew)
+        {
+            users.Add(editableUser);
+            UnsavedChanges[editableUser] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            var changedFields = DataUtils.ApplyModifiedFields(editableUser, changedUser);
+            if (changedFields.Count > 0)
+            {
+                if (UnsavedChanges.TryGetValue(changedUser, out var changes))
+                    changes.ChangedFields.UnionWith(changedFields);
+                else
+                    UnsavedChanges.Add(changedUser, new(DataChangeType.Modification, changedFields));
+            }
+        }
+    }
+
+    private async Task UpdateDataAsync()
+    {
+        var usrs = await UserManager.Users.ToListAsync();
+        roles = await RoleManager.Roles.ToListAsync();
+        foreach (var usr in usrs)
+        {
+            ApplicationEditUser user = await ConvertUser(usr);
+            userRoles[user.Id] = user.Role.Name;
+        }
+    }
+    private async Task<ApplicationEditUser?> FindDataItem(ApplicationEditUser changedItem)
+    {
+        var user = await UserManager.FindByIdAsync(changedItem.Id);
+        if (user != null)
+            return await ConvertUser(user);
+        return null;
+    }
+    private async Task<ApplicationEditUser> ConvertUser(ApplicationUser user)
+    {
+        var roles = await UserManager.GetRolesAsync(user);
+        ApplicationEditUser anUser = new() { Id = user.Id, UserName = user.UserName!, FirstName = user.FirstName, LastName = user.LastName, TitleBefore = user.TitleBefore, TitleAfter = user.TitleAfter };
+        anUser.Role = new() { Name = roles.First() };
+        anUser.Phone = user.PhoneNumber;
+
+        return anUser;
+    }
+
+
+
+
+
+
+    private void StartEditRole(string userId)
+    {
+        editingRoles.Add(userId); // Enable editing mode for this user
+    }
+    private void ChangeUserRole(ApplicationUser user, string? newRole)
+    {
+        updatedRoles[user.Id] = newRole; // Store the updated role temporarily
+        editingRoles.Remove(user.Id); // Exit editing mode for this user
+    }
+
+
+
+
     async Task ClearUnsavedChangesAsync()
     {
         UnsavedChanges.Clear();
@@ -181,4 +318,5 @@ else
     }
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification, Addition, Delete }
+    */
 }
