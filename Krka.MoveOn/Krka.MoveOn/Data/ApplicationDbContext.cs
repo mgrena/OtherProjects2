@@ -161,28 +161,28 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         #region "DialActiveIngredient"
             //init_1
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 1, Type_q = 1, Name = "levodopa/karbidopa", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 2, Type_q = 1, Name = "levodopa/benserazid", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 3, Type_q = 1, Name = "entakapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 4, Type_q = 1, Name = "tolkapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 5, Type_q = 1, Name = "opikapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 6, Type_q = 1, Name = "rasagilÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 7, Type_q = 1, Name = "pramipexol", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 8, Type_q = 1, Name = "ropinirol", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 9, Type_q = 1, Name = "rotigotÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 10, Type_q = 1, Name = "apomorfÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 11, Type_q = 1, Name = "amantadÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 1, Type_q = 1, Name = "Levodopa/Karbidopa", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 2, Type_q = 1, Name = "Levodopa/Benserazid", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 3, Type_q = 1, Name = "Entakapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 4, Type_q = 1, Name = "Tolkapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 5, Type_q = 1, Name = "Opikapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 6, Type_q = 1, Name = "RasagilÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 7, Type_q = 1, Name = "Pramipexol", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 8, Type_q = 1, Name = "Ropinirol", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 9, Type_q = 1, Name = "RotigotÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 10, Type_q = 1, Name = "ApomorfÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 11, Type_q = 1, Name = "AmantadÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
 
-            //treat_3
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 12, Type_q = 2, Name = "Poruchy moËenia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 13, Type_q = 2, Name = "Erektiln· dysfunkcia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 14, Type_q = 2, Name = "Z·pcha", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 15, Type_q = 2, Name = "Porucha sp·nku", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 16, Type_q = 2, Name = "Ortostatick· hypotenzia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 17, Type_q = 2, Name = "Depresia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 18, Type_q = 2, Name = "⁄zkosù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 19, Type_q = 2, Name = "PsychÛza (halucin·cie, bludy)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 20, Type_q = 2, Name = "InÈ- uviesù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            ////treat_3
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 12, Type_q = 2, Name = "Pruhy moËenia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 13, Type_q = 2, Name = "Erektiln· dysfunkcia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 14, Type_q = 2, Name = "Z·pcha", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 15, Type_q = 2, Name = "Porucha sp·nku", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 16, Type_q = 2, Name = "Ortostatick· hypotenzia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 17, Type_q = 2, Name = "Depresia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 18, Type_q = 2, Name = "⁄zkosù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 19, Type_q = 2, Name = "PsychÛza (halucin·cie, bludy)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 20, Type_q = 2, Name = "InÈ...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         #endregion
 
     }

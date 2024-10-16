@@ -1,24 +1,29 @@
-﻿@page "/patients"
+﻿@page "/patients/"
 
 @using Krka.MoveOn.Data
 @using Krka.MoveOn.Services
+@using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.Extensions.Localization
 @using Krka.MoveOn.Resources;
 @using System.Globalization
 
 
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = "Admin, Doctor, Office")]
 @attribute [StreamRendering(true)]
 
 @rendermode InteractiveServer
 
 @inject IStringLocalizer<Patient> localizer
 @inject PatientService PatientService
+@inject QuestionnaireService QuestionnaireService
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IToastNotificationService ToastService
+
+@inject ProtectedSessionStorage SessionStorage
 
 <div class="d-flex align-items-center custom-toast-background">
     <DxToastProvider Name="Overview"
@@ -31,11 +36,10 @@
 
 
 <div style="display: flex; justify-content: space-between; width: 100%;">
-    <div class="grid-container" style="width: 52%;">
+    <div style="width: 52%;">
 
         <PageTitle>Welcome</PageTitle>
 
-        
         <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
             Pacienti
         </div>
@@ -55,8 +59,8 @@
                 ColumnResizeMode="GridColumnResizeMode.NextColumn"
                 TextWrapEnabled="false"
                 HighlightRowOnHover="true"
-                CustomizeEditModel="Grid_CustomizeEditModel_New"
                 EditModelSaving="Grid_EditModelSaving"
+                CustomizeEditModel="Grid_CustomizeEditModel_New"                
                 DataItemDeleting="Grid_DataItemDeleting"
                 FocusedRowEnabled ="true"
                 FocusedRowChanged="OnFocusedRowChanged"> 
@@ -124,29 +128,64 @@
             <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
                 Udalosti
             </div>
-            <div class="simple-table" style=" border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
-                <div style="margin-bottom: 6px;">
-                    <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
-                        <Items>
-                            <DxMenuItem NavigateUrl="/entryQ/gen" Text="1. Vstupný klinický dotazník"></DxMenuItem>
-                        </Items>
-                    </DxMenu>
-                </div>
-                <div style="margin-bottom: 6px;">
-                    <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
-                        <Items>
-                            <DxMenuItem NavigateUrl="/EntryQuestionnaire/GeneralQ" Text="2. Priebežný klinický dotazník"></DxMenuItem>
-                        </Items>
-                    </DxMenu>
-                </div>
-                <div>
-                    <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
-                        <Items>
-                            <DxMenuItem NavigateUrl="/EntryQuestionnaire/GeneralQ" Text="3. Výstupný klinický dotazník"></DxMenuItem>
-                        </Items>
-                    </DxMenu>
-                </div>
+            <div class="simple-table" style="border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
+                @if (hasQuestionnaires)
+                {
+                    @foreach (var questionnaire in Questionnaires)
+                    {
+                        <div style="margin-bottom: 6px;">
+                            <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
+                                <Items>
+                                    <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
+                                                Text="@GetMenuText(questionnaire.Order)"
+                                                @onclick="() => SetCurrentId(questionnaire.Id)" />
+                                </Items>
+                            </DxMenu>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p style="color: red">Žiadne dotazníky nie sú k dispozícii pre tohto pacienta.</p>
+                }
             </div>
+
+            @code {
+
+                /// <summary>
+                /// Zachytenie aktualnej Questionnaire_id
+                /// </summary>
+                /// <param name="id"></param>
+                /// <returns></returns>
+                private async Task SetCurrentId(int id)
+                {
+                    await SessionStorage.SetAsync("currentId", id);
+                }
+
+
+                private string GetNavigateUrl(Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum order, int id)
+                {
+                    return order switch
+                    {
+                        Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.entry => $"/entryQ/gen/{id}",
+                        Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing => $"/EntryQuestionnaire/GeneralQ/{id}",
+                        Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.result => $"/EntryQuestionnaire/GeneralQ/{id}",
+                        _ => "/"
+                    };
+                }
+
+                private string GetMenuText(Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum order)
+                {
+                    return order switch
+                    {
+                        Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.entry => "1. Vstupný klinický dotazník",
+                        Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing => "2. Priebežný klinický dotazník",
+                        Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.result => "3. Výstupný klinický dotazník",
+                        _ => "Unknown"
+                    };
+                }
+            }
+
 
         </div>
     </div>
@@ -157,38 +196,94 @@
 
 
 @code {
-    IGrid patientsGrid { get; set; }    
+    IGrid patientsGrid { get; set; }
     public List<Data.Patient> Patients { get; set; }
+    public List<Data.Questionnaires.Questionnaire> Questionnaires { get; set; }
+
     private string? selectedPatientCode;
+    private int? selectedPatientId;
+    private bool hasQuestionnaires; 
 
     protected override async Task OnInitializedAsync()
     {
         Patients = await PatientService.GetPatientsAsync();
     }
 
+    /// <summary>
+    /// Nacitanie Id aktualneho pouzivatela
+    /// </summary>
+    /// <returns></returns>
+    async Task<string> GetCurrentUserIdAsync()
+    {
+        var user = await UserManager.GetUserAsync(SignInManager.Context.User);
+        if (user != null)
+        {
+            return user.Id;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
     private void DeleteToast()
     {
         ToastService.ShowToast(new ToastOptions
-        {
-            ProviderName = "Overview",
-            Title = "Pacient bol úspešne odstránený",
-            ThemeMode = ToastThemeMode.Saturated,
-            RenderStyle = ToastRenderStyle.Success,
-        });
+            {
+                ProviderName = "Overview",
+                Title = "Pacient bol úspešne odstránený",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
     }
 
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
     private void AddToast()
     {
         ToastService.ShowToast(new ToastOptions
-        {
-            ProviderName = "Overview",
-            Title = "Pacient bol úspešne pridaný",
-
-            ThemeMode = ToastThemeMode.Saturated,
-            RenderStyle = ToastRenderStyle.Success,
-        });
+            {
+                ProviderName = "Overview",
+                Title = "Pacient bol úspešne pridaný",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
     }
 
+    /// <summary>
+    /// Reload Grid
+    /// </summary>
+    /// <returns></returns>
+    async Task UpdateDataAsync()
+    {
+        Patients = await PatientService.GetPatientsAsync();
+        patientsGrid.Reload();
+    }
+
+
+    /// <summary>
+    /// Otvorenie editForm
+    /// </summary>
+    /// <returns></returns>
+    async Task New_Click() => await patientsGrid.StartEditNewRowAsync();
+
+    /// <summary>
+    /// Nastavenie objektov
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    async Task Grid_CustomizeEditModel_New(GridCustomizeEditModelEventArgs e)
+    {
+        if (e.IsNew)
+        {
+            var newPatient = (Data.Patient)e.EditModel;
+            newPatient.UserId = await GetCurrentUserIdAsync();
+            newPatient.CreatedAt = DateTime.Now;
+            newPatient.ModifiedAt = DateTime.Now;
+        }
+    }
+    
     void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
     {
         if (e.IsNew)
@@ -199,48 +294,64 @@
         }
     }
 
-    async Task New_Click() => await patientsGrid.StartEditNewRowAsync();
-
-    async Task Grid_CustomizeEditModel_New(GridCustomizeEditModelEventArgs e)
-    {
-
-        if (e.IsNew)
-        {
-            var newPatient = (Data.Patient)e.EditModel;
-            newPatient.UserId = await GetCurrentUserIdAsync();
-            newPatient.CreatedAt = DateTime.Now;
-            newPatient.ModifiedAt = DateTime.Now;
-        }
-    }
-
+    /// <summary>
+    /// Ulozenie do DB
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
     async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
         var patient = (Data.Patient)e.EditModel;
         if (e.IsNew)
         {
             await PatientService.SavePatientAsync(patient);
+
+            // Vytvorenie 3 sekcii dotazníkov (Vstupny, prebiehajúci, Vystupni)
+            var questionnaires = new List<Data.Questionnaires.Questionnaire>
+            {
+                new Data.Questionnaires.Questionnaire
+                {
+                    PatientId = patient.Id,
+                    Date = DateTime.Now,
+                    Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.entry,
+                    CreatedAt = DateTime.Now,
+                    ModifiedAt = DateTime.Now
+                },
+                new Data.Questionnaires.Questionnaire
+                {
+                    PatientId = patient.Id,
+                    Date = DateTime.Now,
+                    Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing,
+                    CreatedAt = DateTime.Now,
+                    ModifiedAt = DateTime.Now
+                },
+                new Data.Questionnaires.Questionnaire
+                {
+                    PatientId = patient.Id,
+                    Date = DateTime.Now,
+                    Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.result,
+                    CreatedAt = DateTime.Now,
+                    ModifiedAt = DateTime.Now
+                }
+            };
+
+            foreach (var questionnaire in questionnaires)
+            {
+                await QuestionnaireService.SaveQuestionnaireAsync(questionnaire);
+            }
         }
         await UpdateDataAsync();
         AddToast();
     }
 
-    async Task UpdateDataAsync()
-    {
-        Patients = await PatientService.GetPatientsAsync();
-        patientsGrid.Reload();
-    }
-
-    async Task<string> GetCurrentUserIdAsync()
-    {
-        var user = await UserManager.GetUserAsync(SignInManager.Context.User);
-        if (user != null) 
-        { 
-            return user.Id; 
-        }
-        return null;
-    }
 
 
+
+    /// <summary>
+    /// Nastavenie objektu "DeletedAt" 
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
         var patient = (Data.Patient)e.DataItem;
@@ -251,11 +362,35 @@
 
 
 
-    private void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
+    /// <summary>
+    /// Nacitanie dotaznikov podla daneho pacienta
+    /// </summary>
+    /// <param name="patientId"></param>
+    /// <returns></returns>
+    private async Task LoadQuestionnairesAsync(int patientId)
     {
-        var patient = e.DataItem as Data.Patient;
-        selectedPatientCode = patient?.PatientCode;
+        var questionnaires = await QuestionnaireService.GetQuestionnairesByPatientIdAsync(patientId);
+        hasQuestionnaires = questionnaires.Any(); // ak obsahuje polozky
+        Questionnaires = hasQuestionnaires ? questionnaires : new List<Data.Questionnaires.Questionnaire>(); 
     }
 
 
+    /// <summary>
+    /// Zmena focusnuteho riadku 
+    /// </summary>
+    /// <param name="e"></param>
+    private async void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
+    {
+        var patient = e.DataItem as Data.Patient;
+        selectedPatientCode = patient?.PatientCode;
+        selectedPatientId = patient?.Id;
+
+        if (selectedPatientId.HasValue)
+        {
+            await LoadQuestionnairesAsync(selectedPatientId.Value);
+            StateHasChanged(); //Aktualizacia, vykreslenie noveho obsahu
+        }
+    }
 }
+
+

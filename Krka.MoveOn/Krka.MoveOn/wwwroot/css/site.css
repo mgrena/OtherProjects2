@@ -238,8 +238,8 @@ html, body {
     -webkit-mask-repeat: no-repeat;
     background-position: center center;
     background-color: currentColor;
-    height: 16px;
-    width: 16px;
+    height: 18px;
+    width: 18px;
     opacity: 0.7;
 }
 
@@ -257,7 +257,7 @@ html, body {
 .grid-toolbar-save {
     -webkit-mask-image: url("/images/save.svg");
     mask-image: url("/images/save.svg");
-    mask-size: 16px 16px;
+    mask-size: 20px 20px;
 }
 
 .grid-toolbar-cancel {

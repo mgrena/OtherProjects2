@@ -6,7 +6,7 @@ namespace Krka.MoveOn.Data
     [Table("patients")]
     public class Patient
     {
-        [Required, Key]
+        [Key]
         [Column("id")]
         public int Id { get; set; }
 
