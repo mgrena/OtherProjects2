@@ -12,7 +12,7 @@ namespace Krka.MoveOn.Services.Questionnaires
         public async Task<List<QuestionnaireInitial02>> GetQuestionnaireInitial02(int questionnaireId)
         {
             return await _context.QuestionnaireInitial02s
-                .Where(q => q.Questionnaire_id == questionnaireId)
+                .Where(q => q.Questionnaire_id == questionnaireId && q.DeletedAt == null)
                 .ToListAsync();
         }
 
@@ -23,6 +23,12 @@ namespace Krka.MoveOn.Services.Questionnaires
 
         public async Task SaveInitialAsync(QuestionnaireInitial02 init)
         {
+            var existingEntity = await _context.QuestionnaireInitial02s.FindAsync(init.Id);
+            if (existingEntity != null)
+            {
+                _context.Entry(existingEntity).State = EntityState.Detached;
+            }
+
             if (init.Id == 0)
             {
                 _context.QuestionnaireInitial02s.Add(init);
@@ -32,6 +38,17 @@ namespace Krka.MoveOn.Services.Questionnaires
                 _context.QuestionnaireInitial02s.Update(init);
             }
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteInitAsync(int initId)
+        {
+            var init = await _context.QuestionnaireInitial02s.FindAsync(initId);
+            if (init != null)
+            {
+                init.DeletedAt = DateTime.Now;
+                _context.QuestionnaireInitial02s.Update(init);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

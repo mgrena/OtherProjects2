@@ -173,16 +173,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 10, Type_q = 1, Name = "ApomorfÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 11, Type_q = 1, Name = "AmantadÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
 
-            ////treat_3
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 12, Type_q = 2, Name = "Pruhy moËenia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 13, Type_q = 2, Name = "Erektiln· dysfunkcia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 14, Type_q = 2, Name = "Z·pcha", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 15, Type_q = 2, Name = "Porucha sp·nku", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 16, Type_q = 2, Name = "Ortostatick· hypotenzia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 17, Type_q = 2, Name = "Depresia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 18, Type_q = 2, Name = "⁄zkosù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 19, Type_q = 2, Name = "PsychÛza (halucin·cie, bludy)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            //modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 20, Type_q = 2, Name = "InÈ...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        #endregion
+
+        #region "DialIndication"
+        //treat_3
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 1, Type_q = 1, Name = "Pruhy moËenia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 2, Type_q = 1, Name = "Erektiln· dysfunkcia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 3, Type_q = 1, Name = "Z·pcha", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 4, Type_q = 1, Name = "Porucha sp·nku", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 5, Type_q = 1, Name = "Ortostatick· hypotenzia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 6, Type_q = 1, Name = "Depresia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 7, Type_q = 1, Name = "⁄zkosù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 8, Type_q = 1, Name = "PsychÛza (halucin·cie, bludy)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 9, Type_q = 1, Name = "InÈ...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         #endregion
 
     }

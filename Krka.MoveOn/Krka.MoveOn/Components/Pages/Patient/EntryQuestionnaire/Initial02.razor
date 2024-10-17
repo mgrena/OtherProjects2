@@ -4,14 +4,25 @@
 @using Krka.MoveOn.Services.Questionnaires
 
 
+
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
 @inject Initial02Service InitialService
-
+@inject IToastNotificationService ToastService
 
 
 <PageTitle>MoveOn - Začiatočná liečba P</PageTitle>
+
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_EntryBtn />
@@ -35,6 +46,7 @@
             ColumnResizeMode="GridColumnResizeMode.NextColumn"
             TextWrapEnabled="false"
             EditModelSaving="Grid_EditModelSaving"
+            DataItemDeleting="Grid_DataItemDeleting"
             HighlightRowOnHover="true"           
             FocusedRowEnabled="true" >
 
@@ -64,9 +76,28 @@
                     <DxComboBoxSettings Data="@init_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
             </DxGridDataColumn>
-            <DxGridDataColumn FieldName="Init_2" Caption="Dávka (mg)" />
-            <DxGridDataColumn FieldName="Init_3" Caption="počet dávok denne" />
 
+            <DxGridDataColumn FieldName="Init_2" Caption="Dávka (mg)" />
+
+            <DxGridDataColumn FieldName="Init_3" Caption="Počet dávok denne" />
+
+            <DxGridDataColumn Caption="Denná dávka" ReadOnly="true" >
+                <CellDisplayTemplate Context="gridContext" >
+                    @{
+                        if (gridContext.DataItem is Data.Questionnaires.QuestionnaireInitial02 dataItem)
+                        {
+                            decimal init2 = dataItem.Init_2 != null ? dataItem.Init_2 : 0m;
+                            int init3 = dataItem.Init_3 ?? 0;
+                            var calculatedValue = init2 * init3;
+                            @calculatedValue
+                        }
+                        else
+                        {
+                            @:0
+                        }
+                    }
+                </CellDisplayTemplate>
+            </DxGridDataColumn>
 
             <DxGridCommandColumn Width="30px" NewButtonVisible="false">
 
@@ -75,7 +106,7 @@
                         <DxButton IconCssClass="grid-icon grid-icon-delete"
                                   RenderStyle="ButtonRenderStyle.Link"
                                   aria-label="Delete"
-                                  >
+                                  Click="@(() => initGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
                             <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
                         </DxButton>
                     </div>
@@ -93,6 +124,11 @@
                 </CellEditTemplate>
             </DxGridCommandColumn>
         </Columns>
+
+        <TotalSummary>
+            <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Init_2" ValueDisplayFormat=" {0}" />
+            <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Init_3" ValueDisplayFormat=" {0}" />
+        </TotalSummary>
 
         <EditFormTemplate Context="editFormContext">
             <DxFormLayout>
@@ -128,6 +164,50 @@
     }
 
 
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+        {
+            ProviderName = "Overview",
+            Title = "Učinná látka bola pridaná",
+            ThemeMode = ToastThemeMode.Saturated,
+            RenderStyle = ToastRenderStyle.Success,
+        });
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+        {
+            ProviderName = "Overview",
+            Title = "Učinná látka bola odstránená",
+            ThemeMode = ToastThemeMode.Saturated,
+            RenderStyle = ToastRenderStyle.Success,
+        });
+    }
+
+
+
     async Task UpdateDataAsync()
     {
         Inits = await InitialService.GetQuestionnaireInitial02(questionnaireId);
@@ -151,8 +231,12 @@
             {
                 case DataChangeType.Addition:
                     await InitialService.SaveInitialAsync(changedItem);
+                    AddToast();
                     break;
-
+                case DataChangeType.Modification:
+                    await InitialService.SaveInitialAsync(changedItem);
+                    ModifyToast();
+                    break;
             }
         }
         await ClearUnsavedChangesAsync();
@@ -173,7 +257,24 @@
         {
             Inits.Add(init);
             UnsavedChanges[init] = new(DataChangeType.Addition, new());
-        }       
+        }  
+        else
+        {
+            UnsavedChanges[init] = new(DataChangeType.Modification, new());
+        }
+    }
+
+    /// <summary>
+    /// Nastavenie objektu "DeletedAt"
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var init = (Data.Questionnaires.QuestionnaireInitial02)e.DataItem;
+        await InitialService.DeleteInitAsync(init.Id);
+        await UpdateDataAsync();
+        DeleteToast();
     }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);

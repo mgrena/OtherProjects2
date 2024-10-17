@@ -37,8 +37,8 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<General01Service>();
-builder.Services.AddScoped<Treatment03Service>();
 builder.Services.AddScoped<Initial02Service>();
+builder.Services.AddScoped<Treatment03Service>();
 builder.Services.AddScoped<QuestionnaireService>();
 
 builder.Services.AddAuthentication(options => {
