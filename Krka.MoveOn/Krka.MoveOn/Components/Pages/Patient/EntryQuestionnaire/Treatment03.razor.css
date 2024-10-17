@@ -5,3 +5,13 @@
     border-color: #dfdfdf;
 }
 
+
+::deep .vertical-grid .dx-datagrid-rowsview .dx-row {
+    display: flex;
+    flex-direction: column;
+}
+
+::deep .vertical-grid .dx-datagrid-rowsview .dx-row > td {
+    display: block;
+    width: 100%;
+}

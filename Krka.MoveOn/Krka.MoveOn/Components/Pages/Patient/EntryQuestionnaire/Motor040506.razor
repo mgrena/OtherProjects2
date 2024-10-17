@@ -1,73 +1,533 @@
-﻿@page "/entryQ/motor/"
+﻿@page "/entryQ/motor/{questionnaireId:int}"
+
+@using Krka.MoveOn.Services.Questionnaires
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
+@inject Motor040506Service MotorService
+@inject NavigationManager Navigation
+
 
 <PageTitle>MoveOn - MDS-UPDRS škála </PageTitle>
 
-<div>
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_EntryBtn />
-</div>
 
-@* <DxFormLayout CssClass="w-100">
-    <DxFormLayoutItem>
-        <div class="buttons-group mb-2">
-            <div class="d-flex flex-row flex-wrap">
-                <div class="me-2 mb-2">
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Detekcia príznakovvv"
-                              CssClass="w-100 rectangular-button"
-                               />
-                </div>
-                <div class="me-2 mb-2">
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Detekcia príznakov"
-                              CssClass="w-100 rectangular-button" />
-                </div>
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+                MDS-UPDRS škála, časť I.  – Nemotorické stránky denného života (nM-EDL)
             </div>
+            <DxGrid @ref="nonmotGrid"
+                    Data="Nonmot"
+                    KeyFieldName="Fieldname"
+                    PageSize="15"
+                    ValidationEnabled="false"
+                    EditMode="GridEditMode.EditCell"
+                    FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                    ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                    TextWrapEnabled="false"
+                    HighlightRowOnHover="true"
+                    EditModelSaving="OnEditModelSavingNonmot"
+                    FocusedRowEnabled="false">
+
+                <Columns>
+                    <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
+                    <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
+                    <DxGridDataColumn FieldName="Value" Caption="Počet bodov">
+                        <EditSettings>
+                            <DxSpinEditSettings MinValue="0" MaxValue="4" />
+                        </EditSettings>
+                    </DxGridDataColumn>
+                </Columns>
+
+                <TotalSummary>
+                    <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
+                </TotalSummary>
+            </DxGrid>
+
+            <br>
+
+            <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+                MDS-UPDRS škála, časť II.  - Motorické aspekty každodenného života (M-EDL)
+            </div>
+            <DxGrid @ref="motGrid"
+                    Data="Mot"
+                    KeyFieldName="Fieldname"
+                    PageSize="15"
+                    ValidationEnabled="false"
+                    EditMode="GridEditMode.EditCell"
+                    FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                    ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                    TextWrapEnabled="false"
+                    HighlightRowOnHover="true"
+                    EditModelSaving="OnEditModelSavingMot"
+                    FocusedRowEnabled="false">
+
+                <Columns>
+                    <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
+                    <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
+                    <DxGridDataColumn FieldName="Value" Caption="Počet bodov">
+                        <EditSettings>
+                            <DxSpinEditSettings MinValue="0" MaxValue="4" />
+                        </EditSettings>
+                    </DxGridDataColumn>
+                </Columns>
+
+                <TotalSummary>
+                    <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
+                </TotalSummary>
+            </DxGrid>
         </div>
-    </DxFormLayoutItem>
-@*     <DxFormLayoutTabPages @bind-ActiveTabIndex="@ActiveTabIndex">
-        <DxFormLayoutTabPage Caption="Detekcia príznakov">       
-            <DxFormLayoutItem Caption="Hire Date:" >
-                <DxDateEdit @bind-Date="@q1.Gen_1" ShowValidationIcon="true" />
-                <
-            </DxFormLayoutItem>
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="Začiatočná liečba">
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="Liečba pridružených problémov">
-            <!-- Obsah pre Liečba pridružených problémov -->
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="Modifikovaná škála podľa Hoehenovej a Yahra">
-            <!-- Obsah pre Modifikovaná škála podľa Hoehenovej a Yahra -->
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="MOCA">
-            <!-- Obsah pre MOCA -->
-        </DxFormLayoutTabPage>
-        <DxFormLayoutTabPage Caption="Údaje o predčasnom vylúčení">
-            <!-- Obsah pre Údaje o predčasnom vylúčení -->
-        </DxFormLayoutTabPage>
-    </DxFormLayoutTabPages> 
-</DxFormLayout> *@
+        <div class="grid-item" style="width: 50%; margin-left: 20px">        
 
-<div>
-    MDS-UPDRS škála, časť I.  – Nemotorické stránky denného života (nM-EDL)
+
+            <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+                MDS-UPDRS škála, časť III. - Vyšetrenie motoriky
+            </div>
+            <DxGrid @ref="motskillGrid"
+                    Data="Motskill"
+                    KeyFieldName="Fieldname"
+                    PageSize="35"
+                    ValidationEnabled="false"
+                    EditMode="GridEditMode.EditCell"
+                    FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                    ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                    TextWrapEnabled="false"
+                    HighlightRowOnHover="true" 
+                    EditModelSaving="OnEditModelSavingMotSkill"
+                    FocusedRowEnabled="false">
+
+                <Columns>
+                    <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
+                    <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
+                    <DxGridDataColumn FieldName="Value" Caption="Počet bodov">
+                        <EditSettings>
+                            <DxSpinEditSettings MinValue="0" MaxValue="4" />
+                        </EditSettings>
+                    </DxGridDataColumn>
+                </Columns>
+
+                <TotalSummary>
+                    <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
+                </TotalSummary>
+            </DxGrid>
+        </div>
+    </div>
 </div>
 
-<div>
-    MDS-UPDRS škála, časť II.  - Motorické aspekty každodenného života (M-EDL)
-</div>
 
-<div>
-    MDS-UPDRS škála, časť III. - Vyšetrenie motoriky
-</div>
+
 
 
 
 @code {
+    [Parameter]
+    public int questionnaireId { get; set; }
 
+    IGrid nonmotGrid { get; set; }
+    IGrid motGrid { get; set; }
+    IGrid motskillGrid { get; set; }
+
+    public List<MDSItem>? Nonmot { get; set; }
+    public List<MDSItem>? Mot { get; set; }
+    public List<MDSItem>? Motskill { get; set; }
+
+
+    Dictionary<Data.Questionnaires.QuestionnaireNonMotor04, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || nonmotGrid.IsEditing();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var nonmot = await MotorService.GetQuestionnaireNonMotor04(questionnaireId);
+        Nonmot = new List<MDSItem>();
+
+        var mot = await MotorService.GetQuestionnaireMotor05(questionnaireId);
+        Mot = new List<MDSItem>();
+
+        var motskill = await MotorService.GetQuestionnaireMotorSkill06(questionnaireId);
+        Motskill = new List<MDSItem>();
+
+        #region "Table nonmot"
+
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_1", Number = "1.1", Name = "Zhoršenie kognitívnych funkcií", Value = (nonmot != null) ? nonmot.Nonmot_1 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_2", Number = "1.2", Name = "Halucinácie a psychózy", Value = (nonmot != null) ? nonmot.Nonmot_2 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_3", Number = "1.3", Name = "Depresívna nálada", Value = (nonmot != null) ? nonmot.Nonmot_3 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_4", Number = "1.4", Name = "Úzkostná nálada", Value = (nonmot != null) ? nonmot.Nonmot_4 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_5", Number = "1.5", Name = "Apatia", Value = (nonmot != null) ? nonmot.Nonmot_5 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_6", Number = "1.6", Name = "Prejavy syndrómu dopamínovej dysregulácie", Value = (nonmot != null) ? nonmot.Nonmot_6 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_7", Number = "1.7", Name = "Problémy so spánkom", Value = (nonmot != null) ? nonmot.Nonmot_7 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_8", Number = "1.8", Name = "Denná spavosť", Value = (nonmot != null) ? nonmot.Nonmot_8 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_9", Number = "1.9", Name = "Bolesť a iné poruchy citlivosti", Value = (nonmot != null) ? nonmot.Nonmot_9 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_10", Number = "1.10", Name = "Problémy s močením", Value = (nonmot != null) ? nonmot.Nonmot_10 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_11", Number = "1.11", Name = "Problémy so zápchou", Value = (nonmot != null) ? nonmot.Nonmot_11 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_12", Number = "1.12", Name = "Závrativosť pri zmene polohy tela", Value = (nonmot != null) ? nonmot.Nonmot_12 : 0 });
+            Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_13", Number = "1.13", Name = "Únava", Value = (nonmot != null) ? nonmot.Nonmot_13 : 0 });
+        #endregion
+
+        #region "Table mot"
+            Mot.Add(new MDSItem() { Fieldname = "Mot_1", Number = "2.1", Name = "Reč", Value = (mot != null) ? mot.Mot_1 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_2", Number = "2.2", Name = "Slinenie", Value = (mot != null) ? mot.Mot_2 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_3", Number = "2.3", Name = "Žuvanie a prehĺtanie", Value = (mot != null) ? mot.Mot_3 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_4", Number = "2.4", Name = "Príprava jedla a stolovanie", Value = (mot != null) ? mot.Mot_4 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_5", Number = "2.5", Name = "Obliekanie sa", Value = (mot != null) ? mot.Mot_5 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_6", Number = "2.6", Name = "Hygiena", Value = (mot != null) ? mot.Mot_6 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_7", Number = "2.7", Name = "Písanie", Value = (mot != null) ? mot.Mot_7 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_8", Number = "2.8", Name = "Koníčky a iné aktivity", Value = (mot != null) ? mot.Mot_8 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_9", Number = "2.9", Name = "Pohyblivosť v posteli", Value = (mot != null) ? mot.Mot_9 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_10", Number = "2.10", Name = "Tras", Value = (mot != null) ? mot.Mot_10 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_11", Number = "2.11", Name = "Vstávanie z postele, auta alebo hlbokej stoličky", Value = (mot != null) ? mot.Mot_11 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_12", Number = "2.12", Name = "Chôdza a rovnováha", Value = (mot != null) ? mot.Mot_12 : 0 });
+            Mot.Add(new MDSItem() { Fieldname = "Mot_13", Number = "2.13", Name = "Stuhnutie pohybu počas chôdze (freezing)", Value = (mot != null) ? mot.Mot_13 : 0 });
+        #endregion
+
+        #region "Table motskill"
+
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_1", Number = "3.1", Name = "Reč", Value = (motskill != null) ? motskill.Motskill_1 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_2", Number = "3.2", Name = "Výraz tváre", Value = (motskill != null) ? motskill.Motskill_2 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_3", Number = "3.3a", Name = "Rigidita - krk", Value = (motskill != null) ? motskill.Motskill_3 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_4", Number = "3.3b", Name = "Rigidita - PHK", Value = (motskill != null) ? motskill.Motskill_4 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_5", Number = "3.3c", Name = "Rigidita - ĽHK", Value = (motskill != null) ? motskill.Motskill_5 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_6", Number = "3.3d", Name = "Rigidita - PDK", Value = (motskill != null) ? motskill.Motskill_6 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_7", Number = "3.3e", Name = "Rigidita - ĽDK", Value = (motskill != null) ? motskill.Motskill_7 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_8", Number = "3.4a", Name = "Spínanie prstov – P ruka", Value = (motskill != null) ? motskill.Motskill_8 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_9", Number = "3.4b", Name = "Spínanie prstov – Ľ ruka", Value = (motskill != null) ? motskill.Motskill_9 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_10", Number = "3.5a", Name = "Pohyby rúk – P ruka", Value = (motskill != null) ? motskill.Motskill_10 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_11", Number = "3.5b", Name = "Pohyby rúk – Ľ ruka", Value = (motskill != null) ? motskill.Motskill_11 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_12", Number = "3.6a", Name = "Supinačne-pronančné pohyby rúk – P ruka", Value = (motskill != null) ? motskill.Motskill_12 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_13", Number = "3.6b", Name = "Supinačne-pronančné pohyby rúk – Ľ ruka", Value = (motskill != null) ? motskill.Motskill_13 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_14", Number = "3.7a", Name = "Klopkanie špičkami nôh – P noha", Value = (motskill != null) ? motskill.Motskill_14 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_15", Number = "3.7b", Name = "Klopkanie špičkami nôh – Ľ noha", Value = (motskill != null) ? motskill.Motskill_15 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_16", Number = "3.8a", Name = "Obratnosť dolných končatín - PDK", Value = (motskill != null) ? motskill.Motskill_16 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_17", Number = "3.8b", Name = "Obratnosť dolných končatín - ĽDK", Value = (motskill != null) ? motskill.Motskill_17 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_18", Number = "3.9", Name = "Vstávanie zo stoličky", Value = (motskill != null) ? motskill.Motskill_18 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_19", Number = "3.10", Name = "Chôdza", Value = (motskill != null) ? motskill.Motskill_19 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_20", Number = "3.11", Name = "Stuhnutie počas chôdze (freezing)", Value = (motskill != null) ? motskill.Motskill_20 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_21", Number = "3.12", Name = "Posturálna stabilita", Value = (motskill != null) ? motskill.Motskill_21 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_22", Number = "3.13", Name = "Postoj", Value = (motskill != null) ? motskill.Motskill_22 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_23", Number = "3.14", Name = "Celková spontaneita pohybov (bradykinéza)", Value = (motskill != null) ? motskill.Motskill_23 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_24", Number = "3.15a", Name = "Polohový tras rúk – P ruka", Value = (motskill != null) ? motskill.Motskill_24 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_25", Number = "3.15b", Name = "Polohový tras rúk – Ľ ruka", Value = (motskill != null) ? motskill.Motskill_25 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_26", Number = "3.16a", Name = "Kinetický tras rúk – P ruka", Value = (motskill != null) ? motskill.Motskill_26 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_27", Number = "3.16b", Name = "Kinetický tras rúk – Ľ ruka", Value = (motskill != null) ? motskill.Motskill_27 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_28", Number = "3.17a", Name = "Amplitúda pokojového trasu - PHK", Value = (motskill != null) ? motskill.Motskill_28 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_29", Number = "3.17b", Name = "Amplitúda pokojového trasu - ĽHK", Value = (motskill != null) ? motskill.Motskill_29 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_30", Number = "3.17c", Name = "Amplitúda pokojového trasu - PDK", Value = (motskill != null) ? motskill.Motskill_30 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_31", Number = "3.17d", Name = "Amplitúda pokojového trasu - ĽDK", Value = (motskill != null) ? motskill.Motskill_31 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_32", Number = "3.17e", Name = "Amplitúda pokojového trasu – pery/sánka", Value = (motskill != null) ? motskill.Motskill_32 : 0 });
+            Motskill.Add(new MDSItem() { Fieldname = "Motskill_33", Number = "3.18", Name = "Konštantnosť pokojového trasu", Value = (motskill != null) ? motskill.Motskill_33 : 0 });
+        #endregion
+    }
+
+
+    #region "Saving nonmot table"
+
+        private async Task OnEditModelSavingNonmot(GridEditModelSavingEventArgs e)
+        {
+            var item = (MDSItem)e.EditModel;
+            var questionnaire = await MotorService.GetQuestionnaireNonMotor04(questionnaireId) ?? new Data.Questionnaires.QuestionnaireNonMotor04
+            {
+                Nonmot_1 = 0,
+                Nonmot_2 = 0,
+                Nonmot_3 = 0,
+                Nonmot_4 = 0,
+                Nonmot_5 = 0,
+                Nonmot_6 = 0,
+                Nonmot_7 = 0,
+                Nonmot_8 = 0,
+                Nonmot_9 = 0,
+                Nonmot_10 = 0,
+                Nonmot_11 = 0,
+                Nonmot_12 = 0,
+                Nonmot_13 = 0,
+                Questionnaire_id = questionnaireId,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
+            };
+
+            switch (item.Fieldname)
+            {
+                case "Nonmot_1":
+                    questionnaire.Nonmot_1 = item.Value;
+                    break;
+                case "Nonmot_2":
+                    questionnaire.Nonmot_2 = item.Value;
+                    break;
+                case "Nonmot_3":
+                    questionnaire.Nonmot_3 = item.Value;
+                    break;
+                case "Nonmot_4":
+                    questionnaire.Nonmot_4 = item.Value;
+                    break;
+                case "Nonmot_5":
+                    questionnaire.Nonmot_5 = item.Value;
+                    break;
+                case "Nonmot_6":
+                    questionnaire.Nonmot_6 = item.Value;
+                    break;
+                case "Nonmot_7":
+                    questionnaire.Nonmot_7 = item.Value;
+                    break;
+                case "Nonmot_8":
+                    questionnaire.Nonmot_8 = item.Value;
+                    break;
+                case "Nonmot_9":
+                    questionnaire.Nonmot_9 = item.Value;
+                    break;
+                case "Nonmot_10":
+                    questionnaire.Nonmot_10 = item.Value;
+                    break;
+                case "Nonmot_11":
+                    questionnaire.Nonmot_11 = item.Value;
+                    break;
+                case "Nonmot_12":
+                    questionnaire.Nonmot_12 = item.Value;
+                    break;
+                case "Nonmot_13":
+                    questionnaire.Nonmot_13 = item.Value;
+                    break;
+            }
+
+            await MotorService.SaveOrUpdateQuestionnaireNonMotor04(questionnaire);
+            Navigation.NavigateTo($"/entryQ/motor/{questionnaireId}", forceLoad: true);
+        }
+
+    #endregion
+
+    #region "Saving mot table"
+
+        private async Task OnEditModelSavingMot(GridEditModelSavingEventArgs e)
+        {
+            var item = (MDSItem)e.EditModel;
+            var questionnaire = await MotorService.GetQuestionnaireMotor05(questionnaireId) ?? new Data.Questionnaires.QuestionnaireMotor05
+                {
+                    Mot_1 = 0,
+                    Mot_2 = 0,
+                    Mot_3 = 0,
+                    Mot_4 = 0,
+                    Mot_5 = 0,
+                    Mot_6 = 0,
+                    Mot_7 = 0,
+                    Mot_8 = 0,
+                    Mot_9 = 0,
+                    Mot_10 = 0,
+                    Mot_11 = 0,
+                    Mot_12 = 0,
+                    Mot_13 = 0,                
+
+                    Questionnaire_id = questionnaireId,
+                    CreatedAt = DateTime.Now,
+                    ModifiedAt = DateTime.Now
+                };
+
+            switch (item.Fieldname)
+            {
+                case "Mot_1":
+                    questionnaire.Mot_1 = item.Value;
+                    break;
+                case "Mot_2":
+                    questionnaire.Mot_2 = item.Value;
+                    break;
+                case "Mot_3":
+                    questionnaire.Mot_3 = item.Value;
+                    break;
+                case "Mot_4":
+                    questionnaire.Mot_4 = item.Value;
+                    break;
+                case "Mot_5":
+                    questionnaire.Mot_5 = item.Value;
+                    break;
+                case "Mot_6":
+                    questionnaire.Mot_6 = item.Value;
+                    break;
+                case "Mot_7":
+                    questionnaire.Mot_7 = item.Value;
+                    break;
+                case "Mot_8":
+                    questionnaire.Mot_8 = item.Value;
+                    break;
+                case "Mot_9":
+                    questionnaire.Mot_9 = item.Value;
+                    break;
+                case "Mot_10":
+                    questionnaire.Mot_10 = item.Value;
+                    break;
+                case "Mot_11":
+                    questionnaire.Mot_11 = item.Value;
+                    break;
+                case "Mot_12":
+                    questionnaire.Mot_12 = item.Value;
+                    break;
+                case "Mot_13":
+                    questionnaire.Mot_13 = item.Value;
+                    break;
+            }
+
+            await MotorService.SaveOrUpdateQuestionnaireMotor05(questionnaire);
+            Navigation.NavigateTo($"/entryQ/motor/{questionnaireId}", forceLoad: true);
+        }
+
+    #endregion
+
+    #region "Saving motskill table"
+
+        private async Task OnEditModelSavingMotSkill(GridEditModelSavingEventArgs e)
+    {
+        var item = (MDSItem)e.EditModel;
+        var questionnaire = await MotorService.GetQuestionnaireMotorSkill06(questionnaireId) ?? new Data.Questionnaires.QuestionnaireMotorSkill06
+            {
+                Motskill_1 = 0,
+                Motskill_2 = 0,
+                Motskill_3 = 0,
+                Motskill_4 = 0,
+                Motskill_5 = 0,
+                Motskill_6 = 0,
+                Motskill_7 = 0,
+                Motskill_8 = 0,
+                Motskill_9 = 0,
+                Motskill_10 = 0,
+                Motskill_11 = 0,
+                Motskill_12 = 0,
+                Motskill_13 = 0,
+                Motskill_14 = 0,
+                Motskill_15 = 0,
+                Motskill_16 = 0,
+                Motskill_17 = 0,
+                Motskill_18 = 0,
+                Motskill_19 = 0,
+                Motskill_20 = 0,
+                Motskill_21 = 0,
+                Motskill_22 = 0,
+                Motskill_23 = 0,
+                Motskill_24 = 0,
+                Motskill_25 = 0,
+                Motskill_26 = 0,
+                Motskill_27 = 0,
+                Motskill_28 = 0,
+                Motskill_29 = 0,
+                Motskill_30 = 0,
+                Motskill_31 = 0,
+                Motskill_32 = 0,
+                Motskill_33 = 0,
+                
+
+                Questionnaire_id = questionnaireId,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
+            };
+
+        switch (item.Fieldname)
+        {
+            case "Motskill_1":
+                questionnaire.Motskill_1 = item.Value;
+                break;
+            case "Motskill_2":
+                questionnaire.Motskill_2 = item.Value;
+                break;
+            case "Motskill_3":
+                questionnaire.Motskill_3 = item.Value;
+                break;
+            case "Motskill_4":
+                questionnaire.Motskill_4 = item.Value;
+                break;
+            case "Motskill_5":
+                questionnaire.Motskill_5 = item.Value;
+                break;
+            case "Motskill_6":
+                questionnaire.Motskill_6 = item.Value;
+                break;
+            case "Motskill_7":
+                questionnaire.Motskill_7 = item.Value;
+                break;
+            case "Motskill_8":
+                questionnaire.Motskill_8 = item.Value;
+                break;
+            case "Motskill_9":
+                questionnaire.Motskill_9 = item.Value;
+                break;
+            case "Motskill_10":
+                questionnaire.Motskill_10 = item.Value;
+                break;
+            case "Motskill_11":
+                questionnaire.Motskill_11 = item.Value;
+                break;
+            case "Motskill_12":
+                questionnaire.Motskill_12 = item.Value;
+                break;
+            case "Motskill_13":
+                questionnaire.Motskill_13 = item.Value;
+                break;
+            case "Motskill_14":
+                questionnaire.Motskill_14 = item.Value;
+                break;
+            case "Motskill_15":
+                questionnaire.Motskill_15 = item.Value;
+                break;
+            case "Motskill_16":
+                questionnaire.Motskill_16 = item.Value;
+                break;
+            case "Motskill_17":
+                questionnaire.Motskill_17 = item.Value;
+                break;
+            case "Motskill_18":
+                questionnaire.Motskill_18 = item.Value;
+                break;
+            case "Motskill_19":
+                questionnaire.Motskill_19 = item.Value;
+                break;
+            case "Motskill_20":
+                questionnaire.Motskill_20 = item.Value;
+                break;
+            case "Motskill_21":
+                questionnaire.Motskill_21 = item.Value;
+                break;
+            case "Motskill_22":
+                questionnaire.Motskill_22 = item.Value;
+                break;
+            case "Motskill_23":
+                questionnaire.Motskill_23 = item.Value;
+                break;
+            case "Motskill_24":
+                questionnaire.Motskill_24 = item.Value;
+                break;
+            case "Motskill_25":
+                questionnaire.Motskill_25 = item.Value;
+                break;
+            case "Motskill_26":
+                questionnaire.Motskill_26 = item.Value;
+                break;
+            case "Motskill_27":
+                questionnaire.Motskill_27 = item.Value;
+                break;
+            case "Motskill_28":
+                questionnaire.Motskill_28 = item.Value;
+                break;
+            case "Motskill_29":
+                questionnaire.Motskill_29 = item.Value;
+                break;
+            case "Motskill_30":
+                questionnaire.Motskill_30 = item.Value;
+                break;
+            case "Motskill_31":
+                questionnaire.Motskill_31 = item.Value;
+                break;
+            case "Motskill_32":
+                questionnaire.Motskill_32 = item.Value;
+                break;
+            case "Motskill_33":
+                questionnaire.Motskill_33 = item.Value;
+                break;
+        }
+
+        await MotorService.SaveOrUpdateQuestionnaireMotorSkill06(questionnaire);
+        Navigation.NavigateTo($"/entryQ/motor/{questionnaireId}", forceLoad: true);
+    }
+
+    #endregion
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification }
 }

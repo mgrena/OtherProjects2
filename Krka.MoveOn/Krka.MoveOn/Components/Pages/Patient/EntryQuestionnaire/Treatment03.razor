@@ -11,6 +11,7 @@
 @inject IToastNotificationService ToastService
 
 
+
 <PageTitle>MoveOn - Liečba pridružených problémov </PageTitle>
 
 <div class="d-flex align-items-center custom-toast-background">
@@ -25,9 +26,12 @@
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_EntryBtn />
 
+
     <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
         Liečba pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.):
     </div>
+
+
     <DxGrid @ref="treatGrid"
             Data="Treats"
             PageSize="20"
@@ -46,7 +50,8 @@
             EditModelSaving="Grid_EditModelSaving"
             DataItemDeleting="Grid_DataItemDeleting"
             HighlightRowOnHover="true"
-            FocusedRowEnabled="true">
+            FocusedRowEnabled="true"
+            >
 
         <ToolbarTemplate Context="toolbarContext">
             <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
@@ -69,7 +74,7 @@
         </ToolbarTemplate>
 
         <Columns>
-            <DxGridDataColumn FieldName="Treat_1" Caption="Učinná látka">
+            <DxGridDataColumn FieldName="Treat_1" Caption="Učinná látka" Width="">
                 <EditSettings>
                     <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
@@ -126,6 +131,8 @@
 
     List<Data.Dials.DialIndication> dialIndication = new();
     List<Data.Dials.DialIndication> treat_3_Answer = new();
+
+    
 
     Dictionary<QuestionnaireTreatment03, DataChange> UnsavedChanges { get; } = new();
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || treatGrid.IsEditing();

@@ -39,6 +39,7 @@ builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<General01Service>();
 builder.Services.AddScoped<Initial02Service>();
 builder.Services.AddScoped<Treatment03Service>();
+builder.Services.AddScoped<Motor040506Service>();
 builder.Services.AddScoped<QuestionnaireService>();
 
 builder.Services.AddAuthentication(options => {
