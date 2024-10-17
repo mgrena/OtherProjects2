@@ -47,5 +47,11 @@ namespace Krka.MoveOn.Data.Questionnaires
 
         [Column("deleted_at")]
         public required DateTime? DeletedAt { get; set; }
+
+
+        public QuestionnaireTreatment03 Clone()
+        {
+            return (QuestionnaireTreatment03)MemberwiseClone();
+        }
     }
 }
