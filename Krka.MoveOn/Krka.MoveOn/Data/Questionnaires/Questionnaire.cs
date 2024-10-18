@@ -9,14 +9,14 @@ namespace Krka.MoveOn.Data.Questionnaires
 
         public enum QuestionnaireOrderEnum
         {
-            entrz = 1,
+            entry = 1,
             ongoing = 2,
             result = 3
         }
 
         [Key]
         [Column("id")]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
         [Column("id_patient")]
         public required int PatientId { get; set; }

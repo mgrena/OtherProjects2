@@ -9,7 +9,9 @@ namespace Krka.MoveOn.Services
 
         public async Task<List<Data.Patient>> GetPatientsAsync()
         {
-            return await _context.Patients.ToListAsync();
+            return await _context.Patients
+                .Where(p => p.DeletedAt == null)
+                .ToListAsync();
         }
 
         public async Task SavePatientAsync(Patient patient)
@@ -30,7 +32,8 @@ namespace Krka.MoveOn.Services
             var patient = await _context.Patients.FindAsync(patientId);
             if (patient != null)
             {
-                _context.Patients.Remove(patient);
+                patient.DeletedAt = DateTime.Now;
+                _context.Patients.Update(patient);
                 await _context.SaveChangesAsync();
             }
         }

@@ -6,8 +6,7 @@ namespace Krka.MoveOn.Data.Questionnaires
     [Table("questionnaire_general01")]
     public class QuestionnaireGeneral01
     {
-        private static int _lastId = 0;
-
+       
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -160,10 +159,6 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("created_at")]
         public  DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public QuestionnaireGeneral01()
-        {
-            Id = ++_lastId;
-        }
 
     }
 }

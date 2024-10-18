@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -33,6 +33,32 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Components.Layout.NavMenu.en-US.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="DXLocalization.sk.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DXLocalization.sk.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DXLocalization.sk.en.resx">
+      <DependentUpon>DXLocalization.sk.resx</DependentUpon>
+    </EmbeddedResource>
+    <Compile Update="DXLocalization.sk.Designer.cs">
+      <DependentUpon>DXLocalization.sk.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Update="DXLocalization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DXLocalization.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DXLocalization.en.resx">
+      <DependentUpon>DXLocalization.resx</DependentUpon>
+    </EmbeddedResource>
+    <Compile Update="DXLocalization.Designer.cs">
+      <DependentUpon>DXLocalization.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\Components.Pages.Index.en-US.resx">
@@ -45,6 +71,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\Pages\" />
+    <Reference Include="DevExpress.Utils.v24.1">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 24.1\Components\Bin\NetCore\DevExpress.Utils.v24.1.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

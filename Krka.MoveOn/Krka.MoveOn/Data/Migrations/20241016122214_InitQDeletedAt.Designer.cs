@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241016122214_InitQDeletedAt")]
+    partial class InitQDeletedAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,80 +382,6 @@ namespace Krka.MoveOn.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("dial_indications");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pruhy močenia",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Erektilná dysfunkcia",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Zápcha",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Porucha spánku",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ortostatická hypotenzia",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Depresia",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Úzkosť",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Psychóza (halucinácie, bludy)",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Iné...",
-                            Type_q = 1
-                        });
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialMH", b =>
@@ -1904,10 +1833,6 @@ namespace Krka.MoveOn.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2")

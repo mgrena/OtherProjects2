@@ -21,7 +21,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         public int? TreatQ1 { get; set; }
 
         /// <summary>
-        /// liek - Ucinna latka - čísleník na DialActiveIngredient
+        /// liek - Ucinna latka - čísleník na DialIndication
         /// </summary>
         [Column("treat_1")]
         public int? Treat_1 { get; set; }
@@ -44,5 +44,14 @@ namespace Krka.MoveOn.Data.Questionnaires
 
         [Column("created_at")]
         public required DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        [Column("deleted_at")]
+        public required DateTime? DeletedAt { get; set; }
+
+
+        public QuestionnaireTreatment03 Clone()
+        {
+            return (QuestionnaireTreatment03)MemberwiseClone();
+        }
     }
 }

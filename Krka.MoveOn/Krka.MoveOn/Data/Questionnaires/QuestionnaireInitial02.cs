@@ -44,5 +44,14 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("created_at")]
         public required DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        [Column("deleted_at")]
+        public required DateTime? DeletedAt { get; set; } 
+
+
+        public QuestionnaireInitial02 Clone()
+        {
+            return (QuestionnaireInitial02)MemberwiseClone();
+        }
+
     }
 }

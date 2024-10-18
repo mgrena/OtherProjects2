@@ -9,7 +9,7 @@ namespace Krka.MoveOn.Data.Questionnaires
     {
         [Key]
         [Column("id")]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
         [Column("questionnaire_id")]
         public required int Questionnaire_id { get; set; }

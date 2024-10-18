@@ -36,8 +36,11 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<PatientService>();
-builder.Services.AddScoped<Q01Service>();
+builder.Services.AddScoped<General01Service>();
+builder.Services.AddScoped<Initial02Service>();
 builder.Services.AddScoped<Treatment03Service>();
+builder.Services.AddScoped<Motor040506Service>();
+builder.Services.AddScoped<QuestionnaireService>();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -97,4 +100,5 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.MapAdditionalIdentityEndpoints();
+DevExpress.Utils.Localization.XtraLocalizer.EnableTraceSource();
 app.Run();
