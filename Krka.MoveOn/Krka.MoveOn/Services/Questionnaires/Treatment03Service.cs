@@ -9,7 +9,14 @@ public class Treatment03Service(ApplicationDbContext context)
     private readonly ApplicationDbContext _context = context;
 
     public async Task<List<DialActiveIngredient>> GetActiveIngredient() { 
-        var list = await _context.DialActiveIngredients.Where(i => i.Type_q == 2).ToListAsync();
+        var list = await _context.DialActiveIngredients.Where(i => i.Type_q == 1).ToListAsync();
         return list;
     }
+
+    public async Task<List<DialActiveIngredient>> GetIndicationListTreat()
+    {
+        var list1 = await _context.DialActiveIngredients.Where(i => i.Type_q == 2).ToListAsync();
+        return list1;
+    }
+
 }

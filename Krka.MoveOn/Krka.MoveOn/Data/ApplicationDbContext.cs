@@ -160,7 +160,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         #endregion
 
         #region "DialActiveIngredient"
-            //init_1
+            //treat_1
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 1, Type_q = 1, Name = "levodopa/karbidopa", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 2, Type_q = 1, Name = "levodopa/benserazid", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 3, Type_q = 1, Name = "entakapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });

@@ -10,6 +10,7 @@ using System.Globalization;
 using static System.Reflection.Metadata.BlobBuilder;
 using Krka.MoveOn.Interfaces;
 using Krka.MoveOn.Repositories;
+using Krka.MoveOn.Services.Questionnaires;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,7 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<Q01Service>();
+builder.Services.AddScoped<Treatment03Service>();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
