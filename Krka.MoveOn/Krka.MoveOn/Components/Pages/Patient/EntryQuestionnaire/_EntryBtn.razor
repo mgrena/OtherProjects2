@@ -12,7 +12,7 @@
 
 <DxFormLayout>
     <DxFormLayoutItem>
-        <div class="buttons-group mb-2">
+        <div class="buttons-group mb-2 ">
             <div class="d-flex flex-row w-100">
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
@@ -32,8 +32,13 @@
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
                           Text="MDS-UPDRS škála"
-                          CssClass="flex-fill rectangular-button"
+                          CssClass="flex-fill me-2 rectangular-button"
                           NavigateUrl="@GetNavigateUrl("/entryQ/motor")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Moca"
+                          CssClass="flex-fill rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/moca")" />
             </div>
         </div>
     </DxFormLayoutItem>

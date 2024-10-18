@@ -188,5 +188,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 9, Type_q = 1, Name = "Iné...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         #endregion
 
+        #region "DialMH"
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 1, Type_q = 1, Name = "Jednostranné príznaky", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 2, Type_q = 1, Name = "Jednostranné a axiálne príznaky (hypofónia, hypomímia, flekènédranie tela)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 3, Type_q = 1, Name = "Obojstranné príznaky bez poruchy rovnováhy", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 4, Type_q = 1, Name = "Obojstranné príznaky s miernou poruchou rovnováhy (schopnos vyrovna postoj pri pull teste)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 5, Type_q = 1, Name = "Mierne a stredné obojstranné príznaky, posturálnainstabilita, pacient je stále sebestaènı", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 6, Type_q = 1, Name = "aké postihnutie, no pacient je schopnı chodi alebo stá bez pomoci", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 7, Type_q = 1, Name = "Pacient je odkázanı na vozík alebo poste¾", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        #endregion
+
     }
 }

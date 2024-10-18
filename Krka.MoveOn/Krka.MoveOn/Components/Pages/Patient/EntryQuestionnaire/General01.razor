@@ -9,7 +9,6 @@
 
 @inject General01Service Q01Service
 @inject IToastNotificationService ToastService
-
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 
@@ -36,7 +35,7 @@
               >
         <DataAnnotationsValidator />
             <DxFormLayout>
-                <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+            <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
 
                     <DxFormLayoutItem Caption="Dátum" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     @if (isReadOnly)

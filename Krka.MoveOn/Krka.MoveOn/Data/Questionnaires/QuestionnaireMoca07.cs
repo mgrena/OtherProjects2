@@ -8,10 +8,16 @@ namespace Krka.MoveOn.Data.Questionnaires
     {
         [Key]
         [Column("id")]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
         [Column("questionnaire_id")]
         public required int Questionnaire_id { get; set; }
+
+        /// <summary>
+        /// Zakrúžkujte prosím číslo, ktoré vyjadruje štádium ochorenia. -> DialMHs - číselník na odpovede
+        /// </summary>
+        [Column("mh_1")]
+        public int? Mh_1 { get; set; }
 
         /// <summary>
         /// Vizuálno-priestorové schopnosti - "Test cesty"
