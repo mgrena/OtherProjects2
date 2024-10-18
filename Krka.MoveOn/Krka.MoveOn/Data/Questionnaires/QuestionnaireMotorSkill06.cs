@@ -213,12 +213,6 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("motskill_33")]
         public required int Motskill_33 { get; set; }
 
-        /// <summary>
-        /// Zakrúžkujte prosím číslo, ktoré vyjadruje štádium ochorenia. -> DialMHs - číselník na odpovede
-        /// </summary>
-        [Column("mh_1")]
-        public int? Mh_1 { get; set; }
-
         [Column("modified_at")]
         public required DateTime ModifiedAt { get; set; } = DateTime.Now;
 

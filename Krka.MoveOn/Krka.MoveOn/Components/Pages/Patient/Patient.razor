@@ -168,7 +168,7 @@
                     return order switch
                     {
                         Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.entry => $"/entryQ/gen/{id}",
-                        Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing => $"/EntryQuestionnaire/GeneralQ/{id}",
+                        Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing => $"/ongoingQ/init/{id}",
                         Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.result => $"/EntryQuestionnaire/GeneralQ/{id}",
                         _ => "/"
                     };
