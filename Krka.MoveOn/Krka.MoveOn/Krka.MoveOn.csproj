@@ -75,7 +75,4 @@
       <HintPath>..\..\..\..\..\Program Files\DevExpress 24.1\Components\Bin\NetCore\DevExpress.Utils.v24.1.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components\Pages\Components\" />
-  </ItemGroup>
 </Project>

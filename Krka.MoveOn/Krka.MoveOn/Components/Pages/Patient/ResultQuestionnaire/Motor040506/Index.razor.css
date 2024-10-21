@@ -1,0 +1,17 @@
+﻿::deep .rectangular-button {
+    border-radius: 0;
+    padding: 30px 20px;
+    border: 1px solid black;
+    border-color: #dfdfdf;
+}
+
+
+::deep .grid-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+::deep .grid-item {
+    flex: 1;
+    min-width: 300px;
+}

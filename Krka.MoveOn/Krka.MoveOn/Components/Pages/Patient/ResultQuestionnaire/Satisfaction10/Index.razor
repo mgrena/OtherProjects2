@@ -1,0 +1,51 @@
+﻿@page "/resultQ/satisfaction/{questionnaireId:int}"
+
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.ResultQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+@using Krka.MoveOn.Data.Questionnaires
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Satisfaction10Service SatisfactionService
+@inject IToastNotificationService ToastService
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    th {
+        text-align: center;
+    }
+
+    .radio-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+</style>
+
+<PageTitle>MoveOn - MDS-UPDRS škála </PageTitle>
+
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
+    <_EntryBtn />
+
+    <Satisfaction10Form questionnaireId="@questionnaireId" />
+
+</div>
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public int questionnaireId { get; set; }
+
+    
+}
+

@@ -8,7 +8,7 @@ namespace Krka.MoveOn.Data.Questionnaires
     {
         [Key]
         [Column("id")]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
         [Column("questionnaire_id")]
         public required int Questionnaire_id { get; set; }
@@ -38,9 +38,9 @@ namespace Krka.MoveOn.Data.Questionnaires
         public required int SF_4 { get; set; }
 
         [Column("modified_at")]
-        public required DateTime ModifiedAt { get; set; } = DateTime.Now;
+        public DateTime ModifiedAt { get; set; } = DateTime.Now;
 
         [Column("created_at")]
-        public required DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }
