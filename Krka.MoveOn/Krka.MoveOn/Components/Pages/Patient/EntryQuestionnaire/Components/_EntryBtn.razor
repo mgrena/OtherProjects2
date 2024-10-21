@@ -1,12 +1,15 @@
-﻿@page "/entrybtn"
+﻿
 @using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+@namespace Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
 @inject General01Service Q01Service
 @inject ProtectedSessionStorage SessionStorage
+
 
 <PageTitle>EntryBtn</PageTitle>
 
