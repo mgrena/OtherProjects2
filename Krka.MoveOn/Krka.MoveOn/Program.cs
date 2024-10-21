@@ -42,6 +42,7 @@ builder.Services.AddScoped<Treatment03Service>();
 builder.Services.AddScoped<Motor040506Service>();
 builder.Services.AddScoped<Moca07Service>();
 builder.Services.AddScoped<QuestionnaireService>();
+builder.Services.AddScoped<DrugEffect09Service>();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
