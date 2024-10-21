@@ -1,13 +1,14 @@
-﻿@page "/entryQ/treat/{questionnaireId:int}"
+﻿@page "/ongoingQ/drugEffect/{questionnaireId:int}"
 
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services
 @using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
-@inject Treatment03Service TreatmentService
+@inject DrugEffect09Service DrugEffectService
 @inject IToastNotificationService ToastService
 
 
@@ -28,12 +29,12 @@
 
 
     <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
-        Liečba pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.):
+        Nežiaduci účinok liečiva:
     </div>
 
 
-    <DxGrid @ref="treatGrid"
-            Data="Treats"
+    <DxGrid @ref="drugEffectGrid"
+            Data="DrugEffects"
             PageSize="20"
             PagerPosition="GridPagerPosition.Bottom"
             PageSizeSelectorVisible="true"
@@ -48,7 +49,6 @@
             ColumnResizeMode="GridColumnResizeMode.NextColumn"
             TextWrapEnabled="false"
             EditModelSaving="Grid_EditModelSaving"
-            DataItemDeleting="Grid_DataItemDeleting"
             HighlightRowOnHover="true"
             FocusedRowEnabled="true"
             >
@@ -74,20 +74,18 @@
         </ToolbarTemplate>
 
         <Columns>
-            <DxGridDataColumn FieldName="Treat_1" Caption="Učinná látka" Width="">
+            <DxGridDataColumn FieldName="De_1" Caption="Učinná látka" Width="">
                 <EditSettings>
                     <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
             </DxGridDataColumn>
 
-            <DxGridDataColumn FieldName="Treat_2" Caption="Dávka (mg)" />
+            <DxGridDataColumn FieldName="De_2" Caption="Dávka (mg)" />
 
-            <DxGridDataColumn FieldName="Treat_3" Caption="Indikácia" >
-                <EditSettings>
-                    <DxComboBoxSettings Data="@treat_3_Answer" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>     
-            
+            <DxGridDataColumn FieldName="De_3" Caption="Nežiaduci účinok"/>
+
+            <DxGridDataColumn FieldName="De_4" Caption="Indikácia"/>
+
             <DxGridCommandColumn Width="30px" NewButtonVisible="false">
 
                 <CellDisplayTemplate Context="gridContext">
@@ -95,7 +93,7 @@
                         <DxButton IconCssClass="grid-icon grid-icon-delete"
                                   RenderStyle="ButtonRenderStyle.Link"
                                   aria-label="Delete"
-                                  Click="@(() => treatGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                  Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
                             <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
                         </DxButton>
                     </div>
@@ -123,29 +121,29 @@
     [Parameter]
     public int questionnaireId { get; set; }
 
-    IGrid treatGrid { get; set; }
-    public List<Data.Questionnaires.QuestionnaireTreatment03> Treats { get; set; }
+    IGrid drugEffectGrid { get; set; }
+    public List<Data.Questionnaires.QuestionnaireDrugEffect09> DrugEffects { get; set; }
 
     List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
     List<Data.Dials.DialActiveIngredient> treat_1_Answer = new();
 
-    List<Data.Dials.DialIndication> dialIndication = new();
-    List<Data.Dials.DialIndication> treat_3_Answer = new();
+    // List<Data.Dials.DialIndication> dialIndication = new();
+    // List<Data.Dials.DialIndication> treat_3_Answer = new();
 
     
 
-    Dictionary<QuestionnaireTreatment03, DataChange> UnsavedChanges { get; } = new();
-    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || treatGrid.IsEditing();
+    Dictionary<QuestionnaireDrugEffect09, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || drugEffectGrid.IsEditing();
 
     protected override async Task OnInitializedAsync()
     {
-        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(questionnaireId);
 
-        dialActiveIngredient = await TreatmentService.GetDialActiveIngredientAsync();
+        dialActiveIngredient = await DrugEffectService.GetDialActiveIngredientAsync();
         treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
 
-        dialIndication = await TreatmentService.GetDialIndicationAsync();
-        treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
+        // dialIndication = await TreatmentService.GetDialIndicationAsync();
+        // treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
 
     }
 
@@ -194,11 +192,11 @@
 
     async Task UpdateDataAsync()
     {
-        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
-        treatGrid.Reload();
+        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(questionnaireId);
+        drugEffectGrid.Reload();
     }
 
-    async Task New_Click() => await treatGrid.StartEditNewRowAsync();
+    async Task New_Click() => await drugEffectGrid.StartEditNewRowAsync();
 
     async Task Cancel_Click() => await ClearUnsavedChangesAsync();
 
@@ -211,11 +209,11 @@
             switch (changeType)
             {
                 case DataChangeType.Addition:
-                    await TreatmentService.SaveTreatmentAsync(changedItem);
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
                     AddToast();
                     break;
                 case DataChangeType.Modification:
-                    await TreatmentService.SaveTreatmentAsync(changedItem);
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
                     ModifyToast();
                     break;
             }
@@ -231,17 +229,17 @@
 
     void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
-        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
-        var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
-        treat.Questionnaire_id = questionnaireId;
+        var drugEffect = (Data.Questionnaires.QuestionnaireDrugEffect09)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
+        drugEffect.Questionnaire_id = questionnaireId;
         if (e.IsNew)
         {
-            Treats.Add(treat);
-            UnsavedChanges[treat] = new(DataChangeType.Addition, new());
+            DrugEffects.Add(drugEffect);
+            UnsavedChanges[drugEffect] = new(DataChangeType.Addition, new());
         }
         else
         {
-            UnsavedChanges[treat] = new(DataChangeType.Modification, new());
+            UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
         }
     }
 
@@ -250,13 +248,13 @@
     /// </summary>
     /// <param name="e"></param>
     /// <returns></returns>
-    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
-    {
-        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
-        await TreatmentService.DeleteTreatAsync(treat.Id);
-        await UpdateDataAsync();
-        DeleteToast();
-    }
+    // async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    // {
+    //     var treat = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
+    //     await DrugEffectService.DeleteTreatAsync(treat.Id);
+    //     await UpdateDataAsync();
+    //     DeleteToast();
+    // }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification, Addition, Delete }

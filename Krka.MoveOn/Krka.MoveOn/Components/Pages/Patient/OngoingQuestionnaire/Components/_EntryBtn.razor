@@ -12,33 +12,28 @@
 
 <DxFormLayout>
     <DxFormLayoutItem>
-        <div class="buttons-group mb-2 ">
+        <div class="buttons-group mb-2">
             <div class="d-flex flex-row w-100">
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Detekcia príznakov"
+                          Text="Liečba Parkinsonovej choroby"
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/gen")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/init")" />
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Začiatočná liečba"
+                          Text="Zmena v liečbe pridružených problémov"
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/init")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/treat")" />
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Liečba pridružených problémov"
+                          Text="Nežiaduci účinok liečiva"
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/treat")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/drugEffect")" />
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="MDS-UPDRS škála"
+                          Text="Nežiaduci účinok liečiva"
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/motor")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Moca"
-                          CssClass="flex-fill rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/moca")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/motor")" />
             </div>
         </div>
     </DxFormLayoutItem>

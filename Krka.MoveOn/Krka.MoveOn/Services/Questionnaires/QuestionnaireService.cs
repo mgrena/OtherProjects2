@@ -31,4 +31,35 @@ public class QuestionnaireService(ApplicationDbContext context)
                              .Where(q => q.PatientId == patientId)
                              .ToListAsync();
     }
+
+    /// <summary>
+    /// Nacitanie Sekcii z tabulky Questionnaire na zaklade Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<Questionnaire> GetQuestionnairesByIdAsync(int id)
+    {
+        return await _context.Questionnaires
+                             .FirstOrDefaultAsync(q => q.Id == id);
+    }
+
+    public async Task UpdateQuestionnaireAsync(Questionnaire questionnaire)
+    {
+        if (questionnaire == null)
+        {
+            throw new ArgumentNullException(nameof(questionnaire));
+        }
+
+        var existingQuestionnaire = await _context.Questionnaires
+                                                  .FirstOrDefaultAsync(q => q.Id == questionnaire.Id);
+
+        if (existingQuestionnaire == null)
+        {
+            throw new InvalidOperationException($"Questionnaire with ID {questionnaire.Id} not found.");
+        }
+
+        _context.Entry(existingQuestionnaire).CurrentValues.SetValues(questionnaire);
+
+        await _context.SaveChangesAsync();
+    }
 }
