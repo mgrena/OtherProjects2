@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241022073649_Exclusion08Seed")]
+    partial class Exclusion08Seed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,19 +38,15 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<int?>("Effect")
+                    b.Property<int>("Effect")
                         .HasColumnType("int")
                         .HasColumnName("effect");
 
-                    b.Property<int?>("Frequency")
+                    b.Property<int>("Frequency")
                         .HasColumnType("int")
                         .HasColumnName("frequency");
 
-                    b.Property<int?>("Intensity")
+                    b.Property<int>("Intensity")
                         .HasColumnType("int")
                         .HasColumnName("intensity");
 
@@ -56,7 +55,8 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnName("modified_at");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(150)
+                        .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar")
                         .HasColumnName("adverse_effect");
 
@@ -64,19 +64,19 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id_questionnaire");
 
-                    b.Property<int?>("Related")
+                    b.Property<int>("Related")
                         .HasColumnType("int")
                         .HasColumnName("related");
 
-                    b.Property<int?>("Result")
+                    b.Property<int>("Result")
                         .HasColumnType("int")
                         .HasColumnName("result");
 
-                    b.Property<int?>("Severity")
+                    b.Property<int>("Severity")
                         .HasColumnType("int")
                         .HasColumnName("severity");
 
-                    b.Property<int?>("Start")
+                    b.Property<int>("Start")
                         .HasColumnType("int")
                         .HasColumnName("start");
 
@@ -310,7 +310,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(250)
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
                     b.Property<int>("Type_q")
@@ -320,208 +320,6 @@ namespace Krka.MoveOn.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("dial_adverse_effects");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Jedenkrát",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Občas",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Neustále",
-                            Type_q = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Nesúvisí (Ak je NU klasifikovaná ako nesúvisiaca s liekom)",
-                            Type_q = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Nepravdepodobne súvisí (udalosť s najväčšou pravdepodobnosťou nebola spôsobená liekom, ale príčinnú súvislosť nemožno úplne vylúčiť)",
-                            Type_q = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Možno súvisí (Udalosť môže, ale nemusí byť spôsobená liekom, príčinnú súvislosť nie je možné posúdiť s väčšou istotou)",
-                            Type_q = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pravdepodobne súvisí (Liek je najpravdepodobnejšou príčinou udalosti, ale nemožno vylúčiť iné príčiny)",
-                            Type_q = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Takmer určite súvisí (Liek je takmer určite príčinou udalosti, neexistujú žiadne iné zjavné alternatívne vysvetlenia)",
-                            Type_q = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Nezávažné",
-                            Type_q = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Život ohrozujúce",
-                            Type_q = 3
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Hospitalizácia (začatá alebo predĺžená)",
-                            Type_q = 3
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Zdravotné postihnutie",
-                            Type_q = 3
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Vrodená anomália",
-                            Type_q = 3
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Smrť",
-                            Type_q = 3
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Závažné podľa názoru skúšajúceho lekára",
-                            Type_q = 3
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Mierna (Nespôsobuje obmedzenie bežných činností, pacient môže pociťovať mierne nepohodlie)",
-                            Type_q = 4
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Stredne ťažká (Spôsobuje určité obmedzenia bežných aktivít, pacient môže pociťovať nepríjemné nepohodlie)",
-                            Type_q = 4
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ťažká (Spôsobuje neschopnosť vykonávať bežné činnosti, pacient môže pociťovať neznesiteľné nepohodlie alebo bolesť)",
-                            Type_q = 4
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bez následkov",
-                            Type_q = 5
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Zmeny v liečbe",
-                            Type_q = 5
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Zníženie dávky",
-                            Type_q = 5
-                        },
-                        new
-                        {
-                            Id = 22,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Symptomatická liečba",
-                            Type_q = 5
-                        },
-                        new
-                        {
-                            Id = 23,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Hospitalizácia",
-                            Type_q = 5
-                        },
-                        new
-                        {
-                            Id = 24,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Prestala",
-                            Type_q = 6
-                        },
-                        new
-                        {
-                            Id = 25,
-                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pokračuje",
-                            Type_q = 6
-                        });
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialExclusion", b =>

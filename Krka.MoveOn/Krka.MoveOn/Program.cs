@@ -41,6 +41,7 @@ builder.Services.AddScoped<Initial02Service>();
 builder.Services.AddScoped<Treatment03Service>();
 builder.Services.AddScoped<Motor040506Service>();
 builder.Services.AddScoped<Moca07Service>();
+builder.Services.AddScoped<Exclusion08Service>();
 builder.Services.AddScoped<QuestionnaireService>();
 builder.Services.AddScoped<DrugEffect09Service>(); 
 builder.Services.AddScoped<Satisfaction10Service>();

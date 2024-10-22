@@ -198,5 +198,56 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 7, Type_q = 1, Name = "Pacient je odkázanı na vozík alebo poste¾", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         #endregion
 
+        #region "Dial Exclusion"
+        //exc_2
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 1, Type_q = 1, Name = "Pri návšteve pacienta na mieste", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 2, Type_q = 1, Name = "Na dia¾ku prostredníctvom telefonického hovoru", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 3, Type_q = 1, Name = "Na dia¾ku prostredníctvom elektronickıch médií", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        //exc_3
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 4, Type_q = 2, Name = "Vıskyt závanej neiaducej reakcie poèas pozorovacieho obdobia v tejto štúdii", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 5, Type_q = 2, Name = "Smr", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 6, Type_q = 2, Name = "Hospitalizácia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 7, Type_q = 2, Name = "Rozhodnutie pacienta ukonèi lieèbu a odvolanie jeho informovaného súhlasu", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 8, Type_q = 2, Name = "Rozhodnutie pacienta ukonèi lieèbu a odvolanie informovaného súhlasu a GDPR formulára", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 9, Type_q = 2, Name = "Bezpeènos pacienta (napr. rozhodnutie skúšajúceho vylúèi pacienta zo štúdie v jeho najlepšom záujme, neiaduce úèinky vyadujúce medikamentózny zásah alebo ukonèenie lieèby)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 10, Type_q = 2, Name = "O alebo zhoršenie existujúceho ochorenia poèas štúdie, ktoré si vyaduje pouívanie liekov, ktoré nie sú povolené v spojení so súhrnom charakteristickıch vlastností lieku pouitıch liekov", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 11, Type_q = 2, Name = "Iné...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        #endregion
+
+        #region "Dial AdverseEffect"
+        //Frekvencia
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 1, Type_q = 1, Name = "Jedenkrát", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 2, Type_q = 1, Name = "Obèas", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 3, Type_q = 1, Name = "Neustále", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        //Súvis 
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 4, Type_q = 2, Name = "Nesúvisí (Ak je NU klasifikovaná ako nesúvisiaca s liekom)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 5, Type_q = 2, Name = "Nepravdepodobne súvisí (udalos s najväèšou pravdepodobnosou nebola spôsobená liekom, ale príèinnú súvislos nemono úplne vylúèi)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 6, Type_q = 2, Name = "Mono súvisí (Udalos môe, ale nemusí by spôsobená liekom, príèinnú súvislos nie je moné posúdi s väèšou istotou)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 7, Type_q = 2, Name = "Pravdepodobne súvisí (Liek je najpravdepodobnejšou príèinou udalosti, ale nemono vylúèi iné príèiny)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 8, Type_q = 2, Name = "Takmer urèite súvisí (Liek je takmer urèite príèinou udalosti, neexistujú iadne iné zjavné alternatívne vysvetlenia)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        //Zavaznost
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 9, Type_q = 3, Name = "Nezávané", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 10, Type_q = 3, Name = "ivot ohrozujúce", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 11, Type_q = 3, Name = "Hospitalizácia (zaèatá alebo predåená)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 12, Type_q = 3, Name = "Zdravotné postihnutie", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 13, Type_q = 3, Name = "Vrodená anomália", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 14, Type_q = 3, Name = "Smr", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 15, Type_q = 3, Name = "Závané pod¾a názoru skúšajúceho lekára", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        //Intenzita
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 16, Type_q = 4, Name = "Mierna (Nespôsobuje obmedzenie benıch èinností, pacient môe pociova mierne nepohodlie)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 17, Type_q = 4, Name = "Stredne aká (Spôsobuje urèité obmedzenia benıch aktivít, pacient môe pociova nepríjemné nepohodlie)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 18, Type_q = 4, Name = "aká (Spôsobuje neschopnos vykonáva bené èinnosti, pacient môe pociova neznesite¾né nepohodlie alebo boles)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        //Vplyv na lieèbu
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 19, Type_q = 5, Name = "Bez následkov", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 20, Type_q = 5, Name = "Zmeny v lieèbe", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 21, Type_q = 5, Name = "Zníenie dávky", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 22, Type_q = 5, Name = "Symptomatická lieèba", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 23, Type_q = 5, Name = "Hospitalizácia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        //Vysledok
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 24, Type_q = 6, Name = "Prestala", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 25, Type_q = 6, Name = "Pokraèuje", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+
+        #endregion
+
     }
 }

@@ -20,5 +20,16 @@ namespace Krka.MoveOn.Services.Questionnaires
             return await _context.DialMHs.ToListAsync();
         }
 
+        public async Task SaveQuestionnaireMoca07Async(QuestionnaireMoca07 questionnaire)
+        {
+            if (questionnaire == null)
+            {
+                throw new ArgumentNullException(nameof(questionnaire));
+            }
+
+            _context.QuestionnaireMoca07s.Add(questionnaire);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
