@@ -1,0 +1,166 @@
+﻿@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Data.Questionnaires
+
+@inject Satisfaction10Service SatisfactionService
+@inject IToastNotificationService ToastService
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<DxLoadingPanel @bind-Visible="PanelVisible"
+                IsContentBlocked="true"
+                ApplyBackgroundShading="true"
+                IndicatorAreaVisible="false"
+                Text="Fetching Data...">
+
+        <EditForm Model="@SatisfactionQ"
+            Context="EditFormContext"
+            OnValidSubmit="@HandleValidSubmit"
+            >
+            <DxFormLayout>
+                <DxFormLayoutGroup Caption="Hodnotenie spokojnosti s liečbou">
+
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Veľmi nespokojný</th>
+                                    <th>Nespokojný</th>
+                                    <th>Neutrálny</th>
+                                    <th>Spokojný</th>
+                                    <th>Veľmi spokojný</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Celková spokojnosť s liečbou</td>
+                                    @foreach (var option in ratingOptions)
+                                    {
+                                        <td>
+                                            <div class="radio-container">
+                                            <DxRadio @bind-GroupValue="@SatisfactionQ.SF_1" Value="@option" GroupName="sf_1_group" />
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>Spokojnosť so zlepšením depresívnych symptómov</td>
+                                    @foreach (var option in ratingOptions)
+                                    {
+                                        <td>
+                                            <div class="radio-container">
+                                            <DxRadio @bind-GroupValue="@SatisfactionQ.SF_2" Value="@option" GroupName="sf_2_group" />
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>Spokojnosť so zlepšením ranných príznakov (t.j. ranná stuhnutosť, problém so vstávaním z postele)</td>
+                                    @foreach (var option in ratingOptions)
+                                    {
+                                        <td>
+                                            <div class="radio-container">
+                                            <DxRadio @bind-GroupValue="@SatisfactionQ.SF_3" Value="@option" GroupName="sf_3_group" />
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>Spokojnosť so zlepšením únavy</td>
+                                    @foreach (var option in ratingOptions)
+                                    {
+                                        <td>
+                                            <div class="radio-container">
+                                                <DxRadio @bind-GroupValue="@SatisfactionQ.SF_4" Value="@option" GroupName="sf_4_group" />
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        <DxFormLayoutItem ColSpanMd="12">
+                            <div style="margin-top: 5px">
+
+                                <DxButton SubmitFormOnClick="true"
+                                          Text="Uložiť"
+                                          RenderStyle="ButtonRenderStyle.Primary" />
+
+                            </div>
+                        </DxFormLayoutItem>
+                
+                </DxFormLayoutGroup>
+            </DxFormLayout>
+        </EditForm>
+        
+        
+</DxLoadingPanel>
+
+@code {
+
+    [Parameter]
+    public int questionnaireId { get; set; }
+
+    bool PanelVisible { get; set; }
+
+    private List<int> ratingOptions = new List<int> { 1, 2, 3, 4, 5 };
+
+    QuestionnaireSatisfaction10 SatisfactionQ { get; set; } = new QuestionnaireSatisfaction10
+        {
+            Questionnaire_id = -1,
+            SF_1 = 0,
+            SF_2 = 0,
+            SF_3 = 0,
+            SF_4 = 0
+        };
+
+    protected override async Task OnInitializedAsync()
+    {
+        PanelVisible = true;
+        SatisfactionQ = await SatisfactionService.GetQuestionnaireSatisfaction10(questionnaireId);
+        if (SatisfactionQ == null)
+        {
+            SatisfactionQ = new QuestionnaireSatisfaction10
+            {
+                Questionnaire_id = questionnaireId,
+                SF_1 = 0,
+                SF_2 = 0,
+                SF_3 = 0,
+                SF_4 = 0
+            };
+        }
+        PanelVisible = false;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (SatisfactionQ != null)
+        {
+            await SatisfactionService.SaveSatisfactionAsync(SatisfactionQ);
+            AddToast();
+        }
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Hodnotenie spokojnosti  úspešne uložené",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

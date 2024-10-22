@@ -2,6 +2,7 @@
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Components
 
 @inject Initial02Service InitialService
 @inject IToastNotificationService ToastService
@@ -27,23 +28,7 @@
         FocusedRowEnabled="true">
 
     <ToolbarTemplate Context="toolbarContext">
-        <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
-
-            <DxToolbarItem Text="Pridať učinnú látku" Click="New_Click" Enabled="true">
-                <img src="images/pill.svg" width="24" height="24" alt="Pridať učinnu látku" />
-                <span style="margin-left: 2px">Pridať učinnú látku</span>
-            </DxToolbarItem>
-
-            <DxToolbarItem Text="Uložiť" BeginGroup="true" Enabled="BatchItemsEnabled" Click="Save_Click">
-                <img src="images/save.svg" width="24" height="24" alt="Save" />
-                <span style="margin-left: 3px">Uložiť</span>
-            </DxToolbarItem>
-
-            <DxToolbarItem Text="Zrušiť" Click="Cancel_Click" Enabled="BatchItemsEnabled">
-                <img src="images/cancel.svg" width="24" height="24" alt="Cancel" />
-                <span style="margin-left: 4px">Zrušiť</span>
-            </DxToolbarItem>
-        </DxToolbar>
+        <ManagementToolbar NewClick="New_Click" SaveClick="Save_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
     </ToolbarTemplate>
 
     <Columns>
