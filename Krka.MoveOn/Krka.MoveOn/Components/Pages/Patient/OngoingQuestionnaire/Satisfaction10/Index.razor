@@ -1,4 +1,4 @@
-﻿@page "/ongoingQ/satisfaction/{questionnaireId:int}"
+﻿@page "/ongoingQ/satisfaction/{questionnaireId}"
 
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
@@ -44,7 +44,7 @@
 
 @code {
     [Parameter]
-    public int questionnaireId { get; set; }
+    public string questionnaireId { get; set; }
 
     
 }

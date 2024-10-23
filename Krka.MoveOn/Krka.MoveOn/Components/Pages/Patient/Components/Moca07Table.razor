@@ -247,7 +247,7 @@
 
 @code {
     [Parameter]
-    public int questionnaireId { get; set; }
+    public string questionnaireId { get; set; }
     bool isReadOnly = false;
     bool IsInfoOpen { get; set; } = false;
 
@@ -306,7 +306,7 @@
     }
 
 
-    private async Task LoadQuestionnaire(int questionnaireId)
+    private async Task LoadQuestionnaire(string questionnaireId)
     {  
         var questionnaire = await MocaService.GetQuestionnaireMoca07ByQuestionnaireIdAsync(questionnaireId);
         if (questionnaire != null)

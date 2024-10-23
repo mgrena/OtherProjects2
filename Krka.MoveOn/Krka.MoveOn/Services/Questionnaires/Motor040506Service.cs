@@ -9,19 +9,19 @@ public class Motor040506Service(ApplicationDbContext context)
 {
     private readonly ApplicationDbContext _context = context;
 
-    public async Task<QuestionnaireNonMotor04?> GetQuestionnaireNonMotor04(int questionnaireId)
+    public async Task<QuestionnaireNonMotor04?> GetQuestionnaireNonMotor04(string questionnaireId)
     {
         return await Task.Run(() => _context.QuestionnaireNonMotor04s
             .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));            
     }
 
-    public async Task<QuestionnaireMotor05?> GetQuestionnaireMotor05(int questionnaireId)
+    public async Task<QuestionnaireMotor05?> GetQuestionnaireMotor05(string questionnaireId)
     {
         return await Task.Run(() => _context.QuestionnaireMotor05s
             .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
     }
 
-    public async Task<QuestionnaireMotorSkill06?> GetQuestionnaireMotorSkill06(int questionnaireId)
+    public async Task<QuestionnaireMotorSkill06?> GetQuestionnaireMotorSkill06(string questionnaireId)
     {
         return await Task.Run(() => _context.QuestionnaireMotorSkill06s
             .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));

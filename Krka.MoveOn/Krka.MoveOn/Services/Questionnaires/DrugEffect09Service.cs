@@ -9,7 +9,7 @@ public class DrugEffect09Service(ApplicationDbContext context)
 {
     private readonly ApplicationDbContext _context = context;
 
-    public async Task<List<QuestionnaireDrugEffect09>> GetQuestionnaireDrugEffect09(int questionnaireId)
+    public async Task<List<QuestionnaireDrugEffect09>> GetQuestionnaireDrugEffect09(string questionnaireId)
     {
         return await _context.QuestionnaireDrugEffect09s
             .Where(q => q.Questionnaire_id == questionnaireId)

@@ -1,4 +1,4 @@
-﻿@page "/entryQ/treat/{questionnaireId:int}"
+﻿@page "/entryQ/treat/{questionnaireId}"
 
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services
@@ -39,6 +39,6 @@
 
 @code {
     [Parameter]
-    public int questionnaireId { get; set; }
+    public string questionnaireId { get; set; }
 
 }

@@ -9,7 +9,7 @@ public class Treatment03Service(ApplicationDbContext context)
 {
     private readonly ApplicationDbContext _context = context;
 
-    public async Task<List<QuestionnaireTreatment03>> GetQuestionnaireTreatment03(int questionnaireId)
+    public async Task<List<QuestionnaireTreatment03>> GetQuestionnaireTreatment03(string questionnaireId)
     {
         return await _context.QuestionnaireTreatment03s
             .Where(q => q.Questionnaire_id == questionnaireId && q.DeletedAt == null)

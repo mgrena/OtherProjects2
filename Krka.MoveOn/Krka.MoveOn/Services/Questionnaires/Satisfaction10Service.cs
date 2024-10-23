@@ -9,7 +9,7 @@ public class Satisfaction10Service(ApplicationDbContext context)
 {
     private readonly ApplicationDbContext _context = context;
 
-    public async Task<QuestionnaireSatisfaction10> GetQuestionnaireSatisfaction10(int questionnaireId)
+    public async Task<QuestionnaireSatisfaction10> GetQuestionnaireSatisfaction10(string questionnaireId)
     {
         return await Task.Run(() => _context.QuestionnaireSatisfaction10s
             .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));

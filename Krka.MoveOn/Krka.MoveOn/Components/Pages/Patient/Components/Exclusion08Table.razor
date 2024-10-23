@@ -212,7 +212,7 @@
 
 @code {
     [Parameter]
-    public int questionnaireId { get; set; }
+    public string questionnaireId { get; set; }
     bool isReadOnly = false;
     bool isExc_q_Answer = false;
     bool isExc_3_1_Answer = false;
@@ -284,7 +284,7 @@
         await LoadQuestionnaire(questionnaireId);
     }
 
-    private async Task LoadQuestionnaire(int questionnaireId)
+    private async Task LoadQuestionnaire(string questionnaireId)
     {
         var questionnaire = await ExclusionService.GetQuestionnaireExclusion08ByQuestionnaireIdAsync(questionnaireId);
         if (questionnaire != null)

@@ -1,4 +1,4 @@
-﻿@page "/entryQ/gen/{questionnaireId:int}"
+﻿@page "/entryQ/gen/{questionnaireId}"
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
 @using Microsoft.AspNetCore.Authorization
@@ -396,7 +396,7 @@
 
 @code {
     [Parameter]
-    public int questionnaireId { get; set; }
+    public string questionnaireId { get; set; }
 
 
     bool isGen7_1_DM = false;
@@ -494,7 +494,7 @@
     }
 
 
-    private async Task LoadQuestionnaire(int questionnaireId)
+    private async Task LoadQuestionnaire(string questionnaireId)
     {
         var questionnaire = await Q01Service.GetQuestionnaireGeneral01ByQuestionnaireIdAsync(questionnaireId);
         if (questionnaire != null)

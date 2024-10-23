@@ -10,7 +10,7 @@ namespace Krka.MoveOn.Services.Questionnaires
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<QuestionnaireExclusion08?> GetQuestionnaireExclusion08ByQuestionnaireIdAsync(int questionnaireId)
+        public async Task<QuestionnaireExclusion08?> GetQuestionnaireExclusion08ByQuestionnaireIdAsync(string questionnaireId)
         {
             return await Task.Run(() => _context.QuestionnaireExclusion08s
                                  .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
@@ -31,7 +31,7 @@ namespace Krka.MoveOn.Services.Questionnaires
             return await _context.DialAdverseEffects.ToListAsync();
         }
 
-        public async Task<List<AdverseEffect>> GetAdverseEffect(int questionnaireId)
+        public async Task<List<AdverseEffect>> GetAdverseEffect(string questionnaireId)
         {
             return await _context.AdverseEffects
                .Where(q => q.QuestionnaireId == questionnaireId && q.DeletedAt == null)

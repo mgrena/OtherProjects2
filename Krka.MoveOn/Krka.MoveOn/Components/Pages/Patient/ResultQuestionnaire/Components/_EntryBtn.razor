@@ -51,13 +51,13 @@
 
 @code 
 {
-    private int currentId;
+    private string currentId;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            var result = await SessionStorage.GetAsync<int>("currentId");
+            var result = await SessionStorage.GetAsync<string>("currentId");
             if (result.Success)
             {
                 currentId = result.Value;

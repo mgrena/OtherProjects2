@@ -1,4 +1,4 @@
-﻿@page "/resultQ/drugEffect/{questionnaireId:int}"
+﻿@page "/resultQ/drugEffect/{questionnaireId}"
 
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services
@@ -119,7 +119,7 @@
 
 @code {
     [Parameter]
-    public int questionnaireId { get; set; }
+    public string questionnaireId { get; set; }
 
     IGrid drugEffectGrid { get; set; }
     public List<Data.Questionnaires.QuestionnaireDrugEffect09> DrugEffects { get; set; }

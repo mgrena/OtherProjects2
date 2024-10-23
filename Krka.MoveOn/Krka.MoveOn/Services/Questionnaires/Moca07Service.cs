@@ -9,7 +9,7 @@ namespace Krka.MoveOn.Services.Questionnaires
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<QuestionnaireMoca07?> GetQuestionnaireMoca07ByQuestionnaireIdAsync(int questionnaireId)
+        public async Task<QuestionnaireMoca07?> GetQuestionnaireMoca07ByQuestionnaireIdAsync(string questionnaireId)
         {
             return await Task.Run(() => _context.QuestionnaireMoca07s
                                  .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));

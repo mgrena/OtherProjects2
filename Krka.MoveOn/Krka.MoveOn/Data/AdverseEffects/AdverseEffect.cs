@@ -10,8 +10,8 @@ namespace Krka.MoveOn.Data.AdverseEffects
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("id_questionnaire")]
-        public required int QuestionnaireId { get; set; }
+        [Column("id_questionnaire", TypeName = "nvarchar"), StringLength(450)]
+        public required string QuestionnaireId { get; set; }
 
         /// <summary>
         /// Nežiaduca udalosť 

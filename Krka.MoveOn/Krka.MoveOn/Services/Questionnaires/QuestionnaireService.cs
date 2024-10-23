@@ -37,7 +37,7 @@ public class QuestionnaireService(ApplicationDbContext context)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<Questionnaire> GetQuestionnairesByIdAsync(int id)
+    public async Task<Questionnaire> GetQuestionnairesByIdAsync(string id)
     {
         return await _context.Questionnaires
                              .FirstOrDefaultAsync(q => q.Id == id);

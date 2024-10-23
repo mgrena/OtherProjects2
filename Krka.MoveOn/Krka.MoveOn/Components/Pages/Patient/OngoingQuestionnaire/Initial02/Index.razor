@@ -1,4 +1,4 @@
-﻿@page "/ongoingQ/init/{questionnaireId:int}"
+﻿@page "/ongoingQ/init/{questionnaireId}"
 @using DevExpress.Blazor.Internal
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services.Questionnaires
@@ -61,7 +61,7 @@
 
 @code {
     [Parameter]
-    public int questionnaireId { get; set; }
+    public string questionnaireId { get; set; }
     Questionnaire questionnaire = new Questionnaire
     {
         Date = DateTime.Now,

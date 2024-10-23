@@ -15,8 +15,8 @@ namespace Krka.MoveOn.Data.Questionnaires
         }
 
         [Key]
-        [Column("id")]
-        public int Id { get; set; }
+        [Column("id", TypeName = "nvarchar"), StringLength(450)]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Column("id_patient")]
         public required int PatientId { get; set; }

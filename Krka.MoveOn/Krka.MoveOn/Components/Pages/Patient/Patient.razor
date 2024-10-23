@@ -157,13 +157,13 @@
                 /// </summary>
                 /// <param name="id"></param>
                 /// <returns></returns>
-                private async Task SetCurrentId(int id)
+                private async Task SetCurrentId(string id)
                 {
                     await SessionStorage.SetAsync("currentId", id);
                 }
 
 
-                private string GetNavigateUrl(Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum order, int id)
+                private string GetNavigateUrl(Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum order, string id)
                 {
                     return order switch
                     {

@@ -11,8 +11,8 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("id")]
         public required int Id { get; set; }
 
-        [Column("questionnaire_id")]
-        public required int Questionnaire_id { get; set; }
+        [Column("questionnaire_id", TypeName = "nvarchar"), StringLength(450)]
+        public required string Questionnaire_id { get; set; }
 
         /// <summary>
         /// Zmena v liečbe pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.) -> DialQGeneral- ciselnik odpovedmi

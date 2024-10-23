@@ -108,7 +108,7 @@
 @code {
 
     [Parameter]
-    public int questionnaireId { get; set; }
+    public string questionnaireId { get; set; }
 
     bool PanelVisible { get; set; }
 
@@ -116,7 +116,7 @@
 
     QuestionnaireSatisfaction10 SatisfactionQ { get; set; } = new QuestionnaireSatisfaction10
         {
-            Questionnaire_id = -1,
+            Questionnaire_id = "",
             SF_1 = 0,
             SF_2 = 0,
             SF_3 = 0,
