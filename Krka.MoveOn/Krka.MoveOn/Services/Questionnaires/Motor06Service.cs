@@ -11,8 +11,8 @@ public class Motor06Service(ApplicationDbContext context)
 
     public async Task<QuestionnaireMotorSkill06?> GetQuestionnaireMotorSkill06(string questionnaireId)
     {
-        return await Task.Run(() => _context.QuestionnaireMotorSkill06s
-            .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
+        return await _context.QuestionnaireMotorSkill06s
+        .FirstOrDefaultAsync(q => q.Questionnaire_id == questionnaireId);
     }
 
     public async Task SaveOrUpdateQuestionnaireMotorSkill06(QuestionnaireMotorSkill06 questionnaire)

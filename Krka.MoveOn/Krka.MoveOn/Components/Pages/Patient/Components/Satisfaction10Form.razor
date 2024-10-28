@@ -5,6 +5,24 @@
 @inject Satisfaction10Service SatisfactionService
 @inject IToastNotificationService ToastService
 
+
+<style>
+    table {
+        width: 100%;
+    }
+
+    th {
+        text-align: center;
+    }
+
+    .radio-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+</style>
+
 <div class="d-flex align-items-center custom-toast-background">
     <DxToastProvider Name="Overview"
                      MaxToastCount="3"
