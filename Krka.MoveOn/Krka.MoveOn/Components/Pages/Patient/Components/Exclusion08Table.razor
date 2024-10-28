@@ -114,8 +114,10 @@
             FocusedRowEnabled="true">
 
         <ToolbarTemplate>
-            <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
-                <DxToolbarItem Text="Pridať nežiadúcu udalosť" Enabled="true" Click="New_Click">
+            @if (!isReadOnly)
+            {
+                <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+                    <DxToolbarItem Text="Pridať nežiadúcu udalosť" Enabled="true" Click="New_Click">
                     <ChildContent Context="toolbarContext">
                         <img src="images/adverse.svg" width="24" height="24" alt="Pridať nežiadúcu udalosť" />
                         <span style="margin-left: 2px">Pridať nežiadúcu udalosť</span>
@@ -136,43 +138,44 @@
                     </ChildContent>
                 </DxToolbarItem>
             </DxToolbar>
+            }
         </ToolbarTemplate>
 
         <Columns>
-            <DxGridDataColumn FieldName="Name" Caption="Nežiaduca udalosť " />
-            <DxGridDataColumn FieldName="Start" Caption="Začiatok" />
+            <DxGridDataColumn FieldName="Name" Caption="Nežiaduca udalosť " ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)"/>
+            <DxGridDataColumn FieldName="Start" Caption="Začiatok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)"/>
 
-            <DxGridDataColumn FieldName="Frequency" Caption="Frekvencia">
+            <DxGridDataColumn FieldName="Frequency" Caption="Frekvencia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                 <EditSettings>
                     <DxComboBoxSettings Data="@frequency" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
             </DxGridDataColumn>
 
-            <DxGridDataColumn FieldName="Related" Caption="Súvis s liekom spoločnosti Krka">
+            <DxGridDataColumn FieldName="Related" Caption="Súvis s liekom spoločnosti Krka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                 <EditSettings>
                     <DxComboBoxSettings Data="@related" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
             </DxGridDataColumn>
 
-            <DxGridDataColumn FieldName="Severity" Caption="Závažnosť">
+            <DxGridDataColumn FieldName="Severity" Caption="Závažnosť" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                 <EditSettings>
                     <DxComboBoxSettings Data="@severity" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
             </DxGridDataColumn>
 
-            <DxGridDataColumn FieldName="Intensity" Caption="Intenzita">
+            <DxGridDataColumn FieldName="Intensity" Caption="Intenzita" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                 <EditSettings>
                     <DxComboBoxSettings Data="@intensity" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
             </DxGridDataColumn>
 
-            <DxGridDataColumn FieldName="Effect" Caption="Vplyv na liečbu">
+            <DxGridDataColumn FieldName="Effect" Caption="Vplyv na liečbu" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                 <EditSettings>
                     <DxComboBoxSettings Data="@effect" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
             </DxGridDataColumn>
 
-            <DxGridDataColumn FieldName="Result" Caption="Výsledok">
+            <DxGridDataColumn FieldName="Result" Caption="Výsledok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                 <EditSettings>
                     <DxComboBoxSettings Data="@result" ValueFieldName="Id" TextFieldName="Name" />
                 </EditSettings>
@@ -182,24 +185,30 @@
 
                 <CellDisplayTemplate Context="gridContext">
                     <div class="grid-cell-align-center">
-                        <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                  RenderStyle="ButtonRenderStyle.Link"
-                                  aria-label="Delete"
-                                  Click="@(() => advEffGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                            <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                        </DxButton>
+                        @if (!isReadOnly)
+                        {
+
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                      RenderStyle="ButtonRenderStyle.Link"
+                                      aria-label="Delete"
+                                      Click="@(() => advEffGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
+                            </DxButton>                            
+                        }
                     </div>
                 </CellDisplayTemplate>
 
                 <CellEditTemplate Context="editContext">
                     <div class="grid-cell-align-center">
+                        @if (!isReadOnly)
+                        {
                         <DxButton Enabled="false"
                                   aria-label="Delete"
                                   CssClass="grid-disabled-button"
                                   IconCssClass="grid-icon grid-icon-delete"
                                   RenderStyle="ButtonRenderStyle.Link"
                                  />
-
+                        }
                     </div>
                 </CellEditTemplate>
             </DxGridCommandColumn>

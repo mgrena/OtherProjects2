@@ -1,0 +1,104 @@
+﻿
+@using DevExpress.Blazor.Internal
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Initial02Service InitialService
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+
+<EditForm Model="@questionnaire"
+        Context="EditFormContext"
+        OnValidSubmit="@HandleValidSubmit"
+        >
+
+    <DataAnnotationsValidator />
+    <DxFormLayout>
+        <DxFormLayoutGroup Caption="Liečba Parkinsonovej choroby" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+
+            <DxFormLayoutItem Caption="Dátum" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+
+                <DxDateEdit @bind-Date="@questionnaire.Date" ShowValidationIcon="true" required ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+              
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanMd="12">
+                <div style="margin-top: 5px">
+                    @if(!isReadOnly){
+                    <DxButton SubmitFormOnClick="true"
+                                Text="Uložiť"
+                                RenderStyle="ButtonRenderStyle.Primary" />
+                    }
+                </div>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    </DxFormLayout>
+
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public string questionnaireId { get; set; }
+
+    Questionnaire questionnaire = new Questionnaire
+    {
+        Date = DateTime.Now,
+        PatientId = 0,
+        Order = 0,
+        ModifiedAt = DateTime.Now,
+        CreatedAt = DateTime.Now
+    };
+
+    bool isReadOnly = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
+        questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId);
+    }
+
+
+    private async Task HandleValidSubmit()
+    {
+        await QuestionnaireService.UpdateQuestionnaireAsync(questionnaire);
+        ModifyToast();
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+     
+}

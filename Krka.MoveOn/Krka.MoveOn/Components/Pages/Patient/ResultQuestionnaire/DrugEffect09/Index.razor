@@ -4,6 +4,7 @@
 @using Krka.MoveOn.Services
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.ResultQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
@@ -33,85 +34,8 @@
     </div>
 
 
-    <DxGrid @ref="drugEffectGrid"
-            Data="DrugEffects"
-            PageSize="20"
-            PagerPosition="GridPagerPosition.Bottom"
-            PageSizeSelectorVisible="true"
-            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-            PageSizeSelectorAllRowsItemVisible="true"
-            PagerSwitchToInputBoxButtonCount="10"
-            PagerVisibleNumericButtonCount="10"
-            KeyFieldName="Id"
-            ValidationEnabled="false"
-            EditMode="GridEditMode.EditCell"
-            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-            ColumnResizeMode="GridColumnResizeMode.NextColumn"
-            TextWrapEnabled="false"
-            EditModelSaving="Grid_EditModelSaving"
-            HighlightRowOnHover="true"
-            FocusedRowEnabled="true"
-            >
+    <DrugEffect09Table questionnaireId="@QuestionnaireIdAsString"/>
 
-        <ToolbarTemplate Context="toolbarContext">
-            <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
-
-                <DxToolbarItem Text="Pridať učinnú látku" Enabled="true" Click="New_Click">
-                    <img src="images/pill.svg" width="24" height="24" alt="Pridať učinnu látku" />
-                    <span style="margin-left: 2px">Pridať učinnú látku</span>
-                </DxToolbarItem>
-
-                <DxToolbarItem Text="Uložiť" BeginGroup="true" Click="Save_Click" Enabled="BatchItemsEnabled">
-                    <img src="images/save.svg" width="24" height="24" alt="Save" />
-                    <span style="margin-left: 3px">Uložiť</span>
-                </DxToolbarItem>
-
-                <DxToolbarItem Text="Zrušiť" Click="Cancel_Click" Enabled="BatchItemsEnabled">
-                    <img src="images/cancel.svg" width="24" height="24" alt="Cancel" />
-                    <span style="margin-left: 4px">Zrušiť</span>
-                </DxToolbarItem>
-            </DxToolbar>
-        </ToolbarTemplate>
-
-        <Columns>
-            <DxGridDataColumn FieldName="De_1" Caption="Učinná látka" Width="">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>
-
-            <DxGridDataColumn FieldName="De_2" Caption="Dávka (mg)" />
-
-            <DxGridDataColumn FieldName="De_3" Caption="Nežiaduci účinok"/>
-
-            <DxGridDataColumn FieldName="De_4" Caption="Indikácia"/>
-
-            <DxGridCommandColumn Width="30px" NewButtonVisible="false">
-
-                <CellDisplayTemplate Context="gridContext">
-                    <div class="grid-cell-align-center">
-                        <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                  RenderStyle="ButtonRenderStyle.Link"
-                                  aria-label="Delete"
-                                  Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                            <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                        </DxButton>
-                    </div>
-                </CellDisplayTemplate>
-
-                <CellEditTemplate Context="editContext">
-                    <div class="grid-cell-align-center">
-                        <DxButton Enabled="false"
-                                  aria-label="Delete"
-                                  CssClass="grid-disabled-button"
-                                  IconCssClass="grid-icon grid-icon-delete"
-                                  RenderStyle="ButtonRenderStyle.Link" />
-
-                    </div>
-                </CellEditTemplate>
-            </DxGridCommandColumn>
-        </Columns>     
-    </DxGrid>
 </div>
 
 
@@ -244,19 +168,6 @@
             UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
         }
     }
-
-    /// <summary>
-    /// Nastavenie objektu "DeletedAt"
-    /// </summary>
-    /// <param name="e"></param>
-    /// <returns></returns>
-    // async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
-    // {
-    //     var treat = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
-    //     await DrugEffectService.DeleteTreatAsync(treat.Id);
-    //     await UpdateDataAsync();
-    //     DeleteToast();
-    // }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification, Addition, Delete }

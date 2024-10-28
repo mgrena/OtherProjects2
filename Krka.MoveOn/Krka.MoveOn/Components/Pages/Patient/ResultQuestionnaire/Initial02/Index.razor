@@ -26,32 +26,7 @@
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_ResultBtn />
 
-    <EditForm Model="@questionnaire"
-            Context="EditFormContext"
-            OnValidSubmit="@HandleValidSubmit"
-            >
-
-        <DataAnnotationsValidator />
-        <DxFormLayout>
-            <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-
-                <DxFormLayoutItem Caption="Dátum" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
-
-                    <DxDateEdit @bind-Date="@questionnaire.Date" ShowValidationIcon="true" required />
-              
-                </DxFormLayoutItem>
-                <DxFormLayoutItem ColSpanMd="12">
-                    <div style="margin-top: 5px">
-
-                        <DxButton SubmitFormOnClick="true"
-                                    Text="Uložiť"
-                                    RenderStyle="ButtonRenderStyle.Primary" />
-                    </div>
-                </DxFormLayoutItem>
-            </DxFormLayoutGroup>
-        </DxFormLayout>
-
-    </EditForm>
+    <Initial02DateHeader questionnaireId="@QuestionnaireIdAsString" />
 
 
     <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@QuestionnaireIdAsString" />
@@ -65,39 +40,4 @@
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
 
-    Questionnaire questionnaire = new Questionnaire
-    {
-        Date = DateTime.Now,
-        PatientId = 0,
-        Order = 0,
-        ModifiedAt = DateTime.Now,
-        CreatedAt = DateTime.Now
-    };
-
-    protected override async Task OnInitializedAsync()
-    {
-        questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(QuestionnaireIdAsString);
-    }
-
-
-    private async Task HandleValidSubmit()
-    {
-        await QuestionnaireService.UpdateQuestionnaireAsync(questionnaire);
-        ModifyToast();
-    }
-
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
-    private void ModifyToast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Učinná látka bola zmenená",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
-    }
-     
 }

@@ -11,8 +11,8 @@ public class Motor04Service(ApplicationDbContext context)
 
     public async Task<QuestionnaireNonMotor04?> GetQuestionnaireNonMotor04(string questionnaireId)
     {
-        return await Task.Run(() => _context.QuestionnaireNonMotor04s
-            .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));            
+        return await _context.QuestionnaireNonMotor04s
+        .FirstOrDefaultAsync(q => q.Questionnaire_id == questionnaireId);
     }
 
 

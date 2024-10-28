@@ -45,7 +45,7 @@ builder.Services.AddScoped<Motor06Service>();
 builder.Services.AddScoped<Moca07Service>();
 builder.Services.AddScoped<Exclusion08Service>();
 builder.Services.AddScoped<QuestionnaireService>();
-builder.Services.AddScoped<DrugEffect09Service>(); 
+builder.Services.AddTransient<DrugEffect09Service>(); 
 builder.Services.AddScoped<Satisfaction10Service>();
 
 builder.Services.AddAuthentication(options => {

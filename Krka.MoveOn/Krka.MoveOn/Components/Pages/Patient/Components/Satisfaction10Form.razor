@@ -4,6 +4,7 @@
 
 @inject Satisfaction10Service SatisfactionService
 @inject IToastNotificationService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 <style>
@@ -64,7 +65,7 @@
                                     {
                                         <td>
                                             <div class="radio-container">
-                                            <DxRadio @bind-GroupValue="@SatisfactionQ.SF_1" Value="@option" GroupName="sf_1_group" />
+                                        <DxRadio @bind-GroupValue="@SatisfactionQ.SF_1" Value="@option" GroupName="sf_1_group" ReadOnly="@isReadOnly" />
                                             </div>
                                         </td>
                                     }
@@ -75,7 +76,7 @@
                                     {
                                         <td>
                                             <div class="radio-container">
-                                            <DxRadio @bind-GroupValue="@SatisfactionQ.SF_2" Value="@option" GroupName="sf_2_group" />
+                                        <DxRadio @bind-GroupValue="@SatisfactionQ.SF_2" Value="@option" GroupName="sf_2_group" ReadOnly="@isReadOnly" />
                                             </div>
                                         </td>
                                     }
@@ -86,7 +87,7 @@
                                     {
                                         <td>
                                             <div class="radio-container">
-                                            <DxRadio @bind-GroupValue="@SatisfactionQ.SF_3" Value="@option" GroupName="sf_3_group" />
+                                        <DxRadio @bind-GroupValue="@SatisfactionQ.SF_3" Value="@option" GroupName="sf_3_group" ReadOnly="@isReadOnly" />
                                             </div>
                                         </td>
                                     }
@@ -97,7 +98,7 @@
                                     {
                                         <td>
                                             <div class="radio-container">
-                                                <DxRadio @bind-GroupValue="@SatisfactionQ.SF_4" Value="@option" GroupName="sf_4_group" />
+                                        <DxRadio @bind-GroupValue="@SatisfactionQ.SF_4" Value="@option" GroupName="sf_4_group" ReadOnly="@isReadOnly" />
                                             </div>
                                         </td>
                                     }
@@ -108,11 +109,11 @@
 
                         <DxFormLayoutItem ColSpanMd="12">
                             <div style="margin-top: 5px">
-
+                                @if(!isReadOnly){
                                 <DxButton SubmitFormOnClick="true"
                                           Text="Uložiť"
                                           RenderStyle="ButtonRenderStyle.Primary" />
-
+                                }
                             </div>
                         </DxFormLayoutItem>
                 
@@ -141,8 +142,18 @@
             SF_4 = 0
         };
 
+    bool isReadOnly = false;
+
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
         PanelVisible = true;
         SatisfactionQ = await SatisfactionService.GetQuestionnaireSatisfaction10(questionnaireId);
         if (SatisfactionQ == null)
