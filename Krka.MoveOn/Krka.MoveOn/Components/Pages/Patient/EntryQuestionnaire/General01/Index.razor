@@ -1,4 +1,4 @@
-﻿@page "/entryQ/gen/{questionnaireId}"
+﻿@page "/entryQ/gen/{questionnaireId:guid}"
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
 @using Microsoft.AspNetCore.Authorization
@@ -396,7 +396,9 @@
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
 
 
     bool isGen7_1_DM = false;
@@ -462,7 +464,7 @@
 
         gen = new Data.Questionnaires.QuestionnaireGeneral01
         {
-            Questionnaire_id = questionnaireId
+                Questionnaire_id = QuestionnaireIdAsString
         };
 
         //DialQGeneral
@@ -490,7 +492,7 @@
 
         gen_13_Answer = dialQGenerals.Where(d => d.Type_q == 11).ToList();
 
-        await LoadQuestionnaire(questionnaireId);
+        await LoadQuestionnaire(QuestionnaireIdAsString);
     }
 
 

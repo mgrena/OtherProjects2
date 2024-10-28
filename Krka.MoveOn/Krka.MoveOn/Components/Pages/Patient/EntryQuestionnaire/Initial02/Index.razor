@@ -1,4 +1,4 @@
-﻿@page "/entryQ/init/{questionnaireId}"
+﻿@page "/entryQ/init/{questionnaireId:guid}"
 @using DevExpress.Blazor.Internal
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services.Questionnaires
@@ -28,13 +28,15 @@
         Začiatočná liečba Parkinsonovej choroby
     </div>
 
-    <Initial02Table questionnaireId="@questionnaireId" />
+    <Initial02Table questionnaireId="@QuestionnaireIdAsString" />
     
 </div>
 
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
 
 }

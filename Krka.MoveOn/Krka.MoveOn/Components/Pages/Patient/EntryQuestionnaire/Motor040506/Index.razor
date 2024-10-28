@@ -1,4 +1,4 @@
-﻿@page "/entryQ/motor/{questionnaireId}"
+﻿@page "/entryQ/motor/{questionnaireId:guid}"
 
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
@@ -11,7 +11,7 @@
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_EntryBtn />
 
-    <Motor040506Table questionnaireId="@questionnaireId" />
+    <Motor040506Table questionnaireId="@QuestionnaireIdAsString" />
     
 </div>
 
@@ -19,5 +19,7 @@
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
 }

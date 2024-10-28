@@ -1,4 +1,4 @@
-﻿@page "/resultQ/init/{questionnaireId}"
+﻿@page "/resultQ/init/{questionnaireId:guid}"
 @using DevExpress.Blazor.Internal
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services.Questionnaires
@@ -24,7 +24,7 @@
 </div>
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
-    <_EntryBtn />
+    <_ResultBtn />
 
     <EditForm Model="@questionnaire"
             Context="EditFormContext"
@@ -54,14 +54,17 @@
     </EditForm>
 
 
-    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@questionnaireId" />
+    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@QuestionnaireIdAsString" />
 
 </div>
 
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+
     Questionnaire questionnaire = new Questionnaire
     {
         Date = DateTime.Now,
@@ -73,7 +76,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId);
+        questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(QuestionnaireIdAsString);
     }
 
 

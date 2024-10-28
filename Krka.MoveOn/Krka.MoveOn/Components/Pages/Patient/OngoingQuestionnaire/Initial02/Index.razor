@@ -1,4 +1,4 @@
-﻿@page "/ongoingQ/init/{questionnaireId}"
+﻿@page "/ongoingQ/init/{questionnaireId:guid}"
 @using DevExpress.Blazor.Internal
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services.Questionnaires
@@ -24,7 +24,7 @@
 </div>
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
-    <_EntryBtn />
+    <_OngoingBtn />
 
     <EditForm Model="@questionnaire"
             Context="EditFormContext"
@@ -33,7 +33,7 @@
 
         <DataAnnotationsValidator />
         <DxFormLayout>
-            <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+            <DxFormLayoutGroup Caption="Liečba Parkinsonovej choroby" ColSpanMd="12" CaptionCssClass="caption-styleH0">
 
                 <DxFormLayoutItem Caption="Dátum" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
 
@@ -54,14 +54,17 @@
     </EditForm>
 
 
-    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@questionnaireId" />
+    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@QuestionnaireIdAsString" />
 
 </div>
 
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+
     Questionnaire questionnaire = new Questionnaire
     {
         Date = DateTime.Now,
@@ -73,7 +76,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId);
+        questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(QuestionnaireIdAsString);
     }
 
 

@@ -1,5 +1,4 @@
-﻿@page "/entrybtn"
-@using Krka.MoveOn.Services.Questionnaires
+﻿@using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
 @attribute [StreamRendering(true)]
@@ -7,8 +6,6 @@
 
 @inject General01Service Q01Service
 @inject ProtectedSessionStorage SessionStorage
-
-<PageTitle>EntryBtn</PageTitle>
 
 <DxFormLayout>
     <DxFormLayoutItem>
@@ -18,27 +15,27 @@
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
                           Text="Liečba Parkinsonovej choroby"
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/resultQ/init")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/init")" />
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
                           Text="Zmena v liečbe pridružených problémov"
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/resultQ/treat")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/treat")" />
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
                           Text="Nežiaduci účinok liečiva"
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/resultQ/drugEffect")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/drugEffect")" />
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Nežiaduci účinok liečiva"
+                          Text="MDS-UPDRS škála"
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/resultQ/motor")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/motor")" />
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
                           Text="Hodnotenie spokojnosti s liečbou "
                           CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/resultQ/satisfaction")" />
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/satisfaction")" />
             </div>
         </div>
     </DxFormLayoutItem>

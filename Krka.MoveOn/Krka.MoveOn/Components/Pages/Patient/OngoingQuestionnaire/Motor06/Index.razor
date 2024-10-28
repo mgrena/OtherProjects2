@@ -1,19 +1,19 @@
-﻿@page "/resultQ/motor/{questionnaireId:guid}"
+﻿@page "/ongoingQ/motor/{questionnaireId:guid}"
 
 @using Krka.MoveOn.Services.Questionnaires
-@using Krka.MoveOn.Components.Pages.Patient.ResultQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
 
-<PageTitle>MoveOn - MDS-UPDRS škála </PageTitle>
+<PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
-    <_ResultBtn />
+    <_OngoingBtn />
      
-    <Motor040506Table questionnaireId="@QuestionnaireIdAsString" />
+    <Motor06Table questionnaireId="@QuestionnaireIdAsString" />
     
 </div>
 

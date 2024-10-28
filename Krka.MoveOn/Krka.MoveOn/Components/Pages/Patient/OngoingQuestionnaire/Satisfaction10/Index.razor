@@ -1,4 +1,4 @@
-﻿@page "/ongoingQ/satisfaction/{questionnaireId}"
+﻿@page "/ongoingQ/satisfaction/{questionnaireId:guid}"
 
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
@@ -28,12 +28,12 @@
     }
 </style>
 
-<PageTitle>MoveOn - MDS-UPDRS škála </PageTitle>
+<PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
-    <_EntryBtn />
+    <_OngoingBtn />
 
-    <Satisfaction10Form questionnaireId="@questionnaireId" />
+    <Satisfaction10Form questionnaireId="@QuestionnaireIdAsString" />
 
 </div>
 
@@ -44,7 +44,9 @@
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
 
     
 }

@@ -1,4 +1,4 @@
-﻿@page "/entryQ/moca/{questionnaireId}"
+﻿@page "/entryQ/moca/{questionnaireId:guid}"
 @using DevExpress.Blazor.Internal
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services.Questionnaires
@@ -24,13 +24,15 @@
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_EntryBtn />
-    <Moca07Table questionnaireId="@questionnaireId" />
+    <Moca07Table questionnaireId="@QuestionnaireIdAsString" />
     
 </div>
 
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
 
 }

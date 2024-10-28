@@ -28,7 +28,7 @@ public class QuestionnaireService(ApplicationDbContext context)
     public async Task<List<Questionnaire>> GetQuestionnairesByPatientIdAsync(int patientId)
     {
         return await _context.Questionnaires
-                             .Where(q => q.PatientId == patientId)
+                             .Where(q => q.PatientId == patientId).OrderBy(q => q.CreatedAt)
                              .ToListAsync();
     }
 

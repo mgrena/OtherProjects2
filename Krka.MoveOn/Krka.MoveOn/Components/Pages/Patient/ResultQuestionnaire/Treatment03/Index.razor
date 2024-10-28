@@ -1,4 +1,4 @@
-﻿@page "/resultQ/treat/{questionnaireId}"
+﻿@page "/resultQ/treat/{questionnaireId:guid}"
 
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services
@@ -25,14 +25,14 @@
 </div>
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
-    <_EntryBtn />
+    <_ResultBtn />
 
 
     <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
         Liečba pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.):
     </div>
 
-    <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@questionnaireId" />
+    <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@QuestionnaireIdAsString" />
 
 </div>
 
@@ -41,6 +41,8 @@
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
 
 }
