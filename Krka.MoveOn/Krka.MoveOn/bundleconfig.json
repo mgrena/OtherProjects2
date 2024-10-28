@@ -10,5 +10,11 @@
     "inputFiles": [
       "Components/Pages/Patient/EntryQuestionnaire/GeneralQ.razor.css"
     ]
+  },
+  {
+    "outputFileName": "Components/Pages/Patient/EntryQuestionnaire/Moca07/Index.razor.min.min.css",
+    "inputFiles": [
+      "Components/Pages/Patient/EntryQuestionnaire/Moca07/Index.razor.min.css"
+    ]
   }
 ]

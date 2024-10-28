@@ -1,0 +1,219 @@
+﻿@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Data.Dials
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Moca07Service MocaService
+@inject NavigationManager Navigation
+
+
+<div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+    MDS-UPDRS škála, časť III. - Vyšetrenie motoriky
+</div>
+<DxGrid @ref="motskillGrid"
+        Data="MotskillMH"
+        KeyFieldName="Fieldname"
+        PageSize="35"
+        ValidationEnabled="false"
+        EditMode="GridEditMode.EditCell"
+        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+        ColumnResizeMode="GridColumnResizeMode.NextColumn"
+        TextWrapEnabled="false"
+        HighlightRowOnHover="true" 
+        EditModelSaving="OnEditModelSavingMotSkill"
+        FocusedRowEnabled="false">
+
+    <Columns>
+        @* <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" /> *@
+        <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
+@*         <DxGridDataColumn FieldName="Value" Caption="Počet bodov">
+            <EditSettings>
+                <DxSpinEditSettings MinValue="0" MaxValue="4" />
+            </EditSettings>
+        </DxGridDataColumn> *@
+    </Columns>
+
+    <TotalSummary>
+        <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
+    </TotalSummary>
+</DxGrid>
+
+
+
+@code {
+    // [Parameter]
+    // [EditorRequired]
+    // public string questionnaireId { get; set; }
+
+    IGrid motskillGrid { get; set; }
+
+    public List<DialMH>? MotskillMH { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        MotskillMH = await MocaService.GetDialMHAsync();
+    }
+
+    #region "Saving motskill table"
+
+    private async Task OnEditModelSavingMotSkill(GridEditModelSavingEventArgs e)
+    {
+        // var item = (MDSItem)e.EditModel;
+        // var questionnaire = await MotorService.GetQuestionnaireMotorSkill06(questionnaireId) ?? new Data.Questionnaires.QuestionnaireMotorSkill06
+        //     {
+        //         Motskill_1 = 0,
+        //         Motskill_2 = 0,
+        //         Motskill_3 = 0,
+        //         Motskill_4 = 0,
+        //         Motskill_5 = 0,
+        //         Motskill_6 = 0,
+        //         Motskill_7 = 0,
+        //         Motskill_8 = 0,
+        //         Motskill_9 = 0,
+        //         Motskill_10 = 0,
+        //         Motskill_11 = 0,
+        //         Motskill_12 = 0,
+        //         Motskill_13 = 0,
+        //         Motskill_14 = 0,
+        //         Motskill_15 = 0,
+        //         Motskill_16 = 0,
+        //         Motskill_17 = 0,
+        //         Motskill_18 = 0,
+        //         Motskill_19 = 0,
+        //         Motskill_20 = 0,
+        //         Motskill_21 = 0,
+        //         Motskill_22 = 0,
+        //         Motskill_23 = 0,
+        //         Motskill_24 = 0,
+        //         Motskill_25 = 0,
+        //         Motskill_26 = 0,
+        //         Motskill_27 = 0,
+        //         Motskill_28 = 0,
+        //         Motskill_29 = 0,
+        //         Motskill_30 = 0,
+        //         Motskill_31 = 0,
+        //         Motskill_32 = 0,
+        //         Motskill_33 = 0,
+
+
+        //         Questionnaire_id = questionnaireId,
+        //         CreatedAt = DateTime.Now,
+        //         ModifiedAt = DateTime.Now
+        //     };
+
+        // switch (item.Fieldname)
+        // {
+        //     case "Motskill_1":
+        //         questionnaire.Motskill_1 = item.Value;
+        //         break;
+        //     case "Motskill_2":
+        //         questionnaire.Motskill_2 = item.Value;
+        //         break;
+        //     case "Motskill_3":
+        //         questionnaire.Motskill_3 = item.Value;
+        //         break;
+        //     case "Motskill_4":
+        //         questionnaire.Motskill_4 = item.Value;
+        //         break;
+        //     case "Motskill_5":
+        //         questionnaire.Motskill_5 = item.Value;
+        //         break;
+        //     case "Motskill_6":
+        //         questionnaire.Motskill_6 = item.Value;
+        //         break;
+        //     case "Motskill_7":
+        //         questionnaire.Motskill_7 = item.Value;
+        //         break;
+        //     case "Motskill_8":
+        //         questionnaire.Motskill_8 = item.Value;
+        //         break;
+        //     case "Motskill_9":
+        //         questionnaire.Motskill_9 = item.Value;
+        //         break;
+        //     case "Motskill_10":
+        //         questionnaire.Motskill_10 = item.Value;
+        //         break;
+        //     case "Motskill_11":
+        //         questionnaire.Motskill_11 = item.Value;
+        //         break;
+        //     case "Motskill_12":
+        //         questionnaire.Motskill_12 = item.Value;
+        //         break;
+        //     case "Motskill_13":
+        //         questionnaire.Motskill_13 = item.Value;
+        //         break;
+        //     case "Motskill_14":
+        //         questionnaire.Motskill_14 = item.Value;
+        //         break;
+        //     case "Motskill_15":
+        //         questionnaire.Motskill_15 = item.Value;
+        //         break;
+        //     case "Motskill_16":
+        //         questionnaire.Motskill_16 = item.Value;
+        //         break;
+        //     case "Motskill_17":
+        //         questionnaire.Motskill_17 = item.Value;
+        //         break;
+        //     case "Motskill_18":
+        //         questionnaire.Motskill_18 = item.Value;
+        //         break;
+        //     case "Motskill_19":
+        //         questionnaire.Motskill_19 = item.Value;
+        //         break;
+        //     case "Motskill_20":
+        //         questionnaire.Motskill_20 = item.Value;
+        //         break;
+        //     case "Motskill_21":
+        //         questionnaire.Motskill_21 = item.Value;
+        //         break;
+        //     case "Motskill_22":
+        //         questionnaire.Motskill_22 = item.Value;
+        //         break;
+        //     case "Motskill_23":
+        //         questionnaire.Motskill_23 = item.Value;
+        //         break;
+        //     case "Motskill_24":
+        //         questionnaire.Motskill_24 = item.Value;
+        //         break;
+        //     case "Motskill_25":
+        //         questionnaire.Motskill_25 = item.Value;
+        //         break;
+        //     case "Motskill_26":
+        //         questionnaire.Motskill_26 = item.Value;
+        //         break;
+        //     case "Motskill_27":
+        //         questionnaire.Motskill_27 = item.Value;
+        //         break;
+        //     case "Motskill_28":
+        //         questionnaire.Motskill_28 = item.Value;
+        //         break;
+        //     case "Motskill_29":
+        //         questionnaire.Motskill_29 = item.Value;
+        //         break;
+        //     case "Motskill_30":
+        //         questionnaire.Motskill_30 = item.Value;
+        //         break;
+        //     case "Motskill_31":
+        //         questionnaire.Motskill_31 = item.Value;
+        //         break;
+        //     case "Motskill_32":
+        //         questionnaire.Motskill_32 = item.Value;
+        //         break;
+        //     case "Motskill_33":
+        //         questionnaire.Motskill_33 = item.Value;
+        //         break;
+        // }
+
+        // await MotorService.SaveOrUpdateQuestionnaireMotorSkill06(questionnaire);
+        // // Navigation.NavigateTo($"/entryQ/motor/{questionnaireId}", forceLoad: true);
+    }
+
+    #endregion
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification }
+}

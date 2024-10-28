@@ -1,0 +1,48 @@
+﻿@page "/ongoingQ/treat/{questionnaireId:guid}"
+
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+
+
+
+
+<PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
+    <_OngoingBtn />
+
+
+    <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+        Liečba pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.)
+    </div>
+
+    <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@QuestionnaireIdAsString" />
+
+</div>
+
+
+
+
+@code {
+    [Parameter]
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+
+}

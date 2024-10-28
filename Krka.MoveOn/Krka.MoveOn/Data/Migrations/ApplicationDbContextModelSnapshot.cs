@@ -35,15 +35,19 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
-                    b.Property<int>("Effect")
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<int?>("Effect")
                         .HasColumnType("int")
                         .HasColumnName("effect");
 
-                    b.Property<int>("Frequency")
+                    b.Property<int?>("Frequency")
                         .HasColumnType("int")
                         .HasColumnName("frequency");
 
-                    b.Property<int>("Intensity")
+                    b.Property<int?>("Intensity")
                         .HasColumnType("int")
                         .HasColumnName("intensity");
 
@@ -52,28 +56,29 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnName("modified_at");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(150)
                         .HasColumnType("nvarchar")
                         .HasColumnName("adverse_effect");
 
-                    b.Property<int>("QuestionnaireId")
-                        .HasColumnType("int")
+                    b.Property<string>("QuestionnaireId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("id_questionnaire");
 
-                    b.Property<int>("Related")
+                    b.Property<int?>("Related")
                         .HasColumnType("int")
                         .HasColumnName("related");
 
-                    b.Property<int>("Result")
+                    b.Property<int?>("Result")
                         .HasColumnType("int")
                         .HasColumnName("result");
 
-                    b.Property<int>("Severity")
+                    b.Property<int?>("Severity")
                         .HasColumnType("int")
                         .HasColumnName("severity");
 
-                    b.Property<int>("Start")
+                    b.Property<int?>("Start")
                         .HasColumnType("int")
                         .HasColumnName("start");
 
@@ -307,7 +312,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar");
 
                     b.Property<int>("Type_q")
@@ -317,6 +322,208 @@ namespace Krka.MoveOn.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("dial_adverse_effects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Jedenkrát",
+                            Type_q = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Obèas",
+                            Type_q = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Neustále",
+                            Type_q = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Nesúvisí (Ak je NU klasifikovaná ako nesúvisiaca s liekom)",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Nepravdepodobne súvisí (udalos s najväèšou pravdepodobnosou nebola spôsobená liekom, ale príèinnú súvislos nemožno úplne vylúèi)",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Možno súvisí (Udalos môže, ale nemusí by spôsobená liekom, príèinnú súvislos nie je možné posúdi s väèšou istotou)",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Pravdepodobne súvisí (Liek je najpravdepodobnejšou príèinou udalosti, ale nemožno vylúèi iné príèiny)",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Takmer urèite súvisí (Liek je takmer urèite príèinou udalosti, neexistujú žiadne iné zjavné alternatívne vysvetlenia)",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Nezávažné",
+                            Type_q = 3
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Život ohrozujúce",
+                            Type_q = 3
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Hospitalizácia (zaèatá alebo predåžená)",
+                            Type_q = 3
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Zdravotné postihnutie",
+                            Type_q = 3
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Vrodená anomália",
+                            Type_q = 3
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Smr",
+                            Type_q = 3
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Závažné pod¾a názoru skúšajúceho lekára",
+                            Type_q = 3
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Mierna (Nespôsobuje obmedzenie bežných èinností, pacient môže pociova mierne nepohodlie)",
+                            Type_q = 4
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Stredne ažká (Spôsobuje urèité obmedzenia bežných aktivít, pacient môže pociova nepríjemné nepohodlie)",
+                            Type_q = 4
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "ažká (Spôsobuje neschopnos vykonáva bežné èinnosti, pacient môže pociova neznesite¾né nepohodlie alebo boles)",
+                            Type_q = 4
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bez následkov",
+                            Type_q = 5
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Zmeny v lieèbe",
+                            Type_q = 5
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Zníženie dávky",
+                            Type_q = 5
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Symptomatická lieèba",
+                            Type_q = 5
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Hospitalizácia",
+                            Type_q = 5
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Prestala",
+                            Type_q = 6
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Pokraèuje",
+                            Type_q = 6
+                        });
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialExclusion", b =>
@@ -338,7 +545,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar");
 
                     b.Property<int>("Type_q")
@@ -348,6 +555,96 @@ namespace Krka.MoveOn.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("dial_exlusions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Pri návšteve pacienta na mieste",
+                            Type_q = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Na dia¾ku prostredníctvom telefonického hovoru",
+                            Type_q = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Na dia¾ku prostredníctvom elektronických médií",
+                            Type_q = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Výskyt závažnej nežiaducej reakcie poèas pozorovacieho obdobia v tejto štúdii",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Smr",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Hospitalizácia",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Rozhodnutie pacienta ukonèi lieèbu a odvolanie jeho informovaného súhlasu",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Rozhodnutie pacienta ukonèi lieèbu a odvolanie informovaného súhlasu a GDPR formulára",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bezpeènos pacienta (napr. rozhodnutie skúšajúceho vylúèi pacienta zo štúdie v jeho najlepšom záujme, nežiaduce úèinky vyžadujúce medikamentózny zásah alebo ukonèenie lieèby)",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "O alebo zhoršenie existujúceho ochorenia poèas štúdie, ktoré si vyžaduje používanie liekov, ktoré nie sú povolené v spojení so súhrnom charakteristických vlastností lieku použitých liekov",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        });
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialIndication", b =>
@@ -386,7 +683,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pruhy močenia",
+                            Name = "Pruhy moèenia",
                             Type_q = 1
                         },
                         new
@@ -434,7 +731,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Úzkosť",
+                            Name = "Úzkos",
                             Type_q = 1
                         },
                         new
@@ -477,6 +774,11 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar");
 
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar");
+
                     b.Property<int>("Type_q")
                         .HasColumnType("int")
                         .HasColumnName("type_q");
@@ -492,6 +794,7 @@ namespace Krka.MoveOn.Migrations
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Jednostranné príznaky",
+                            Number = "1",
                             Type_q = 1
                         },
                         new
@@ -499,7 +802,8 @@ namespace Krka.MoveOn.Migrations
                             Id = 2,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Jednostranné a axiálne príznaky (hypofónia, hypomímia, flekčnédržanie tela)",
+                            Name = "Jednostranné a axiálne príznaky (hypofónia, hypomímia, flekènédržanie tela)",
+                            Number = "1,5",
                             Type_q = 1
                         },
                         new
@@ -508,6 +812,7 @@ namespace Krka.MoveOn.Migrations
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Obojstranné príznaky bez poruchy rovnováhy",
+                            Number = "2",
                             Type_q = 1
                         },
                         new
@@ -515,7 +820,8 @@ namespace Krka.MoveOn.Migrations
                             Id = 4,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Obojstranné príznaky s miernou poruchou rovnováhy (schopnosť vyrovnať postoj pri pull teste)",
+                            Name = "Obojstranné príznaky s miernou poruchou rovnováhy (schopnos vyrovna postoj pri pull teste)",
+                            Number = "2,5",
                             Type_q = 1
                         },
                         new
@@ -523,7 +829,8 @@ namespace Krka.MoveOn.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Mierne až stredné obojstranné príznaky, posturálnainstabilita, pacient je stále sebestačný",
+                            Name = "Mierne až stredné obojstranné príznaky, posturálnainstabilita, pacient je stále sebestaèný",
+                            Number = "3",
                             Type_q = 1
                         },
                         new
@@ -531,7 +838,8 @@ namespace Krka.MoveOn.Migrations
                             Id = 6,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ťažké postihnutie, no pacient je schopný chodiť alebo stáť bez pomoci",
+                            Name = "ažké postihnutie, no pacient je schopný chodi alebo stá bez pomoci",
+                            Number = "4",
                             Type_q = 1
                         },
                         new
@@ -539,7 +847,8 @@ namespace Krka.MoveOn.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pacient je odkázaný na vozík alebo posteľ",
+                            Name = "Pacient je odkázaný na vozík alebo poste¾",
+                            Number = "5",
                             Type_q = 1
                         });
                 });
@@ -699,7 +1008,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 12,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ex-fajčiar",
+                            Name = "Ex-fajèiar",
                             Type_q = 4
                         },
                         new
@@ -891,7 +1200,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 36,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Porucha čuchu",
+                            Name = "Porucha èuchu",
                             Type_q = 9
                         },
                         new
@@ -907,7 +1216,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 38,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Depresia alebo úzkosť",
+                            Name = "Depresia alebo úzkos",
                             Type_q = 9
                         },
                         new
@@ -1051,7 +1360,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 56,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Nič z vyššie uvedeného ",
+                            Name = "Niè z vyššie uvedeného ",
                             Type_q = 11
                         });
                 });
@@ -1230,12 +1539,10 @@ namespace Krka.MoveOn.Migrations
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.Questionnaire", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                    b.Property<string>("Id")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -1299,8 +1606,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.HasKey("Id");
@@ -1321,11 +1630,11 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
-                    b.Property<DateTime>("Exc_1")
+                    b.Property<DateTime?>("Exc_1")
                         .HasColumnType("datetime2")
                         .HasColumnName("exc_1");
 
-                    b.Property<int>("Exc_2")
+                    b.Property<int?>("Exc_2")
                         .HasColumnType("int")
                         .HasColumnName("exc_2");
 
@@ -1341,8 +1650,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.HasKey("Id");
@@ -1461,8 +1772,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.HasKey("Id");
@@ -1507,8 +1820,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.HasKey("Id");
@@ -1585,8 +1900,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.HasKey("Id");
@@ -1663,8 +1980,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("mot_9");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.HasKey("Id");
@@ -1821,8 +2140,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("motskill_9");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.HasKey("Id");
@@ -1899,8 +2220,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("nonmot_9");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.HasKey("Id");
@@ -1925,8 +2248,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.Property<int>("SF_1")
@@ -1971,8 +2296,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<int>("Questionnaire_id")
-                        .HasColumnType("int")
+                    b.Property<string>("Questionnaire_id")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
                         .HasColumnName("questionnaire_id");
 
                     b.Property<int?>("TreatQ1")

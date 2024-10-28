@@ -9,7 +9,7 @@ namespace Krka.MoveOn.Services.Questionnaires
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<QuestionnaireMoca07?> GetQuestionnaireMoca07ByQuestionnaireIdAsync(int questionnaireId)
+        public async Task<QuestionnaireMoca07?> GetQuestionnaireMoca07ByQuestionnaireIdAsync(string questionnaireId)
         {
             return await Task.Run(() => _context.QuestionnaireMoca07s
                                  .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
@@ -18,6 +18,17 @@ namespace Krka.MoveOn.Services.Questionnaires
         public async Task<List<DialMH>> GetDialMHAsync()
         {
             return await _context.DialMHs.ToListAsync();
+        }
+
+        public async Task SaveQuestionnaireMoca07Async(QuestionnaireMoca07 questionnaire)
+        {
+            if (questionnaire == null)
+            {
+                throw new ArgumentNullException(nameof(questionnaire));
+            }
+
+            _context.QuestionnaireMoca07s.Add(questionnaire);
+            await _context.SaveChangesAsync();
         }
 
     }

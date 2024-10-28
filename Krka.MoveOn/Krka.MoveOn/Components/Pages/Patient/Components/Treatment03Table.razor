@@ -1,0 +1,221 @@
+﻿@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Components
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Treatment03Service TreatmentService
+@inject IToastNotificationService ToastService
+
+<DxGrid @ref="treatGrid"
+        Data="Treats"
+        PageSize="20"
+        PagerPosition="GridPagerPosition.Bottom"
+        PageSizeSelectorVisible="true"
+        PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+        PageSizeSelectorAllRowsItemVisible="true"
+        PagerSwitchToInputBoxButtonCount="10"
+        PagerVisibleNumericButtonCount="10"
+        KeyFieldName="Id"
+        ValidationEnabled="false"
+        EditMode="GridEditMode.EditCell"
+        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+        ColumnResizeMode="GridColumnResizeMode.NextColumn"
+        TextWrapEnabled="false"
+        EditModelSaving="Grid_EditModelSaving"
+        DataItemDeleting="Grid_DataItemDeleting"
+        HighlightRowOnHover="true"
+        FocusedRowEnabled="true">
+
+    <ToolbarTemplate Context="toolbarContext">
+        <ManagementToolbar NewClick="New_Click" SaveClick="Save_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+    </ToolbarTemplate>
+
+    <Columns>
+        <DxGridDataColumn FieldName="Treat_1" Caption="Učinná látka" Width="">
+            <EditSettings>
+                <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
+            </EditSettings>
+        </DxGridDataColumn>
+
+        <DxGridDataColumn FieldName="Treat_2" Caption="Dávka (mg)" />
+
+        <DxGridDataColumn FieldName="Treat_3" Caption="Indikácia">
+            <EditSettings>
+                <DxComboBoxSettings Data="@treat_3_Answer" ValueFieldName="Id" TextFieldName="Name" />
+            </EditSettings>
+        </DxGridDataColumn>
+
+        <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+
+            <CellDisplayTemplate Context="gridContext">
+                <div class="grid-cell-align-center">
+                    <DxButton IconCssClass="grid-icon grid-icon-delete"
+                              RenderStyle="ButtonRenderStyle.Link"
+                              aria-label="Delete"
+                              Click="@(() => treatGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                        <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
+                    </DxButton>
+                </div>
+            </CellDisplayTemplate>
+
+            <CellEditTemplate Context="editContext">
+                <div class="grid-cell-align-center">
+                    <DxButton Enabled="false"
+                              aria-label="Delete"
+                              CssClass="grid-disabled-button"
+                              IconCssClass="grid-icon grid-icon-delete"
+                              RenderStyle="ButtonRenderStyle.Link" />
+
+                </div>
+            </CellEditTemplate>
+        </DxGridCommandColumn>
+    </Columns>
+</DxGrid>
+
+@code {
+    [Parameter]
+    public string questionnaireId { get; set; }
+
+    IGrid treatGrid { get; set; }
+    public List<Data.Questionnaires.QuestionnaireTreatment03> Treats { get; set; }
+
+    List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
+    List<Data.Dials.DialActiveIngredient> treat_1_Answer = new();
+
+    List<Data.Dials.DialIndication> dialIndication = new();
+    List<Data.Dials.DialIndication> treat_3_Answer = new();
+
+
+
+    Dictionary<QuestionnaireTreatment03, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || treatGrid.IsEditing();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+
+        dialActiveIngredient = await TreatmentService.GetDialActiveIngredientAsync();
+        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+
+        dialIndication = await TreatmentService.GetDialIndicationAsync();
+        treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
+
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola pridaná",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola odstránená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    async Task UpdateDataAsync()
+    {
+        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+        treatGrid.Reload();
+    }
+
+    async Task New_Click() => await treatGrid.StartEditNewRowAsync();
+
+    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
+
+    async Task Save_Click()
+    {
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Addition:
+                    await TreatmentService.SaveTreatmentAsync(changedItem);
+                    AddToast();
+                    break;
+                case DataChangeType.Modification:
+                    await TreatmentService.SaveTreatmentAsync(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+        await ClearUnsavedChangesAsync();
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
+        treat.Questionnaire_id = questionnaireId;
+        if (e.IsNew)
+        {
+            Treats.Add(treat);
+            UnsavedChanges[treat] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            UnsavedChanges[treat] = new(DataChangeType.Modification, new());
+        }
+    }
+
+    /// <summary>
+    /// Nastavenie objektu "DeletedAt"
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
+        await TreatmentService.DeleteTreatAsync(treat.Id);
+        await UpdateDataAsync();
+        DeleteToast();
+    }
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification, Addition, Delete }
+
+}

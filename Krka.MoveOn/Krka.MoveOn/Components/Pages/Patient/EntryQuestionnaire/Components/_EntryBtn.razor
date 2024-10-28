@@ -1,0 +1,78 @@
+﻿
+@using Krka.MoveOn.Services.Questionnaires
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+@namespace Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject General01Service Q01Service
+@inject ProtectedSessionStorage SessionStorage
+
+<DxFormLayout>
+    <DxFormLayoutItem>
+        <div class="buttons-group mb-2 ">
+            <div class="d-flex flex-row w-100">
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Detekcia príznakov"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/gen")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Začiatočná liečba"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/init")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Liečba pridružených problémov"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/treat")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="MDS-UPDRS škála"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/motor")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Moca"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/moca")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Predčasné vylúčenie"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/exc")" />
+            </div>
+        </div>
+    </DxFormLayoutItem>
+</DxFormLayout>
+
+
+
+
+
+
+@code 
+{
+    private string currentId;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var result = await SessionStorage.GetAsync<string>("currentId");
+            if (result.Success)
+            {
+                currentId = result.Value;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private string GetNavigateUrl(string baseUrl)
+    {
+        return $"{baseUrl}/{currentId}";
+    }
+}

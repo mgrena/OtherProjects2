@@ -1,0 +1,103 @@
+﻿@page "/ongoingQ/init/{questionnaireId:guid}"
+@using DevExpress.Blazor.Internal
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Initial02Service InitialService
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+<PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
+
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
+    <_OngoingBtn />
+
+    <EditForm Model="@questionnaire"
+            Context="EditFormContext"
+            OnValidSubmit="@HandleValidSubmit"
+            >
+
+        <DataAnnotationsValidator />
+        <DxFormLayout>
+            <DxFormLayoutGroup Caption="Liečba Parkinsonovej choroby" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+
+                <DxFormLayoutItem Caption="Dátum" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+
+                    <DxDateEdit @bind-Date="@questionnaire.Date" ShowValidationIcon="true" required />
+              
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <div style="margin-top: 5px">
+
+                        <DxButton SubmitFormOnClick="true"
+                                    Text="Uložiť"
+                                    RenderStyle="ButtonRenderStyle.Primary" />
+                    </div>
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+
+    </EditForm>
+
+
+    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@QuestionnaireIdAsString" />
+
+</div>
+
+
+@code {
+    [Parameter]
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+
+    Questionnaire questionnaire = new Questionnaire
+    {
+        Date = DateTime.Now,
+        PatientId = 0,
+        Order = 0,
+        ModifiedAt = DateTime.Now,
+        CreatedAt = DateTime.Now
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(QuestionnaireIdAsString);
+    }
+
+
+    private async Task HandleValidSubmit()
+    {
+        await QuestionnaireService.UpdateQuestionnaireAsync(questionnaire);
+        ModifyToast();
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+     
+}

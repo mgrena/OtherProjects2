@@ -1,0 +1,38 @@
+﻿@page "/entryQ/motor/{questionnaireId:guid}"
+
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+<PageTitle>MoveOn - MDS-UPDRS škála </PageTitle>
+
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
+    <_EntryBtn />
+
+    <div class="grid-container">
+        <div class="grid-item">
+
+            <Motor04Table questionnaireId="@QuestionnaireIdAsString" />
+
+            <br>
+
+            <Motor05Table questionnaireId="@QuestionnaireIdAsString" />
+
+            <br>
+
+            <Motor06Table questionnaireId="@QuestionnaireIdAsString" />
+        </div>
+    </div>
+    
+</div>
+
+
+
+@code {
+    [Parameter]
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+}

@@ -1,0 +1,70 @@
+﻿@using Krka.MoveOn.Services.Questionnaires
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject General01Service Q01Service
+@inject ProtectedSessionStorage SessionStorage
+
+<DxFormLayout>
+    <DxFormLayoutItem>
+        <div class="buttons-group mb-2">
+            <div class="d-flex flex-row w-100">
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Liečba Parkinsonovej choroby"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/init")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Zmena v liečbe pridružených problémov"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/treat")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Nežiaduci účinok liečiva"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/drugEffect")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="MDS-UPDRS škála"
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/motor")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Hodnotenie spokojnosti s liečbou "
+                          CssClass="flex-fill me-2 rectangular-button"
+                          NavigateUrl="@GetNavigateUrl("/ongoingQ/satisfaction")" />
+            </div>
+        </div>
+    </DxFormLayoutItem>
+</DxFormLayout>
+
+
+
+
+
+
+@code 
+{
+    private string currentId;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var result = await SessionStorage.GetAsync<string>("currentId");
+            if (result.Success)
+            {
+                currentId = result.Value;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private string GetNavigateUrl(string baseUrl)
+    {
+        return $"{baseUrl}/{currentId}";
+    }
+}

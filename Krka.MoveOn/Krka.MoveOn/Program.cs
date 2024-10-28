@@ -39,10 +39,14 @@ builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<General01Service>();
 builder.Services.AddScoped<Initial02Service>();
 builder.Services.AddScoped<Treatment03Service>();
-builder.Services.AddScoped<Motor040506Service>();
+builder.Services.AddScoped<Motor04Service>();
+builder.Services.AddScoped<Motor05Service>();
+builder.Services.AddScoped<Motor06Service>();
 builder.Services.AddScoped<Moca07Service>();
+builder.Services.AddScoped<Exclusion08Service>();
 builder.Services.AddScoped<QuestionnaireService>();
-builder.Services.AddScoped<DrugEffect09Service>();
+builder.Services.AddScoped<DrugEffect09Service>(); 
+builder.Services.AddScoped<Satisfaction10Service>();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -59,7 +63,7 @@ if (connectionString.Contains("Password"))
     connectionString = string.Format(connectionString, aPassword);
 }
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString), ServiceLifetime.Transient);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()

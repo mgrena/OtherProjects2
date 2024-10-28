@@ -28,7 +28,7 @@ public class QuestionnaireService(ApplicationDbContext context)
     public async Task<List<Questionnaire>> GetQuestionnairesByPatientIdAsync(int patientId)
     {
         return await _context.Questionnaires
-                             .Where(q => q.PatientId == patientId)
+                             .Where(q => q.PatientId == patientId).OrderBy(q => q.CreatedAt)
                              .ToListAsync();
     }
 
@@ -37,7 +37,7 @@ public class QuestionnaireService(ApplicationDbContext context)
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<Questionnaire> GetQuestionnairesByIdAsync(int id)
+    public async Task<Questionnaire> GetQuestionnairesByIdAsync(string id)
     {
         return await _context.Questionnaires
                              .FirstOrDefaultAsync(q => q.Id == id);

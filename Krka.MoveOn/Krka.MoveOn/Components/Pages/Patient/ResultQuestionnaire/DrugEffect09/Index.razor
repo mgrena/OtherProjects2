@@ -1,0 +1,263 @@
+﻿@page "/resultQ/drugEffect/{questionnaireId:guid}"
+
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.ResultQuestionnaire.Components
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject DrugEffect09Service DrugEffectService
+@inject IToastNotificationService ToastService
+
+
+
+<PageTitle>MoveOn - Liečba pridružených problémov </PageTitle>
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
+    <_ResultBtn />
+
+
+    <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+        Nežiaduci účinok liečiva:
+    </div>
+
+
+    <DxGrid @ref="drugEffectGrid"
+            Data="DrugEffects"
+            PageSize="20"
+            PagerPosition="GridPagerPosition.Bottom"
+            PageSizeSelectorVisible="true"
+            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+            PageSizeSelectorAllRowsItemVisible="true"
+            PagerSwitchToInputBoxButtonCount="10"
+            PagerVisibleNumericButtonCount="10"
+            KeyFieldName="Id"
+            ValidationEnabled="false"
+            EditMode="GridEditMode.EditCell"
+            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+            TextWrapEnabled="false"
+            EditModelSaving="Grid_EditModelSaving"
+            HighlightRowOnHover="true"
+            FocusedRowEnabled="true"
+            >
+
+        <ToolbarTemplate Context="toolbarContext">
+            <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+
+                <DxToolbarItem Text="Pridať učinnú látku" Enabled="true" Click="New_Click">
+                    <img src="images/pill.svg" width="24" height="24" alt="Pridať učinnu látku" />
+                    <span style="margin-left: 2px">Pridať učinnú látku</span>
+                </DxToolbarItem>
+
+                <DxToolbarItem Text="Uložiť" BeginGroup="true" Click="Save_Click" Enabled="BatchItemsEnabled">
+                    <img src="images/save.svg" width="24" height="24" alt="Save" />
+                    <span style="margin-left: 3px">Uložiť</span>
+                </DxToolbarItem>
+
+                <DxToolbarItem Text="Zrušiť" Click="Cancel_Click" Enabled="BatchItemsEnabled">
+                    <img src="images/cancel.svg" width="24" height="24" alt="Cancel" />
+                    <span style="margin-left: 4px">Zrušiť</span>
+                </DxToolbarItem>
+            </DxToolbar>
+        </ToolbarTemplate>
+
+        <Columns>
+            <DxGridDataColumn FieldName="De_1" Caption="Učinná látka" Width="">
+                <EditSettings>
+                    <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
+                </EditSettings>
+            </DxGridDataColumn>
+
+            <DxGridDataColumn FieldName="De_2" Caption="Dávka (mg)" />
+
+            <DxGridDataColumn FieldName="De_3" Caption="Nežiaduci účinok"/>
+
+            <DxGridDataColumn FieldName="De_4" Caption="Indikácia"/>
+
+            <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+
+                <CellDisplayTemplate Context="gridContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                  RenderStyle="ButtonRenderStyle.Link"
+                                  aria-label="Delete"
+                                  Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                            <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
+                        </DxButton>
+                    </div>
+                </CellDisplayTemplate>
+
+                <CellEditTemplate Context="editContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton Enabled="false"
+                                  aria-label="Delete"
+                                  CssClass="grid-disabled-button"
+                                  IconCssClass="grid-icon grid-icon-delete"
+                                  RenderStyle="ButtonRenderStyle.Link" />
+
+                    </div>
+                </CellEditTemplate>
+            </DxGridCommandColumn>
+        </Columns>     
+    </DxGrid>
+</div>
+
+
+
+
+@code {
+    [Parameter]
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+
+    IGrid drugEffectGrid { get; set; }
+    public List<Data.Questionnaires.QuestionnaireDrugEffect09> DrugEffects { get; set; }
+
+    List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
+    List<Data.Dials.DialActiveIngredient> treat_1_Answer = new();
+
+    // List<Data.Dials.DialIndication> dialIndication = new();
+    // List<Data.Dials.DialIndication> treat_3_Answer = new();
+
+    
+
+    Dictionary<QuestionnaireDrugEffect09, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || drugEffectGrid.IsEditing();
+
+    protected override async Task OnInitializedAsync()
+    {
+        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(QuestionnaireIdAsString);
+
+        dialActiveIngredient = await DrugEffectService.GetDialActiveIngredientAsync();
+        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+
+        // dialIndication = await TreatmentService.GetDialIndicationAsync();
+        // treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
+
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola pridaná",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+
+    /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola odstránená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    async Task UpdateDataAsync()
+    {
+        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(QuestionnaireIdAsString);
+        drugEffectGrid.Reload();
+    }
+
+    async Task New_Click() => await drugEffectGrid.StartEditNewRowAsync();
+
+    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
+
+    async Task Save_Click()
+    {
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Addition:
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
+                    AddToast();
+                    break;
+                case DataChangeType.Modification:
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+        await ClearUnsavedChangesAsync();
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var drugEffect = (Data.Questionnaires.QuestionnaireDrugEffect09)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
+        drugEffect.Questionnaire_id = QuestionnaireIdAsString;
+        if (e.IsNew)
+        {
+            DrugEffects.Add(drugEffect);
+            UnsavedChanges[drugEffect] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
+        }
+    }
+
+    /// <summary>
+    /// Nastavenie objektu "DeletedAt"
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    // async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    // {
+    //     var treat = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
+    //     await DrugEffectService.DeleteTreatAsync(treat.Id);
+    //     await UpdateDataAsync();
+    //     DeleteToast();
+    // }
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification, Addition, Delete }
+}
