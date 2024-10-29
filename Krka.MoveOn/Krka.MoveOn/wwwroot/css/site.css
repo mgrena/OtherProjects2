@@ -281,6 +281,10 @@ html, body {
     margin-top: -4px;
     margin-bottom: -4px;
 }
+.grid-header-align-center {
+    text-align: center;
+    width: 100%;
+}
 .grid-icon {
     display: inline-block;
     width: 1rem;
@@ -295,10 +299,14 @@ html, body {
     vertical-align: middle;
 }
 .grid-icon-delete {
-    -webkit-mask-image: url("/images/delete.svg");
-    mask-image: url("/images/delete.svg");
+    -webkit-mask-image: url("/images/trash.svg");
+    mask-image: url("/images/trash.svg");
 }
 .grid-icon-add {
     -webkit-mask-image: url("/images/add.svg");
     mask-image: url("/images/add.svg");
+}
+.grid-icon-edit {
+    -webkit-mask-image: url("/images/pencil-square.svg");
+    mask-image: url("/images/pencil-square.svg");
 }

@@ -1,12 +1,6 @@
-﻿using static System.Reflection.Metadata.BlobBuilder;
-using System.Reflection;
+﻿using Krka.MoveOn.Data;
 using Krka.MoveOn.Interfaces;
-using Krka.MoveOn.Data;
-using Microsoft.AspNetCore.Components.Authorization;
-using System.IdentityModel.Claims;
-using static System.Formats.Asn1.AsnWriter;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace Krka.MoveOn.Services;
 
@@ -57,9 +51,9 @@ public class LoggerDatabaseProvider(ILogs logs, IServiceProvider serviceProvider
             }
 
             using var scope = myServiceProvider.CreateScope();
-
             var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
             var httpContextAccessor = scope.ServiceProvider.GetService<IHttpContextAccessor>();
+
             string anUserId = "0";
             if (userManager != null && httpContextAccessor != null && httpContextAccessor.HttpContext != null)
             {
@@ -92,15 +86,18 @@ public class LoggerDatabaseProvider(ILogs logs, IServiceProvider serviceProvider
                         Message = exception.Message
                     };
                     _ = myLogs.Log(aLog);
-                    aLog = new LogEntity()
+                    if (exception.StackTrace != null)
                     {
-                        LogLevel = logLevel.ToString(),
-                        Category = "details",
-                        UserId = anUserId,
-                        CreatedAt = DateTime.Now,
-                        Message = exception.StackTrace
-                    };
-                    _ = myLogs.Log(aLog);
+                        aLog = new LogEntity()
+                        {
+                            LogLevel = logLevel.ToString(),
+                            Category = "details",
+                            UserId = anUserId,
+                            CreatedAt = DateTime.Now,
+                            Message = exception.StackTrace
+                        };
+                        _ = myLogs.Log(aLog);
+                    }
                     exception = exception.InnerException;
                 }
             } // if (exception != null)
