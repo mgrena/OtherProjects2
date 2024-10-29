@@ -5,6 +5,7 @@
 
 @inject Motor06Service MotorService
 @inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
@@ -26,7 +27,7 @@
     <Columns>
         <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
         <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
-        <DxGridDataColumn FieldName="Value" Caption="Počet bodov">
+        <DxGridDataColumn FieldName="Value" Caption="Počet bodov" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
             <EditSettings>
                 <DxSpinEditSettings MinValue="0" MaxValue="4" />
             </EditSettings>
@@ -50,9 +51,17 @@
     public List<MDSItem>? Motskill { get; set; }
 
 
+    bool isReadOnly = false;
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
 
         var motskill = await MotorService.GetQuestionnaireMotorSkill06(questionnaireId);
         Motskill = new List<MDSItem>();

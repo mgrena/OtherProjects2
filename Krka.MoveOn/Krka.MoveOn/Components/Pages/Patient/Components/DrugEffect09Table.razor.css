@@ -1,0 +1,17 @@
+﻿::deep .rectangular-button {
+    border-radius: 0;
+    padding: 30px 20px;
+    border: 1px solid black;
+    border-color: #dfdfdf;
+}
+
+
+::deep .vertical-grid .dx-datagrid-rowsview .dx-row {
+    display: flex;
+    flex-direction: column;
+}
+
+::deep .vertical-grid .dx-datagrid-rowsview .dx-row > td {
+    display: block;
+    width: 100%;
+}

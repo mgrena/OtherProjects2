@@ -6,6 +6,7 @@
 
 @inject Initial02Service InitialService
 @inject IToastNotificationService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <DxGrid @ref="initGrid"
         Data="Inits"
@@ -25,24 +26,29 @@
         EditModelSaving="Grid_EditModelSaving"
         DataItemDeleting="Grid_DataItemDeleting"
         HighlightRowOnHover="true"
-        FocusedRowEnabled="true">
+        FocusedRowEnabled="true"
+        >
+
 
     <ToolbarTemplate Context="toolbarContext">
-        <ManagementToolbar NewClick="New_Click" SaveClick="Save_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+        @if (!isReadOnly)
+        {
+            <ManagementToolbar NewClick="New_Click" SaveClick="Save_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+        }
     </ToolbarTemplate>
 
     <Columns>
-        <DxGridDataColumn FieldName="Init_1" Caption="Učinná látka">
+        <DxGridDataColumn FieldName="Init_1" Caption="Učinná látka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
             <EditSettings>
                 <DxComboBoxSettings Data="@init_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
             </EditSettings>
         </DxGridDataColumn>
 
-        <DxGridDataColumn FieldName="Init_2" Caption="Dávka (mg)" />
+        <DxGridDataColumn FieldName="Init_2" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
 
-        <DxGridDataColumn FieldName="Init_3" Caption="Počet dávok denne" />
+        <DxGridDataColumn FieldName="Init_3" Caption="Počet dávok denne" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
 
-        <DxGridDataColumn Caption="Denná dávka" ReadOnly="true">
+        <DxGridDataColumn Caption="Denná dávka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
             <CellDisplayTemplate Context="gridContext">
                 @{
                     if (gridContext.DataItem is Data.Questionnaires.QuestionnaireInitial02 dataItem)
@@ -60,30 +66,33 @@
             </CellDisplayTemplate>
         </DxGridDataColumn>
 
-        <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+        @if (!isReadOnly)
+        {
+            <DxGridCommandColumn Width="30px" NewButtonVisible="false" ReadOnly="true">
 
-            <CellDisplayTemplate Context="gridContext">
-                <div class="grid-cell-align-center">
-                    <DxButton IconCssClass="grid-icon grid-icon-delete"
-                              RenderStyle="ButtonRenderStyle.Link"
-                              aria-label="Delete"
-                              Click="@(() => initGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                        <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                    </DxButton>
-                </div>
-            </CellDisplayTemplate>
+                <CellDisplayTemplate Context="gridContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                  RenderStyle="ButtonRenderStyle.Link"
+                                  aria-label="Delete"
+                                  Click="@(() => initGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                            <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
+                        </DxButton>
+                    </div>
+                </CellDisplayTemplate>
 
-            <CellEditTemplate Context="editContext">
-                <div class="grid-cell-align-center">
-                    <DxButton Enabled="false"
-                              aria-label="Delete"
-                              CssClass="grid-disabled-button"
-                              IconCssClass="grid-icon grid-icon-delete"
-                              RenderStyle="ButtonRenderStyle.Link" />
+                <CellEditTemplate Context="editContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton Enabled="false"
+                                  aria-label="Delete"
+                                  CssClass="grid-disabled-button"
+                                  IconCssClass="grid-icon grid-icon-delete"
+                                  RenderStyle="ButtonRenderStyle.Link" />
 
-                </div>
-            </CellEditTemplate>
-        </DxGridCommandColumn>
+                    </div>
+                </CellEditTemplate>
+            </DxGridCommandColumn>
+        }
     </Columns>
 
     <TotalSummary>
@@ -114,8 +123,18 @@
     Dictionary<QuestionnaireInitial02, DataChange> UnsavedChanges { get; } = new();
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || initGrid.IsEditing();
 
+    bool isReadOnly = false;
+
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
         Inits = await InitialService.GetQuestionnaireInitial02(questionnaireId);
 
         dialActiveIngredient = await InitialService.GetDialActiveIngredientAsync();

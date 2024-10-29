@@ -11,8 +11,8 @@ namespace Krka.MoveOn.Services.Questionnaires
 
         public async Task<QuestionnaireMoca07?> GetQuestionnaireMoca07ByQuestionnaireIdAsync(string questionnaireId)
         {
-            return await Task.Run(() => _context.QuestionnaireMoca07s
-                                 .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
+            return await _context.QuestionnaireMoca07s
+                .FirstOrDefaultAsync(q => q.Questionnaire_id == questionnaireId);
         }
 
         public async Task<List<DialMH>> GetDialMHAsync()
