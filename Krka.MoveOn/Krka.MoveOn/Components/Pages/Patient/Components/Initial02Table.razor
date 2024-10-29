@@ -68,7 +68,7 @@
 
         @if (!isReadOnly)
         {
-            <DxGridCommandColumn Width="30px" NewButtonVisible="false" ReadOnly="true">
+            <DxGridCommandColumn Width="30px" NewButtonVisible="false">
 
                 <CellDisplayTemplate Context="gridContext">
                     <div class="grid-cell-align-center">
@@ -99,14 +99,7 @@
         <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Init_2" ValueDisplayFormat=" {0}" />
         <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Init_3" ValueDisplayFormat=" {0}" />
     </TotalSummary>
-
-    <EditFormTemplate Context="editFormContext">
-        <DxFormLayout>
-            <DxFormLayoutItem Caption="Identifikačný kód pacienta">
-                @editFormContext.GetEditor("Init_1")
-            </DxFormLayoutItem>
-        </DxFormLayout>
-    </EditFormTemplate>
+    
 </DxGrid>
 
 @code {
@@ -149,12 +142,12 @@
     private void AddToast()
     {
         ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Učinná látka bola pridaná",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
+        {
+            ProviderName = "Overview",
+            Title = "Učinná látka bola pridaná",
+            ThemeMode = ToastThemeMode.Saturated,
+            RenderStyle = ToastRenderStyle.Success,
+        });
     }
 
     /// <summary>
@@ -239,7 +232,14 @@
         }
         else
         {
-            UnsavedChanges[init] = new(DataChangeType.Modification, new());
+            var changedFields = DataUtils.ApplyModifiedFields(init, dataItem);
+            if (changedFields.Count > 0)
+            {
+                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
+                    changes.ChangedFields.UnionWith(changedFields);
+                else
+                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
+            }
         }
     }
 
@@ -258,4 +258,29 @@
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification, Addition, Delete }
+
+
+    //Trieda pre hromadne ukladanie 
+    public static class DataUtils
+    {
+        public static HashSet<string> ApplyModifiedFields<T>(T source, T target)
+        {
+            var changedFields = new HashSet<string>();
+            var properties = typeof(T).GetProperties();
+
+            foreach (var property in properties)
+            {
+                var sourceValue = property.GetValue(source);
+                var targetValue = property.GetValue(target);
+
+                if (!Equals(sourceValue, targetValue))
+                {
+                    property.SetValue(target, sourceValue);
+                    changedFields.Add(property.Name);
+                }
+            }
+
+            return changedFields;
+        }
+    }
 }

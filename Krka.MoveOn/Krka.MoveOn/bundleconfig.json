@@ -16,5 +16,17 @@
     "inputFiles": [
       "Components/Pages/Patient/EntryQuestionnaire/Moca07/Index.razor.min.css"
     ]
+  },
+  {
+    "outputFileName": "Components/Pages/Patient/EntryQuestionnaire/Components/_EntryBtn.razor.min.min.css",
+    "inputFiles": [
+      "Components/Pages/Patient/EntryQuestionnaire/Components/_EntryBtn.razor.min.css"
+    ]
+  },
+  {
+    "outputFileName": "Components/Pages/Patient/EntryQuestionnaire/Components/_EntryBtn.razor.min.css",
+    "inputFiles": [
+      "Components/Pages/Patient/EntryQuestionnaire/Components/_EntryBtn.razor.css"
+    ]
   }
 ]

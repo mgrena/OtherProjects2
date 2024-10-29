@@ -59,26 +59,26 @@ namespace Krka.MoveOn.Data.Questionnaires
         ///   -Ak áno názov mediciny (číselnik na DialMedicines) !!!!!!!!!!
         /// </summary>
         [Column("gen_7_1_dm")]
-        public int Gen_7_1_DM { get; set; }
+        public int? Gen_7_1_DM { get; set; }
 
         /// <summary>
         ///  - Davka 
         /// </summary>
         [Column("gen_7_2", TypeName = "decimal(5,2)")]
-        public decimal Gen_7_2 { get; set; }
+        public decimal? Gen_7_2 { get; set; }
 
         /// <summary>
         /// - jednotka (číselnýk na DialUnits) !!!!!!!!! 
         /// </summary>
         [Column("gen_7_3_du")]
-        public int Gen_7_3_DU { get; set; }
+        public int? Gen_7_3_DU { get; set; }
 
 
         /// <summary>
         /// - Dĺžka užívania v rokoch 
         /// </summary>
         [Column("gen_7_4", TypeName = "decimal(3,1)")]
-        public decimal Gen_7_4 { get; set; }
+        public decimal? Gen_7_4 { get; set; }
 
         /// <summary>
         /// Ak na Otazku 7 dá odpoveď ine (Názov Mediciny)
@@ -90,7 +90,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// Ak na Otazku 7 dá odpoveď ine (Davka)
         /// </summary>
         [Column("gen_7_1_2", TypeName = "decimal(5,2)")]
-        public decimal Gen_7_1_2 { get; set; }
+        public decimal? Gen_7_1_2 { get; set; }
 
         /// <summary>
         /// Ak na Otazku 7 dá odpoveď ine - jednotka (číselnýk na DialUnits) !!!!!!!!!!!!!
@@ -102,7 +102,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         ///  Ak na Otazku 7 dá odpoveď ine - ( Dĺžka užívania v rokoch )
         /// </summary>
         [Column("gen_7_1_4", TypeName = "decimal(3,1)")]
-        public decimal Gen_7_1_4 { get; set; }
+        public decimal? Gen_7_1_4 { get; set; }
 
         /// <summary>
         /// Dĺžka trvania ťažkostí (v mesiacoch)

@@ -53,7 +53,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_2" MinValue="0" MaxValue="1"  />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn1" Click="() => IsInfoOpen1 = !IsInfoOpen1" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_2" MinValue="0" MaxValue="1"  />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen1"
+                                      PositionTarget=".info-icon-btn1"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 1.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
 
@@ -64,7 +78,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="3"  />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn2" Click="() => IsInfoOpen2 = !IsInfoOpen2" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="3"  />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen2"
+                                      PositionTarget=".info-icon-btn2"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 3.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
 
@@ -83,7 +111,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_4" MinValue="0" MaxValue="3" />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn3" Click="() => IsInfoOpen3 = !IsInfoOpen3" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_4" MinValue="0" MaxValue="3" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen3"
+                                      PositionTarget=".info-icon-btn3"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 3.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
 
@@ -102,7 +144,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_5" MinValue="0" MaxValue="2" />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn4" Click="() => IsInfoOpen4 = !IsInfoOpen4" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_5" MinValue="0" MaxValue="2" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen4"
+                                      PositionTarget=".info-icon-btn4"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 2.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
 
@@ -113,7 +169,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_6" MinValue="0" MaxValue="1" />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn5" Click="() => IsInfoOpen5 = !IsInfoOpen5" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_6" MinValue="0" MaxValue="1" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen5"
+                                      PositionTarget=".info-icon-btn5"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 1.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
 
@@ -124,7 +194,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_7" MinValue="0" MaxValue="3" />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn6" Click="() => IsInfoOpen6 = !IsInfoOpen6" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_7" MinValue="0" MaxValue="3" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen6"
+                                      PositionTarget=".info-icon-btn6"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 3.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
 
@@ -143,7 +227,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_8" MinValue="0" MaxValue="2" />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn7" Click="() => IsInfoOpen7 = !IsInfoOpen7" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_8" MinValue="0" MaxValue="2" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen7"
+                                      PositionTarget=".info-icon-btn7"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 2.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
 
@@ -154,7 +252,21 @@
                         }
                         else
                         {
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn8" Click="() => IsInfoOpen8 = !IsInfoOpen8" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
                             <DxSpinEdit @bind-Value="@moca!.Moca_9" MinValue="0" MaxValue="1" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen8"
+                                      PositionTarget=".info-icon-btn8"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 1.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>                       
 
@@ -173,7 +285,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_10" MinValue="0" MaxValue="3" />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn9" Click="() => IsInfoOpen9 = !IsInfoOpen9" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_10" MinValue="0" MaxValue="3" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen9"
+                                      PositionTarget=".info-icon-btn9"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 3.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
                     <p class="sum-style">
@@ -191,7 +317,21 @@
                         }
                         else
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_11" MinValue="0" MaxValue="5" />
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn10" Click="() => IsInfoOpen10 = !IsInfoOpen10" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
+                                <DxSpinEdit @bind-Value="@moca!.Moca_11" MinValue="0" MaxValue="5" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen10"
+                                      PositionTarget=".info-icon-btn10"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 5.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
                     <p class="sum-style">
@@ -209,7 +349,21 @@
                         }
                         else
                         {
+                            <div style="display: flex; align-items: center;">
+                                <DxButton CssClass="info-icon-btn11" Click="() => IsInfoOpen11 = !IsInfoOpen11" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                    <ChildContent Context="buttonContext">
+                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
+                                    </ChildContent>
+                                </DxButton>
                             <DxSpinEdit @bind-Value="@moca!.Moca_12" MinValue="0" MaxValue="6" />
+                            </div>
+                            <DxFlyout @bind-IsOpen="@IsInfoOpen11"
+                                      PositionTarget=".info-icon-btn11"
+                                      Position="FlyoutPosition.Bottom"
+                                      PreventCloseOnPositionTargetClick="true"
+                                      Width="240">
+                                Min = 0 / Max = 6.
+                            </DxFlyout>
                         }
                     </DxFormLayoutItem>
                     <p class="sum-style">
@@ -236,10 +390,10 @@
                                 RenderStyle="ButtonRenderStyle.Primary" />
                 }
 
-                <DxButton SubmitFormOnClick="false"
+@*                 <DxButton SubmitFormOnClick="false"
                             Text="Dalšia záložka"
                             RenderStyle="ButtonRenderStyle.Secondary"
-                            NavigateUrl="/entryQ/init" />
+                            NavigateUrl="/entryQ/init" /> *@
             </div>
         </DxFormLayoutItem>
     </DxFormLayout>
@@ -249,7 +403,19 @@
     [Parameter]
     public string questionnaireId { get; set; }
     bool isReadOnly = false;
+
     bool IsInfoOpen { get; set; } = false;
+    bool IsInfoOpen1 { get; set; } = false;
+    bool IsInfoOpen2 { get; set; } = false;
+    bool IsInfoOpen3 { get; set; } = false;
+    bool IsInfoOpen4 { get; set; } = false;
+    bool IsInfoOpen5 { get; set; } = false;
+    bool IsInfoOpen6 { get; set; } = false;
+    bool IsInfoOpen7 { get; set; } = false;
+    bool IsInfoOpen8 { get; set; } = false;
+    bool IsInfoOpen9 { get; set; } = false;
+    bool IsInfoOpen10 { get; set; } = false;
+    bool IsInfoOpen11 { get; set; } = false;
 
     Data.Questionnaires.QuestionnaireMoca07? moca;
 
@@ -305,7 +471,6 @@
         });
     }
 
-
     private async Task LoadQuestionnaire(string questionnaireId)
     {  
         var questionnaire = await MocaService.GetQuestionnaireMoca07ByQuestionnaireIdAsync(questionnaireId);
@@ -314,7 +479,6 @@
             moca = questionnaire;
         }
     }
-
 
     private async Task HandleValidSubmit()
     {

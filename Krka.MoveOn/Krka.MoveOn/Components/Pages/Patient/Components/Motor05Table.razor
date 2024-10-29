@@ -8,6 +8,7 @@
 
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastNotificationService ToastService
 
 <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
     MDS-UPDRS škála, časť II.  - Motorické aspekty každodenného života (M-EDL)
@@ -22,8 +23,15 @@
         ColumnResizeMode="GridColumnResizeMode.NextColumn"
         TextWrapEnabled="false"
         HighlightRowOnHover="true"
-        EditModelSaving="OnEditModelSavingMot"
+        EditModelSaving="Grid_EditModelSaving"
         FocusedRowEnabled="false">
+
+    <ToolbarTemplate>
+        <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+            <DxToolbarItem Text="Uložiť" Click="Save_Click" IconCssClass="grid-toolbar-save" Enabled="BatchItemsEnabled" BeginGroup="true" />
+            <DxToolbarItem Text="Zrušiť" Click="Cancel_Click" IconCssClass="grid-toolbar-cancel" Enabled="BatchItemsEnabled" />
+        </DxToolbar>
+    </ToolbarTemplate>
 
     <Columns>
         <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
@@ -51,6 +59,9 @@
 
     public List<MDSItem>? Mot { get; set; }
 
+    Dictionary<Data.Questionnaires.QuestionnaireMotor05, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || motGrid.IsEditing();
+
     bool isReadOnly = false;
 
     protected override async Task OnInitializedAsync()
@@ -63,6 +74,11 @@
             isReadOnly = true;
         }
 
+        await UpdateDataAsync();
+    }
+
+    async Task UpdateDataAsync()
+    {
         var mot = await Motor05Service.GetQuestionnaireMotor05(questionnaireId);
         Mot = new List<MDSItem>();
 
@@ -82,11 +98,10 @@
         Mot.Add(new MDSItem() { Fieldname = "Mot_13", Number = "2.13", Name = "Stuhnutie pohybu počas chôdze (freezing)", Value = (mot != null) ? mot.Mot_13 : 0 });
         #endregion
 
+        motGrid.Reload();
     }
 
-    #region "Saving mot table"
-
-    private async Task OnEditModelSavingMot(GridEditModelSavingEventArgs e)
+    private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
         var item = (MDSItem)e.EditModel;
         var questionnaire = await Motor05Service.GetQuestionnaireMotor05(questionnaireId) ?? new Data.Questionnaires.QuestionnaireMotor05
@@ -153,12 +168,62 @@
                 break;
         }
 
-        await Motor05Service.SaveOrUpdateQuestionnaireMotor05(questionnaire);
-        // Navigation.NavigateTo($"/entryQ/motor/{questionnaireId}", forceLoad: true);
+        var nonmotItem = Mot.FirstOrDefault(n => n.Fieldname == item.Fieldname);
+        if (nonmotItem != null)
+        {
+            nonmotItem.Value = item.Value;
+        }
+
+        if (UnsavedChanges.TryGetValue(questionnaire, out var changes))
+        {
+            changes.ChangedFields.Add(item.Fieldname);
+        }
+        else
+        {
+            UnsavedChanges[questionnaire] = new DataChange(DataChangeType.Modification, new HashSet<string> { item.Fieldname });
+        }
+
+        motGrid.Reload();
     }
 
-    #endregion
+    /// <summary>
+    /// Alert
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Časť II. bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
 
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
+
+    async Task Save_Click()
+    {
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Modification:
+                    await Motor05Service.SaveOrUpdateQuestionnaireMotor05(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+        await ClearUnsavedChangesAsync();
+    }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification }

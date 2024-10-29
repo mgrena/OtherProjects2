@@ -13,6 +13,7 @@ namespace Krka.MoveOn.Services.Questionnaires
         {
             return await _context.QuestionnaireInitial02s
                 .Where(q => q.Questionnaire_id == questionnaireId && q.DeletedAt == null)
+                .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
 

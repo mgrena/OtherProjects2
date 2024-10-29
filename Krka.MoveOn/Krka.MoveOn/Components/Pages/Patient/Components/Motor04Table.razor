@@ -1,4 +1,5 @@
-﻿@using Krka.MoveOn.Services.Questionnaires
+﻿@using Krka.MoveOn.Components.Pages.Components
+@using Krka.MoveOn.Services.Questionnaires
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
@@ -8,6 +9,7 @@
 
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastNotificationService ToastService
 
 <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
     MDS-UPDRS škála, časť I.  – Nemotorické stránky denného života (nM-EDL)
@@ -22,8 +24,15 @@
         ColumnResizeMode="GridColumnResizeMode.NextColumn"
         TextWrapEnabled="false"
         HighlightRowOnHover="true"
-        EditModelSaving="OnEditModelSavingNonmot"
+        EditModelSaving="Grid_EditModelSaving"
         FocusedRowEnabled="false">
+
+    <ToolbarTemplate >
+        <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+            <DxToolbarItem Text="Uložiť" Click="Save_Click" IconCssClass="grid-toolbar-save" Enabled="BatchItemsEnabled" BeginGroup="true" />
+            <DxToolbarItem Text="Zrušiť" Click="Cancel_Click" IconCssClass="grid-toolbar-cancel" Enabled="BatchItemsEnabled" />
+        </DxToolbar>
+    </ToolbarTemplate>
 
     <Columns>
         <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
@@ -65,9 +74,13 @@
             isReadOnly = true;
         }
 
+        await UpdateDataAsync();
+    }
+
+    async Task UpdateDataAsync()
+    {
         var nonmot = await Motor04Service.GetQuestionnaireNonMotor04(questionnaireId);
         Nonmot = new List<MDSItem>();
-
 
         #region "Table nonmot"
 
@@ -86,33 +99,32 @@
         Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_13", Number = "1.13", Name = "Únava", Value = (nonmot != null) ? nonmot.Nonmot_13 : 0 });
         #endregion
 
+        nonmotGrid.Reload();
     }
 
 
-    #region "Saving nonmot table"
-
-    private async Task OnEditModelSavingNonmot(GridEditModelSavingEventArgs e)
+    private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
         var item = (MDSItem)e.EditModel;
         var questionnaire = await Motor04Service.GetQuestionnaireNonMotor04(questionnaireId) ?? new Data.Questionnaires.QuestionnaireNonMotor04
-            {
-                Nonmot_1 = 0,
-                Nonmot_2 = 0,
-                Nonmot_3 = 0,
-                Nonmot_4 = 0,
-                Nonmot_5 = 0,
-                Nonmot_6 = 0,
-                Nonmot_7 = 0,
-                Nonmot_8 = 0,
-                Nonmot_9 = 0,
-                Nonmot_10 = 0,
-                Nonmot_11 = 0,
-                Nonmot_12 = 0,
-                Nonmot_13 = 0,
-                Questionnaire_id = questionnaireId,
-                CreatedAt = DateTime.Now,
-                ModifiedAt = DateTime.Now
-            };
+        {
+            Nonmot_1 = 0,
+            Nonmot_2 = 0,
+            Nonmot_3 = 0,
+            Nonmot_4 = 0,
+            Nonmot_5 = 0,
+            Nonmot_6 = 0,
+            Nonmot_7 = 0,
+            Nonmot_8 = 0,
+            Nonmot_9 = 0,
+            Nonmot_10 = 0,
+            Nonmot_11 = 0,
+            Nonmot_12 = 0,
+            Nonmot_13 = 0,
+            Questionnaire_id = questionnaireId,
+            CreatedAt = DateTime.Now,
+            ModifiedAt = DateTime.Now
+        };
 
         switch (item.Fieldname)
         {
@@ -157,13 +169,66 @@
                 break;
         }
 
-        await Motor04Service.SaveOrUpdateQuestionnaireNonMotor04(questionnaire);
-        // Navigation.NavigateTo($"/entryQ/motor/{questionnaireId}", forceLoad: true);
+        var nonmotItem = Nonmot.FirstOrDefault(n => n.Fieldname == item.Fieldname);
+        if (nonmotItem != null)
+        {
+            nonmotItem.Value = item.Value;
+        }
+
+        if (UnsavedChanges.TryGetValue(questionnaire, out var changes))
+        {
+            changes.ChangedFields.Add(item.Fieldname);
+        }
+        else
+        {
+            UnsavedChanges[questionnaire] = new DataChange(DataChangeType.Modification, new HashSet<string> { item.Fieldname });
+        }
+        
+        nonmotGrid.Reload();
     }
 
-    #endregion
+    /// <summary>
+    /// Alert
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+        {
+            ProviderName = "Overview",
+            Title = "Časť I. bola zmenená",
+            ThemeMode = ToastThemeMode.Saturated,
+            RenderStyle = ToastRenderStyle.Success,
+        });
+    }
 
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
+
+    async Task Save_Click()
+    {
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Modification:
+                    await Motor04Service.SaveOrUpdateQuestionnaireNonMotor04(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+        await ClearUnsavedChangesAsync();
+    }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification }
+    
 }
+
+
