@@ -337,7 +337,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 2,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Obèas",
+                            Name = "Občas",
                             Type_q = 1
                         },
                         new
@@ -361,7 +361,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Nepravdepodobne súvisí (udalos s najväèšou pravdepodobnosou nebola spôsobená liekom, ale príèinnú súvislos nemožno úplne vylúèi)",
+                            Name = "Nepravdepodobne súvisí (udalosť s najväčšou pravdepodobnosťou nebola spôsobená liekom, ale príčinnú súvislosť nemožno úplne vylúčiť)",
                             Type_q = 2
                         },
                         new
@@ -369,7 +369,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 6,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Možno súvisí (Udalos môže, ale nemusí by spôsobená liekom, príèinnú súvislos nie je možné posúdi s väèšou istotou)",
+                            Name = "Možno súvisí (Udalosť môže, ale nemusí byť spôsobená liekom, príčinnú súvislosť nie je možné posúdiť s väčšou istotou)",
                             Type_q = 2
                         },
                         new
@@ -377,7 +377,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pravdepodobne súvisí (Liek je najpravdepodobnejšou príèinou udalosti, ale nemožno vylúèi iné príèiny)",
+                            Name = "Pravdepodobne súvisí (Liek je najpravdepodobnejšou príčinou udalosti, ale nemožno vylúčiť iné príčiny)",
                             Type_q = 2
                         },
                         new
@@ -385,7 +385,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 8,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Takmer urèite súvisí (Liek je takmer urèite príèinou udalosti, neexistujú žiadne iné zjavné alternatívne vysvetlenia)",
+                            Name = "Takmer určite súvisí (Liek je takmer určite príčinou udalosti, neexistujú žiadne iné zjavné alternatívne vysvetlenia)",
                             Type_q = 2
                         },
                         new
@@ -409,7 +409,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 11,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Hospitalizácia (zaèatá alebo predåžená)",
+                            Name = "Hospitalizácia (začatá alebo predĺžená)",
                             Type_q = 3
                         },
                         new
@@ -433,7 +433,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 14,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Smr",
+                            Name = "Smrť",
                             Type_q = 3
                         },
                         new
@@ -441,7 +441,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 15,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Závažné pod¾a názoru skúšajúceho lekára",
+                            Name = "Závažné podľa názoru skúšajúceho lekára",
                             Type_q = 3
                         },
                         new
@@ -449,7 +449,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 16,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Mierna (Nespôsobuje obmedzenie bežných èinností, pacient môže pociova mierne nepohodlie)",
+                            Name = "Mierna (Nespôsobuje obmedzenie bežných činností, pacient môže pociťovať mierne nepohodlie)",
                             Type_q = 4
                         },
                         new
@@ -457,7 +457,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 17,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Stredne ažká (Spôsobuje urèité obmedzenia bežných aktivít, pacient môže pociova nepríjemné nepohodlie)",
+                            Name = "Stredne ťažká (Spôsobuje určité obmedzenia bežných aktivít, pacient môže pociťovať nepríjemné nepohodlie)",
                             Type_q = 4
                         },
                         new
@@ -465,7 +465,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 18,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "ažká (Spôsobuje neschopnos vykonáva bežné èinnosti, pacient môže pociova neznesite¾né nepohodlie alebo boles)",
+                            Name = "Ťažká (Spôsobuje neschopnosť vykonávať bežné činnosti, pacient môže pociťovať neznesiteľné nepohodlie alebo bolesť)",
                             Type_q = 4
                         },
                         new
@@ -481,7 +481,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 20,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Zmeny v lieèbe",
+                            Name = "Zmeny v liečbe",
                             Type_q = 5
                         },
                         new
@@ -497,7 +497,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 22,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Symptomatická lieèba",
+                            Name = "Symptomatická liečba",
                             Type_q = 5
                         },
                         new
@@ -521,7 +521,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 25,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pokraèuje",
+                            Name = "Pokračuje",
                             Type_q = 6
                         });
                 });
@@ -570,7 +570,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 2,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Na dia¾ku prostredníctvom telefonického hovoru",
+                            Name = "Na diaľku prostredníctvom telefonického hovoru",
                             Type_q = 1
                         },
                         new
@@ -578,7 +578,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 3,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Na dia¾ku prostredníctvom elektronických médií",
+                            Name = "Na diaľku prostredníctvom elektronických médií.",
                             Type_q = 1
                         },
                         new
@@ -586,7 +586,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 4,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Výskyt závažnej nežiaducej reakcie poèas pozorovacieho obdobia v tejto štúdii",
+                            Name = "Výskyt závažnej nežiaducej reakcie počas pozorovacieho obdobia v tejto štúdii. *",
                             Type_q = 2
                         },
                         new
@@ -594,7 +594,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Smr",
+                            Name = "Smrť",
                             Type_q = 2
                         },
                         new
@@ -610,7 +610,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Rozhodnutie pacienta ukonèi lieèbu a odvolanie jeho informovaného súhlasu",
+                            Name = "Rozhodnutie pacienta ukončiť liečbu a odvolanie jeho informovaného súhlasu.",
                             Type_q = 2
                         },
                         new
@@ -618,7 +618,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 8,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Rozhodnutie pacienta ukonèi lieèbu a odvolanie informovaného súhlasu a GDPR formulára",
+                            Name = "Rozhodnutie pacienta ukončiť liečbu a odvolanie informovaného súhlasu a GDPR formulára.",
                             Type_q = 2
                         },
                         new
@@ -626,7 +626,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 9,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bezpeènos pacienta (napr. rozhodnutie skúšajúceho vylúèi pacienta zo štúdie v jeho najlepšom záujme, nežiaduce úèinky vyžadujúce medikamentózny zásah alebo ukonèenie lieèby)",
+                            Name = "Bezpečnosť pacienta (napr. rozhodnutie skúšajúceho vylúčiť pacienta zo štúdie v jeho najlepšom záujme, nežiaduce účinky vyžadujúce medikamentózny zásah alebo ukončenie liečby).  *",
                             Type_q = 2
                         },
                         new
@@ -634,7 +634,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 10,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "O alebo zhoršenie existujúceho ochorenia poèas štúdie, ktoré si vyžaduje používanie liekov, ktoré nie sú povolené v spojení so súhrnom charakteristických vlastností lieku použitých liekov",
+                            Name = "O alebo zhoršenie existujúceho ochorenia počas štúdie, ktoré si vyžaduje používanie liekov, ktoré nie sú povolené v spojení so súhrnom charakteristických vlastností lieku použitých liekov",
                             Type_q = 2
                         },
                         new
@@ -683,7 +683,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 1,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pruhy moèenia",
+                            Name = "Pruhy močenia",
                             Type_q = 1
                         },
                         new
@@ -731,7 +731,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Úzkos",
+                            Name = "Úzkosť",
                             Type_q = 1
                         },
                         new
@@ -802,7 +802,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 2,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Jednostranné a axiálne príznaky (hypofónia, hypomímia, flekènédržanie tela)",
+                            Name = "Jednostranné a axiálne príznaky (hypofónia, hypomímia, flekčné držanie tela) ",
                             Number = "1,5",
                             Type_q = 1
                         },
@@ -820,7 +820,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 4,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Obojstranné príznaky s miernou poruchou rovnováhy (schopnos vyrovna postoj pri pull teste)",
+                            Name = "Obojstranné príznaky s miernou poruchou rovnováhy (schopnosť vyrovnať postoj pri pull teste)",
                             Number = "2,5",
                             Type_q = 1
                         },
@@ -829,7 +829,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Mierne až stredné obojstranné príznaky, posturálnainstabilita, pacient je stále sebestaèný",
+                            Name = "Mierne až stredné obojstranné príznaky, posturálna instabilita, pacient je stále sebestačný",
                             Number = "3",
                             Type_q = 1
                         },
@@ -838,7 +838,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 6,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "ažké postihnutie, no pacient je schopný chodi alebo stá bez pomoci",
+                            Name = "Ťažké postihnutie, no pacient je schopný chodiť alebo stáť bez pomoci",
                             Number = "4",
                             Type_q = 1
                         },
@@ -847,7 +847,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Pacient je odkázaný na vozík alebo poste¾",
+                            Name = "Pacient je odkázaný na vozík alebo posteľ",
                             Number = "5",
                             Type_q = 1
                         });
@@ -1008,7 +1008,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 12,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ex-fajèiar",
+                            Name = "Ex-fajčiar",
                             Type_q = 4
                         },
                         new
@@ -1200,7 +1200,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 36,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Porucha èuchu",
+                            Name = "Porucha čuchu",
                             Type_q = 9
                         },
                         new
@@ -1216,7 +1216,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 38,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Depresia alebo úzkos",
+                            Name = "Depresia alebo úzkosť",
                             Type_q = 9
                         },
                         new
@@ -1352,7 +1352,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 55,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Iný parkinsonský syndróm ",
+                            Name = "Iný parkinsonský syndróm",
                             Type_q = 11
                         },
                         new
@@ -1360,7 +1360,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 56,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Niè z vyššie uvedeného ",
+                            Name = "Nič z vyššie uvedeného",
                             Type_q = 11
                         });
                 });
