@@ -1,6 +1,15 @@
 ﻿@implements IDisposable
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+<style>
+    .nav-buttons-container {
+        position: sticky;
+        top: 0; 
+        z-index: 1000; 
+        background-color: #fff;
+    }
+
+</style>
 
 <div class="page">
     <DxGridLayout CssClass="page-layout">
@@ -23,8 +32,8 @@
                 </Authorized>
             </AuthorizeView>         
             <DxGridLayoutItem Area="content" CssClass="content px-4">
-            <Template>                    
-                <div class="w-100 nav-buttons-container">
+            <Template>
+                    <div class="w-100 nav-buttons-container nav-buttons-container">
                     @* <CultureSelector /> *@
                     <NavLink id="menu-top" class="button-link hidden" onclick="(document.getElementById('sidebar').classList.toggle('auto-expanded'), document.getElementById('menu-top').classList.toggle('hidden'))">
                         <DxButton RenderStyle="@ButtonRenderStyle.Dark" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-menu"></DxButton>

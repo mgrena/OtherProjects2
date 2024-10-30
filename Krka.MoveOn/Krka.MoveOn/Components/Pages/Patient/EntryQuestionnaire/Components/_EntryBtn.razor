@@ -9,9 +9,21 @@
 @inject General01Service Q01Service
 @inject ProtectedSessionStorage SessionStorage
 
+<style>
+    .nav-buttons-sub-container {
+        position: sticky;
+        top: 90px;
+        z-index: 999;
+        background-color: #fff;
+    }
+
+</style>
+
+<div class="nav-buttons-sub-container">
+
 <DxFormLayout>
     <DxFormLayoutItem>
-        <div class="buttons-group mb-2 ">
+        <div class="buttons-group mb-2">
             <div class="d-flex flex-row w-100">
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
@@ -47,6 +59,8 @@
         </div>
     </DxFormLayoutItem>
 </DxFormLayout>
+
+</div>
 
 <ReturnLinkManager ReturnLink="/patients"/>
 
