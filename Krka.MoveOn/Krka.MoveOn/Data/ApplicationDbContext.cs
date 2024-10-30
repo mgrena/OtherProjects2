@@ -148,6 +148,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 51, Type_q = 10, Name = "Psychiater", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 52, Type_q = 10, Name = "Fyzioterapeut", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 53, Type_q = 10, Name = "Internista", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 57, Type_q = 10, Name = "InÈ...", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
 
             //gen_13
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 54, Type_q = 11, Name = "Idiopatick√° PCH", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
@@ -200,14 +201,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 2, Type_q = 1, Name = "Na diaƒæku prostredn√≠ctvom telefonick√©ho hovoru", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 3, Type_q = 1, Name = "Na diaƒæku prostredn√≠ctvom elektronick√Ωch m√©di√≠.", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         //exc_3
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 4, Type_q = 2, Name = "V√Ωskyt z√°va≈ænej ne≈æiaducej reakcie poƒças pozorovacieho obdobia v tejto ≈°t√∫dii. *", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 5, Type_q = 2, Name = "Smr≈•¬ù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 6, Type_q = 2, Name = "Hospitaliz√°cia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 7, Type_q = 2, Name = "Rozhodnutie pacienta ukonƒçi≈• lieƒçbu a odvolanie jeho informovan√©ho s√∫hlasu.", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 8, Type_q = 2, Name = "Rozhodnutie pacienta ukonƒçi≈• lieƒçbu a odvolanie informovan√©ho s√∫hlasu a GDPR formul√°ra.", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 9, Type_q = 2, Name = "Bezpeƒçnos≈• pacienta (napr. rozhodnutie sk√∫≈°aj√∫ceho vyl√∫ƒçi≈• pacienta zo ≈°t√∫die v jeho najlep≈°om z√°ujme, ne≈æiaduce √∫ƒçinky vy≈æaduj√∫ce medikament√≥zny z√°sah alebo ukonƒçenie lieƒçby).  *", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 10, Type_q = 2, Name = "O alebo zhor≈°enie existuj√∫ceho ochorenia poƒças ≈°t√∫die, ktor√© si vy≈æaduje pou≈æ√≠vanie liekov, ktor√© nie s√∫ povolen√© v spojen√≠ so s√∫hrnom charakteristick√Ωch vlastnost√≠ lieku pou≈æit√Ωch liekov", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 11, Type_q = 2, Name = "In√©...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 4, Type_q = 2, Name = "V˝skyt z·vaûnej neûiaducej reakcie poËas pozorovacieho obdobia v tejto öt˙dii*", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 5, Type_q = 2, Name = "Smrù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 6, Type_q = 2, Name = "Hospitaliz·cia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 7, Type_q = 2, Name = "Rozhodnutie pacienta ukonËiù lieËbu a odvolanie jeho informovanÈho s˙hlasu", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 8, Type_q = 2, Name = "Rozhodnutie pacienta ukonËiù lieËbu a odvolanie informovanÈho s˙hlasu a GDPR formul·ra", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 9, Type_q = 2, Name = "BezpeËnosù pacienta (napr. rozhodnutie sk˙öaj˙ceho vyl˙Ëiù pacienta zo öt˙die v jeho najlepöom z·ujme, neûiaduce ˙Ëinky vyûaduj˙ce medikamentÛzny z·sah alebo ukonËenie lieËby)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 10, Type_q = 2, Name = "O alebo zhoröenie existuj˙ceho ochorenia poËas öt˙die, ktorÈ si vyûaduje pouûÌvanie liekov, ktorÈ nie s˙ povolenÈ v spojenÌ so s˙hrnom charakteristick˝ch vlastnostÌ lieku pouûit˝ch liekov*", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 11, Type_q = 2, Name = "InÈ...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         #endregion
 
         #region "Dial AdverseEffect"

@@ -9,8 +9,20 @@
 @inject IToastNotificationService ToastService
 
 
-<div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
-    MDS-UPDRS škála, časť III. - Vyšetrenie motoriky
+<div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; display: flex; align-items: center; font-weight: bold;">
+    <span>MDS-UPDRS škála, časť I. – Nemotorické stránky denného života (nM-EDL)</span>
+    <DxButton CssClass="info-icon-btn3" Click="() => IsInfoOpen3 = !IsInfoOpen3" IconCssClass="grid-toolbar-save" style="margin-left: auto;">
+        <ChildContent Context="buttonContext">
+            <img src="images/info.svg" width="16" height="16" alt="Info" />
+        </ChildContent>
+    </DxButton>
+    <DxFlyout @bind-IsOpen="@IsInfoOpen3"
+              PositionTarget=".info-icon-btn3"
+              Position="FlyoutPosition.Bottom"
+              PreventCloseOnPositionTargetClick="true"
+              Width="240">
+        Min = 0 / Max = 4.
+    </DxFlyout>
 </div>
 <DxGrid @ref="motskillGrid"
         Data="Motskill"
@@ -21,17 +33,9 @@
         FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
         ColumnResizeMode="GridColumnResizeMode.NextColumn"
         TextWrapEnabled="false"
-        HighlightRowOnHover="true" 
+        HighlightRowOnHover="true"
         EditModelSaving="Grid_EditModelSaving"
         FocusedRowEnabled="false">
-
-    <ToolbarTemplate>
-        <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
-            <DxToolbarItem Text="Uložiť" Click="Save_Click" IconCssClass="grid-toolbar-save" Enabled="BatchItemsEnabled" BeginGroup="true" />
-            <DxToolbarItem Text="Zrušiť" Click="Cancel_Click" IconCssClass="grid-toolbar-cancel" Enabled="BatchItemsEnabled" />
-        </DxToolbar>
-    </ToolbarTemplate>
-
     <Columns>
         <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
         <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
@@ -54,6 +58,8 @@
     [EditorRequired]
     public string questionnaireId { get; set; }
 
+    bool IsInfoOpen3 { get; set; } = false;
+
     IGrid motskillGrid { get; set; }
 
     public List<MDSItem>? Motskill { get; set; }
@@ -75,7 +81,7 @@
         await UpdateDataAsync();
     }
 
-    
+
     private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
         var item = (MDSItem)e.EditModel;
@@ -121,106 +127,240 @@
                 ModifiedAt = DateTime.Now
             };
 
+        bool hasChanges = false;
+
         switch (item.Fieldname)
         {
             case "Motskill_1":
-                questionnaire.Motskill_1 = item.Value;
+                if (questionnaire.Motskill_1 != item.Value)
+                {
+                    questionnaire.Motskill_1 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_2":
-                questionnaire.Motskill_2 = item.Value;
+                if (questionnaire.Motskill_2 != item.Value)
+                {
+                    questionnaire.Motskill_2 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_3":
-                questionnaire.Motskill_3 = item.Value;
+                if (questionnaire.Motskill_3 != item.Value)
+                {
+                    questionnaire.Motskill_3 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_4":
-                questionnaire.Motskill_4 = item.Value;
+                if (questionnaire.Motskill_4 != item.Value)
+                {
+                    questionnaire.Motskill_4 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_5":
-                questionnaire.Motskill_5 = item.Value;
+                if (questionnaire.Motskill_5 != item.Value)
+                {
+                    questionnaire.Motskill_5 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_6":
-                questionnaire.Motskill_6 = item.Value;
+                if (questionnaire.Motskill_6 != item.Value)
+                {
+                    questionnaire.Motskill_6 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_7":
-                questionnaire.Motskill_7 = item.Value;
+                if (questionnaire.Motskill_7 != item.Value)
+                {
+                    questionnaire.Motskill_7 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_8":
-                questionnaire.Motskill_8 = item.Value;
+                if (questionnaire.Motskill_8 != item.Value)
+                {
+                    questionnaire.Motskill_8 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_9":
-                questionnaire.Motskill_9 = item.Value;
+                if (questionnaire.Motskill_9 != item.Value)
+                {
+                    questionnaire.Motskill_9 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_10":
-                questionnaire.Motskill_10 = item.Value;
+                if (questionnaire.Motskill_10 != item.Value)
+                {
+                    questionnaire.Motskill_10 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_11":
-                questionnaire.Motskill_11 = item.Value;
+                if (questionnaire.Motskill_11 != item.Value)
+                {
+                    questionnaire.Motskill_11 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_12":
-                questionnaire.Motskill_12 = item.Value;
+                if (questionnaire.Motskill_12 != item.Value)
+                {
+                    questionnaire.Motskill_12 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_13":
-                questionnaire.Motskill_13 = item.Value;
+                if (questionnaire.Motskill_13 != item.Value)
+                {
+                    questionnaire.Motskill_13 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_14":
-                questionnaire.Motskill_14 = item.Value;
+                if (questionnaire.Motskill_14 != item.Value)
+                {
+                    questionnaire.Motskill_14 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_15":
-                questionnaire.Motskill_15 = item.Value;
+                if (questionnaire.Motskill_15 != item.Value)
+                {
+                    questionnaire.Motskill_15 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_16":
-                questionnaire.Motskill_16 = item.Value;
+                if (questionnaire.Motskill_16 != item.Value)
+                {
+                    questionnaire.Motskill_16 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_17":
-                questionnaire.Motskill_17 = item.Value;
+                if (questionnaire.Motskill_17 != item.Value)
+                {
+                    questionnaire.Motskill_17 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_18":
-                questionnaire.Motskill_18 = item.Value;
+                if (questionnaire.Motskill_18 != item.Value)
+                {
+                    questionnaire.Motskill_18 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_19":
-                questionnaire.Motskill_19 = item.Value;
+                if (questionnaire.Motskill_19 != item.Value)
+                {
+                    questionnaire.Motskill_19 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_20":
-                questionnaire.Motskill_20 = item.Value;
+                if (questionnaire.Motskill_20 != item.Value)
+                {
+                    questionnaire.Motskill_20 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_21":
-                questionnaire.Motskill_21 = item.Value;
+                if (questionnaire.Motskill_21 != item.Value)
+                {
+                    questionnaire.Motskill_21 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_22":
-                questionnaire.Motskill_22 = item.Value;
+                if (questionnaire.Motskill_22 != item.Value)
+                {
+                    questionnaire.Motskill_22 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_23":
-                questionnaire.Motskill_23 = item.Value;
+                if (questionnaire.Motskill_23 != item.Value)
+                {
+                    questionnaire.Motskill_23 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_24":
-                questionnaire.Motskill_24 = item.Value;
+                if (questionnaire.Motskill_24 != item.Value)
+                {
+                    questionnaire.Motskill_24 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_25":
-                questionnaire.Motskill_25 = item.Value;
+                if (questionnaire.Motskill_25 != item.Value)
+                {
+                    questionnaire.Motskill_25 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_26":
-                questionnaire.Motskill_26 = item.Value;
+                if (questionnaire.Motskill_26 != item.Value)
+                {
+                    questionnaire.Motskill_26 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_27":
-                questionnaire.Motskill_27 = item.Value;
+                if (questionnaire.Motskill_27 != item.Value)
+                {
+                    questionnaire.Motskill_27 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_28":
-                questionnaire.Motskill_28 = item.Value;
+                if (questionnaire.Motskill_28 != item.Value)
+                {
+                    questionnaire.Motskill_28 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_29":
-                questionnaire.Motskill_29 = item.Value;
+                if (questionnaire.Motskill_29 != item.Value)
+                {
+                    questionnaire.Motskill_29 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_30":
-                questionnaire.Motskill_30 = item.Value;
+                if (questionnaire.Motskill_30 != item.Value)
+                {
+                    questionnaire.Motskill_30 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_31":
-                questionnaire.Motskill_31 = item.Value;
+                if (questionnaire.Motskill_31 != item.Value)
+                {
+                    questionnaire.Motskill_31 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_32":
-                questionnaire.Motskill_32 = item.Value;
+                if (questionnaire.Motskill_32 != item.Value)
+                {
+                    questionnaire.Motskill_32 = item.Value;
+                    hasChanges = true;
+                }
                 break;
             case "Motskill_33":
-                questionnaire.Motskill_33 = item.Value;
+                if (questionnaire.Motskill_33 != item.Value)
+                {
+                    questionnaire.Motskill_33 = item.Value;
+                    hasChanges = true;
+                }
                 break;
         }
 
@@ -238,6 +378,23 @@
         {
             UnsavedChanges[questionnaire] = new DataChange(DataChangeType.Modification, new HashSet<string> { item.Fieldname });
         }
+
+        if (hasChanges)
+        {
+            foreach (var unsavedChange in UnsavedChanges)
+            {
+                var changedItem = unsavedChange.Key;
+                var changeType = unsavedChange.Value.Type;
+                switch (changeType)
+                {
+                    case DataChangeType.Modification:
+                        await MotorService.SaveOrUpdateQuestionnaireMotorSkill06(changedItem);
+                        ModifyToast();
+                        break;
+                }
+            }
+        }
+        await ClearUnsavedChangesAsync();
 
         motskillGrid.Reload();
     }
@@ -305,26 +462,6 @@
         UnsavedChanges.Clear();
         await UpdateDataAsync();
     }
-
-    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
-
-    async Task Save_Click()
-    {
-        foreach (var unsavedChange in UnsavedChanges)
-        {
-            var changedItem = unsavedChange.Key;
-            var changeType = unsavedChange.Value.Type;
-            switch (changeType)
-            {
-                case DataChangeType.Modification:
-                    await MotorService.SaveOrUpdateQuestionnaireMotorSkill06(changedItem);
-                    ModifyToast();
-                    break;
-            }
-        }
-        await ClearUnsavedChangesAsync();
-    }
-
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification }
