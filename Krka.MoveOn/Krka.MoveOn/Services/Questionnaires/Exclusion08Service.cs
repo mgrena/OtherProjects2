@@ -49,13 +49,22 @@ namespace Krka.MoveOn.Services.Questionnaires
                 .FirstOrDefaultAsync(q => q.Id == questionnaire.Id);
 
             if (existingQuestionnaire != null)
-            {               
+            {
+                //Ukoncije subjekt ucast v studii
                 existingQuestionnaire.Exc_Q = questionnaire.Exc_Q;
-                existingQuestionnaire.Exc_1 = questionnaire.Exc_1;
-                existingQuestionnaire.Exc_2 = questionnaire.Exc_2;
-                existingQuestionnaire.Exc_3 = questionnaire.Exc_3;
-                existingQuestionnaire.ModifiedAt = DateTime.Now;
-                
+                if (questionnaire.Exc_Q == 15)
+                {
+                    existingQuestionnaire.Exc_1 = null;
+                    existingQuestionnaire.Exc_2 = null;
+                    existingQuestionnaire.Exc_3 = null;
+                }
+                else
+                {
+                    existingQuestionnaire.Exc_1 = questionnaire.Exc_1;
+                    existingQuestionnaire.Exc_2 = questionnaire.Exc_2;
+                    existingQuestionnaire.Exc_3 = questionnaire.Exc_3;
+                    existingQuestionnaire.ModifiedAt = DateTime.Now;
+                }
                 _context.QuestionnaireExclusion08s.Update(existingQuestionnaire);
             }
             else

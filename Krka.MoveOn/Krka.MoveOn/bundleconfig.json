@@ -28,5 +28,11 @@
     "inputFiles": [
       "Components/Pages/Patient/EntryQuestionnaire/Components/_EntryBtn.razor.css"
     ]
+  },
+  {
+    "outputFileName": "Components/Pages/Patient/Components/Exclusion08Table.razor.min.css",
+    "inputFiles": [
+      "Components/Pages/Patient/Components/Exclusion08Table.razor.css"
+    ]
   }
 ]

@@ -1,18 +1,16 @@
-﻿@page "/ongoingQ/init/{questionnaireId:guid}"
+﻿@page "/ongoingQ/exc/{questionnaireId:guid}"
 @using DevExpress.Blazor.Internal
 @using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
+
+
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
-
-@inject Initial02Service InitialService
-@inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
+<PageTitle>MoveOn - Údaje o predčasnom vylúčení</PageTitle>
 
 
 <div class="d-flex align-items-center custom-toast-background">
@@ -26,13 +24,8 @@
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_OngoingBtn />
-
-
-    <Initial02DateHeader questionnaireId="@QuestionnaireIdAsString" />
-
-
-    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@QuestionnaireIdAsString" />
-
+    <Exclusion08Table questionnaireId="@QuestionnaireIdAsString" />
+    
 </div>
 
 
@@ -41,19 +34,5 @@
     public Guid questionnaireId { get; set; }
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
-
-    bool isReadOnly = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.IsInRole("Office"))
-        {
-            isReadOnly = true;
-        }
-
-    }
 
 }

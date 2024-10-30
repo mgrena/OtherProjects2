@@ -1,12 +1,17 @@
-﻿@page "/entryQ/motor/{questionnaireId:guid}"
-
+﻿@page "/resultQ/exc/{questionnaireId:guid}"
+@using DevExpress.Blazor.Internal
+@using Krka.MoveOn.Data.Questionnaires
 @using Krka.MoveOn.Services.Questionnaires
-@using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.ResultQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
+
+
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
+@inject IToastNotificationService ToastService
 
-<PageTitle>MoveOn - MDS-UPDRS škála </PageTitle>
+<PageTitle>MoveOn - Údaje o predčasnom vylúčení</PageTitle>
+
 
 <div class="d-flex align-items-center custom-toast-background">
     <DxToastProvider Name="Overview"
@@ -18,20 +23,10 @@
 </div>
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
-    <_EntryBtn />
-
-    <div class="grid-container" style="display: flex;">
-        <div class="grid-item" style="flex: 1;">
-            <Motor04Table questionnaireId="@QuestionnaireIdAsString" />
-            <br>
-            <Motor05Table questionnaireId="@QuestionnaireIdAsString" />
-        </div>
-        <div class="grid-item" style="flex: 1; margin-left: 20px;">
-            <Motor06Table questionnaireId="@QuestionnaireIdAsString" />
-        </div>
-    </div>
+    <_ResultBtn />
+    <Exclusion08Table questionnaireId="@QuestionnaireIdAsString" />
+    
 </div>
-
 
 
 @code {
@@ -39,4 +34,5 @@
     public Guid questionnaireId { get; set; }
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
+
 }

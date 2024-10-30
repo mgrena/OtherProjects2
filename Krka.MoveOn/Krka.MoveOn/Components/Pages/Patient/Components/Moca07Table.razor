@@ -8,8 +8,8 @@
 @inject IToastNotificationService ToastService
 
 <EditForm Model="@moca"
-            Context="EditFormContext"
-            OnValidSubmit="@HandleValidSubmit">
+          Context="EditFormContext"
+          OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Modifikovaná škála podľa Hoehenovej a Yahra" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
@@ -27,7 +27,7 @@
         </DxFormLayoutGroup>
 
         <DxFormLayoutGroup Caption="Montrealský kognitívny test (MOCA)" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
-            <DxFormLayoutGroup Caption="Vizuálno-priestorové schopnosti" ColSpanMd="8" CaptionCssClass="caption-styleH01"> 
+            <DxFormLayoutGroup Caption="Vizuálno-priestorové schopnosti" ColSpanMd="8" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Test cesty" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
                         <div style="display: flex; align-items: center;">
@@ -59,7 +59,7 @@
                                         <img src="images/info.svg" width="16" height="16" alt="Info" />
                                     </ChildContent>
                                 </DxButton>
-                                <DxSpinEdit @bind-Value="@moca!.Moca_2" MinValue="0" MaxValue="1"  />
+                                <DxSpinEdit @bind-Value="@moca!.Moca_2" MinValue="0" MaxValue="1" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen1"
                                       PositionTarget=".info-icon-btn1"
@@ -74,7 +74,7 @@
                     <DxFormLayoutItem Caption="Hodiny" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="3">
                         @if (isReadOnly)
                         {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="1" ReadOnly="true"  />
+                            <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="1" ReadOnly="true" />
                         }
                         else
                         {
@@ -84,7 +84,7 @@
                                         <img src="images/info.svg" width="16" height="16" alt="Info" />
                                     </ChildContent>
                                 </DxButton>
-                                <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="3"  />
+                                <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="3" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen2"
                                       PositionTarget=".info-icon-btn2"
@@ -258,7 +258,7 @@
                                         <img src="images/info.svg" width="16" height="16" alt="Info" />
                                     </ChildContent>
                                 </DxButton>
-                            <DxSpinEdit @bind-Value="@moca!.Moca_9" MinValue="0" MaxValue="1" />
+                                <DxSpinEdit @bind-Value="@moca!.Moca_9" MinValue="0" MaxValue="1" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen8"
                                       PositionTarget=".info-icon-btn8"
@@ -268,7 +268,7 @@
                                 Min = 0 / Max = 1.
                             </DxFlyout>
                         }
-                    </DxFormLayoutItem>                       
+                    </DxFormLayoutItem>
 
                     <p class="sum-style">
                         <span style="color: #6e7de8;">@(moca?.Moca_8 + moca?.Moca_9)</span>/3
@@ -355,7 +355,7 @@
                                         <img src="images/info.svg" width="16" height="16" alt="Info" />
                                     </ChildContent>
                                 </DxButton>
-                            <DxSpinEdit @bind-Value="@moca!.Moca_12" MinValue="0" MaxValue="6" />
+                                <DxSpinEdit @bind-Value="@moca!.Moca_12" MinValue="0" MaxValue="6" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen11"
                                       PositionTarget=".info-icon-btn11"
@@ -378,7 +378,7 @@
                         Spolu: <span style="color: #6e7de8;">@(moca?.Moca_1 + moca?.Moca_2 + moca?.Moca_3 + moca?.Moca_4 + moca?.Moca_5 + moca?.Moca_6 + moca?.Moca_7 + moca?.Moca_8 + moca?.Moca_9 + moca?.Moca_10 + moca?.Moca_11 + moca?.Moca_12)</span>/30
                     </p>
                 </DxFormLayoutItem>
-            </div>             
+            </div>
         </DxFormLayoutGroup>
 
         <DxFormLayoutItem ColSpanMd="12">
@@ -386,14 +386,14 @@
                 @if (!isReadOnly)
                 {
                     <DxButton SubmitFormOnClick="true"
-                                Text="Uložiť"
-                                RenderStyle="ButtonRenderStyle.Primary" />
+                              Text="Uložiť"
+                              RenderStyle="ButtonRenderStyle.Primary" />
                 }
 
-@*                 <DxButton SubmitFormOnClick="false"
-                            Text="Dalšia záložka"
-                            RenderStyle="ButtonRenderStyle.Secondary"
-                            NavigateUrl="/entryQ/init" /> *@
+                @*                 <DxButton SubmitFormOnClick="false"
+                Text="Dalšia záložka"
+                RenderStyle="ButtonRenderStyle.Secondary"
+                NavigateUrl="/entryQ/init" /> *@
             </div>
         </DxFormLayoutItem>
     </DxFormLayout>
@@ -434,23 +434,23 @@
 
 
         moca = new Data.Questionnaires.QuestionnaireMoca07
-        {
-            Questionnaire_id = questionnaireId,
-            Moca_1 = 0,
-            Moca_2 = 0, 
-            Moca_3 = 0, 
-            Moca_4 = 0, 
-            Moca_5 = 0, 
-            Moca_6 = 0, 
-            Moca_7 = 0, 
-            Moca_8 = 0, 
-            Moca_9 = 0, 
-            Moca_10 = 0, 
-            Moca_11 = 0, 
-            Moca_12 = 0, 
-            CreatedAt = DateTime.Now,
-            ModifiedAt = DateTime.Now  
-        };
+            {
+                Questionnaire_id = questionnaireId,
+                Moca_1 = 0,
+                Moca_2 = 0,
+                Moca_3 = 0,
+                Moca_4 = 0,
+                Moca_5 = 0,
+                Moca_6 = 0,
+                Moca_7 = 0,
+                Moca_8 = 0,
+                Moca_9 = 0,
+                Moca_10 = 0,
+                Moca_11 = 0,
+                Moca_12 = 0,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
+            };
 
         //DielMh
         dialMH = await MocaService.GetDialMHAsync();
@@ -463,16 +463,16 @@
     private void AddToast()
     {
         ToastService.ShowToast(new ToastOptions
-        {
-            ProviderName = "Overview",
-            Title = "Detekcia príznakov úspešne uložená",
-            ThemeMode = ToastThemeMode.Saturated,
-            RenderStyle = ToastRenderStyle.Success,
-        });
+            {
+                ProviderName = "Overview",
+                Title = "Detekcia príznakov úspešne uložená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
     }
 
     private async Task LoadQuestionnaire(string questionnaireId)
-    {  
+    {
         var questionnaire = await MocaService.GetQuestionnaireMoca07ByQuestionnaireIdAsync(questionnaireId);
         if (questionnaire != null)
         {

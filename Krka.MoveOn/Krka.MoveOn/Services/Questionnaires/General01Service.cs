@@ -73,10 +73,12 @@ namespace Krka.MoveOn.Services.Questionnaires
                 if (questionnaire.Gen_10 == 15)
                 {
                     existingQuestionnaire.Gen_10_1 = null;
+                    existingQuestionnaire.Gen_10_1_1 = null;
                 }
                 else
                 {
                     existingQuestionnaire.Gen_10_1 = questionnaire.Gen_10_1;
+                    existingQuestionnaire.Gen_10_1_1 = questionnaire.Gen_10_1_1;
                 }
 
                 existingQuestionnaire.Gen_11 = questionnaire.Gen_11;

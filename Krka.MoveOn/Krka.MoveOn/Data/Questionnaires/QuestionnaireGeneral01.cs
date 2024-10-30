@@ -126,7 +126,13 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// 10.1 - Ak áno, ktorá špecializácia?   
         /// </summary>
         [Column("gen_10_1")]
-        public int? Gen_10_1 { get; set; } 
+        public int? Gen_10_1 { get; set; }
+
+        /// <summary>
+        /// 10.1 -Ak da moznost "Ine" (pise Specializaciu)
+        /// </summary>
+        [Column("gen_10_1_1", TypeName = "varchar"), StringLength(60)]
+        public string? Gen_10_1_1 { get; set; }
 
         /// <summary>
         /// Stal sa pacientovi pred objavením príznaku úraz hlavy? 
@@ -151,7 +157,6 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// </summary>
         [Column("gen_13_1", TypeName = "nvarchar"), StringLength(30)]
         public string? Gen_13_1 { get; set; }
-
 
         [Column("modified_at")]
         public  DateTime ModifiedAt { get; set; } = DateTime.Now;
