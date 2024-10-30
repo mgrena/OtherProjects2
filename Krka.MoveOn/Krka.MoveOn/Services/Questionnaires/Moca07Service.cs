@@ -27,7 +27,34 @@ namespace Krka.MoveOn.Services.Questionnaires
                 throw new ArgumentNullException(nameof(questionnaire));
             }
 
-            _context.QuestionnaireMoca07s.Add(questionnaire);
+            var existingQuestionnaire = await _context.QuestionnaireMoca07s
+                .FirstOrDefaultAsync(q => q.Id == questionnaire.Id);
+
+            if (existingQuestionnaire != null)
+            {
+                existingQuestionnaire.Mh_1 = questionnaire.Mh_1;
+                existingQuestionnaire.Moca_1 = questionnaire.Moca_1;
+                existingQuestionnaire.Moca_2 = questionnaire.Moca_2;
+                existingQuestionnaire.Moca_3 = questionnaire.Moca_3;
+                existingQuestionnaire.Moca_4 = questionnaire.Moca_4;
+                existingQuestionnaire.Moca_5 = questionnaire.Moca_5;
+                existingQuestionnaire.Moca_6 = questionnaire.Moca_6;
+                existingQuestionnaire.Moca_7 = questionnaire.Moca_7;
+                existingQuestionnaire.Moca_8 = questionnaire.Moca_8;
+                existingQuestionnaire.Moca_9 = questionnaire.Moca_9;
+                existingQuestionnaire.Moca_10 = questionnaire.Moca_10;
+                existingQuestionnaire.Moca_11 = questionnaire.Moca_11;
+                existingQuestionnaire.Moca_12 = questionnaire.Moca_12;
+                existingQuestionnaire.ModifiedAt = DateTime.Now;
+
+                _context.QuestionnaireMoca07s.Update(existingQuestionnaire);
+            }
+            else
+            {
+                // Pridanie nového záznamu
+                _context.QuestionnaireMoca07s.Add(questionnaire);
+            }
+
             await _context.SaveChangesAsync();
         }
 

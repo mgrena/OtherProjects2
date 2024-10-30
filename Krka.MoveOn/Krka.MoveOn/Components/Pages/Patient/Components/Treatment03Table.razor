@@ -215,7 +215,14 @@
         }
         else
         {
-            UnsavedChanges[treat] = new(DataChangeType.Modification, new());
+            var changedFields = DataUtils.ApplyModifiedFields(treat, dataItem);
+            if (changedFields.Count > 0)
+            {
+                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
+                    changes.ChangedFields.UnionWith(changedFields);
+                else
+                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
+            }
         }
     }
 

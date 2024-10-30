@@ -1,8 +1,7 @@
 ﻿
 @using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
-
-@namespace Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Components
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
@@ -12,7 +11,7 @@
 
 <DxFormLayout>
     <DxFormLayoutItem>
-        <div class="buttons-group mb-2 ">
+        <div class="buttons-group mb-2">
             <div class="d-flex flex-row w-100">
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
@@ -49,6 +48,7 @@
     </DxFormLayoutItem>
 </DxFormLayout>
 
+<ReturnLinkManager ReturnLink="/patients"/>
 
 
 

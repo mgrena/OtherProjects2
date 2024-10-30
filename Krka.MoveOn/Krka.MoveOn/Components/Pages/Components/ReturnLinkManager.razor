@@ -1,0 +1,44 @@
+﻿@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject NavigationManager NavigationManager
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@code {
+    [Parameter] 
+    public string? ReturnLink { get; set; }
+    private bool _firstRender = true;
+    private string _currentUri = string.Empty;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _currentUri = NavigationManager.Uri;
+
+            NavigationManager.LocationChanged += OnLocationChanged;
+
+            if (!string.IsNullOrEmpty(ReturnLink))
+            {
+                await sessionStorage.SetItemAsync("returnLink", ReturnLink);
+            }
+
+            _firstRender = false;
+        }
+    }
+
+    private async void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        if (e.Location != _currentUri)
+        {
+            await sessionStorage.RemoveItemAsync("returnLink");
+
+            _currentUri = e.Location;
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+        await sessionStorage.RemoveItemAsync("returnLink");
+    }
+}

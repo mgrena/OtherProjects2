@@ -9,3 +9,8 @@
     width: 100%;
 }
 
+::deep .buttons-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

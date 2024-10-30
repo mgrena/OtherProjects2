@@ -13,6 +13,7 @@ public class Treatment03Service(ApplicationDbContext context)
     {
         return await _context.QuestionnaireTreatment03s
             .Where(q => q.Questionnaire_id == questionnaireId && q.DeletedAt == null)
+            .OrderByDescending(q => q.CreatedAt)
             .ToListAsync();
     }
 
