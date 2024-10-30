@@ -9,6 +9,18 @@
 @inject General01Service Q01Service
 @inject ProtectedSessionStorage SessionStorage
 
+<style>
+    .nav-buttons-sub-container {
+        position: sticky;
+        top: 90px;
+        z-index: 999;
+        background-color: #fff;
+    }
+
+</style>
+
+<div class="nav-buttons-sub-container">
+
 <DxFormLayout>
     <DxFormLayoutItem>
         <div class="buttons-group mb-2">
@@ -47,6 +59,8 @@
         </div>
     </DxFormLayoutItem>
 </DxFormLayout>
+
+</div>
 
 <ReturnLinkManager ReturnLink="/patients"/>
 
