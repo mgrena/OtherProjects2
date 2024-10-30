@@ -29,11 +29,7 @@
                     <NavLink id="menu-top" class="button-link hidden" onclick="(document.getElementById('sidebar').classList.toggle('auto-expanded'), document.getElementById('menu-top').classList.toggle('hidden'))">
                         <DxButton RenderStyle="@ButtonRenderStyle.Dark" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-menu"></DxButton>
                     </NavLink>
-                    @if(!string.IsNullOrEmpty(NavigationManager.ToBaseRelativePath(NavigationManager.Uri))) {
-                        <NavLink href="/" class="button-link">
-                            <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="Späť na Domov" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-back"></DxButton>
-                        </NavLink>
-                    }
+                    <ReturnButton />
                     <AuthorizeView>
                         <Authorized>                              
                             <NavLink href="Account/Manage" class="button-link menubutton-float-end display-desktop">
