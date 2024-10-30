@@ -1,8 +1,7 @@
 ﻿
 @using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
-
-@namespace Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Components
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
@@ -49,6 +48,7 @@
     </DxFormLayoutItem>
 </DxFormLayout>
 
+<ReturnLinkManager ReturnLink="/patients"/>
 
 
 

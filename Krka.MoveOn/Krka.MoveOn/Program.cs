@@ -12,6 +12,8 @@ using Krka.MoveOn.Interfaces;
 using Krka.MoveOn.Repositories;
 using Krka.MoveOn.Services.Questionnaires;
 using Krka.MoveOn.Services.Pages;
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +54,9 @@ builder.Services.AddTransient<DrugEffect09Service>();
 builder.Services.AddScoped<Satisfaction10Service>();
 
 // add authentication
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredSessionStorage();
+
 builder.Services.AddAuthentication(options => {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
     options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
