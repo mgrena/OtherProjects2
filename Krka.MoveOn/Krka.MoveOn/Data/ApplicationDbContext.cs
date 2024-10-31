@@ -1,4 +1,4 @@
-using Krka.MoveOn.Data.AdverseEffects;
+Ôªøusing Krka.MoveOn.Data.AdverseEffects;
 using Krka.MoveOn.Data.Dials;
 using Krka.MoveOn.Data.Questionnaires;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -86,32 +86,32 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         // Dial General Questionnaire
         #region "DialQGenerals_Answers"
             //gen_2_DG
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 1, Type_q = 1, Name = "Muû", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 2, Type_q = 1, Name = "éena", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 1, Type_q = 1, Name = "Mu≈æ", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 2, Type_q = 1, Name = "≈Ωena", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             //gen_3_DG
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 3, Type_q = 2, Name = "Slobodn˝/·", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 4, Type_q = 2, Name = "éenat˝/Vydat·", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 3, Type_q = 2, Name = "Slobodn√Ω/√°", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 4, Type_q = 2, Name = "≈Ωenat√Ω/Vydat√°", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 5, Type_q = 2, Name = "Vdovec/Vdova", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 6, Type_q = 2, Name = "Rozveden˝/·", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 6, Type_q = 2, Name = "Rozveden√Ω/√°", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             //gen_4_DG
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 7, Type_q = 3, Name = "Zamestnan˝/·", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 8, Type_q = 3, Name = "Nezamestnan˝/·", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 9, Type_q = 3, Name = "Starobn˝ dÙchodok", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 10, Type_q = 3, Name = "Invalidn˝ dÙchodok", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 7, Type_q = 3, Name = "Zamestnan√Ω/√°", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 8, Type_q = 3, Name = "Nezamestnan√Ω/√°", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 9, Type_q = 3, Name = "Starobn√Ω d√¥chodok", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 10, Type_q = 3, Name = "Invalidn√Ω d√¥chodok", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             //gen_5_D
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 11, Type_q = 4, Name = "¡no", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 12, Type_q = 4, Name = "Ex-fajËiar", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 11, Type_q = 4, Name = "√Åno", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 12, Type_q = 4, Name = "Ex-fajƒçiar", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 13, Type_q = 4, Name = "Nie", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             //gen_6_DG
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 14, Type_q = 5, Name = "¡no", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 14, Type_q = 5, Name = "√Åno", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 15, Type_q = 5, Name = "Nie", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             //gen_7_DG
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 16, Type_q = 6, Name = "¡no", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 16, Type_q = 6, Name = "√Åno", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 17, Type_q = 6, Name = "Nie", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             //gen_7_1DM
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 18, Type_q = 7, Name = "KvetiapÌn", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 19, Type_q = 7, Name = "KlozapÌn", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 20, Type_q = 7, Name = "OlanzapÌn", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 18, Type_q = 7, Name = "Kvetiap√≠n", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 19, Type_q = 7, Name = "Klozap√≠n", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 20, Type_q = 7, Name = "Olanzap√≠n", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 21, Type_q = 7, Name = "Risperidon", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 22, Type_q = 7, Name = "Paliperidon", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 23, Type_q = 7, Name = "Tiapridal", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
@@ -125,39 +125,35 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 31, Type_q = 7, Name = "Sulpirid", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 32, Type_q = 7, Name = "Amilsulprid", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 33, Type_q = 7, Name = "Ziprasidon", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 34, Type_q = 7, Name = "InÈ...", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            
-    
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 34, Type_q = 7, Name = "In√©...", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             //gen_7_3_DU
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 35, Type_q = 8, Name = "mg", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-
             //gen_9_Ds
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 36, Type_q = 9, Name = "Porucha Ëuchu", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 37, Type_q = 9, Name = "Porucha spr·vania v†REM sp·nku", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 38, Type_q = 9, Name = "Depresia alebo ˙zkosù", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 39, Type_q = 9, Name = "Dlhotrvaj˙ca z·pcha", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 36, Type_q = 9, Name = "Porucha ƒçuchu", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 37, Type_q = 9, Name = "Porucha spr√°vania v¬†REM sp√°nku", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 38, Type_q = 9, Name = "Depresia alebo √∫zkos≈•", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 39, Type_q = 9, Name = "Dlhotrvaj√∫ca z√°pcha", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 40, Type_q = 9, Name = "Bolesti ramena", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 41, Type_q = 9, Name = "Predklonen˝ postoj", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 42, Type_q = 9, Name = "SpomalenÈ pohyby/chÙdza", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 41, Type_q = 9, Name = "Predklonen√Ω postoj", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 42, Type_q = 9, Name = "Spomalen√© pohyby/ch√¥dza", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 43, Type_q = 9, Name = "Tras", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 44, Type_q = 9, Name = "Oslaben· mimika v†tv·ri (hypomÌmia)", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 45, Type_q = 9, Name = "Vytekanie slÌn z ˙st", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 46, Type_q = 9, Name = "ProblÈmy s†rann˝m vst·vanÌm z†postele", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 47, Type_q = 9, Name = "OpakovanÈ p·dy", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 44, Type_q = 9, Name = "Oslaben√° mimika v¬†tv√°ri (hypom√≠mia)", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 45, Type_q = 9, Name = "Vytekanie sl√≠n z √∫st", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 46, Type_q = 9, Name = "Probl√©my s¬†rann√Ωm vst√°van√≠m z¬†postele", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 47, Type_q = 9, Name = "Opakovan√© p√°dy", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             //gen_10
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 48, Type_q = 10, Name = "Praktick˝ lek·r", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 49, Type_q = 10, Name = "OrtopÈd", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 50, Type_q = 10, Name = "NeurolÛg", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 48, Type_q = 10, Name = "Praktick√Ω lek√°r", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 49, Type_q = 10, Name = "Ortop√©d", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 50, Type_q = 10, Name = "Neurol√≥g", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 51, Type_q = 10, Name = "Psychiater", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 52, Type_q = 10, Name = "Fyzioterapeut", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 53, Type_q = 10, Name = "Internista", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
             modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 57, Type_q = 10, Name = "InÈ...", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
 
             //gen_13
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 54, Type_q = 11, Name = "Idiopatick· PCH", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 55, Type_q = 11, Name = "In˝ parkinsonsk˝ syndrÛm ", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
-            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 56, Type_q = 11, Name = "NiË z vyööie uvedenÈho ", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 54, Type_q = 11, Name = "Idiopatick√° PCH", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 55, Type_q = 11, Name = "In√Ω parkinsonsk√Ω syndr√≥m", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+            modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 56, Type_q = 11, Name = "Niƒç z vy≈°≈°ie uveden√©ho", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
         #endregion
 
         #region "DialActiveIngredient"
@@ -167,43 +163,43 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 3, Type_q = 1, Name = "Entakapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 4, Type_q = 1, Name = "Tolkapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 5, Type_q = 1, Name = "Opikapon", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 6, Type_q = 1, Name = "RasagilÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 6, Type_q = 1, Name = "Rasagil√≠n", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 7, Type_q = 1, Name = "Pramipexol", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 8, Type_q = 1, Name = "Ropinirol", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 9, Type_q = 1, Name = "RotigotÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 10, Type_q = 1, Name = "ApomorfÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 11, Type_q = 1, Name = "AmantadÌn", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 9, Type_q = 1, Name = "Rotigot√≠n", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 10, Type_q = 1, Name = "Apomorf√≠n", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 11, Type_q = 1, Name = "Amantad√≠n", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
 
         #endregion
 
         #region "DialIndication"
         //treat_3
-            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 1, Type_q = 1, Name = "Pruhy moËenia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 2, Type_q = 1, Name = "Erektiln· dysfunkcia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 3, Type_q = 1, Name = "Z·pcha", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 4, Type_q = 1, Name = "Porucha sp·nku", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 5, Type_q = 1, Name = "Ortostatick· hypotenzia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 1, Type_q = 1, Name = "Pruhy moƒçenia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 2, Type_q = 1, Name = "Erektiln√° dysfunkcia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 3, Type_q = 1, Name = "Z√°pcha", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 4, Type_q = 1, Name = "Porucha sp√°nku", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 5, Type_q = 1, Name = "Ortostatick√° hypotenzia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 6, Type_q = 1, Name = "Depresia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 7, Type_q = 1, Name = "⁄zkosù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 8, Type_q = 1, Name = "PsychÛza (halucin·cie, bludy)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 9, Type_q = 1, Name = "InÈ...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 7, Type_q = 1, Name = "√özkos≈•¬ù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 8, Type_q = 1, Name = "Psych√≥za (halucin√°cie, bludy)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialIndication>().HasData(new DialIndication() { Id = 9, Type_q = 1, Name = "In√©...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         #endregion
 
         #region "DialMH"
-            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 1, Type_q = 1, Number = "1", Name = "JednostrannÈ prÌznaky", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 2, Type_q = 1, Number = "1,5", Name = "JednostrannÈ a axi·lne prÌznaky (hypofÛnia, hypomÌmia, flekËnÈdrûanie tela)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 3, Type_q = 1, Number = "2", Name = "ObojstrannÈ prÌznaky bez poruchy rovnov·hy", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 4, Type_q = 1, Number = "2,5", Name = "ObojstrannÈ prÌznaky s miernou poruchou rovnov·hy (schopnosù vyrovnaù postoj pri pull teste)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 5, Type_q = 1, Number = "3", Name = "Mierne aû strednÈ obojstrannÈ prÌznaky, postur·lnainstabilita, pacient je st·le sebestaËn˝", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 6, Type_q = 1, Number = "4", Name = "çaûkÈ postihnutie, no pacient je schopn˝ chodiù alebo st·ù bez pomoci", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 7, Type_q = 1, Number = "5", Name = "Pacient je odk·zan˝ na vozÌk alebo posteæ", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 1, Type_q = 1, Number = "1", Name = "Jednostrann√© pr√≠znaky", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 2, Type_q = 1, Number = "1,5", Name = "Jednostrann√© a axi√°lne pr√≠znaky (hypof√≥nia, hypom√≠mia, flekƒçn√© dr≈æanie tela) ", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 3, Type_q = 1, Number = "2", Name = "Obojstrann√© pr√≠znaky bez poruchy rovnov√°hy", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 4, Type_q = 1, Number = "2,5", Name = "Obojstrann√© pr√≠znaky s miernou poruchou rovnov√°hy (schopnos≈• vyrovna≈• postoj pri pull teste)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 5, Type_q = 1, Number = "3", Name = "Mierne a≈æ stredn√© obojstrann√© pr√≠znaky, postur√°lna instabilita, pacient je st√°le sebestaƒçn√Ω", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 6, Type_q = 1, Number = "4", Name = "¬ç≈§a≈æk√© postihnutie, no pacient je schopn√Ω chodi≈• alebo st√°≈• bez pomoci", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialMH>().HasData(new DialMH() { Id = 7, Type_q = 1, Number = "5", Name = "Pacient je odk√°zan√Ω na voz√≠k alebo posteƒæ", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         #endregion
 
         #region "Dial Exclusion"
         //exc_2
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 1, Type_q = 1, Name = "Pri n·vöteve pacienta na mieste", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 2, Type_q = 1, Name = "Na diaæku prostrednÌctvom telefonickÈho hovoru", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 3, Type_q = 1, Name = "Na diaæku prostrednÌctvom elektronick˝ch mÈdiÌ", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 1, Type_q = 1, Name = "Pri n√°v≈°teve pacienta na mieste", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 2, Type_q = 1, Name = "Na diaƒæku prostredn√≠ctvom telefonick√©ho hovoru", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 3, Type_q = 1, Name = "Na diaƒæku prostredn√≠ctvom elektronick√Ωch m√©di√≠.", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         //exc_3
             modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 4, Type_q = 2, Name = "V˝skyt z·vaûnej neûiaducej reakcie poËas pozorovacieho obdobia v tejto öt˙dii*", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
             modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 5, Type_q = 2, Name = "Smrù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
@@ -217,36 +213,36 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         #region "Dial AdverseEffect"
         //Frekvencia
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 1, Type_q = 1, Name = "Jedenkr·t", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 2, Type_q = 1, Name = "ObËas", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 3, Type_q = 1, Name = "Neust·le", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-        //S˙vis 
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 4, Type_q = 2, Name = "Nes˙visÌ (Ak je NU klasifikovan· ako nes˙visiaca s liekom)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 5, Type_q = 2, Name = "Nepravdepodobne s˙visÌ (udalosù s najv‰Ëöou pravdepodobnosùou nebola spÙsoben· liekom, ale prÌËinn˙ s˙vislosù nemoûno ˙plne vyl˙Ëiù)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 6, Type_q = 2, Name = "Moûno s˙visÌ (Udalosù mÙûe, ale nemusÌ byù spÙsoben· liekom, prÌËinn˙ s˙vislosù nie je moûnÈ pos˙diù s v‰Ëöou istotou)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 7, Type_q = 2, Name = "Pravdepodobne s˙visÌ (Liek je najpravdepodobnejöou prÌËinou udalosti, ale nemoûno vyl˙Ëiù inÈ prÌËiny)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 8, Type_q = 2, Name = "Takmer urËite s˙visÌ (Liek je takmer urËite prÌËinou udalosti, neexistuj˙ ûiadne inÈ zjavnÈ alternatÌvne vysvetlenia)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 1, Type_q = 1, Name = "Jedenkr√°t", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 2, Type_q = 1, Name = "Obƒças", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 3, Type_q = 1, Name = "Neust√°le", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        //S√∫vis 
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 4, Type_q = 2, Name = "Nes√∫vis√≠ (Ak je NU klasifikovan√° ako nes√∫visiaca s liekom)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 5, Type_q = 2, Name = "Nepravdepodobne s√∫vis√≠ (udalos≈• s najv√§ƒç≈°ou pravdepodobnos≈•ou nebola sp√¥soben√° liekom, ale pr√≠ƒçinn√∫ s√∫vislos≈• nemo≈æno √∫plne vyl√∫ƒçi≈•)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 6, Type_q = 2, Name = "Mo≈æno s√∫vis√≠ (Udalos≈• m√¥≈æe, ale nemus√≠ by≈• sp√¥soben√° liekom, pr√≠ƒçinn√∫ s√∫vislos≈• nie je mo≈æn√© pos√∫di≈• s v√§ƒç≈°ou istotou)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 7, Type_q = 2, Name = "Pravdepodobne s√∫vis√≠ (Liek je najpravdepodobnej≈°ou pr√≠ƒçinou udalosti, ale nemo≈æno vyl√∫ƒçi≈• in√© pr√≠ƒçiny)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 8, Type_q = 2, Name = "Takmer urƒçite s√∫vis√≠ (Liek je takmer urƒçite pr√≠ƒçinou udalosti, neexistuj√∫ ≈æiadne in√© zjavn√© alternat√≠vne vysvetlenia)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         //Zavaznost
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 9, Type_q = 3, Name = "Nez·vaûnÈ", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 10, Type_q = 3, Name = "éivot ohrozuj˙ce", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 11, Type_q = 3, Name = "Hospitaliz·cia (zaËat· alebo predÂûen·)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 12, Type_q = 3, Name = "ZdravotnÈ postihnutie", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 13, Type_q = 3, Name = "Vroden· anom·lia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 14, Type_q = 3, Name = "Smrù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 15, Type_q = 3, Name = "Z·vaûnÈ podæa n·zoru sk˙öaj˙ceho lek·ra", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 9, Type_q = 3, Name = "Nez√°va≈æn√©", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 10, Type_q = 3, Name = "≈Ωivot ohrozuj√∫ce", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 11, Type_q = 3, Name = "Hospitaliz√°cia (zaƒçat√° alebo predƒ∫≈æen√°)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 12, Type_q = 3, Name = "Zdravotn√© postihnutie", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 13, Type_q = 3, Name = "Vroden√° anom√°lia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 14, Type_q = 3, Name = "Smr≈•¬ù", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 15, Type_q = 3, Name = "Z√°va≈æn√© podƒæa n√°zoru sk√∫≈°aj√∫ceho lek√°ra", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         //Intenzita
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 16, Type_q = 4, Name = "Mierna (NespÙsobuje obmedzenie beûn˝ch ËinnostÌ, pacient mÙûe pociùovaù mierne nepohodlie)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 17, Type_q = 4, Name = "Stredne ùaûk· (SpÙsobuje urËitÈ obmedzenia beûn˝ch aktivÌt, pacient mÙûe pociùovaù neprÌjemnÈ nepohodlie)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 18, Type_q = 4, Name = "çaûk· (SpÙsobuje neschopnosù vykon·vaù beûnÈ Ëinnosti, pacient mÙûe pociùovaù neznesiteænÈ nepohodlie alebo bolesù)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-        //Vplyv na lieËbu
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 19, Type_q = 5, Name = "Bez n·sledkov", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 20, Type_q = 5, Name = "Zmeny v lieËbe", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 21, Type_q = 5, Name = "ZnÌûenie d·vky", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 22, Type_q = 5, Name = "Symptomatick· lieËba", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 23, Type_q = 5, Name = "Hospitaliz·cia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 16, Type_q = 4, Name = "Mierna (Nesp√¥sobuje obmedzenie be≈æn√Ωch ƒçinnost√≠, pacient m√¥≈æe poci≈•ova≈• mierne nepohodlie)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 17, Type_q = 4, Name = "Stredne ≈•a≈æk√° (Sp√¥sobuje urƒçit√© obmedzenia be≈æn√Ωch aktiv√≠t, pacient m√¥≈æe poci≈•ova≈• nepr√≠jemn√© nepohodlie)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 18, Type_q = 4, Name = "¬ç≈§a≈æk√° (Sp√¥sobuje neschopnos≈• vykon√°va≈• be≈æn√© ƒçinnosti, pacient m√¥≈æe poci≈•ova≈• neznesiteƒæn√© nepohodlie alebo boles≈•)", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        //Vplyv na lieƒçbu
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 19, Type_q = 5, Name = "Bez n√°sledkov", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 20, Type_q = 5, Name = "Zmeny v lieƒçbe", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 21, Type_q = 5, Name = "Zn√≠≈æenie d√°vky", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 22, Type_q = 5, Name = "Symptomatick√° lieƒçba", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 23, Type_q = 5, Name = "Hospitaliz√°cia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         //Vysledok
             modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 24, Type_q = 6, Name = "Prestala", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 25, Type_q = 6, Name = "PokraËuje", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+            modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 25, Type_q = 6, Name = "Pokraƒçuje", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
 
         #endregion
 

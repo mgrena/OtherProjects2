@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241029115427_UpdateDiacritics")]
+    partial class UpdateDiacritics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -433,7 +436,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 14,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Smrť",
+                            Name = "Smrť",
                             Type_q = 3
                         },
                         new
@@ -465,7 +468,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 18,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ťažká (Spôsobuje neschopnosť vykonávať bežné činnosti, pacient môže pociťovať neznesiteľné nepohodlie alebo bolesť)",
+                            Name = "Ťažká (Spôsobuje neschopnosť vykonávať bežné činnosti, pacient môže pociťovať neznesiteľné nepohodlie alebo bolesť)",
                             Type_q = 4
                         },
                         new
@@ -578,7 +581,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 3,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Na diaľku prostredníctvom elektronických médií",
+                            Name = "Na diaľku prostredníctvom elektronických médií.",
                             Type_q = 1
                         },
                         new
@@ -586,7 +589,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 4,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Výskyt závažnej nežiaducej reakcie počas pozorovacieho obdobia v tejto štúdii",
+                            Name = "Výskyt závažnej nežiaducej reakcie počas pozorovacieho obdobia v tejto štúdii. *",
                             Type_q = 2
                         },
                         new
@@ -594,7 +597,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Smrť",
+                            Name = "Smrť",
                             Type_q = 2
                         },
                         new
@@ -610,7 +613,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Rozhodnutie pacienta ukončiť liečbu a odvolanie jeho informovaného súhlasu",
+                            Name = "Rozhodnutie pacienta ukončiť liečbu a odvolanie jeho informovaného súhlasu.",
                             Type_q = 2
                         },
                         new
@@ -618,7 +621,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 8,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Rozhodnutie pacienta ukončiť liečbu a odvolanie informovaného súhlasu a GDPR formulára",
+                            Name = "Rozhodnutie pacienta ukončiť liečbu a odvolanie informovaného súhlasu a GDPR formulára.",
                             Type_q = 2
                         },
                         new
@@ -626,7 +629,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 9,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Bezpečnosť pacienta (napr. rozhodnutie skúšajúceho vylúčiť pacienta zo štúdie v jeho najlepšom záujme, nežiaduce účinky vyžadujúce medikamentózny zásah alebo ukončenie liečby)",
+                            Name = "Bezpečnosť pacienta (napr. rozhodnutie skúšajúceho vylúčiť pacienta zo štúdie v jeho najlepšom záujme, nežiaduce účinky vyžadujúce medikamentózny zásah alebo ukončenie liečby).  *",
                             Type_q = 2
                         },
                         new
@@ -731,7 +734,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 7,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Úzkosť",
+                            Name = "Úzkosť",
                             Type_q = 1
                         },
                         new
@@ -802,7 +805,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 2,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Jednostranné a axiálne príznaky (hypofónia, hypomímia, flekčnédržanie tela)",
+                            Name = "Jednostranné a axiálne príznaky (hypofónia, hypomímia, flekčné držanie tela) ",
                             Number = "1,5",
                             Type_q = 1
                         },
@@ -829,7 +832,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Mierne až stredné obojstranné príznaky, posturálnainstabilita, pacient je stále sebestačný",
+                            Name = "Mierne až stredné obojstranné príznaky, posturálna instabilita, pacient je stále sebestačný",
                             Number = "3",
                             Type_q = 1
                         },
@@ -838,7 +841,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 6,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ťažké postihnutie, no pacient je schopný chodiť alebo stáť bez pomoci",
+                            Name = "Ťažké postihnutie, no pacient je schopný chodiť alebo stáť bez pomoci",
                             Number = "4",
                             Type_q = 1
                         },
@@ -1216,7 +1219,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 38,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Depresia alebo úzkosť",
+                            Name = "Depresia alebo úzkosť",
                             Type_q = 9
                         },
                         new
@@ -1341,14 +1344,6 @@ namespace Krka.MoveOn.Migrations
                         },
                         new
                         {
-                            Id = 57,
-                            CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Iné...",
-                            Type_q = 10
-                        },
-                        new
-                        {
                             Id = 54,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1368,7 +1363,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 56,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Nič z vyššie uvedeného ",
+                            Name = "Nič z vyššie uvedeného",
                             Type_q = 11
                         });
                 });
@@ -1694,11 +1689,6 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("gen_10_1");
 
-                    b.Property<string>("Gen_10_1_1")
-                        .HasMaxLength(60)
-                        .HasColumnType("varchar")
-                        .HasColumnName("gen_10_1_1");
-
                     b.Property<int>("Gen_11")
                         .HasColumnType("int")
                         .HasColumnName("gen_11");
@@ -1741,7 +1731,7 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("varchar")
                         .HasColumnName("gen_7_1_1");
 
-                    b.Property<decimal?>("Gen_7_1_2")
+                    b.Property<decimal>("Gen_7_1_2")
                         .HasColumnType("decimal(5,2)")
                         .HasColumnName("gen_7_1_2");
 
@@ -1749,23 +1739,23 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("gen_7_1_3_du");
 
-                    b.Property<decimal?>("Gen_7_1_4")
+                    b.Property<decimal>("Gen_7_1_4")
                         .HasColumnType("decimal(3,1)")
                         .HasColumnName("gen_7_1_4");
 
-                    b.Property<int?>("Gen_7_1_DM")
+                    b.Property<int>("Gen_7_1_DM")
                         .HasColumnType("int")
                         .HasColumnName("gen_7_1_dm");
 
-                    b.Property<decimal?>("Gen_7_2")
+                    b.Property<decimal>("Gen_7_2")
                         .HasColumnType("decimal(5,2)")
                         .HasColumnName("gen_7_2");
 
-                    b.Property<int?>("Gen_7_3_DU")
+                    b.Property<int>("Gen_7_3_DU")
                         .HasColumnType("int")
                         .HasColumnName("gen_7_3_du");
 
-                    b.Property<decimal?>("Gen_7_4")
+                    b.Property<decimal>("Gen_7_4")
                         .HasColumnType("decimal(3,1)")
                         .HasColumnName("gen_7_4");
 
