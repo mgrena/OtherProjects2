@@ -1,18 +1,29 @@
-﻿using Krka.MoveOn.Data;
+﻿using Krka.MoveOn.Components.Pages;
+using Krka.MoveOn.Data;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Krka.MoveOn.Services.Pages;
 
-public class UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+public class UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, NavigationManager navigationManager, IEmailSender<ApplicationUser> emailSender, ILogger<UserService> logger)
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+    private readonly NavigationManager _navigationManager = navigationManager;
+    private readonly IEmailSender<ApplicationUser> _emailSender = emailSender;
+    private readonly ILogger _logger = logger;
 
     public async Task<List<ApplicationUser>> GetUsersAsync()
     {
+        // read all users
         var users = await _userManager.Users.ToListAsync();
+        // read all roles
         var roles = await _roleManager.Roles.ToListAsync();
+        // for each user read and assign role
         foreach (var user in users)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -20,20 +31,114 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         }
         return users;
     }
+
     public async Task<List<IdentityRole>> GetRolesAsync()
     {
         return await _roleManager.Roles.ToListAsync();
     }
 
-    public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
+    public async Task<ApplicationUser?> GetUserByIdAsync(string userId)
     {
-        var result = await _userManager.CreateAsync(user, password);
+        return await _userManager.FindByIdAsync(userId);
+    }
+
+    public async Task<IdentityResult> CreateUserAsync(ApplicationUser user)
+    {
+        // create user
+        var result = await _userManager.CreateAsync(user, user.Password!);
+        if (result.Succeeded)
+            _logger.LogInformation("User {UserName} successfully created.", user.UserName);
+        else
+        {
+            _logger.LogError("Adding of user {UserName} failed.", user.UserName);
+            foreach (var error in result.Errors)
+                _logger.LogError("Detail: {error}", error.Description);
+            return result;
+        }
+
+        // send confirmation email
+        var userId = await _userManager.GetUserIdAsync(user);
+        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = _navigationManager.GetUriWithQueryParameters(
+            _navigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = @"/" });
+
+        await _emailSender.SendConfirmationLinkAsync(user, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));
+
         return result;
     }
 
-    public async Task<IdentityResult> AddUserToRoleAsync(ApplicationUser user, string role)
+    public async Task<IdentityResult> AddUserToRoleAsync(ApplicationUser user)
     {
-        var result = await _userManager.AddToRoleAsync(user, role);
+        // read and remove original role
+        var userOrig = await GetUserByIdAsync(user.Id);
+        if (userOrig != null)
+        {
+            var userRole = await _userManager.GetRolesAsync(userOrig);
+            if (userRole != null && userRole.Count > 0) { 
+                var resultRemove = await _userManager.RemoveFromRoleAsync(user, userRole.First());
+                if (!resultRemove.Succeeded)
+                { 
+                    _logger.LogError("Fail of removing user ({UserName}) from role {UserRole}.", user.UserName, userRole.First());
+                    foreach (var error in resultRemove.Errors)
+                        _logger.LogError("Detail: {error}", error.Description);
+                    return resultRemove;
+                }
+            }
+        }
+
+        // add new role
+        var resultAdd = await _userManager.AddToRoleAsync(user, user.Role!.Name!);
+        if (resultAdd.Succeeded)
+            _logger.LogInformation("Added user ({UserName}) to role {UserRole}.", user.UserName, user.Role!.Name!);
+        else
+        {
+            _logger.LogError("Fail of adding user {UserName}  to role {UserRole}.", user.UserName, user.Role!.Name!);
+            foreach (var error in resultAdd.Errors)
+                _logger.LogError("Detail: {error}", error.Description);
+        }
+        return resultAdd;
+    }
+
+    public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
+    {
+        var result = await _userManager.UpdateAsync(user);
+        if (result.Succeeded)
+            _logger.LogInformation("The user {UserName} has been successfully changed.", user.UserName);
+        else
+        {
+            _logger.LogError("Could not change user {UserName}.",  user.UserName);
+            foreach (var error in result.Errors)
+                _logger.LogError("Detail: {error}", error.Description);
+            return result;
+        }
+
         return result;
+    }
+    public async Task<IdentityResult> SetPhoneNumberAsync(ApplicationUser user)
+    {
+        var result = await _userManager.SetPhoneNumberAsync(user, user.PhoneNumber);
+        if (result.Succeeded)
+            _logger.LogInformation("For user {UserName} is set new phone number {phone}.", user.UserName, user.PhoneNumber);
+        else
+        {
+            _logger.LogError("Failed to change phone number ({phone}) for user {UserName}.", user.PhoneNumber, user.UserName);
+            foreach (var error in result.Errors)
+                _logger.LogError("Detail: {error}", error.Description);
+            return result;
+        }
+
+        return result;
+    }
+    public async Task GenerateChangeEmailTokenAsync(ApplicationUser user)
+    {
+        var code = await _userManager.GenerateChangeEmailTokenAsync(user, user.UserName!);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = _navigationManager.GetUriWithQueryParameters(
+        _navigationManager.ToAbsoluteUri("Account/ConfirmEmailChange").AbsoluteUri,
+            new Dictionary<string, object?> { ["userId"] = user.Id, ["email"] = user.UserName!, ["code"] = code });
+
+        await _emailSender.SendConfirmationLinkAsync(user, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));
     }
 }
