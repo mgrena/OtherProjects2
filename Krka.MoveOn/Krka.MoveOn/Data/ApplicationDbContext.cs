@@ -1,4 +1,4 @@
-﻿using Krka.MoveOn.Data.AdverseEffects;
+using Krka.MoveOn.Data.AdverseEffects;
 using Krka.MoveOn.Data.Dials;
 using Krka.MoveOn.Data.Questionnaires;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
