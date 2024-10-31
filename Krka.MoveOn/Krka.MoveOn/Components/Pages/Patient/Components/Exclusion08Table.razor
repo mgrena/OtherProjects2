@@ -75,6 +75,150 @@
                 }
             </DxFormLayoutItem>
 
+            @if (isExc_3_1_Answer || isExc_3_6_Answer)
+            {
+                <div style="width: 98%; margin-left: 15px;">
+                    <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+                        Tabuľka nežiadúcej udalosti
+                    </div>
+                    <DxGrid @ref="advEffGrid"
+                            Data="AdverseEffects"
+                            PageSize="20"
+                            PagerPosition="GridPagerPosition.Bottom"
+                            PageSizeSelectorVisible="true"
+                            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                            PageSizeSelectorAllRowsItemVisible="true"
+                            PagerSwitchToInputBoxButtonCount="10"
+                            PagerVisibleNumericButtonCount="10"
+                            KeyFieldName="Id"
+                            ValidationEnabled="false"
+                            EditMode="GridEditMode.PopupEditForm"
+                            PopupEditFormHeaderText="Nežiadúca udalosť"
+                            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                            TextWrapEnabled="false"
+                            HighlightRowOnHover="true"
+                            EditModelSaving="Grid_EditModelSaving"
+                            DataItemDeleting="Grid_DataItemDeleting"
+                            FocusedRowEnabled="true">
+
+                        <ToolbarTemplate Context="toolbarContext">
+                            @if (!isReadOnly)
+                            {
+                                <ManagementToolbarWithoutSave NewClick="New_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                            }
+                        </ToolbarTemplate>
+
+                        <Columns>
+                            <DataAnnotationsValidator />
+                            <DxGridDataColumn FieldName="Name" Caption="Nežiaduca udalosť " ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+                            <DxGridDataColumn FieldName="Start" Caption="Začiatok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+
+                            <DxGridDataColumn FieldName="Frequency" Caption="Frekvencia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@frequency" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Related" Caption="Súvis s liekom spoločnosti Krka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@related" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Severity" Caption="Závažnosť" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@severity" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Intensity" Caption="Intenzita" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@intensity" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Effect" Caption="Vplyv na liečbu" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@effect" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Result" Caption="Výsledok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@result" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+
+                                <CellDisplayTemplate Context="gridContext">
+                                    <div class="grid-cell-align-center">
+                                        @if (!isReadOnly)
+                                        {
+
+                                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link"
+                                                      aria-label="Delete"
+                                                      Click="@(() => advEffGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                                <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
+                                            </DxButton>
+                                        }
+                                    </div>
+                                </CellDisplayTemplate>
+
+                                <CellEditTemplate Context="editContext">
+                                    <div class="grid-cell-align-center">
+                                        @if (!isReadOnly)
+                                        {
+                                            <DxButton Enabled="false"
+                                                      aria-label="Delete"
+                                                      CssClass="grid-disabled-button"
+                                                      IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link" />
+                                        }
+                                    </div>
+                                </CellEditTemplate>
+                            </DxGridCommandColumn>
+
+
+                        </Columns>
+                        <EditFormTemplate Context="EditFormContext1">
+
+                            <DxFormLayout>
+
+                                <DxFormLayoutItem Caption="Nežiaduca udalosť:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Name")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Začiatok (Týždeň liečby):" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Start")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Frekvencia:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Frequency")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Súvis s liekom spoločnosti Krka:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Related")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Závažnosť:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Severity")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Intenzita:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Intensity")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Vplyv na liečbu:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Effect")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Výsledok:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Result")
+                                </DxFormLayoutItem>
+
+                            </DxFormLayout>
+                        </EditFormTemplate>
+                    </DxGrid>
+                </div>
+            }
+
+
             <DxFormLayoutItem ColSpanMd="12">
                 <div style="margin-top: 5px">
                     @if (!isReadOnly)
@@ -86,157 +230,12 @@
                     }
                 </div>
             </DxFormLayoutItem>
+
         </DxFormLayoutGroup>
     </DxFormLayout>
 </EditForm>
 
-@if (isExc_3_1_Answer || isExc_3_6_Answer)
-{
 
-    <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
-        Tabuľka nežiadúcej udalosti
-    </div>
-    <DxGrid @ref="advEffGrid"
-            Data="AdverseEffects"
-            PageSize="20"
-            PagerPosition="GridPagerPosition.Bottom"
-            PageSizeSelectorVisible="true"
-            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-            PageSizeSelectorAllRowsItemVisible="true"
-            PagerSwitchToInputBoxButtonCount="10"
-            PagerVisibleNumericButtonCount="10"
-            KeyFieldName="Id"
-            ValidationEnabled="false"
-            EditMode="GridEditMode.PopupEditForm"
-            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-            ColumnResizeMode="GridColumnResizeMode.NextColumn"
-            TextWrapEnabled="false"
-            HighlightRowOnHover="true"
-            EditModelSaving="Grid_EditModelSaving"
-            DataItemDeleting="Grid_DataItemDeleting"
-            FocusedRowEnabled="true">
-
-        <ToolbarTemplate>
-            @if (!isReadOnly)
-            {
-                <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
-                    <DxToolbarItem Text="Pridať nežiadúcu udalosť" Enabled="true" Click="New_Click">
-                        <ChildContent Context="toolbarContext">
-                            <img src="images/adverse.svg" width="24" height="24" alt="Pridať nežiadúcu udalosť" />
-                            <span style="margin-left: 2px">Pridať nežiadúcu udalosť</span>
-                        </ChildContent>
-                    </DxToolbarItem>
-                </DxToolbar>
-            }
-        </ToolbarTemplate>
-
-        <Columns>
-            <DataAnnotationsValidator />
-            <DxGridDataColumn FieldName="Name" Caption="Nežiaduca udalosť " ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
-            <DxGridDataColumn FieldName="Start" Caption="Začiatok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
-
-            <DxGridDataColumn FieldName="Frequency" Caption="Frekvencia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@frequency" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>
-
-            <DxGridDataColumn FieldName="Related" Caption="Súvis s liekom spoločnosti Krka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@related" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>
-
-            <DxGridDataColumn FieldName="Severity" Caption="Závažnosť" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@severity" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>
-
-            <DxGridDataColumn FieldName="Intensity" Caption="Intenzita" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@intensity" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>
-
-            <DxGridDataColumn FieldName="Effect" Caption="Vplyv na liečbu" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@effect" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>
-
-            <DxGridDataColumn FieldName="Result" Caption="Výsledok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@result" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>
-
-            <DxGridCommandColumn Width="30px" NewButtonVisible="false">
-
-                <CellDisplayTemplate Context="gridContext">
-                    <div class="grid-cell-align-center">
-                        @if (!isReadOnly)
-                        {
-
-                            <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                      RenderStyle="ButtonRenderStyle.Link"
-                                      aria-label="Delete"
-                                      Click="@(() => advEffGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                                <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                            </DxButton>
-                        }
-                    </div>
-                </CellDisplayTemplate>
-
-                <CellEditTemplate Context="editContext">
-                    <div class="grid-cell-align-center">
-                        @if (!isReadOnly)
-                        {
-                            <DxButton Enabled="false"
-                                      aria-label="Delete"
-                                      CssClass="grid-disabled-button"
-                                      IconCssClass="grid-icon grid-icon-delete"
-                                      RenderStyle="ButtonRenderStyle.Link" />
-                        }
-                    </div>
-                </CellEditTemplate>
-            </DxGridCommandColumn>
-
-
-        </Columns>
-        <EditFormTemplate Context="EditFormContext">
-
-            <DxFormLayout>
-                <DxFormLayoutItem Caption="Nežiaduca udalosť:" ColSpanMd="12">
-                    @EditFormContext.GetEditor("Name")
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Začiatok (Týždeň liečby):" ColSpanMd="12">
-                    @EditFormContext.GetEditor("Start")
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Frekvencia:" ColSpanMd="12">
-                    @EditFormContext.GetEditor("Frequency")
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Súvis s liekom spoločnosti Krka:" ColSpanMd="12">
-                    @EditFormContext.GetEditor("Related")
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Závažnosť:" ColSpanMd="12">
-                    @EditFormContext.GetEditor("Severity")
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Intenzita:" ColSpanMd="12">
-                    @EditFormContext.GetEditor("Intensity")
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Vplyv na liečbu:" ColSpanMd="12">
-                    @EditFormContext.GetEditor("Effect")
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Výsledok:" ColSpanMd="12">
-                    @EditFormContext.GetEditor("Result")
-                </DxFormLayoutItem>
-
-            </DxFormLayout>
-        </EditFormTemplate>
-
-    </DxGrid>
-}
 
 
 @code {
@@ -376,7 +375,7 @@
         {
             isModified = false;
             await ExclusionService.SaveQuestionnaireExlusion08Async(exc!);
-            AddToast();
+            await Save_Click();
         }
     }
 
@@ -387,6 +386,8 @@
     }
 
     async Task New_Click() => await advEffGrid.StartEditNewRowAsync();
+
+    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
 
     async Task Save_Click()
     {

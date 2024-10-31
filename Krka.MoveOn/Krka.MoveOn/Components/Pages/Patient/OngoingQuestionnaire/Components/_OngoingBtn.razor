@@ -7,6 +7,7 @@
 
 @inject General01Service Q01Service
 @inject ProtectedSessionStorage SessionStorage
+@inject NavigationManager NavigationManager
 
 
 <style>
@@ -17,67 +18,84 @@
         background-color: #fff;
     }
 
+    .rectangular-button {
+        width: 100%;
+        min-width: 32.8%;
+    }
+
+    .d-flex .flex-fill {
+        flex: 1 1 auto;
+    }
+
+    .active-button {
+        background-color: #6e7de8;
+        border-color: #007bff;
+        color: white;
+    }
+
 </style>
 
 <div class="nav-buttons-sub-container">
 
-<DxFormLayout>
-    <DxFormLayoutItem>
-        <div class="buttons-group mb-2">
-            <div class="d-flex flex-row w-100">
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Liečba Parkinsonovej choroby"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/ongoingQ/init")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Zmena v liečbe pridružených problémov"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/ongoingQ/treat")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Nežiaduci účinok liečiva"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/ongoingQ/drugEffect")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="MDS-UPDRS škála"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/ongoingQ/motor")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Hodnotenie spokojnosti s liečbou "
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/ongoingQ/satisfaction")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Predčasné vylúčenie"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/ongoingQ/exc")" />
+    <DxFormLayout>
+        <DxFormLayoutItem>
+            <div class="buttons-group mb-2">
+                <div class="d-flex flex-row w-100">
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Liečba Parkinsonovej choroby"
+                              CssClass="@GetButtonCssClass("/ongoingQ/init")"
+                              NavigateUrl="@GetNavigateUrl("/ongoingQ/init")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Zmena v liečbe pridružených problémov"
+                              CssClass="@GetButtonCssClass("/ongoingQ/treat")"
+                              NavigateUrl="@GetNavigateUrl("/ongoingQ/treat")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Nežiaduci účinok liečiva"
+                              CssClass="@GetButtonCssClass("/ongoingQ/drugEffect")"
+                              NavigateUrl="@GetNavigateUrl("/ongoingQ/drugEffect")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="MDS-UPDRS škála"
+                              CssClass="@GetButtonCssClass("/ongoingQ/motor")"
+                              NavigateUrl="@GetNavigateUrl("/ongoingQ/motor")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Hodnotenie spokojnosti s liečbou "
+                              CssClass="@GetButtonCssClass("/ongoingQ/satisfaction")"
+                              NavigateUrl="@GetNavigateUrl("/ongoingQ/satisfaction")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Predčasné vylúčenie"
+                              CssClass="@GetButtonCssClass("/ongoingQ/exc")"
+                              NavigateUrl="@GetNavigateUrl("/ongoingQ/exc")" />
+                </div>
             </div>
-        </div>
-    </DxFormLayoutItem>
-</DxFormLayout>
+        </DxFormLayoutItem>
+    </DxFormLayout>
 </div>
 
-<ReturnLinkManager ReturnLink="/patients"/>
+<ReturnLinkManager ReturnLink="/patients" />
 
 
 
 
-@code 
+@code
 {
     private string currentId;
+    private string currentUrl;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             var result = await SessionStorage.GetAsync<string>("currentId");
-            if (result.Success)
+            if (result.Success && NavigationManager != null)
             {
                 currentId = result.Value;
+                currentUrl = NavigationManager.Uri; // Získaj aktuálnu URL
                 StateHasChanged();
             }
         }
@@ -86,5 +104,10 @@
     private string GetNavigateUrl(string baseUrl)
     {
         return $"{baseUrl}/{currentId}";
+    }
+
+    private string GetButtonCssClass(string url)
+    {
+        return currentUrl != null && currentUrl.Contains(url) ? "flex-fill me-2 rectangular-button active-button" : "flex-fill me-2 rectangular-button";
     }
 }
