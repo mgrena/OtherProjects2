@@ -1,0 +1,29 @@
+﻿<DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+
+    <DxToolbarItem Text="Pridať učinnú látku" Enabled="true" Click="NewClick">
+        <img src="images/pill.svg" width="24" height="24" alt="Pridať učinnú látku" />
+        <span style="margin-left: 2px">Pridať učinnú látку</span>
+    </DxToolbarItem>
+
+    <DxToolbarItem Text="Zrušiť" BeginGroup="true" Click="CancelClick" Enabled="BatchItemsEnabled">
+        <img src="@(BatchItemsEnabled ? "images/cancel-enabled.svg" : "images/cancel.svg")" width="24" height="24" alt="Cancel" />
+        <span style="margin-left: 4px; color:@(BatchItemsEnabled ? "#6e7de8" : "inherit");">Zrušiť</span>
+    </DxToolbarItem>
+
+    @ChildContent
+
+</DxToolbar>
+
+@code {
+    [Parameter, EditorRequired]
+    public bool BatchItemsEnabled { get; set; } = false;
+
+    [Parameter, EditorRequired]
+    public EventCallback NewClick { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback CancelClick { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

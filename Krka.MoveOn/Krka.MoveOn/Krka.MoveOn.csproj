@@ -77,4 +77,9 @@
       <HintPath>..\..\..\..\..\Program Files\DevExpress 24.1\Components\Bin\NetCore\DevExpress.Utils.v24.1.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="Components\Pages\Components\ManagementToolbarWithoutSave.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
 </Project>

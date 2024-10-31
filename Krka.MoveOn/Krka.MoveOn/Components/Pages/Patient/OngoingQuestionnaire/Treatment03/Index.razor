@@ -9,6 +9,8 @@
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject Treatment03Service TreatmentService
 
 
 
@@ -26,11 +28,6 @@
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_OngoingBtn />
-
-
-    <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
-        Liečba pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.)
-    </div>
 
     <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@QuestionnaireIdAsString" />
 

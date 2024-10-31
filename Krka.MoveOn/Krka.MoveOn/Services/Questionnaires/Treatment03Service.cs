@@ -17,6 +17,12 @@ public class Treatment03Service(ApplicationDbContext context)
             .ToListAsync();
     }
 
+    public async Task<QuestionnaireTreatment03?> GetQuestionnaireTreatment03ByQuestionnaireIdAsync(string questionnaireId)
+    {
+        return await Task.Run(() => _context.QuestionnaireTreatment03s
+                             .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
+    }
+
 
     public async Task<List<DialIndication>> GetDialIndicationAsync()
     {
@@ -26,6 +32,11 @@ public class Treatment03Service(ApplicationDbContext context)
     public async Task<List<DialActiveIngredient>> GetDialActiveIngredientAsync()
     {
         return await _context.DialActiveIngredients.ToListAsync();
+    }
+
+    public async Task<List<DialQGeneral>> GetDialGeneralAsync()
+    {
+        return await _context.DialQGenerals.ToListAsync();
     }
 
     public async Task SaveTreatmentAsync(QuestionnaireTreatment03 treat)
@@ -46,7 +57,6 @@ public class Treatment03Service(ApplicationDbContext context)
         }
         await _context.SaveChangesAsync();
     }
-
 
     public async Task DeleteTreatAsync(int treatId)
     {

@@ -12,15 +12,26 @@ public class DrugEffect09Service(ApplicationDbContext context)
     public async Task<List<QuestionnaireDrugEffect09>> GetQuestionnaireDrugEffect09(string questionnaireId)
     {
         return await _context.QuestionnaireDrugEffect09s
-            .Where(q => q.Questionnaire_id == questionnaireId)
+            .Where(q => q.Questionnaire_id == questionnaireId && q.DeletedAt == null)
+            .OrderByDescending(q => q.CreatedAt)
             .ToListAsync();
     }
 
+    public async Task<QuestionnaireDrugEffect09?> GetQuestionnaireDrugEffect09ByQuestionnaireIdAsync(string questionnaireId)
+    {
+        return await Task.Run(() => _context.QuestionnaireDrugEffect09s
+                             .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
+    }
 
-    //public async Task<List<DialIndication>> GetDialIndicationAsync()
-    //{
-    //    return await _context.DialIndication.ToListAsync();
-    //}
+    public async Task<List<DialQGeneral>> GetDialGeneralAsync()
+    {
+        return await _context.DialQGenerals.ToListAsync();
+    }
+
+    public async Task<List<DialIndication>> GetDialIndicationAsync()
+    {
+        return await _context.DialIndication.ToListAsync();
+    }
 
     public async Task<List<DialActiveIngredient>> GetDialActiveIngredientAsync()
     {
@@ -45,17 +56,4 @@ public class DrugEffect09Service(ApplicationDbContext context)
         }
         await _context.SaveChangesAsync();
     }
-
-
-    //public async Task DeleteDrugEffectAsync(int treatId)
-    //{
-    //    var treat = await _context.QuestionnaireDrugEffect09s.FindAsync(treatId);
-    //    if (treat != null)
-    //    {
-    //        treat.DeletedAt = DateTime.Now;
-    //        _context.QuestionnaireDrugEffect09s.Update(treat);
-    //        await _context.SaveChangesAsync();
-    //    }
-    //}
-
 }

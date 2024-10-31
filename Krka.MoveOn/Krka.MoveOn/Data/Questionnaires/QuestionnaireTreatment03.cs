@@ -9,7 +9,7 @@ namespace Krka.MoveOn.Data.Questionnaires
     {
         [Key]
         [Column("id")]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
         [Column("questionnaire_id", TypeName = "nvarchar"), StringLength(450)]
         public required string Questionnaire_id { get; set; }
@@ -30,7 +30,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// Dávka (mg)
         /// </summary>
         [Column("treat_2", TypeName = "decimal(5,2)")]
-        public decimal Treat_2 { get; set; }
+        public decimal? Treat_2 { get; set; }
 
         /// <summary>
         /// indikácia - čísleník na DialIndication
@@ -46,7 +46,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         public required DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Column("deleted_at")]
-        public required DateTime? DeletedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
 
         public QuestionnaireTreatment03 Clone()

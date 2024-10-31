@@ -20,79 +20,122 @@
                      Width="320px" />
 </div>
 
+<EditForm Model="@druggEffect"
+          Context="EditFormContext"
+          OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <DxFormLayout>
+        <DxFormLayoutGroup Caption="Nežiaduci účinok liečiva" ColSpanMd="12" CaptionCssClass="caption-styleH0">
 
-    <DxGrid @ref="drugEffectGrid"
-            Data="DrugEffects"
-            PageSize="20"
-            PagerPosition="GridPagerPosition.Bottom"
-            PageSizeSelectorVisible="true"
-            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-            PageSizeSelectorAllRowsItemVisible="true"
-            PagerSwitchToInputBoxButtonCount="10"
-            PagerVisibleNumericButtonCount="10"
-            KeyFieldName="Id"
-            ValidationEnabled="false"
-            EditMode="GridEditMode.EditCell"
-            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-            ColumnResizeMode="GridColumnResizeMode.NextColumn"
-            TextWrapEnabled="false"
-            EditModelSaving="Grid_EditModelSaving"
-            HighlightRowOnHover="true"
-            FocusedRowEnabled="true"
-            >
+            <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <InputRadioGroup @bind-Value="@druggEffect!.De_1" class="d-flex flex-wrap">
+                    @foreach (var item in de_1_Answer)
+                    {
+                        <label class="d-block m-2">
+                            <InputRadio class="m-2" @onclick="() => {OnD1QAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                        </label>
+                    }
+                </InputRadioGroup>
+                <ValidationMessage For="@(() => druggEffect!.De_1)" />
+            </DxFormLayoutItem>
 
-        <ToolbarTemplate Context="toolbarContext">
-            @if (!isReadOnly)
+            @if (isDe1Answer)
             {
-                <ManagementToolbar NewClick="New_Click" SaveClick="Save_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                <div style="width: 98%; margin-left: 15px;">
+                    <DxGrid @ref="drugEffectGrid"
+                            Data="DrugEffects"
+                            PageSize="20"
+                            PagerPosition="GridPagerPosition.Bottom"
+                            PageSizeSelectorVisible="true"
+                            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                            PageSizeSelectorAllRowsItemVisible="true"
+                            PagerSwitchToInputBoxButtonCount="10"
+                            PagerVisibleNumericButtonCount="10"
+                            KeyFieldName="Id"
+                            ValidationEnabled="false"
+                            EditMode="GridEditMode.EditCell"
+                            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                            TextWrapEnabled="false"
+                            EditModelSaving="Grid_EditModelSaving"
+                            HighlightRowOnHover="true"
+                            FocusedRowEnabled="true">
+
+                        <ToolbarTemplate Context="toolbarContext">
+                            @if (!isReadOnly)
+                            {
+                                <ManagementToolbarWithoutSave NewClick="New_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                            }
+                        </ToolbarTemplate>
+
+                        <Columns>
+
+                            <DxGridDataColumn FieldName="De_2" Caption="Učinná látka" Width="" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@De_2_Answer" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="De_3" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+
+                            <DxGridDataColumn FieldName="De_4" Caption="Nežiaduci účinok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" /> @* Pozor toto budeme este naplnat *@
+
+                            <DxGridDataColumn FieldName="De_5" Caption="Indikácia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@De_5_Answer" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+
+                                <CellDisplayTemplate Context="gridContext">
+                                    <div class="grid-cell-align-center">
+                                        @if (!isReadOnly)
+                                        {
+                                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link"
+                                                      aria-label="Delete"
+                                                      Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                                <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
+                                            </DxButton>
+                                        }
+                                    </div>
+                                </CellDisplayTemplate>
+
+                                <CellEditTemplate Context="editContext">
+                                    <div class="grid-cell-align-center">
+                                        @if (!isReadOnly)
+                                        {
+                                            <DxButton Enabled="false"
+                                                      aria-label="Delete"
+                                                      CssClass="grid-disabled-button"
+                                                      IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link" />
+                                        }
+                                    </div>
+                                </CellEditTemplate>
+
+                            </DxGridCommandColumn>
+                        </Columns>
+                    </DxGrid>
+                </div>
             }
-        </ToolbarTemplate>
 
-        <Columns>
-            <DxGridDataColumn FieldName="De_1" Caption="Učinná látka" Width="" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                <EditSettings>
-                    <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
-                </EditSettings>
-            </DxGridDataColumn>
+            <DxFormLayoutItem ColSpanMd="12">
+                <div style="margin-top: 5px">
+                    @if (!isReadOnly)
+                    {
+                        <DxButton SubmitFormOnClick="true"
+                                  Text="Uložiť"
+                                  RenderStyle="ButtonRenderStyle.Primary" />
+                    }
+                </div>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    </DxFormLayout>
+</EditForm>
 
-            <DxGridDataColumn FieldName="De_2" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
 
-            <DxGridDataColumn FieldName="De_3" Caption="Nežiaduci účinok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
-
-            <DxGridDataColumn FieldName="De_4" Caption="Indikácia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
-
-            <DxGridCommandColumn Width="30px" NewButtonVisible="false">
-
-                    <CellDisplayTemplate Context="gridContext">
-                        <div class="grid-cell-align-center">
-                            @if (!isReadOnly)
-                            {
-                                <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                RenderStyle="ButtonRenderStyle.Link"
-                                aria-label="Delete"
-                                Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                                    <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                                </DxButton>
-                            }
-                        </div>
-                    </CellDisplayTemplate>
-
-                    <CellEditTemplate Context="editContext">
-                        <div class="grid-cell-align-center">
-                            @if (!isReadOnly)
-                            {
-                                <DxButton Enabled="false"
-                                          aria-label="Delete"
-                                          CssClass="grid-disabled-button"
-                                          IconCssClass="grid-icon grid-icon-delete"
-                                          RenderStyle="ButtonRenderStyle.Link" />
-                            }
-                        </div>
-                    </CellEditTemplate>
-                
-            </DxGridCommandColumn>
-        </Columns>     
-    </DxGrid>
 
 
 
@@ -104,10 +147,18 @@
     IGrid drugEffectGrid { get; set; }
     public List<Data.Questionnaires.QuestionnaireDrugEffect09> DrugEffects { get; set; }
 
+    bool isDe1Answer = false;
+
     List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
-    List<Data.Dials.DialActiveIngredient> treat_1_Answer = new();
+    List<Data.Dials.DialActiveIngredient> De_2_Answer = new();
 
+    List<Data.Dials.DialQGeneral> dialQGenerals = new();
+    List<Data.Dials.DialQGeneral> de_1_Answer = new();
 
+    List<Data.Dials.DialIndication> dialIndication = new();
+    List<Data.Dials.DialIndication> De_5_Answer = new();
+
+    Data.Questionnaires.QuestionnaireDrugEffect09? druggEffect;
 
     Dictionary<QuestionnaireDrugEffect09, DataChange> UnsavedChanges { get; } = new();
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || drugEffectGrid.IsEditing();
@@ -123,16 +174,47 @@
             isReadOnly = true;
         }
 
+        druggEffect = new Data.Questionnaires.QuestionnaireDrugEffect09
+            {
+                Questionnaire_id = questionnaireId,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
+            };
+
         DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(questionnaireId);
 
         dialActiveIngredient = await DrugEffectService.GetDialActiveIngredientAsync();
-        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+        De_2_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
 
+        dialIndication = await DrugEffectService.GetDialIndicationAsync();
+        De_5_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
+
+        dialQGenerals = await DrugEffectService.GetDialGeneralAsync();
+        de_1_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
+
+        await LoadQuestionnaire(questionnaireId);
     }
 
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
+    private async Task LoadQuestionnaire(string questionnaireid)
+    {
+        var questionnaire = await DrugEffectService.GetQuestionnaireDrugEffect09ByQuestionnaireIdAsync(questionnaireid);
+        if (questionnaire != null)
+        {
+            druggEffect = questionnaire;
+
+            isDe1Answer = (druggEffect.De_1 == 14);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (!isReadOnly)
+        {
+            await DrugEffectService.SaveDrugEffectAsync(druggEffect!);
+            await Save_Click();
+        }
+    }
+
     private void AddToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -144,9 +226,6 @@
             });
     }
 
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
     private void ModifyToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -158,10 +237,6 @@
             });
     }
 
-
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
     private void DeleteToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -202,6 +277,12 @@
             }
         }
         await ClearUnsavedChangesAsync();
+    }
+
+    void OnD1QAnswer(int value)
+    {
+        druggEffect!.De_1 = value;
+        isDe1Answer = (druggEffect!.De_1 == 14);
     }
 
     async Task ClearUnsavedChangesAsync()
