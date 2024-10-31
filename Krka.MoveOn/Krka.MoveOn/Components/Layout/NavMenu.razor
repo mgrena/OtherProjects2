@@ -48,22 +48,31 @@
                             </AuthorizeView>
                         </Items>
                     </DxMenu>
-                  <DxMenu Orientation="@Orientation.Vertical" CssClass="menu">
+                    <DxMenu Orientation="@Orientation.Vertical" CssClass="menu">
                         <Items>
-                            <DxMenuItem NavigateUrl="/" Text="Home" CssClass="menu-item" IconCssClass="icon home-icon"></DxMenuItem>
-                            <DxMenuItem NavigateUrl="/counter" Text="@localizer["CounterText"]" CssClass="menu-item" IconCssClass="icon counter-icon"></DxMenuItem>
-                            <DxMenuItem NavigateUrl="/weather" Text="Weather" CssClass="menu-item" IconCssClass="icon weather-icon"></DxMenuItem>
-                            <DxMenuItem NavigateUrl="/Account/Manage" Text="Settings" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
+                            <DxMenuItem NavigateUrl="/" Text="Domov" CssClass="menu-item" IconCssClass="icon home-icon"></DxMenuItem>
+                            <DxMenuItem NavigateUrl="/Account/Manage" Text="Profil" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
                             <AuthorizeView>
-                                <DxMenuItem NavigateUrl="/patients" Text="Pacienti" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
+                                <DxMenuItem NavigateUrl="/patients" Text="Pacienti" CssClass="menu-item" IconCssClass="icon patients-icon"></DxMenuItem>
                             </AuthorizeView>
                             <AuthorizeView Roles="Admin">
-                                <DxMenuItem NavigateUrl="/users" Text="Používatelia" CssClass="menu-item" IconCssClass="icon settings-icon"></DxMenuItem>
+                                <DxMenuItem NavigateUrl="/users" Text="Používatelia" CssClass="menu-item" IconCssClass="icon users-icon"></DxMenuItem>
                             </AuthorizeView>
                         </Items>
                     </DxMenu>
                 </Template>
+
+            </DxGridLayoutItem>
+
+            <DxGridLayoutItem Area="footer" CssClass="sidebar-header">
+                <Template>
+                    <div>
+                        <p style="color: white;">Verzia 0.3.3</p>
+                    </div>
+                    @* <img class="logo" src="images/logo.svg" alt="DevExpress logo" /> *@
+                </Template>
             </DxGridLayoutItem>
         </Items>
     </DxGridLayout>
+
 </div>

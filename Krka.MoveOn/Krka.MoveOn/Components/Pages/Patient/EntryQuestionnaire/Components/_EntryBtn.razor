@@ -1,5 +1,4 @@
-﻿
-@using Krka.MoveOn.Services.Questionnaires
+﻿@using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using Krka.MoveOn.Components.Pages.Components
 
@@ -8,6 +7,7 @@
 
 @inject General01Service Q01Service
 @inject ProtectedSessionStorage SessionStorage
+@inject NavigationManager NavigationManager
 
 <style>
     .nav-buttons-sub-container {
@@ -17,69 +17,85 @@
         background-color: #fff;
     }
 
+    .rectangular-button {
+        width: 100%;
+        min-width: 32.8%;
+    }
+
+    .d-flex .flex-fill {
+        flex: 1 1 auto;
+    }
+
+    .active-button {
+        background-color: #6e7de8;
+        border-color: #007bff;
+        color: white;
+    }
+
 </style>
 
 <div class="nav-buttons-sub-container">
-
-<DxFormLayout>
-    <DxFormLayoutItem>
-        <div class="buttons-group mb-2">
-            <div class="d-flex flex-row w-100">
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Detekcia príznakov"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/gen")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Začiatočná liečba"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/init")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Liečba pridružených problémov"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/treat")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="MDS-UPDRS škála"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/motor")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Moca"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/moca")" />
-                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                          Text="Predčasné vylúčenie"
-                          CssClass="flex-fill me-2 rectangular-button"
-                          NavigateUrl="@GetNavigateUrl("/entryQ/exc")" />
+    <DxFormLayout>
+        <DxFormLayoutItem>
+            <div class="buttons-group mb-2">
+                <div class="d-flex flex-row w-100">
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Detekcia príznakov"
+                              CssClass="@GetButtonCssClass("/entryQ/gen")"
+                              NavigateUrl="@GetNavigateUrl("/entryQ/gen")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Začiatočná liečba"
+                              CssClass="@GetButtonCssClass("/entryQ/init")"
+                              NavigateUrl="@GetNavigateUrl("/entryQ/init")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Liečba pridružených problémov"
+                              CssClass="@GetButtonCssClass("/entryQ/treat")"
+                              NavigateUrl="@GetNavigateUrl("/entryQ/treat")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="MDS-UPDRS škála"
+                              CssClass="@GetButtonCssClass("/entryQ/motor")"
+                              NavigateUrl="@GetNavigateUrl("/entryQ/motor")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Moca"
+                              CssClass="@GetButtonCssClass("/entryQ/moca")"
+                              NavigateUrl="@GetNavigateUrl("/entryQ/moca")" />
+                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                              Text="Predčasné vylúčenie"
+                              CssClass="@GetButtonCssClass("/entryQ/exc")"
+                              NavigateUrl="@GetNavigateUrl("/entryQ/exc")" />
+                </div>
             </div>
-        </div>
-    </DxFormLayoutItem>
-</DxFormLayout>
+        </DxFormLayoutItem>
+    </DxFormLayout>
 
 </div>
 
-<ReturnLinkManager ReturnLink="/patients"/>
+<ReturnLinkManager ReturnLink="/patients" />
 
 
 
 
 
-@code 
+@code
 {
     private string currentId;
+    private string currentUrl;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             var result = await SessionStorage.GetAsync<string>("currentId");
-            if (result.Success)
+            if (result.Success && NavigationManager != null)
             {
                 currentId = result.Value;
+                currentUrl = NavigationManager.Uri; // Získaj aktuálnu URL
                 StateHasChanged();
             }
         }
@@ -88,5 +104,10 @@
     private string GetNavigateUrl(string baseUrl)
     {
         return $"{baseUrl}/{currentId}";
+    }
+
+    private string GetButtonCssClass(string url)
+    {
+        return currentUrl != null && currentUrl.Contains(url) ? "flex-fill me-2 rectangular-button active-button" : "flex-fill me-2 rectangular-button";
     }
 }

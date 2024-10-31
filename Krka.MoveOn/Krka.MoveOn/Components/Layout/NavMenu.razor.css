@@ -100,6 +100,14 @@
     background-image: url("images/account/user.svg");
 }
 
+::deep .users-icon {
+    background-image: url("images/users.svg");
+}
+
+::deep .patients-icon {
+    background-image: url("images/patients.svg");
+}
+
 ::deep .docs-icon {
     mask-image: url("images/doc.svg");
     -webkit-mask-image: url("images/doc.svg");
