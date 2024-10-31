@@ -1,0 +1,64 @@
+﻿@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject NavigationManager NavigationManager
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+
+@if (!string.IsNullOrEmpty(NavigationManager.ToBaseRelativePath(NavigationManager.Uri)))
+{
+    <DxButton RenderStyle="@ButtonRenderStyle.Dark"
+    Text="Späť"
+    RenderStyleMode="@ButtonRenderStyleMode.Text"
+    CssClass="menu-button"
+    IconCssClass="icon icon-back"
+    Click="OnBackButtonClick">
+    </DxButton>
+
+
+}
+
+@code {
+    private bool _isRendered = false;
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isRendered = true;
+        }
+    }
+
+    private async Task OnBackButtonClick()
+    {
+        if (_isRendered)
+        {
+
+            var previousCategoryUrl = await sessionStorage.GetItemAsync<string>("returnLink");
+
+            if (!string.IsNullOrEmpty(previousCategoryUrl))
+            {
+                NavigationManager.NavigateTo(previousCategoryUrl);
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/");
+            }
+        }
+    }
+
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
