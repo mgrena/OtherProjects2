@@ -75,8 +75,7 @@ public class EmailSender(IOptions<SmtpOptions> optionsAccessor, ILogger<EmailSen
             }
             catch (Exception ex)
             {
-                logger.LogError("Error sending mail to adress: {EmailAddress}. Error: {Message}", toEmail, ex.Message);
-                logger.LogError(ex.StackTrace);
+                logger.LogError(ex, "Error sending mail to adress: {EmailAddress}. Error: {Message}", toEmail, ex.Message);
             }
         });
     }

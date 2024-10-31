@@ -2,6 +2,7 @@
 
 @using Krka.MoveOn.Components.Account.Shared
 @using Krka.MoveOn.Data
+@using Krka.MoveOn.Services
 @using Krka.MoveOn.Services.Pages
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
@@ -46,11 +47,13 @@ else
             EditFormButtonsVisible="true"
             FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
             ColumnResizeMode="GridColumnResizeMode.NextColumn"
+            CustomizeDataRowEditor="OnCustomizeDataRowEditor"
             CustomizeEditModel="Grid_CustomizeEditModel"
             EditModelSaving="Grid_EditModelSaving"
             DataItemDeleting="Grid_DataItemDeleting"
             TextWrapEnabled="false"
-            HighlightRowOnHover="true">
+            HighlightRowOnHover="true"
+            KeyFieldName="Id">
         <Columns>
             <DxGridDataColumn Caption="Používateľ" FieldName="FullName" />
             <DxGridDataColumn Caption="Úroveň" FieldName="Role">
@@ -92,6 +95,7 @@ else
                 </CellEditTemplate>
             </DxGridCommandColumn>
         </Columns>
+
         <EditFormTemplate Context="EditFormContext">
             @{
                 var user = (ApplicationUser)EditFormContext.EditModel;
@@ -132,6 +136,9 @@ else
                 <DxFormLayoutItem Caption="Phone:" ColSpanMd="6">
                     @EditFormContext.GetEditor("PhoneNumber")
                 </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <ValidationSummary/>
+                </DxFormLayoutItem>
                 @* <DxFormLayoutItem ColSpanMd="12">
                     <div class="grid-cell-align-center">
                         <DxButton SubmitFormOnClick="true" Text="Uložiť" />
@@ -140,6 +147,10 @@ else
                 </DxFormLayoutItem> *@
             </DxFormLayout>
         </EditFormTemplate>
+
+        <CustomValidators>
+            <MyCustomValidator DataItemValidating="ValidateGridData" />
+        </CustomValidators>
     </DxGrid>
 }
 
@@ -172,34 +183,57 @@ else
     }
     private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
-        var anUser = (ApplicationUser)e.EditModel;
+        // var anUser = (ApplicationUser)e.EditModel;
 
-        // validation
-        var emailAttribute = new EmailAddressAttribute();
-        if (!emailAttribute.IsValid(anUser.UserName))
-            identityErrors.Add(new() { Code = "1", Description = emailAttribute.ErrorMessage });
-        if (string.IsNullOrEmpty(anUser.FirstName))
-            identityErrors.Add(new() { Code = "2", Description = "Krstné meno je povinný údaj" });
-        if (string.IsNullOrEmpty(anUser.LastName))
-            identityErrors.Add(new() { Code = "3", Description = "Priezvisko je povinný údaj" });
-
-        // depends on acton type
-        if (e.IsNew)
-        {
-            if (string.IsNullOrEmpty(anUser.Password) || anUser.Password.Length < 6 || anUser.Password.Length > 100)
-                identityErrors.Add(new() { Code = "4", Description = "Pole Heslo musí byť aspoň 6 a maximálne 100 znakov dlhé." });
-            if (!string.IsNullOrEmpty(anUser.ConfirmPassword) && !anUser.ConfirmPassword.Equals(anUser.Password))
-                identityErrors.Add(new() { Code = "5", Description = "Heslo a potvrdzovacie heslo sa nezhodujú.." });
-        }
-        // await NwindDataService.InsertSupplierAsync((Supplier)e.EditModel);
+        // if (e.IsNew)
+        // {
+        //     var resultUser = await UserService.CreateUserAsync(anUser);
+        //     if (resultUser.Succeeded)
+        //     {
+        //         var resultRole = await UserService.AddUserToRoleAsync(anUser);
+        //         if (!resultUser.Succeeded)
+        //         {
+        //             identityErrors = resultUser.Errors.ToList();
+        //             return;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         identityErrors = resultUser.Errors.ToList();
+        //         return;
+        //     }
+        // }
         // else
-        //     await NwindDataService.UpdateSupplierAsync((Supplier)e.DataItem, (Supplier)e.EditModel);
+        // {
+        //     if (((ApplicationUser)e.DataItem).PhoneNumber != ((ApplicationUser)e.EditModel).PhoneNumber)
+        //     {
+        //         var resultUser = await UserService.SetPhoneNumberAsync(anUser);
+        //         if (!resultUser.Succeeded)
+        //             identityErrors = resultUser.Errors.ToList();
+        //     }
+        //     if (((ApplicationUser)e.DataItem).UserName != ((ApplicationUser)e.EditModel).UserName)
+        //     {
+        //         await UserService.GenerateChangeEmailTokenAsync(anUser);
+        //     }
+        //     if (((ApplicationUser)e.DataItem).FirstName != ((ApplicationUser)e.EditModel).FirstName
+        //         || ((ApplicationUser)e.DataItem).LastName != ((ApplicationUser)e.EditModel).LastName
+        //         || ((ApplicationUser)e.DataItem).TitleBefore != ((ApplicationUser)e.EditModel).TitleBefore
+        //         || ((ApplicationUser)e.DataItem).TitleAfter != ((ApplicationUser)e.EditModel).TitleAfter)
+        //     {
+        //         var resultUser = await UserService.UpdateUserAsync(anUser);
+        //         if (!resultUser.Succeeded)
+        //             identityErrors.AddRange(resultUser.Errors.ToList());
+        //     }
+        // }
         // await UpdateDataAsync();
     }
     private async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
         // await NwindDataService.RemoveSupplierAsync((Supplier)e.DataItem);
         // await UpdateDataAsync();
+    }
+    private async Task UpdateDataAsync() {
+        DataSource = await UserService.GetUsersAsync();
     }
 
     private Task OnRowEditStart(GridEditStartEventArgs e)
@@ -216,9 +250,37 @@ else
         return Task.CompletedTask;
     }
 
+    private void OnCustomizeDataRowEditor(GridCustomizeDataRowEditorEventArgs e)
+    {
+        if (e.EditSettings is ITextEditSettings settings)
+            settings.ShowValidationIcon = true;
+    }
+
+    private void ValidateGridData(ValidationMessageStoreEventArgs e)
+    {
+        var user = (ApplicationUser)e.EditModel;
+
+        // EmailAddressAttribute emailAttribute = new();
+        // if (!emailAttribute.IsValid(user.UserName))
+        //     e.AddError(nameof(user.UserName), string.Format(emailAttribute.ErrorMessage, "Používateľské meno"));
+
+        if (string.IsNullOrEmpty(user.UserName))
+            e.AddError(nameof(user.UserName), "Používateľské meno / e-mail je povinný údaj.");
+        else if (!EmailValidator.IsValidEmail(user.UserName))
+            e.AddError(nameof(user.UserName), "Používateľské meno / e-mail má chybný formát.");
+        if (string.IsNullOrEmpty(user.FirstName))
+            e.AddError(nameof(user.FirstName), "Krstné meno je povinný údaj.");
+        if (string.IsNullOrEmpty(user.LastName))
+            e.AddError(nameof(user.LastName), "Priezvisko je povinný údaj.");
+
+        // if (string.IsNullOrEmpty(anUser.Password) || anUser.Password.Length < 6 || anUser.Password.Length > 100)
+        //     identityErrors.Add(new() { Code = "4", Description = "Pole Heslo musí byť aspoň 6 a maximálne 100 znakov dlhé." });
+        // if (!string.IsNullOrEmpty(anUser.ConfirmPassword) && !anUser.ConfirmPassword.Equals(anUser.Password))
+        //     identityErrors.Add(new() { Code = "5", Description = "Heslo a potvrdenie hesla sa nezhodujú." });
+    }
+
     public void Dispose()
     {
         DataLoadedTcs.TrySetCanceled();
     }
-
 }
