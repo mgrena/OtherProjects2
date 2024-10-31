@@ -111,17 +111,17 @@ else
                     if (isNewUser)
                     {
                         <DxFormLayoutItem Caption="Heslo:" ColSpanMd="6">
-                            <DxTextBox @bind-Text="user.Password" />
+                            <DxTextBox @bind-Text="user.Password" Password="true" />
                         </DxFormLayoutItem>
                         <DxFormLayoutItem Caption="Potvrdenie hesla:" ColSpanMd="6">
-                            <DxTextBox @bind-Text="user.ConfirmPassword" />
+                            <DxTextBox @bind-Text="user.ConfirmPassword" Password="true" />
                         </DxFormLayoutItem>
                     }
                 }
                 <DxFormLayoutItem Caption="Titul pred menom:" ColSpanMd="6">
                     <DxTextBox @bind-Text="user.TitleBefore" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Titul pred menom:" ColSpanMd="6">
+                <DxFormLayoutItem Caption="Titul za menom:" ColSpanMd="6">
                     <DxTextBox @bind-Text="user.TitleAfter" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Krstné meno:" ColSpanMd="6">
@@ -130,11 +130,8 @@ else
                 <DxFormLayoutItem Caption="Priezvisko:" ColSpanMd="6">
                     <DxTextBox @bind-Text="user.LastName" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Titul za menom:" ColSpanMd="6">
-                    <DxTextBox @bind-Text="user.TitleAfter" />
-                </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Phone:" ColSpanMd="6">
-                    @EditFormContext.GetEditor("PhoneNumber")
+                    <DxMaskedInput name="user.PhoneNumber" @rendermode="InteractiveServer" @bind-Value="user.PhoneNumber" Mask="+421 000 000 000" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12">
                     <ValidationSummary/>
@@ -183,54 +180,52 @@ else
     }
     private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
-        // var anUser = (ApplicationUser)e.EditModel;
+        var user = (ApplicationUser)e.EditModel;
 
-        // if (e.IsNew)
-        // {
-        //     var resultUser = await UserService.CreateUserAsync(anUser);
-        //     if (resultUser.Succeeded)
-        //     {
-        //         var resultRole = await UserService.AddUserToRoleAsync(anUser);
-        //         if (!resultUser.Succeeded)
-        //         {
-        //             identityErrors = resultUser.Errors.ToList();
-        //             return;
-        //         }
-        //     }
-        //     else
-        //     {
-        //         identityErrors = resultUser.Errors.ToList();
-        //         return;
-        //     }
-        // }
-        // else
-        // {
-        //     if (((ApplicationUser)e.DataItem).PhoneNumber != ((ApplicationUser)e.EditModel).PhoneNumber)
-        //     {
-        //         var resultUser = await UserService.SetPhoneNumberAsync(anUser);
-        //         if (!resultUser.Succeeded)
-        //             identityErrors = resultUser.Errors.ToList();
-        //     }
-        //     if (((ApplicationUser)e.DataItem).UserName != ((ApplicationUser)e.EditModel).UserName)
-        //     {
-        //         await UserService.GenerateChangeEmailTokenAsync(anUser);
-        //     }
-        //     if (((ApplicationUser)e.DataItem).FirstName != ((ApplicationUser)e.EditModel).FirstName
-        //         || ((ApplicationUser)e.DataItem).LastName != ((ApplicationUser)e.EditModel).LastName
-        //         || ((ApplicationUser)e.DataItem).TitleBefore != ((ApplicationUser)e.EditModel).TitleBefore
-        //         || ((ApplicationUser)e.DataItem).TitleAfter != ((ApplicationUser)e.EditModel).TitleAfter)
-        //     {
-        //         var resultUser = await UserService.UpdateUserAsync(anUser);
-        //         if (!resultUser.Succeeded)
-        //             identityErrors.AddRange(resultUser.Errors.ToList());
-        //     }
-        // }
-        // await UpdateDataAsync();
+        if (e.IsNew)
+        {
+            var resultUser = await UserService.CreateUserAsync(user);
+            if (!resultUser.Succeeded)
+            {
+                identityErrors = resultUser.Errors.ToList();
+                return;
+            }
+        }
+        else
+        {
+            if (((ApplicationUser)e.DataItem).PhoneNumber != ((ApplicationUser)e.EditModel).PhoneNumber)
+            {
+                var resultUser = await UserService.SetPhoneNumberAsync(user);
+                if (!resultUser.Succeeded)
+                    identityErrors = resultUser.Errors.ToList();
+            }
+            if (((ApplicationUser)e.DataItem).UserName != ((ApplicationUser)e.EditModel).UserName)
+            {
+                await UserService.GenerateChangeEmailTokenAsync(user);
+            }
+            if (((ApplicationUser)e.DataItem).FirstName != ((ApplicationUser)e.EditModel).FirstName
+                || ((ApplicationUser)e.DataItem).LastName != ((ApplicationUser)e.EditModel).LastName
+                || ((ApplicationUser)e.DataItem).TitleBefore != ((ApplicationUser)e.EditModel).TitleBefore
+                || ((ApplicationUser)e.DataItem).TitleAfter != ((ApplicationUser)e.EditModel).TitleAfter)
+            {
+                var resultUser = await UserService.UpdateUserAsync(user);
+                if (!resultUser.Succeeded)
+                    identityErrors.AddRange(resultUser.Errors.ToList());
+            }
+        }
+        await UpdateDataAsync();
     }
     private async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
-        // await NwindDataService.RemoveSupplierAsync((Supplier)e.DataItem);
-        // await UpdateDataAsync();
+        var user = (ApplicationUser)e.DataItem;
+
+        user.LockoutEnabled = true;
+        user.LockoutEnd = DateTimeOffset.MaxValue;
+        var resultUser = await UserService.UpdateUserAsync(user);
+        if (!resultUser.Succeeded)
+            identityErrors.AddRange(resultUser.Errors.ToList());
+
+        await UpdateDataAsync();
     }
     private async Task UpdateDataAsync() {
         DataSource = await UserService.GetUsersAsync();
