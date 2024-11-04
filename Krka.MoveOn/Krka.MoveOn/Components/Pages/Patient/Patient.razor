@@ -239,8 +239,6 @@
 
 @code {
 
-    public int? preSelectedPatientId { get; set; }
-
     IGrid patientsGrid { get; set; }
     public List<Data.Patient> Patients { get; set; }
     public List<Data.Questionnaires.Questionnaire> Questionnaires { get; set; }
@@ -258,6 +256,7 @@
     private string? selectedPatientCode;
     private int? selectedPatientId;
     private bool hasQuestionnaires; 
+    private bool isRendered = false;
 
     bool isReadOnly = false;
 
@@ -277,15 +276,32 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (preSelectedPatientId.HasValue)
+        isRendered = true;
+        var selectedPatientId = await GetSelectedPatientId();
+        if (selectedPatientId.HasValue)
         {
-            var selectedPatient = Patients.FirstOrDefault(p => p.Id == preSelectedPatientId.Value);
+            var selectedPatient = Patients.FirstOrDefault(p => p.Id == selectedPatientId.Value);
             if (selectedPatient != null)
             {
                 await patientsGrid.SetFocusedDataItemAsync(selectedPatient);
             }
         }
     }
+
+    private async Task SetSelectedPatientId(int PatientId)
+    {
+        if (isRendered)
+        {
+            await SessionStorage.SetAsync("selectedPatientId", PatientId);
+        }
+    }
+
+    private async Task<int?> GetSelectedPatientId()
+    {
+        var result = await SessionStorage.GetAsync<int?>("selectedPatientId");
+        return result.Success ? result.Value : null;
+    }
+
     /// <summary>
     /// Nacitanie Id aktualneho pouzivatela
     /// </summary>
@@ -491,6 +507,7 @@
         if (selectedPatientId.HasValue)
         {
             await LoadQuestionnairesAsync(selectedPatientId.Value);
+            await SetSelectedPatientId(selectedPatientId.Value);
             StateHasChanged(); //Aktualizacia, vykreslenie noveho obsahu
         }
     }
