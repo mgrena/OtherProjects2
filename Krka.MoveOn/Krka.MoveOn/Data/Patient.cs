@@ -16,6 +16,12 @@ namespace Krka.MoveOn.Data
         [Column("id_user", TypeName ="nvarchar"), StringLength(450)]
         public required string UserId { get; set; }
 
+        [Column("info_confirm")]
+        public bool InfoConfirmation { get; set; } = false;
+
+        [Column("gdpr_confirm")]
+        public bool GDPRConfirmation { get; set; } = false;
+
         /// <summary>
         ///  Patient code   
         /// </summary>
