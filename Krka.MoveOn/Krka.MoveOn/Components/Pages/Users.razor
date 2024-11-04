@@ -193,16 +193,26 @@ else
         }
         else
         {
+            // change phone number
             if (((ApplicationUser)e.DataItem).PhoneNumber != ((ApplicationUser)e.EditModel).PhoneNumber)
             {
                 var resultUser = await UserService.SetPhoneNumberAsync(user);
                 if (!resultUser.Succeeded)
                     identityErrors = resultUser.Errors.ToList();
             }
+            // change user name / email
             if (((ApplicationUser)e.DataItem).UserName != ((ApplicationUser)e.EditModel).UserName)
             {
                 await UserService.GenerateChangeEmailTokenAsync(user);
             }
+            // change role
+            if (((ApplicationUser)e.DataItem).Role != ((ApplicationUser)e.EditModel).Role)
+            {
+                var result = await UserService.AddUserToRoleAsync(user);
+                if (!result.Succeeded)
+                    identityErrors.AddRange(result.Errors.ToList());
+            }
+            // chnage other user data
             if (((ApplicationUser)e.DataItem).FirstName != ((ApplicationUser)e.EditModel).FirstName
                 || ((ApplicationUser)e.DataItem).LastName != ((ApplicationUser)e.EditModel).LastName
                 || ((ApplicationUser)e.DataItem).TitleBefore != ((ApplicationUser)e.EditModel).TitleBefore

@@ -99,7 +99,7 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         {
             var userRole = await _userManager.GetRolesAsync(userOrig);
             if (userRole != null && userRole.Count > 0) { 
-                var resultRemove = await _userManager.RemoveFromRoleAsync(user, userRole.First());
+                var resultRemove = await _userManager.RemoveFromRoleAsync(userOrig, userRole.First());
                 if (!resultRemove.Succeeded)
                 { 
                     _logger.LogError("Fail of removing user ({UserName}) from role {UserRole}.", user.UserName, userRole.First());

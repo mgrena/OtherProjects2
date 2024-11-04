@@ -11,6 +11,7 @@ namespace Krka.MoveOn.Services
         {
             return await _context.Patients
                 .Where(p => p.DeletedAt == null)
+                .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
         }
 
