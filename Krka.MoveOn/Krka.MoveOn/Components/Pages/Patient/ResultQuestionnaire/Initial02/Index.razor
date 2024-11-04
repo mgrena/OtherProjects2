@@ -4,6 +4,9 @@
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.ResultQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
