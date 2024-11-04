@@ -38,15 +38,16 @@
                     <NavLink id="menu-top" class="button-link hidden" onclick="(document.getElementById('sidebar').classList.toggle('auto-expanded'), document.getElementById('menu-top').classList.toggle('hidden'))">
                         <DxButton RenderStyle="@ButtonRenderStyle.Dark" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-menu"></DxButton>
                     </NavLink>
-                    <ReturnButton />
+                    
                     <AuthorizeView>
-                        <Authorized>                              
+                        <Authorized>
+                            <ReturnButton />
                             <NavLink href="Account/Manage" class="button-link menubutton-float-end display-desktop">
                                 <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="@context.User.Identity?.Name" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-user"></DxButton>
                             </NavLink>
-                            <form action="Account/Logout" method="post" class="display-desktop">
+                            <form action="Account/Logout" method="post" class="display-desktop" onsubmit="localStorage.clear(); sessionStorage.clear();">
                                 <AntiforgeryToken />
-                                <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                                    <input type="hidden" name="ReturnUrl" value="Account/Login" />
                                 <DxButton RenderStyle="@ButtonRenderStyle.Dark" SubmitFormOnClick="true" Text="Odhlásiť sa" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-log-out"></DxButton>
                             </form>
                         </Authorized>
