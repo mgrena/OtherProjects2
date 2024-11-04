@@ -1,4 +1,4 @@
-﻿@page "/patients/"
+﻿@page "/patients"
 
 @using Krka.MoveOn.Data
 @using Krka.MoveOn.Services
@@ -22,7 +22,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IToastNotificationService ToastService
-
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ProtectedSessionStorage SessionStorage
 
 <div class="d-flex align-items-center custom-toast-background">
@@ -125,6 +125,48 @@
                 Pacient č.  <span style="color:#6e7de8; font-weight: bold;">@selectedPatientCode</span>
 
             </div>
+            <div>
+                <EditForm Model="@selectedPatient"
+                          Context="EditFormContext"
+                          OnValidSubmit="@HandleConfirmationSubmit">
+                    <DxFormLayout CssClass="w-100">
+                        <DxFormLayoutGroup>
+
+                            <DxStackLayout CssClass="w-100" Orientation="@Orientation.Vertical">
+                                <Items>
+                                    <DxStackLayoutItem>
+                                        <Template>
+                                            <DxFormLayoutItem Caption="Má pacient podpísaný informovaný súhlas so štúdiou?">
+                                                <DxCheckBox @bind-Checked="selectedPatient.InfoConfirmation" Text="áno" ReadOnly="@isReadOnly" />
+                                            </DxFormLayoutItem>
+                                        </Template>
+                                    </DxStackLayoutItem>
+                                    <DxStackLayoutItem>
+                                        <Template>
+                                            <DxFormLayoutItem Caption="Má pacient podpísaný Formulár súhlasu s nariadením GDPR?">
+                                                <DxCheckBox @bind-Checked="selectedPatient.GDPRConfirmation" Text="áno" ReadOnly="@isReadOnly" />
+                                            </DxFormLayoutItem>
+                                        </Template>
+                                    </DxStackLayoutItem>
+                                </Items>
+                            </DxStackLayout>
+
+
+                        <DxFormLayoutItem ColSpanMd="12">
+                            <div style="margin-top: 5px">
+                                @if (!isReadOnly)
+                                {
+                                    <DxButton SubmitFormOnClick="true"
+                                                Text="Uložiť"
+                                                RenderStyle="ButtonRenderStyle.Primary" />
+                                }
+                            </div>
+                        </DxFormLayoutItem>
+
+                        </DxFormLayoutGroup>
+                    </DxFormLayout>
+                </EditForm>
+            </div>
             <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
                 Udalosti
             </div>
@@ -196,19 +238,54 @@
 
 
 @code {
+
+    public int? preSelectedPatientId { get; set; }
+
     IGrid patientsGrid { get; set; }
     public List<Data.Patient> Patients { get; set; }
     public List<Data.Questionnaires.Questionnaire> Questionnaires { get; set; }
+
+    private Data.Patient selectedPatient = new Data.Patient
+        {
+            UserId = "default",           
+            PatientCode = "default",        
+            InfoConfirmation = false,
+            GDPRConfirmation = false,
+            ModifiedAt = DateTime.Now,          
+            CreatedAt = DateTime.Now            
+        };
 
     private string? selectedPatientCode;
     private int? selectedPatientId;
     private bool hasQuestionnaires; 
 
+    bool isReadOnly = false;
+
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
         Patients = await PatientService.GetPatientsAsync();
+
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (preSelectedPatientId.HasValue)
+        {
+            var selectedPatient = Patients.FirstOrDefault(p => p.Id == preSelectedPatientId.Value);
+            if (selectedPatient != null)
+            {
+                await patientsGrid.SetFocusedDataItemAsync(selectedPatient);
+            }
+        }
+    }
     /// <summary>
     /// Nacitanie Id aktualneho pouzivatela
     /// </summary>
@@ -252,6 +329,20 @@
     }
 
     /// <summary>
+    /// Notifikacia
+    /// </summary>
+    private void UpdateToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje o pacientovi boli úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    /// <summary>
     /// Reload Grid
     /// </summary>
     /// <returns></returns>
@@ -283,7 +374,7 @@
             newPatient.ModifiedAt = DateTime.Now;
         }
     }
-    
+
     void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
     {
         if (e.IsNew)
@@ -351,10 +442,24 @@
     /// <returns></returns>
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
-        var patient = (Data.Patient)e.DataItem;
-        await PatientService.DeletePatientAsync(patient.Id);
+        await PatientService.SavePatientAsync(selectedPatient);
         await UpdateDataAsync();
         DeleteToast();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    async void HandleConfirmationSubmit()
+    {
+        if (selectedPatient.UserId != "default")
+        {
+            await PatientService.SavePatientAsync(selectedPatient);
+            await UpdateDataAsync();
+            UpdateToast();
+        }
     }
 
     /// <summary>
@@ -376,6 +481,10 @@
     private async void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
     {
         var patient = e.DataItem as Data.Patient;
+        if (patient is not null)
+        {
+            selectedPatient = patient;
+        }
         selectedPatientCode = patient?.PatientCode;
         selectedPatientId = patient?.Id;
 
