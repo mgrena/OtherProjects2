@@ -41,7 +41,7 @@
         <PageTitle>Welcome</PageTitle>
 
         <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
-            Pacienti
+            Pacienti (@PatientService.PatientCount)
         </div>
         <DxGrid @ref="patientsGrid"
                 Data="Patients"
@@ -78,6 +78,10 @@
             <Columns>
                 <DxGridDataColumn FieldName="PatientCode" Caption="Identifikačný kód pacienta" />
                 <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
+                @if (isAdminOrOffice)
+                {
+                    <DxGridDataColumn FieldName="Doctor" Caption="Doktor" />
+                }
 
                 <DxGridCommandColumn Width="30px" NewButtonVisible="false">
                     <CellDisplayTemplate Context="gridContext">
@@ -107,7 +111,7 @@
             <EditFormTemplate Context="editFormContext">
                 <DxFormLayout>
                     <div style="display: flex; align-items: center;">
-                        <div style=" margin-top: 5px; margin-left: 5px;">
+                        <div style=" margin-top: 8px; margin-left: 8px;">
                             <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
                                 <img src="images/info.svg" width="16" height="16" alt="Info" />
                             </DxButton>
@@ -120,14 +124,16 @@
                                   Position="FlyoutPosition.Bottom"
                                   PreventCloseOnPositionTargetClick="true"
                                   Width="240">
-                            Údaje o všetkých pacientoch budú anonymizované. Jednotliví pacienti budú figurovať pod všeobecným označením miesta centra (ZV – Zvolen, MT– Martin, BAR – Bratislava Ružinov, BAK – Bratislava Kramáre, TT – Trnava, NR – Nitra, RK – Ružomberok, BJ – Bardejov, KE – Košice, GA– Galanta) a poradového čísla pacienta v danom centre, napríklad ZV19, MT11 a pod.
+                            Údaje o všetkých pacientoch budú anonymizované. Jednotliví pacienti budú figurovať pod všeobecným <b>označením miesta centra</b> (ZV – Zvolen, MT– Martin, BAR – Bratislava Ružinov, BAK – Bratislava Kramáre, TT – Trnava, NR – Nitra, RK – Ružomberok, BJ – Bardejov, KE – Košice, GA– Galanta) a <b>poradového čísla pacienta</b> v danom centre, <span style="color:cornflowerblue">napríklad ZV19, MT11 a pod </span>.
                         </DxFlyout>
                     </div>
+                    @* <DxFormLayoutItem Caption="Doktor" ColSpanMd="12">
+                        <DxComboBox Data="@Doctors" TextFieldName="UserName" ValueFieldName="Id" @bind-Value="selectedDoctorId" />
+                    </DxFormLayoutItem> *@
                 </DxFormLayout>
             </EditFormTemplate>
         </DxGrid>
     </div>
-
 
 
     <div style="width: 45%">
@@ -144,7 +150,7 @@
                           Context="EditFormContext"
                           OnValidSubmit="@HandleConfirmationSubmit">
                     <DxFormLayout CssClass="w-100">
-                        <DxFormLayoutGroup>
+                        <DxFormLayoutGroup Caption="Povolenia">
 
                             <DxStackLayout CssClass="w-100" Orientation="@Orientation.Vertical">
                                 <Items>
@@ -252,8 +258,8 @@
 
 
 @code {
-
     IGrid patientsGrid { get; set; }
+    // private List<ApplicationUser> Doctors;
     public List<Data.Patient> Patients { get; set; }
     public List<Data.Questionnaires.Questionnaire> Questionnaires { get; set; }
 
@@ -267,11 +273,13 @@
             CreatedAt = DateTime.Now
         };
 
+    private string selectedDoctorId;
     private string? selectedPatientCode;
     private int? selectedPatientId;
     private bool hasQuestionnaires;
     private bool isRendered = false;
-    private bool IsInfoOpen = false;
+    private bool IsInfoOpen = true;
+    private bool isAdminOrOffice;
 
     bool isReadOnly = false;
 
@@ -280,13 +288,15 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
+        isAdminOrOffice = user.IsInRole("Admin") || user.IsInRole("Office");
+
         if (user.IsInRole("Office"))
         {
             isReadOnly = true;
         }
 
         Patients = await PatientService.GetPatientsAsync();
-
+        // Doctors = await PatientService.GetDoctorsAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -473,7 +483,8 @@
     /// <returns></returns>
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
-        await PatientService.SavePatientAsync(selectedPatient);
+        var patient = (Data.Patient)e.DataItem;
+        await PatientService.DeletePatientAsync(patient.Id);
         await UpdateDataAsync();
         DeleteToast();
     }

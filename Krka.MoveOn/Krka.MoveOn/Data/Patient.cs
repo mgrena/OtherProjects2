@@ -37,5 +37,8 @@ namespace Krka.MoveOn.Data
         [Column("deleted_at")]
         public DateTime? DeletedAt { get; set; }
 
+        [NotMapped]
+        public string? Doctor { get; set; }
+
     }
 }
