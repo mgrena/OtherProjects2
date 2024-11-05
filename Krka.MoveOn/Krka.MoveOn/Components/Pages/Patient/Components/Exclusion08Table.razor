@@ -15,7 +15,7 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Údaje o predčasnom vylúčení" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
-            <DxFormLayoutItem Caption="Ukončuje subjekt účasť v štúdii?" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+            <DxFormLayoutItem Caption="Ukončuje subjekt účasť v štúdii?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                 <InputRadioGroup @bind-Value="@exc!.Exc_Q" class="d-flex flex-wrap" @onchange="OnFieldChanged">
                     @foreach (var item in exc_q_Answer)
                     {
@@ -28,7 +28,7 @@
 
                 @if (isExc_q_Answer || isExc_3_1_Answer || isExc_3_6_Answer)
                 {
-                    <DxFormLayoutItem Caption="Dátum predčasného vylúčenia" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                    <DxFormLayoutItem Caption="Dátum predčasného vylúčenia" ColSpanMd="4" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <ChildContent Context="dateContext">
                             @if (isReadOnly)
                             {
@@ -41,6 +41,7 @@
                             <ValidationMessage For="@(() => exc.Exc_1)" />
                         </ChildContent>
                     </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="8"/>
 
                     <DxFormLayoutItem Caption="Ako ste zbierali údaje o pacientoch?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <ChildContent Context="dataContext">

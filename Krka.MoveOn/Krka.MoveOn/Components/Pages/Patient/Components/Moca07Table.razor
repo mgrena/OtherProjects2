@@ -13,7 +13,7 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Modifikovaná škála podľa Hoehenovej a Yahra" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
-            <DxFormLayoutItem Caption="Vyznačte prosím odpoveď, ktorá vyjadruje štádium ochorenia." CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+            <DxFormLayoutItem Caption="Vyznačte prosím odpoveď, ktorá vyjadruje štádium ochorenia." CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1" ColSpanMd="12">
                 <InputRadioGroup @bind-Value="@moca!.Mh_1" class="d-flex flex-wrap">
                     @foreach (var item in mh_1_Answer)
                     {
