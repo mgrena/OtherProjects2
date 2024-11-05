@@ -57,13 +57,14 @@
                 EditMode="GridEditMode.PopupEditForm"
                 FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
                 ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                PopupEditFormHeaderText="Pridať pacienta"
                 TextWrapEnabled="false"
                 HighlightRowOnHover="true"
                 EditModelSaving="Grid_EditModelSaving"
-                CustomizeEditModel="Grid_CustomizeEditModel_New"                
+                CustomizeEditModel="Grid_CustomizeEditModel_New"
                 DataItemDeleting="Grid_DataItemDeleting"
-                FocusedRowEnabled ="true"
-                FocusedRowChanged="OnFocusedRowChanged"> 
+                FocusedRowEnabled="true"
+                FocusedRowChanged="OnFocusedRowChanged">
 
             <ToolbarTemplate Context="toolbarContext">
                 <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
@@ -82,12 +83,12 @@
                     <CellDisplayTemplate Context="gridContext">
                         <div class="grid-cell-align-center">
                             <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                      RenderStyle="ButtonRenderStyle.Link"                                     
+                                      RenderStyle="ButtonRenderStyle.Link"
                                       aria-label="Delete"
                                       Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                                <img src="images/delete.svg" width="20" height="20" alt="Vymazať"  />
+                                <img src="images/delete.svg" width="20" height="20" alt="Vymazať" />
                             </DxButton>
-                         
+
                         </div>
                     </CellDisplayTemplate>
                     <CellEditTemplate Context="editContext">
@@ -96,8 +97,7 @@
                                       aria-label="Delete"
                                       CssClass="grid-disabled-button"
                                       IconCssClass="grid-icon grid-icon-delete"
-                                      RenderStyle="ButtonRenderStyle.Link"
-                                      />
+                                      RenderStyle="ButtonRenderStyle.Link" />
 
                         </div>
                     </CellEditTemplate>
@@ -106,9 +106,23 @@
 
             <EditFormTemplate Context="editFormContext">
                 <DxFormLayout>
-                    <DxFormLayoutItem Caption="Identifikačný kód pacienta">
-                        @editFormContext.GetEditor("PatientCode")
-                    </DxFormLayoutItem>  
+                    <div style="display: flex; align-items: center;">
+                        <div style=" margin-top: 5px; margin-left: 5px;">
+                            <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
+                                <img src="images/info.svg" width="16" height="16" alt="Info" />
+                            </DxButton>
+                        </div>
+                        <DxFormLayoutItem Caption="Identifikačný kód pacienta" ColSpanMd="12">
+                            @editFormContext.GetEditor("PatientCode")
+                        </DxFormLayoutItem>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen"
+                                  PositionTarget=".info-icon-btn"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Údaje o všetkých pacientoch budú anonymizované. Jednotliví pacienti budú figurovať pod všeobecným označením miesta centra (ZV – Zvolen, MT– Martin, BAR – Bratislava Ružinov, BAK – Bratislava Kramáre, TT – Trnava, NR – Nitra, RK – Ružomberok, BJ – Bardejov, KE – Košice, GA– Galanta) a poradového čísla pacienta v danom centre, napríklad ZV19, MT11 a pod.
+                        </DxFlyout>
+                    </div>
                 </DxFormLayout>
             </EditFormTemplate>
         </DxGrid>
@@ -152,16 +166,16 @@
                             </DxStackLayout>
 
 
-                        <DxFormLayoutItem ColSpanMd="12">
-                            <div style="margin-top: 5px">
-                                @if (!isReadOnly)
-                                {
-                                    <DxButton SubmitFormOnClick="true"
-                                                Text="Uložiť"
-                                                RenderStyle="ButtonRenderStyle.Primary" />
-                                }
-                            </div>
-                        </DxFormLayoutItem>
+                            <DxFormLayoutItem ColSpanMd="12">
+                                <div style="margin-top: 5px">
+                                    @if (!isReadOnly)
+                                    {
+                                        <DxButton SubmitFormOnClick="true"
+                                                  Text="Uložiť"
+                                                  RenderStyle="ButtonRenderStyle.Primary" />
+                                    }
+                                </div>
+                            </DxFormLayoutItem>
 
                         </DxFormLayoutGroup>
                     </DxFormLayout>
@@ -245,18 +259,19 @@
 
     private Data.Patient selectedPatient = new Data.Patient
         {
-            UserId = "default",           
-            PatientCode = "default",        
+            UserId = "default",
+            PatientCode = "default",
             InfoConfirmation = false,
             GDPRConfirmation = false,
-            ModifiedAt = DateTime.Now,          
-            CreatedAt = DateTime.Now            
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now
         };
 
     private string? selectedPatientCode;
     private int? selectedPatientId;
-    private bool hasQuestionnaires; 
+    private bool hasQuestionnaires;
     private bool isRendered = false;
+    private bool IsInfoOpen = false;
 
     bool isReadOnly = false;
 
@@ -452,7 +467,7 @@
     }
 
     /// <summary>
-    /// Nastavenie objektu "DeletedAt" 
+    /// Nastavenie objektu "DeletedAt"
     /// </summary>
     /// <param name="e"></param>
     /// <returns></returns>
@@ -464,7 +479,7 @@
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="e"></param>
     /// <returns></returns>
@@ -487,11 +502,11 @@
     {
         var questionnaires = await QuestionnaireService.GetQuestionnairesByPatientIdAsync(patientId);
         hasQuestionnaires = questionnaires.Any(); // ak obsahuje polozky
-        Questionnaires = hasQuestionnaires ? questionnaires : new List<Data.Questionnaires.Questionnaire>(); 
+        Questionnaires = hasQuestionnaires ? questionnaires : new List<Data.Questionnaires.Questionnaire>();
     }
 
     /// <summary>
-    /// Zmena focusnuteho riadku 
+    /// Zmena focusnuteho riadku
     /// </summary>
     /// <param name="e"></param>
     private async void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
