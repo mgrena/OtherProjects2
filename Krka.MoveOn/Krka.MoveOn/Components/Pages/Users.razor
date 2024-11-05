@@ -73,11 +73,18 @@ else
                     </div>
                 </HeaderTemplate>
                 <CellDisplayTemplate Context="gridContext">
+                    @{
+                        var user = (ApplicationUser)gridContext.DataItem;
+                    }
                     <div class="grid-cell-align-center">
                         <DxButton IconCssClass="grid-icon grid-icon-edit"
                                   RenderStyle="ButtonRenderStyle.Link"
                                   title="Upraviť údaje používateľa"
                                   Click="@(() => Grid!.StartEditDataItemAsync(gridContext.DataItem))" />
+                        <DxButton IconCssClass="grid-icon grid-icon-key"
+                                  RenderStyle="ButtonRenderStyle.Link"
+                                  title="Resetnúť heslo"
+                                  Click="@(async () => await OnResetPasswordClick(user))" />
                         <DxButton IconCssClass="grid-icon grid-icon-delete"
                                   RenderStyle="ButtonRenderStyle.Link"
                                   title="Vymazať používateľa"
@@ -180,11 +187,12 @@ else
     }
     private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
-        var user = (ApplicationUser)e.EditModel;
+        var userUpdated = (ApplicationUser)e.EditModel;
+        var userOrig = (ApplicationUser)e.DataItem;
 
         if (e.IsNew)
         {
-            var resultUser = await UserService.CreateUserAsync(user);
+            var resultUser = await UserService.CreateUserAsync(userUpdated);
             if (!resultUser.Succeeded)
             {
                 identityErrors = resultUser.Errors.ToList();
@@ -194,31 +202,31 @@ else
         else
         {
             // change phone number
-            if (((ApplicationUser)e.DataItem).PhoneNumber != ((ApplicationUser)e.EditModel).PhoneNumber)
+            if (userOrig.PhoneNumber != userUpdated.PhoneNumber)
             {
-                var resultUser = await UserService.SetPhoneNumberAsync(user);
+                var resultUser = await UserService.SetPhoneNumberAsync(userUpdated);
                 if (!resultUser.Succeeded)
                     identityErrors = resultUser.Errors.ToList();
             }
             // change user name / email
-            if (((ApplicationUser)e.DataItem).UserName != ((ApplicationUser)e.EditModel).UserName)
+            if (userOrig.UserName != userUpdated.UserName)
             {
-                await UserService.GenerateChangeEmailTokenAsync(user);
+                await UserService.GenerateChangeEmailTokenAsync(userUpdated);
             }
             // change role
-            if (((ApplicationUser)e.DataItem).Role != ((ApplicationUser)e.EditModel).Role)
+            if (userOrig.Role != userUpdated.Role)
             {
-                var result = await UserService.AddUserToRoleAsync(user);
+                var result = await UserService.AddUserToRoleAsync(userUpdated);
                 if (!result.Succeeded)
                     identityErrors.AddRange(result.Errors.ToList());
             }
             // chnage other user data
-            if (((ApplicationUser)e.DataItem).FirstName != ((ApplicationUser)e.EditModel).FirstName
-                || ((ApplicationUser)e.DataItem).LastName != ((ApplicationUser)e.EditModel).LastName
-                || ((ApplicationUser)e.DataItem).TitleBefore != ((ApplicationUser)e.EditModel).TitleBefore
-                || ((ApplicationUser)e.DataItem).TitleAfter != ((ApplicationUser)e.EditModel).TitleAfter)
+            if (userOrig.FirstName != userUpdated.FirstName
+                || userOrig.LastName != userUpdated.LastName
+                || userOrig.TitleBefore != userUpdated.TitleBefore
+                || userOrig.TitleAfter != userUpdated.TitleAfter)
             {
-                var resultUser = await UserService.UpdateUserAsync(user);
+                var resultUser = await UserService.UpdateUserAsync(userUpdated);
                 if (!resultUser.Succeeded)
                     identityErrors.AddRange(resultUser.Errors.ToList());
             }
@@ -282,6 +290,12 @@ else
         //     identityErrors.Add(new() { Code = "4", Description = "Pole Heslo musí byť aspoň 6 a maximálne 100 znakov dlhé." });
         // if (!string.IsNullOrEmpty(anUser.ConfirmPassword) && !anUser.ConfirmPassword.Equals(anUser.Password))
         //     identityErrors.Add(new() { Code = "5", Description = "Heslo a potvrdenie hesla sa nezhodujú." });
+    }
+
+    private async Task OnResetPasswordClick(ApplicationUser user)
+    {
+        if (user == null) return;
+        await UserService.GeneratePasswordResetTokenAsync(user);
     }
 
     public void Dispose()

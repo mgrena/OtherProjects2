@@ -310,3 +310,7 @@ html, body {
     -webkit-mask-image: url("/images/pencil-square.svg");
     mask-image: url("/images/pencil-square.svg");
 }
+.grid-icon-key {
+    -webkit-mask-image: url("/images/key.svg");
+    mask-image: url("/images/key.svg");
+}

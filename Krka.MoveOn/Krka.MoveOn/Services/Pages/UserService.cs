@@ -1,5 +1,4 @@
-﻿using Krka.MoveOn.Components.Pages;
-using Krka.MoveOn.Data;
+﻿using Krka.MoveOn.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -179,6 +178,16 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
             new Dictionary<string, object?> { ["userId"] = user.Id, ["email"] = user.UserName!, ["code"] = code });
 
         await _emailSender.SendConfirmationLinkAsync(user, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));
+    }
+    public async Task GeneratePasswordResetTokenAsync(ApplicationUser user)
+    {
+        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = _navigationManager.GetUriWithQueryParameters(
+            _navigationManager.ToAbsoluteUri("Account/ResetPassword").AbsoluteUri,
+            new Dictionary<string, object?> { ["code"] = code });
+
+        await _emailSender.SendPasswordResetLinkAsync(user, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));
     }
 
     private ApplicationUser CreateUser()
