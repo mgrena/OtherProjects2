@@ -61,16 +61,29 @@
 
     private async Task OnValidSubmitAsync() {
         var authenticatorCode = Input.TwoFactorCode!.Replace(" ", string.Empty).Replace("-", string.Empty);
-        var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, RememberMe, Input.RememberMachine);
+
+        var isTokenValid = await UserManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultAuthenticatorProvider, authenticatorCode);
         var userId = await UserManager.GetUserIdAsync(user);
 
-        if(result.Succeeded) {
-            Logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", userId);
-            RedirectManager.RedirectTo(ReturnUrl);
-        } else if(result.IsLockedOut) {
-            Logger.LogWarning("User with ID '{UserId}' account locked out.", userId);
-            RedirectManager.RedirectTo("Account/Lockout");
-        } else {
+        if (isTokenValid)
+        {
+            await UserManager.UpdateSecurityStampAsync(user);
+            var result = await SignInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, RememberMe, Input.RememberMachine);
+
+            if (result.Succeeded)
+            {
+                Logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", userId);
+                RedirectManager.RedirectTo(ReturnUrl);
+            }
+            else if (result.IsLockedOut)
+            {
+                Logger.LogWarning("User with ID '{UserId}' account locked out.", userId);
+                RedirectManager.RedirectTo("Account/Lockout");
+            }
+        
+        }
+        else
+        {
             Logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", userId);
             message = "Chyba: Neplatný overovací kód.";
         }

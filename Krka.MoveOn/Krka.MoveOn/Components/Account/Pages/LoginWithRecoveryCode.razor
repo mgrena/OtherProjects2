@@ -55,20 +55,28 @@
     private async Task OnValidSubmitAsync()
     {
         var recoveryCode = Input.RecoveryCode.Replace(" ", string.Empty);
-
-        var result = await SignInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
-
         var userId = await UserManager.GetUserIdAsync(user);
 
-        if (result.Succeeded)
+
+        var isRecoveryCodeValid = await UserManager.RedeemTwoFactorRecoveryCodeAsync(user, recoveryCode);
+
+        if (isRecoveryCodeValid.Succeeded)
         {
-            Logger.LogInformation("User with ID '{UserId}' logged in with a recovery code.", userId);
-            RedirectManager.RedirectTo(ReturnUrl);
-        }
-        else if (result.IsLockedOut)
-        {
-            Logger.LogWarning("User account locked out.");
-            RedirectManager.RedirectTo("Account/Lockout");
+            await UserManager.UpdateSecurityStampAsync(user);
+
+            var result = await SignInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+
+            if (result.Succeeded)
+            {
+                Logger.LogInformation("User with ID '{UserId}' logged in with a recovery code.", userId);
+                RedirectManager.RedirectTo(ReturnUrl);
+            }
+            else if (result.IsLockedOut)
+            {
+                Logger.LogWarning("User account locked out.");
+                RedirectManager.RedirectTo("Account/Lockout");
+            }
+
         }
         else
         {
