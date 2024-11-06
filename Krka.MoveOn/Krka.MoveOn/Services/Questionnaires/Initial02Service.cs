@@ -9,10 +9,11 @@ namespace Krka.MoveOn.Services.Questionnaires
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<List<QuestionnaireInitial02>> GetQuestionnaireInitial02(int questionnaireId)
+        public async Task<List<QuestionnaireInitial02>> GetQuestionnaireInitial02(string questionnaireId)
         {
             return await _context.QuestionnaireInitial02s
                 .Where(q => q.Questionnaire_id == questionnaireId && q.DeletedAt == null)
+                .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
 

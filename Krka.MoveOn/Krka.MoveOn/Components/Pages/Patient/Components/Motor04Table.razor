@@ -1,0 +1,294 @@
+﻿@using Krka.MoveOn.Components.Pages.Components
+@using Krka.MoveOn.Services.Questionnaires
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Motor04Service Motor04Service
+@inject Motor05Service Motor05Service
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastNotificationService ToastService
+
+<div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; display: flex; align-items: center; font-weight: bold;">
+    <span>MDS-UPDRS škála, časť I. – Nemotorické stránky denného života (nM-EDL)</span>
+    <DxButton CssClass="info-icon-btn1" Click="() => IsInfoOpen1 = !IsInfoOpen1" IconCssClass="grid-toolbar-save" style="margin-left: auto; margin-top: 5px;">
+        <ChildContent Context="buttonContext">
+            <img src="images/info.svg" width="16" height="16" alt="Info" />
+        </ChildContent>
+    </DxButton>
+    <DxFlyout @bind-IsOpen="@IsInfoOpen1"
+              PositionTarget=".info-icon-btn1"
+              Position="FlyoutPosition.Bottom"
+              PreventCloseOnPositionTargetClick="true"
+              Width="240">
+        Min = 0 / Max = 4.
+    </DxFlyout>
+</div>
+
+<DxGrid @ref="nonmotGrid"
+        Data="Nonmot"
+        KeyFieldName="Fieldname"
+        PageSize="15"
+        ValidationEnabled="false"
+        EditMode="GridEditMode.EditCell"
+        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+        ColumnResizeMode="GridColumnResizeMode.NextColumn"
+        TextWrapEnabled="false"
+        HighlightRowOnHover="true"
+        EditModelSaving="Grid_EditModelSaving"
+        FocusedRowEnabled="false">
+
+    <Columns>
+        <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
+        <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
+        <DxGridDataColumn FieldName="Value" Caption="Počet bodov" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+            <EditSettings>
+                <DxSpinEditSettings MinValue="0" MaxValue="4" />
+            </EditSettings>
+        </DxGridDataColumn>
+    </Columns>
+
+    <TotalSummary>
+        <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
+    </TotalSummary>
+</DxGrid>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string questionnaireId { get; set; }
+
+    bool IsInfoOpen1 { get; set; } = false;
+
+    IGrid nonmotGrid { get; set; }
+
+    public List<MDSItem>? Nonmot { get; set; }
+
+    Dictionary<Data.Questionnaires.QuestionnaireNonMotor04, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || nonmotGrid.IsEditing();
+
+    bool isReadOnly = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
+        await UpdateDataAsync();
+    }
+
+    async Task UpdateDataAsync()
+    {
+        var nonmot = await Motor04Service.GetQuestionnaireNonMotor04(questionnaireId);
+        Nonmot = new List<MDSItem>();
+
+        #region "Table nonmot"
+
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_1", Number = "1.1", Name = "Zhoršenie kognitívnych funkcií", Value = (nonmot != null) ? nonmot.Nonmot_1 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_2", Number = "1.2", Name = "Halucinácie a psychózy", Value = (nonmot != null) ? nonmot.Nonmot_2 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_3", Number = "1.3", Name = "Depresívna nálada", Value = (nonmot != null) ? nonmot.Nonmot_3 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_4", Number = "1.4", Name = "Úzkostná nálada", Value = (nonmot != null) ? nonmot.Nonmot_4 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_5", Number = "1.5", Name = "Apatia", Value = (nonmot != null) ? nonmot.Nonmot_5 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_6", Number = "1.6", Name = "Prejavy syndrómu dopamínovej dysregulácie", Value = (nonmot != null) ? nonmot.Nonmot_6 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_7", Number = "1.7", Name = "Problémy so spánkom", Value = (nonmot != null) ? nonmot.Nonmot_7 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_8", Number = "1.8", Name = "Denná spavosť", Value = (nonmot != null) ? nonmot.Nonmot_8 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_9", Number = "1.9", Name = "Bolesť a iné poruchy citlivosti", Value = (nonmot != null) ? nonmot.Nonmot_9 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_10", Number = "1.10", Name = "Problémy s močením", Value = (nonmot != null) ? nonmot.Nonmot_10 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_11", Number = "1.11", Name = "Problémy so zápchou", Value = (nonmot != null) ? nonmot.Nonmot_11 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_12", Number = "1.12", Name = "Závrativosť pri zmene polohy tela", Value = (nonmot != null) ? nonmot.Nonmot_12 : 0 });
+        Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_13", Number = "1.13", Name = "Únava", Value = (nonmot != null) ? nonmot.Nonmot_13 : 0 });
+        #endregion
+
+        nonmotGrid.Reload();
+    }
+
+    private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var item = (MDSItem)e.EditModel;
+        var questionnaire = await Motor04Service.GetQuestionnaireNonMotor04(questionnaireId) ?? new Data.Questionnaires.QuestionnaireNonMotor04
+            {
+                Nonmot_1 = 0,
+                Nonmot_2 = 0,
+                Nonmot_3 = 0,
+                Nonmot_4 = 0,
+                Nonmot_5 = 0,
+                Nonmot_6 = 0,
+                Nonmot_7 = 0,
+                Nonmot_8 = 0,
+                Nonmot_9 = 0,
+                Nonmot_10 = 0,
+                Nonmot_11 = 0,
+                Nonmot_12 = 0,
+                Nonmot_13 = 0,
+                Questionnaire_id = questionnaireId,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
+            };
+
+        bool hasChanges = false;
+
+        switch (item.Fieldname)
+        {
+            case "Nonmot_1":
+                if (questionnaire.Nonmot_1 != item.Value)
+                {
+                    questionnaire.Nonmot_1 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_2":
+                if (questionnaire.Nonmot_2 != item.Value)
+                {
+                    questionnaire.Nonmot_2 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_3":
+                if (questionnaire.Nonmot_3 != item.Value)
+                {
+                    questionnaire.Nonmot_3 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_4":
+                if (questionnaire.Nonmot_4 != item.Value)
+                {
+                    questionnaire.Nonmot_4 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_5":
+                if (questionnaire.Nonmot_5 != item.Value)
+                {
+                    questionnaire.Nonmot_5 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_6":
+                if (questionnaire.Nonmot_6 != item.Value)
+                {
+                    questionnaire.Nonmot_6 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_7":
+                if (questionnaire.Nonmot_7 != item.Value)
+                {
+                    questionnaire.Nonmot_7 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_8":
+                if (questionnaire.Nonmot_8 != item.Value)
+                {
+                    questionnaire.Nonmot_8 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_9":
+                if (questionnaire.Nonmot_9 != item.Value)
+                {
+                    questionnaire.Nonmot_9 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_10":
+                if (questionnaire.Nonmot_10 != item.Value)
+                {
+                    questionnaire.Nonmot_10 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_11":
+                if (questionnaire.Nonmot_11 != item.Value)
+                {
+                    questionnaire.Nonmot_11 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_12":
+                if (questionnaire.Nonmot_12 != item.Value)
+                {
+                    questionnaire.Nonmot_12 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Nonmot_13":
+                if (questionnaire.Nonmot_13 != item.Value)
+                {
+                    questionnaire.Nonmot_13 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+        }
+
+
+        var nonmotItem = Nonmot.FirstOrDefault(n => n.Fieldname == item.Fieldname);
+        if (nonmotItem != null)
+        {
+            nonmotItem.Value = item.Value;
+        }
+
+        if (UnsavedChanges.TryGetValue(questionnaire, out var changes))
+        {
+            changes.ChangedFields.Add(item.Fieldname);
+        }
+        else
+        {
+            UnsavedChanges[questionnaire] = new DataChange(DataChangeType.Modification, new HashSet<string> { item.Fieldname });
+        }
+
+        if (hasChanges)
+        {
+            foreach (var unsavedChange in UnsavedChanges)
+            {
+                var changedItem = unsavedChange.Key;
+                var changeType = unsavedChange.Value.Type;
+                switch (changeType)
+                {
+                    case DataChangeType.Modification:
+                        await Motor04Service.SaveOrUpdateQuestionnaireNonMotor04(changedItem);
+                        ModifyToast();
+                        break;
+                }
+            }
+        }
+
+        await ClearUnsavedChangesAsync();
+        nonmotGrid.Reload();
+    }
+
+    /// <summary>
+    /// Alert
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Časť I. bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification }
+
+}
+
+

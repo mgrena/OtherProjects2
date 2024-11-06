@@ -1,0 +1,62 @@
+﻿@page "/ongoingQ/init/{questionnaireId:guid}"
+@using DevExpress.Blazor.Internal
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Initial02Service InitialService
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
+
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
+    <_OngoingBtn />
+
+
+    <Initial02DateHeader questionnaireId="@QuestionnaireIdAsString" />
+
+
+    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@QuestionnaireIdAsString" />
+
+</div>
+
+
+@code {
+    [Parameter]
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+
+    bool isReadOnly = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
+    }
+
+}

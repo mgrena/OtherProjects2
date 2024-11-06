@@ -8,10 +8,10 @@ namespace Krka.MoveOn.Data.Questionnaires
     {
         [Key]
         [Column("id")]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
-        [Column("questionnaire_id")]
-        public required int Questionnaire_id { get; set; }
+        [Column("questionnaire_id", TypeName = "nvarchar"), StringLength(450)]
+        public required string Questionnaire_id { get; set; }
 
         /// <summary>
         /// Nežiaduci účinok liečiva: => DialDrugEffect - ciselnik
@@ -48,5 +48,8 @@ namespace Krka.MoveOn.Data.Questionnaires
 
         [Column("created_at")]
         public required DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        [Column("deleted_at")]
+        public DateTime? DeletedAt { get; set; } = DateTime.Now;
     }
 }

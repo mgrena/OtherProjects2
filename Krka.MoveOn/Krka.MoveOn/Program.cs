@@ -11,6 +11,9 @@ using static System.Reflection.Metadata.BlobBuilder;
 using Krka.MoveOn.Interfaces;
 using Krka.MoveOn.Repositories;
 using Krka.MoveOn.Services.Questionnaires;
+using Krka.MoveOn.Services.Pages;
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,16 +34,28 @@ builder.Services.AddDevExpressBlazor(options => {
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddMvc();
 
+// configure services
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<General01Service>();
 builder.Services.AddScoped<Initial02Service>();
 builder.Services.AddScoped<Treatment03Service>();
-builder.Services.AddScoped<Motor040506Service>();
+builder.Services.AddScoped<Motor04Service>();
+builder.Services.AddScoped<Motor05Service>();
+builder.Services.AddScoped<Motor06Service>();
+builder.Services.AddScoped<Moca07Service>();
+builder.Services.AddScoped<Exclusion08Service>();
 builder.Services.AddScoped<QuestionnaireService>();
+builder.Services.AddTransient<DrugEffect09Service>(); 
+builder.Services.AddScoped<Satisfaction10Service>();
+
+// add authentication
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredSessionStorage();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -48,6 +63,7 @@ builder.Services.AddAuthentication(options => {
 })
     .AddIdentityCookies();
 
+// configure DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 if (connectionString.Contains("Password"))
 {
@@ -57,7 +73,7 @@ if (connectionString.Contains("Password"))
     connectionString = string.Format(connectionString, aPassword);
 }
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString), ServiceLifetime.Transient);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -66,9 +82,11 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<UserManager<ApplicationUser>>();
 
+// configure EmailSender
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpOptions"));
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
 
+// configure Logger
 builder.Logging.AddDbLogger();
 builder.Services.AddSingleton<ILogs, LogRepository>();
 builder.Services.AddHttpContextAccessor();

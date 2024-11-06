@@ -13,7 +13,7 @@ namespace Krka.MoveOn.Data.Dials
         [Column("type_q")]
         public required int Type_q { get; set; }
 
-        [Column(TypeName = "nvarchar"), StringLength(50)]
+        [Column(TypeName = "nvarchar"), StringLength(250)]
         public required string Name { get; set; }
 
         [Column("modified_at")]

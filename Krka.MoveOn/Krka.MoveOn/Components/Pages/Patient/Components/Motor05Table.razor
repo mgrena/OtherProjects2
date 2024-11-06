@@ -1,0 +1,291 @@
+﻿@using Krka.MoveOn.Services.Questionnaires
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Motor04Service Motor04Service
+@inject Motor05Service Motor05Service
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastNotificationService ToastService
+
+<div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; display: flex; align-items: center; font-weight: bold;">
+    <span>MDS-UPDRS škála, časť II. - Motorické aspekty každodenného života (M-EDL)</span>
+    <DxButton CssClass="info-icon-btn2" Click="() => IsInfoOpen2 = !IsInfoOpen2" IconCssClass="grid-toolbar-save" style="margin-left: auto;">
+        <ChildContent Context="buttonContext">
+            <img src="images/info.svg" width="16" height="16" alt="Info" />
+        </ChildContent>
+    </DxButton>
+    <DxFlyout @bind-IsOpen="@IsInfoOpen2"
+              PositionTarget=".info-icon-btn2"
+              Position="FlyoutPosition.Bottom"
+              PreventCloseOnPositionTargetClick="true"
+              Width="240">
+        Min = 0 / Max = 4.
+    </DxFlyout>
+</div>
+
+<DxGrid @ref="motGrid"
+        Data="Mot"
+        KeyFieldName="Fieldname"
+        PageSize="15"
+        ValidationEnabled="false"
+        EditMode="GridEditMode.EditCell"
+        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+        ColumnResizeMode="GridColumnResizeMode.NextColumn"
+        TextWrapEnabled="false"
+        HighlightRowOnHover="true"
+        EditModelSaving="Grid_EditModelSaving"
+        FocusedRowEnabled="false">
+
+    <Columns>
+        <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
+        <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
+        <DxGridDataColumn FieldName="Value" Caption="Počet bodov" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+            <EditSettings>
+                <DxSpinEditSettings MinValue="0" MaxValue="4" />
+            </EditSettings>
+        </DxGridDataColumn>
+    </Columns>
+
+    <TotalSummary>
+        <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
+    </TotalSummary>
+</DxGrid>
+
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string questionnaireId { get; set; }
+
+    bool IsInfoOpen2 { get; set; } = false;
+
+    IGrid motGrid { get; set; }
+
+    public List<MDSItem>? Mot { get; set; }
+
+    Dictionary<Data.Questionnaires.QuestionnaireMotor05, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || motGrid.IsEditing();
+
+    bool isReadOnly = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
+        await UpdateDataAsync();
+    }
+
+    async Task UpdateDataAsync()
+    {
+        var mot = await Motor05Service.GetQuestionnaireMotor05(questionnaireId);
+        Mot = new List<MDSItem>();
+
+        #region "Table mot"
+        Mot.Add(new MDSItem() { Fieldname = "Mot_1", Number = "2.1", Name = "Reč", Value = (mot != null) ? mot.Mot_1 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_2", Number = "2.2", Name = "Slinenie", Value = (mot != null) ? mot.Mot_2 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_3", Number = "2.3", Name = "Žuvanie a prehĺtanie", Value = (mot != null) ? mot.Mot_3 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_4", Number = "2.4", Name = "Príprava jedla a stolovanie", Value = (mot != null) ? mot.Mot_4 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_5", Number = "2.5", Name = "Obliekanie sa", Value = (mot != null) ? mot.Mot_5 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_6", Number = "2.6", Name = "Hygiena", Value = (mot != null) ? mot.Mot_6 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_7", Number = "2.7", Name = "Písanie", Value = (mot != null) ? mot.Mot_7 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_8", Number = "2.8", Name = "Koníčky a iné aktivity", Value = (mot != null) ? mot.Mot_8 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_9", Number = "2.9", Name = "Pohyblivosť v posteli", Value = (mot != null) ? mot.Mot_9 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_10", Number = "2.10", Name = "Tras", Value = (mot != null) ? mot.Mot_10 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_11", Number = "2.11", Name = "Vstávanie z postele, auta alebo hlbokej stoličky", Value = (mot != null) ? mot.Mot_11 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_12", Number = "2.12", Name = "Chôdza a rovnováha", Value = (mot != null) ? mot.Mot_12 : 0 });
+        Mot.Add(new MDSItem() { Fieldname = "Mot_13", Number = "2.13", Name = "Stuhnutie pohybu počas chôdze (freezing)", Value = (mot != null) ? mot.Mot_13 : 0 });
+        #endregion
+
+        motGrid.Reload();
+    }
+
+    private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var item = (MDSItem)e.EditModel;
+        var questionnaire = await Motor05Service.GetQuestionnaireMotor05(questionnaireId) ?? new Data.Questionnaires.QuestionnaireMotor05
+            {
+                Mot_1 = 0,
+                Mot_2 = 0,
+                Mot_3 = 0,
+                Mot_4 = 0,
+                Mot_5 = 0,
+                Mot_6 = 0,
+                Mot_7 = 0,
+                Mot_8 = 0,
+                Mot_9 = 0,
+                Mot_10 = 0,
+                Mot_11 = 0,
+                Mot_12 = 0,
+                Mot_13 = 0,
+
+                Questionnaire_id = questionnaireId,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
+            };
+
+        bool hasChanges = false;
+
+        switch (item.Fieldname)
+        {
+            case "Mot_1":
+                if (questionnaire.Mot_1 != item.Value)
+                {
+                    questionnaire.Mot_1 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_2":
+                if (questionnaire.Mot_2 != item.Value)
+                {
+                    questionnaire.Mot_2 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_3":
+                if (questionnaire.Mot_3 != item.Value)
+                {
+                    questionnaire.Mot_3 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_4":
+                if (questionnaire.Mot_4 != item.Value)
+                {
+                    questionnaire.Mot_4 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_5":
+                if (questionnaire.Mot_5 != item.Value)
+                {
+                    questionnaire.Mot_5 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_6":
+                if (questionnaire.Mot_6 != item.Value)
+                {
+                    questionnaire.Mot_6 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_7":
+                if (questionnaire.Mot_7 != item.Value)
+                {
+                    questionnaire.Mot_7 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_8":
+                if (questionnaire.Mot_8 != item.Value)
+                {
+                    questionnaire.Mot_8 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_9":
+                if (questionnaire.Mot_9 != item.Value)
+                {
+                    questionnaire.Mot_9 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_10":
+                if (questionnaire.Mot_10 != item.Value)
+                {
+                    questionnaire.Mot_10 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_11":
+                if (questionnaire.Mot_11 != item.Value)
+                {
+                    questionnaire.Mot_11 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_12":
+                if (questionnaire.Mot_12 != item.Value)
+                {
+                    questionnaire.Mot_12 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+            case "Mot_13":
+                if (questionnaire.Mot_13 != item.Value)
+                {
+                    questionnaire.Mot_13 = item.Value;
+                    hasChanges = true;
+                }
+                break;
+        }
+
+
+        var nonmotItem = Mot.FirstOrDefault(n => n.Fieldname == item.Fieldname);
+        if (nonmotItem != null)
+        {
+            nonmotItem.Value = item.Value;
+        }
+
+        if (UnsavedChanges.TryGetValue(questionnaire, out var changes))
+        {
+            changes.ChangedFields.Add(item.Fieldname);
+        }
+        else
+        {
+            UnsavedChanges[questionnaire] = new DataChange(DataChangeType.Modification, new HashSet<string> { item.Fieldname });
+        }
+
+        if (hasChanges)
+        {
+            foreach (var unsavedChange in UnsavedChanges)
+            {
+                var changedItem = unsavedChange.Key;
+                var changeType = unsavedChange.Value.Type;
+                switch (changeType)
+                {
+                    case DataChangeType.Modification:
+                        await Motor05Service.SaveOrUpdateQuestionnaireMotor05(changedItem);
+                        ModifyToast();
+                        break;
+                }
+            }
+        }
+        await ClearUnsavedChangesAsync();
+
+        motGrid.Reload();
+    }
+
+    /// <summary>
+    /// Alert
+    /// </summary>
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Časť II. bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification }
+}

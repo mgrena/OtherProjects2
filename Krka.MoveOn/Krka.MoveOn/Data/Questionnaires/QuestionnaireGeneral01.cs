@@ -11,8 +11,8 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("questionnaire_id")]
-        public required int Questionnaire_id { get; set; }
+        [Column("questionnaire_id", TypeName = "nvarchar"), StringLength(450)]
+        public required string Questionnaire_id { get; set; }
         /// <summary>
         /// Dátum (DD/MM/RRRR) 
         /// </summary>
@@ -59,26 +59,26 @@ namespace Krka.MoveOn.Data.Questionnaires
         ///   -Ak áno názov mediciny (číselnik na DialMedicines) !!!!!!!!!!
         /// </summary>
         [Column("gen_7_1_dm")]
-        public int Gen_7_1_DM { get; set; }
+        public int? Gen_7_1_DM { get; set; }
 
         /// <summary>
         ///  - Davka 
         /// </summary>
         [Column("gen_7_2", TypeName = "decimal(5,2)")]
-        public decimal Gen_7_2 { get; set; }
+        public decimal? Gen_7_2 { get; set; }
 
         /// <summary>
         /// - jednotka (číselnýk na DialUnits) !!!!!!!!! 
         /// </summary>
         [Column("gen_7_3_du")]
-        public int Gen_7_3_DU { get; set; }
+        public int? Gen_7_3_DU { get; set; }
 
 
         /// <summary>
         /// - Dĺžka užívania v rokoch 
         /// </summary>
         [Column("gen_7_4", TypeName = "decimal(3,1)")]
-        public decimal Gen_7_4 { get; set; }
+        public decimal? Gen_7_4 { get; set; }
 
         /// <summary>
         /// Ak na Otazku 7 dá odpoveď ine (Názov Mediciny)
@@ -90,7 +90,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// Ak na Otazku 7 dá odpoveď ine (Davka)
         /// </summary>
         [Column("gen_7_1_2", TypeName = "decimal(5,2)")]
-        public decimal Gen_7_1_2 { get; set; }
+        public decimal? Gen_7_1_2 { get; set; }
 
         /// <summary>
         /// Ak na Otazku 7 dá odpoveď ine - jednotka (číselnýk na DialUnits) !!!!!!!!!!!!!
@@ -102,7 +102,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         ///  Ak na Otazku 7 dá odpoveď ine - ( Dĺžka užívania v rokoch )
         /// </summary>
         [Column("gen_7_1_4", TypeName = "decimal(3,1)")]
-        public decimal Gen_7_1_4 { get; set; }
+        public decimal? Gen_7_1_4 { get; set; }
 
         /// <summary>
         /// Dĺžka trvania ťažkostí (v mesiacoch)
@@ -126,7 +126,13 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// 10.1 - Ak áno, ktorá špecializácia?   
         /// </summary>
         [Column("gen_10_1")]
-        public int? Gen_10_1 { get; set; } 
+        public int? Gen_10_1 { get; set; }
+
+        /// <summary>
+        /// 10.1 -Ak da moznost "Ine" (pise Specializaciu)
+        /// </summary>
+        [Column("gen_10_1_1", TypeName = "varchar"), StringLength(60)]
+        public string? Gen_10_1_1 { get; set; }
 
         /// <summary>
         /// Stal sa pacientovi pred objavením príznaku úraz hlavy? 
@@ -151,7 +157,6 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// </summary>
         [Column("gen_13_1", TypeName = "nvarchar"), StringLength(30)]
         public string? Gen_13_1 { get; set; }
-
 
         [Column("modified_at")]
         public  DateTime ModifiedAt { get; set; } = DateTime.Now;

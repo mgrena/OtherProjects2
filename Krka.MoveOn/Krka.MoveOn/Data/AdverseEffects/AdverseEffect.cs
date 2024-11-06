@@ -8,63 +8,66 @@ namespace Krka.MoveOn.Data.AdverseEffects
     {
         [Key]
         [Column("id")]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
-        [Column("id_questionnaire")]
-        public required int QuestionnaireId { get; set; }
+        [Column("id_questionnaire", TypeName = "nvarchar"), StringLength(450)]
+        public required string QuestionnaireId { get; set; }
 
         /// <summary>
         /// Nežiaduca udalosť 
         /// </summary>
-        [Column("adverse_effect",TypeName = "nvarchar"), StringLength(50)]
-        public required string Name { get; set; }
+        [Column("adverse_effect",TypeName = "nvarchar"), StringLength(150)]
+        public string? Name { get; set; }
 
         /// <summary>
         /// Začiatok
         /// </summary>
         [Column("start")]
-        public required int Start { get; set; }
+        public int? Start { get; set; }
 
         /// <summary>
         /// Frekvencia
         /// </summary>
         [Column("frequency")]
-        public required int Frequency { get; set; }
+        public int? Frequency { get; set; }
 
         /// <summary>
         /// Súvis
         /// </summary>
         [Column("related")]
-        public required int Related { get; set; }
+        public int? Related { get; set; }
 
         /// <summary>
-        /// Súvis
+        /// Zavaznost
         /// </summary>
         [Column("severity")]
-        public required int Severity { get; set; }
+        public int? Severity { get; set; }
 
         /// <summary>
         /// Intenzita
         /// </summary>
         [Column("intensity")]
-        public required int Intensity { get; set; }
+        public int? Intensity { get; set; }
 
         /// <summary>
         /// Vplyv na liečbu
         /// </summary>
         [Column("effect")]
-        public required int Effect { get; set; }
+        public int? Effect { get; set; }
 
         /// <summary>
-        /// Vplyv na liečbu
+        /// vysledok
         /// </summary>
         [Column("result")]
-        public required int Result { get; set; }
+        public int? Result { get; set; }
 
         [Column("modified_at")]
-        public required DateTime ModifiedAt { get; set; } = DateTime.Now;
+        public DateTime ModifiedAt { get; set; } = DateTime.Now;
 
         [Column("created_at")]
-        public required DateTime CreatedAt { get; set; } = DateTime.Now;
+        public  DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        [Column("deleted_at")]
+        public  DateTime? DeletedAt { get; set; }
     }
 }

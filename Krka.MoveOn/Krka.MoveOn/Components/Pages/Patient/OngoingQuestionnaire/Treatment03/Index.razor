@@ -1,0 +1,47 @@
+﻿@page "/ongoingQ/treat/{questionnaireId:guid}"
+
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject Treatment03Service TreatmentService
+
+
+
+
+<PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
+    <_OngoingBtn />
+
+    <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@QuestionnaireIdAsString" />
+
+</div>
+
+
+
+
+@code {
+    [Parameter]
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+
+}

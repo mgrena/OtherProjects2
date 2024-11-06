@@ -9,11 +9,18 @@ public class Treatment03Service(ApplicationDbContext context)
 {
     private readonly ApplicationDbContext _context = context;
 
-    public async Task<List<QuestionnaireTreatment03>> GetQuestionnaireTreatment03(int questionnaireId)
+    public async Task<List<QuestionnaireTreatment03>> GetQuestionnaireTreatment03(string questionnaireId)
     {
         return await _context.QuestionnaireTreatment03s
             .Where(q => q.Questionnaire_id == questionnaireId && q.DeletedAt == null)
+            .OrderByDescending(q => q.CreatedAt)
             .ToListAsync();
+    }
+
+    public async Task<QuestionnaireTreatment03?> GetQuestionnaireTreatment03ByQuestionnaireIdAsync(string questionnaireId)
+    {
+        return await Task.Run(() => _context.QuestionnaireTreatment03s
+                             .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
     }
 
 
@@ -25,6 +32,11 @@ public class Treatment03Service(ApplicationDbContext context)
     public async Task<List<DialActiveIngredient>> GetDialActiveIngredientAsync()
     {
         return await _context.DialActiveIngredients.ToListAsync();
+    }
+
+    public async Task<List<DialQGeneral>> GetDialGeneralAsync()
+    {
+        return await _context.DialQGenerals.ToListAsync();
     }
 
     public async Task SaveTreatmentAsync(QuestionnaireTreatment03 treat)
@@ -45,7 +57,6 @@ public class Treatment03Service(ApplicationDbContext context)
         }
         await _context.SaveChangesAsync();
     }
-
 
     public async Task DeleteTreatAsync(int treatId)
     {

@@ -1,0 +1,38 @@
+﻿::deep .form-layout-column {
+    display: flex;
+    flex-direction: column;
+}
+
+::deep .new-row {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+::deep .caption-styleH1 {
+    font-size: 14px;
+    color: #6e7de8;
+    font-weight: 600;
+
+}
+
+::deep .caption-styleH0 {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.buttons-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px; /* alebo akákoľvek hodnota, ktorú potrebuješ */
+}
+
+::deep .rectangular-button {
+    border-radius: 0;
+    padding: 30px 20px;
+    border: 1px solid black;
+    border-color: #dfdfdf;
+    flex: 1 1 20%; /* nastaví šírku na 20% kontajnera */
+}

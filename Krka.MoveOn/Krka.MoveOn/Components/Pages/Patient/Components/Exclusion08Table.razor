@@ -1,0 +1,476 @@
+﻿@using DevExpress.Blazor.Internal
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Components
+
+@inject Exclusion08Service ExclusionService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastNotificationService ToastService
+@inject IJSRuntime JSRuntime
+
+<EditForm Model="@exc"
+          Context="EditFormContext"
+          OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <DxFormLayout>
+        <DxFormLayoutGroup Caption="Údaje o predčasnom vylúčení" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
+            <DxFormLayoutItem Caption="Ukončuje subjekt účasť v štúdii?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <InputRadioGroup @bind-Value="@exc!.Exc_Q" class="d-flex flex-wrap" @onchange="OnFieldChanged">
+                    @foreach (var item in exc_q_Answer)
+                    {
+                        <label class="d-block m-2">
+                            <InputRadio class="m-2" @onclick="() => {OnExcQAnswer(item.Id); OnExc31Answer(item.Id); OnExc36Answer(item.Id);} " Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                        </label>
+                    }
+                </InputRadioGroup>
+                <ValidationMessage For="@(() => exc.Exc_Q)" />
+
+                @if (isExc_q_Answer || isExc_3_1_Answer || isExc_3_6_Answer)
+                {
+                    <DxFormLayoutItem Caption="Dátum predčasného vylúčenia" ColSpanMd="4" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                        <ChildContent Context="dateContext">
+                            @if (isReadOnly)
+                            {
+                                <DxDateEdit @bind-Date="@exc.Exc_1" ShowValidationIcon="true" required ReadOnly="true" />
+                            }
+                            else
+                            {
+                                <DxDateEdit @bind-Date="@exc.Exc_1" ShowValidationIcon="true" />
+                            }
+                            <ValidationMessage For="@(() => exc.Exc_1)" />
+                        </ChildContent>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="8"/>
+
+                    <DxFormLayoutItem Caption="Ako ste zbierali údaje o pacientoch?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                        <ChildContent Context="dataContext">
+                            <InputRadioGroup @bind-Value="@exc.Exc_2" class="d-flex flex-wrap">
+                                @foreach (var item in exc_2_Answer)
+                                {
+                                    <label class="d-block m-2">
+                                        <InputRadio class="m-2" @onclick="OnFieldChanged" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                                    </label>
+                                }
+                            </InputRadioGroup>
+                            <ValidationMessage For="@(() => exc.Exc_2)" />
+                        </ChildContent>
+                    </DxFormLayoutItem>
+
+                    <DxFormLayoutItem Caption="Aký je dôvod, prečo bol pacient predčasne vylúčený z tejto štúdie?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                        <ChildContent Context="reasonContext">
+                            <InputRadioGroup @bind-Value="@exc.Exc_3" class="d-flex flex-wrap" @onchange="OnFieldChanged">
+                                @foreach (var item in exc_3_Answer)
+                                {
+                                    <label class="d-block m-2">
+                                        <InputRadio class="m-2" @onclick="() => { OnExc31Answer(item.Id); OnExc36Answer(item.Id); }" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                                    </label>
+                                }
+                            </InputRadioGroup>
+                            <ValidationMessage For="@(() => exc.Exc_3)" />
+                        </ChildContent>
+                    </DxFormLayoutItem>
+                    <p style="color:red; margin-left: 20px; font-weight: 600;">
+                        * V prípade, že sú odpovede označené "*", zobrazí sa tabuľka pre zápis nežiaducich udalostí.
+                    </p>
+                }
+            </DxFormLayoutItem>
+
+            @if (isExc_3_1_Answer || isExc_3_6_Answer)
+            {
+                <div style="width: 98%; margin-left: 15px;">
+                    <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+                        Tabuľka nežiadúcej udalosti
+                    </div>
+                    <DxGrid @ref="advEffGrid"
+                            Data="AdverseEffects"
+                            PageSize="20"
+                            PagerPosition="GridPagerPosition.Bottom"
+                            PageSizeSelectorVisible="true"
+                            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                            PageSizeSelectorAllRowsItemVisible="true"
+                            PagerSwitchToInputBoxButtonCount="10"
+                            PagerVisibleNumericButtonCount="10"
+                            KeyFieldName="Id"
+                            ValidationEnabled="false"
+                            EditMode="GridEditMode.PopupEditForm"
+                            PopupEditFormHeaderText="Nežiadúca udalosť"
+                            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                            TextWrapEnabled="false"
+                            HighlightRowOnHover="true"
+                            EditModelSaving="Grid_EditModelSaving"
+                            DataItemDeleting="Grid_DataItemDeleting"
+                            FocusedRowEnabled="true">
+
+                        <ToolbarTemplate Context="toolbarContext">
+                            @if (!isReadOnly)
+                            {
+                                <ManagementToolbarWithoutSave NewClick="New_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                            }
+                        </ToolbarTemplate>
+
+                        <Columns>
+                            <DataAnnotationsValidator />
+                            <DxGridDataColumn FieldName="Name" Caption="Nežiaduca udalosť " ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+                            <DxGridDataColumn FieldName="Start" Caption="Začiatok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+
+                            <DxGridDataColumn FieldName="Frequency" Caption="Frekvencia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@frequency" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Related" Caption="Súvis s liekom spoločnosti Krka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@related" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Severity" Caption="Závažnosť" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@severity" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Intensity" Caption="Intenzita" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@intensity" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Effect" Caption="Vplyv na liečbu" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@effect" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Result" Caption="Výsledok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@result" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+
+                                <CellDisplayTemplate Context="gridContext">
+                                    <div class="grid-cell-align-center">
+                                        @if (!isReadOnly)
+                                        {
+
+                                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link"
+                                                      aria-label="Delete"
+                                                      Click="@(() => advEffGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                                <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
+                                            </DxButton>
+                                        }
+                                    </div>
+                                </CellDisplayTemplate>
+
+                                <CellEditTemplate Context="editContext">
+                                    <div class="grid-cell-align-center">
+                                        @if (!isReadOnly)
+                                        {
+                                            <DxButton Enabled="false"
+                                                      aria-label="Delete"
+                                                      CssClass="grid-disabled-button"
+                                                      IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link" />
+                                        }
+                                    </div>
+                                </CellEditTemplate>
+                            </DxGridCommandColumn>
+
+
+                        </Columns>
+                        <EditFormTemplate Context="EditFormContext1">
+
+                            <DxFormLayout>
+
+                                <DxFormLayoutItem Caption="Nežiaduca udalosť:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Name")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Začiatok (Týždeň liečby):" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Start")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Frekvencia:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Frequency")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Súvis s liekom spoločnosti Krka:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Related")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Závažnosť:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Severity")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Intenzita:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Intensity")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Vplyv na liečbu:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Effect")
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Výsledok:" ColSpanMd="12">
+                                    @EditFormContext1.GetEditor("Result")
+                                </DxFormLayoutItem>
+
+                            </DxFormLayout>
+                        </EditFormTemplate>
+                    </DxGrid>
+                </div>
+            }
+
+
+            <DxFormLayoutItem ColSpanMd="12">
+                <div style="margin-top: 5px">
+                    @if (!isReadOnly)
+                    {
+                        <DxButton SubmitFormOnClick="true"
+                                  Text="Uložiť"
+                                  RenderStyle="ButtonRenderStyle.Primary"
+                                  Enabled="@isModified" />
+                    }
+                </div>
+            </DxFormLayoutItem>
+
+        </DxFormLayoutGroup>
+    </DxFormLayout>
+</EditForm>
+
+
+
+
+@code {
+    [Parameter]
+    public string questionnaireId { get; set; }
+    bool isReadOnly = false;
+    bool isExc_q_Answer = false;
+    bool isExc_3_1_Answer = false;
+    bool isExc_3_6_Answer = false;
+
+    bool isModified = false;
+
+    IGrid advEffGrid { get; set; }
+    public List<Data.AdverseEffects.AdverseEffect> AdverseEffects { get; set; }
+
+    Data.Questionnaires.QuestionnaireExclusion08? exc;
+
+    //Dial Exclusion
+    List<Data.Dials.DialExclusion> dialExc = new();
+    List<Data.Dials.DialExclusion> exc_2_Answer = new();
+    List<Data.Dials.DialExclusion> exc_3_Answer = new();
+
+    //Dial General
+    List<Data.Dials.DialQGeneral> dialGeneral = new();
+    List<Data.Dials.DialQGeneral> exc_q_Answer = new();
+
+    //Dial AdverseEffect
+    List<Data.Dials.DialAdverseEffect> dialAdverseEffect = new();
+    List<Data.Dials.DialAdverseEffect> frequency = new();
+    List<Data.Dials.DialAdverseEffect> related = new();
+    List<Data.Dials.DialAdverseEffect> severity = new();
+    List<Data.Dials.DialAdverseEffect> intensity = new();
+    List<Data.Dials.DialAdverseEffect> effect = new();
+    List<Data.Dials.DialAdverseEffect> result = new();
+
+    Dictionary<Data.AdverseEffects.AdverseEffect, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || advEffGrid.IsEditing();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
+        exc = new Data.Questionnaires.QuestionnaireExclusion08
+            {
+                Questionnaire_id = questionnaireId,
+            };
+
+        AdverseEffects = await ExclusionService.GetAdverseEffect(questionnaireId);
+
+        //DialQGeneral
+        dialGeneral = await ExclusionService.GetDialGeneralAsync();
+        exc_q_Answer = dialGeneral.Where(d => d.Type_q == 5).ToList();
+
+        //DialExclusion
+        dialExc = await ExclusionService.GetDialExclusionAsync();
+        exc_2_Answer = dialExc.Where(d => d.Type_q == 1).ToList();
+        exc_3_Answer = dialExc.Where(d => d.Type_q == 2).ToList();
+
+        //dialAdverseEffect
+        dialAdverseEffect = await ExclusionService.GetDialAdverseEffectAsync();
+        frequency = dialAdverseEffect.Where(d => d.Type_q == 1).ToList();
+        related = dialAdverseEffect.Where(d => d.Type_q == 2).ToList();
+        severity = dialAdverseEffect.Where(d => d.Type_q == 3).ToList();
+        intensity = dialAdverseEffect.Where(d => d.Type_q == 4).ToList();
+        effect = dialAdverseEffect.Where(d => d.Type_q == 5).ToList();
+        result = dialAdverseEffect.Where(d => d.Type_q == 6).ToList();
+
+        await LoadQuestionnaire(questionnaireId);
+    }
+
+    private async Task LoadQuestionnaire(string questionnaireId)
+    {
+        var questionnaire = await ExclusionService.GetQuestionnaireExclusion08ByQuestionnaireIdAsync(questionnaireId);
+        if (questionnaire != null)
+        {
+            exc = questionnaire;
+
+            isExc_q_Answer = (exc.Exc_Q == 14);
+            isExc_3_1_Answer = (exc!.Exc_3 == 4);
+            isExc_3_6_Answer = (exc!.Exc_3 == 9);
+        }
+    }
+
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje o predčasnom vylúčení úspešne uložené",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private void AddToastNU()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Nežiadúca udalosť pridaná",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Nežiadúca udalosť zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Nežiadúca udalosť bola odstránená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (!isReadOnly)
+        {
+            isModified = false;
+            await ExclusionService.SaveQuestionnaireExlusion08Async(exc!);
+            await Save_Click();
+        }
+    }
+
+    async Task UpdateDataAsync()
+    {
+        AdverseEffects = await ExclusionService.GetAdverseEffect(questionnaireId);
+        advEffGrid.Reload();
+    }
+
+    async Task New_Click() => await advEffGrid.StartEditNewRowAsync();
+
+    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
+
+    async Task Save_Click()
+    {
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Addition:
+                    await ExclusionService.AdverserEffectAsync(changedItem);
+                    AddToastNU();
+                    break;
+                case DataChangeType.Modification:
+                    await ExclusionService.AdverserEffectAsync(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+        await ClearUnsavedChangesAsync();
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    async void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var adverse = (Data.AdverseEffects.AdverseEffect)e.EditModel;
+        var dataItem = (Data.AdverseEffects.AdverseEffect)e.DataItem;
+        adverse.QuestionnaireId = questionnaireId;
+        if (e.IsNew)
+        {
+            AdverseEffects.Add(adverse);
+            UnsavedChanges[adverse] = new(DataChangeType.Addition, new());
+
+        }
+        else
+        {
+            UnsavedChanges[adverse] = new(DataChangeType.Modification, new());
+        }
+
+        // Zavolanie metódy Save_Click
+        await Save_Click();
+    }
+
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var adverse = (Data.AdverseEffects.AdverseEffect)e.DataItem;
+        await ExclusionService.DeleteAdvenceAsync(adverse.Id);
+        await UpdateDataAsync();
+        DeleteToast();
+    }
+
+    void OnExcQAnswer(int value)
+    {
+        exc!.Exc_Q = value;
+        isExc_q_Answer = (exc!.Exc_Q == 14);
+        OnFieldChanged();
+    }
+
+    void OnExc31Answer(int value)
+    {
+        exc!.Exc_3 = value;
+        isExc_3_1_Answer = (exc!.Exc_3 == 4);
+        OnFieldChanged();
+    }
+
+    void OnExc36Answer(int value)
+    {
+        exc!.Exc_3 = value;
+        isExc_3_6_Answer = (exc!.Exc_3 == 9);
+        OnFieldChanged();
+    }
+
+    private void OnFieldChanged()
+    {
+        isModified = true;
+    }
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification, Addition, Delete }
+}

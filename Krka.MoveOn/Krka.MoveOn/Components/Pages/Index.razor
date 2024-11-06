@@ -6,7 +6,7 @@
 @using System.Globalization
 @inject IStringLocalizer<Index> localizer
 
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize]
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
@@ -15,39 +15,20 @@
 
 <PageTitle>Welcome</PageTitle>
 
-@* <h1>Index necháme zatial prazdny</h1> *@
 
-<div class="main-content">
-    <DxGridLayout CssClass="welcome-gridlayout" RowSpacing="3rem">
-        <Rows>
-            <DxGridLayoutRow Height="auto" Areas="header"></DxGridLayoutRow>
-            <DxGridLayoutRow Height="auto" Areas="cards"></DxGridLayoutRow>
-        </Rows>
-        <Items>
-            <DxGridLayoutItem Area="header" CssClass="title">
-                <Template>
-                    <div class="title-header-text">Hello World!</div>
-                    <div class="title-content-text">@localizer["WelcomeMessage"]</div>
-                </Template>
-            </DxGridLayoutItem>
-            <DxGridLayoutItem Area="cards" CssClass="welcome-cards">
-                <Template>
-                    <NavLink class="welcome-card" href="/counter">
-                        <svg class="welcome-card-img" alt="counter card">
-                            <use href="images/cards.svg#counter"></use>
-                        </svg>
-                        <div class="welcome-card-text">Counter</div>
-                        <div class="welcome-card-back"></div>
-                    </NavLink>
-                    <NavLink class="welcome-card" href="/weather">
-                        <svg class="welcome-card-img" alt="weather card">
-                            <use href="images/cards.svg#weather"></use>
-                        </svg>
-                        <div class="welcome-card-text">Weather</div>
-                        <div class="welcome-card-back"></div>
-                    </NavLink>
-                </Template>
-            </DxGridLayoutItem>
-        </Items>
-    </DxGridLayout>
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-size: 20px;">
+    <div style="width: 40%; text-align: justify;">
+        <p>Vážená pani doktorka, vážený pán doktor,</p>
+        <p>Sme radi, že ste sa rozhodli zúčastniť epidemiologickej štúdie zameranej na <b>detekciu pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment.</b></p>
+        <p>Včasná diagnostika a nasadenie kompenzačnej liečby Parkinsonovej choroby môžu výrazne zlepšiť kvalitu života pacienta. V tejto štúdii chceme dokázať, že včasná diagnostika ruka v ruke s včasným nastavením kompenzívnej liečby Parkinsonovej choroby by mohla výrazne zlepšiť kvalitu života pacienta.</p>
+        <p>Než začnete so zaradením pacientov, poprosíme Vás o vyplnenie informácií ku každému pacientovi, aké dokumenty máte podpísané s pacientom pred vstupom do štúdie.</p>
+        <p>Zároveň by sme Vás chceli informovať, že do projektu môžete zaradiť <b>max. 20 pacientov.</b> Projekt bude trvať do apríla 2026.</p>
+        <p>V prípade ďalších otázok neváhajte kontaktovať autorizovanú osobu spoločnosti Krka Slovensko pre túto štúdiu, so žiadosťou o ďalšiu pomoc.</p>
+        <p>S pozdravom</p>
+        <p>Tím spoločnosti KRKA</p>
+    </div>
 </div>
+
+
+
+

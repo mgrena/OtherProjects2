@@ -1,0 +1,323 @@
+﻿@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Components
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject Treatment03Service TreatmentService
+@inject IToastNotificationService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<EditForm Model="@treat03"
+          Context="EditFormContext"
+          OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <DxFormLayout>
+        <DxFormLayoutGroup Caption="Zmena v liečbe pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.):" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+
+            <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <InputRadioGroup @bind-Value="@treat03!.TreatQ1" class="d-flex flex-wrap">
+                    @foreach (var item in treat_q_1_Answer)
+                    {
+                        <label class="d-block m-2">
+                            <InputRadio class="m-2" @onclick="() => {OnTreatQAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                        </label>
+                    }
+                </InputRadioGroup>
+                <ValidationMessage For="@(() => treat03!.TreatQ1)" />
+            </DxFormLayoutItem>
+
+            @if (isTreatQ1Answer)
+            {
+                <div style="width: 98%; margin-left: 15px;">
+                    <DxGrid @ref="treatGrid"
+                            Data="Treats"
+                            PageSize="20"
+                            PagerPosition="GridPagerPosition.Bottom"
+                            PageSizeSelectorVisible="true"
+                            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                            PageSizeSelectorAllRowsItemVisible="true"
+                            PagerSwitchToInputBoxButtonCount="10"
+                            PagerVisibleNumericButtonCount="10"
+                            KeyFieldName="Id"
+                            ValidationEnabled="false"
+                            EditMode="GridEditMode.EditCell"
+                            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                            TextWrapEnabled="false"
+                            EditModelSaving="Grid_EditModelSaving"
+                            DataItemDeleting="Grid_DataItemDeleting"
+                            HighlightRowOnHover="true"
+                            FocusedRowEnabled="true">
+
+                        <ToolbarTemplate Context="toolbarContext">
+                            @if (!isReadOnly)
+                            {
+                                <ManagementToolbarWithoutSave NewClick="New_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                            }
+                        </ToolbarTemplate>
+
+                        <Columns>
+                            <DxGridDataColumn FieldName="Treat_1" Caption="Učinná látka" Width="" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Treat_2" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+
+                            <DxGridDataColumn FieldName="Treat_3" Caption="Indikácia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@treat_3_Answer" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            @if (!isReadOnly)
+                            {
+                                <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+
+                                    <CellDisplayTemplate Context="gridContext">
+                                        <div class="grid-cell-align-center">
+                                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link"
+                                                      aria-label="Delete"
+                                                      Click="@(() => treatGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                                <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
+                                            </DxButton>
+                                        </div>
+                                    </CellDisplayTemplate>
+
+                                    <CellEditTemplate Context="editContext">
+                                        <div class="grid-cell-align-center">
+                                            <DxButton Enabled="false"
+                                                      aria-label="Delete"
+                                                      CssClass="grid-disabled-button"
+                                                      IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link" />
+
+                                        </div>
+                                    </CellEditTemplate>
+                                </DxGridCommandColumn>
+                            }
+                        </Columns>
+                    </DxGrid>
+                </div>
+            }
+
+            <DxFormLayoutItem ColSpanMd="12">
+                <div style="margin-top: 5px">
+                    @if (!isReadOnly)
+                    {
+                        <DxButton SubmitFormOnClick="true"
+                                  Text="Uložiť"
+                                  RenderStyle="ButtonRenderStyle.Primary"/>
+                    }
+                </div>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    </DxFormLayout>
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public string questionnaireId { get; set; }
+    bool isModified = false;
+
+    bool isSaveVisible = false;
+
+    bool isTreatQ1Answer = false;
+
+    IGrid treatGrid { get; set; }
+    public List<Data.Questionnaires.QuestionnaireTreatment03> Treats { get; set; }
+
+    Data.Questionnaires.QuestionnaireTreatment03? treat03;
+
+    List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
+    List<Data.Dials.DialActiveIngredient> treat_1_Answer = new();
+
+    List<Data.Dials.DialIndication> dialIndication = new();
+    List<Data.Dials.DialIndication> treat_3_Answer = new();
+
+    List<Data.Dials.DialQGeneral> dialQGenerals = new();
+    List<Data.Dials.DialQGeneral> treat_q_1_Answer = new();
+
+    Dictionary<QuestionnaireTreatment03, DataChange> UnsavedChanges { get; } = new();
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || treatGrid.IsEditing();
+
+    bool isReadOnly = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.IsInRole("Office"))
+        {
+            isReadOnly = true;
+        }
+
+        treat03 = new Data.Questionnaires.QuestionnaireTreatment03
+            {
+                Questionnaire_id = questionnaireId,
+                CreatedAt = DateTime.Now,
+                ModifiedAt = DateTime.Now
+            };
+
+        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+
+        dialActiveIngredient = await TreatmentService.GetDialActiveIngredientAsync();
+        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+
+        dialIndication = await TreatmentService.GetDialIndicationAsync();
+        treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
+
+
+        dialQGenerals = await TreatmentService.GetDialGeneralAsync();
+        treat_q_1_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
+
+        await LoadQuestionnaire(questionnaireId);
+    }
+
+    private async Task LoadQuestionnaire(string questionnaireid)
+    {
+        var questionnaire = await TreatmentService.GetQuestionnaireTreatment03ByQuestionnaireIdAsync(questionnaireid);
+        if (questionnaire != null)
+        {
+            treat03 = questionnaire;
+
+            isTreatQ1Answer = (treat03.TreatQ1 == 14);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (!isReadOnly)
+        {
+            isModified = false;
+            await TreatmentService.SaveTreatmentAsync(treat03!);            
+            await Save_Click();
+        }
+    }
+
+    void OnTreatQAnswer(int value)
+    {
+        treat03!.TreatQ1 = value;
+        isTreatQ1Answer = (treat03!.TreatQ1 == 14);
+        OnFieldChanged();
+    }
+
+    private void OnFieldChanged()
+    {
+        isModified = true;
+    }
+
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola pridaná",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola zmenená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola odstránená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    async Task UpdateDataAsync()
+    {
+        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+        treatGrid.Reload();
+    }
+
+    async Task New_Click() => await treatGrid.StartEditNewRowAsync();
+
+    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
+
+    async Task Save_Click()
+    {
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Addition:
+                    await TreatmentService.SaveTreatmentAsync(changedItem);
+                    AddToast();
+                    break;
+                case DataChangeType.Modification:
+                    await TreatmentService.SaveTreatmentAsync(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+        await ClearUnsavedChangesAsync();
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
+        treat.Questionnaire_id = questionnaireId;
+        if (e.IsNew)
+        {
+            Treats.Add(treat);
+            UnsavedChanges[treat] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            var changedFields = DataUtils.ApplyModifiedFields(treat, dataItem);
+            if (changedFields.Count > 0)
+            {
+                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
+                    changes.ChangedFields.UnionWith(changedFields);
+                else
+                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
+            }
+        }
+    }
+
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
+        await TreatmentService.DeleteTreatAsync(treat.Id);
+        await UpdateDataAsync();
+        DeleteToast();
+    }
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification, Addition, Delete }
+
+}

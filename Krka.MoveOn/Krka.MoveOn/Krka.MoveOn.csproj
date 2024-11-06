@@ -12,14 +12,16 @@
     <None Include="bundleconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.12.0" />
+    <PackageReference Include="Azure.Identity" Version="1.13.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
     <PackageReference Include="DevExpress.Blazor" Version="24.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*-*" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*-*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.*-*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*-*" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.10" />
     <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
@@ -74,5 +76,10 @@
     <Reference Include="DevExpress.Utils.v24.1">
       <HintPath>..\..\..\..\..\Program Files\DevExpress 24.1\Components\Bin\NetCore\DevExpress.Utils.v24.1.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Components\Pages\Components\ManagementToolbarWithoutSave.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
   </ItemGroup>
 </Project>

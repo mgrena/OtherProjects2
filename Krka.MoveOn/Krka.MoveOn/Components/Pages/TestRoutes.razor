@@ -1,0 +1,120 @@
+﻿@page "/routes"
+@using System.Reflection
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = "Admin")]
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+        color: #333;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #e0e7ff;
+    }
+
+    .attribute-list span {
+        display: inline-block;
+        padding: 4px 8px;
+        margin: 2px;
+        background-color: #d1e7dd;
+        color: #0f5132;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+</style>
+
+<h3>Registered Routes</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Route</th>
+            <th>Component</th>
+            <th>Authorize</th>
+            <th>Attributes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var route in Routes)
+        {
+            <tr>
+                <td>@route.Template</td>
+                <td>@route.Component.Name</td>
+                <td>@(route.IsAuthorized ? "Yes" : "No")</td>
+                <td>
+                    @foreach (var attribut in route.Attributes)
+                    {
+                        <span>@attribut.GetType().Name</span>
+
+                        <br />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<RouteInfo> Routes { get; set; } = new List<RouteInfo>();
+
+    protected override void OnInitialized()
+    {
+        var assembly = typeof(Program).Assembly;
+        var components = assembly.GetTypes()
+            .Where(t => t.IsSubclassOf(typeof(ComponentBase)));
+
+        foreach (var component in components)
+        {
+            var pageAttributes = component.GetCustomAttributes(typeof(RouteAttribute), true)
+                                          .Cast<RouteAttribute>();
+
+            var otherAttributes = component.GetCustomAttributes()
+                                           .Where(attr => attr.GetType() != typeof(RouteAttribute) 
+                                                          && attr.GetType().Name != "__PrivateComponentRenderModeAttribute"
+                                                          && attr.GetType() != typeof(AuthorizeAttribute)
+                                           )
+                                           .ToList();
+
+            bool isAuthorized = component.GetCustomAttributes(typeof(AuthorizeAttribute), true).Any();
+
+            foreach (var pageAttribute in pageAttributes)
+            {
+                Routes.Add(new RouteInfo
+                {
+                    Template = pageAttribute.Template,
+                    Component = component,
+                    Attributes = otherAttributes,
+                    IsAuthorized = isAuthorized
+                });
+            }
+        }
+    }
+
+    private class RouteInfo
+    {
+        public string Template { get; set; }
+        public Type Component { get; set; }
+        public List<Attribute> Attributes { get; set; }
+        public bool IsAuthorized { get; set; }
+    }
+}

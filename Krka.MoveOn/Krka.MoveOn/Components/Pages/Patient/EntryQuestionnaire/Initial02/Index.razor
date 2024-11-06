@@ -1,0 +1,43 @@
+﻿@page "/entryQ/init/{questionnaireId:guid}"
+@using DevExpress.Blazor.Internal
+@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+<PageTitle>MoveOn - Začiatočná liečba P</PageTitle>
+
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<div class="cw-880" style="width: 70%; margin: 0 auto;">
+    <_EntryBtn />
+
+    <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+        Začiatočná liečba Parkinsonovej choroby
+    </div>
+
+    <Initial02Table questionnaireId="@QuestionnaireIdAsString" />
+    
+</div>
+
+
+@code {
+    [Parameter]
+    public Guid questionnaireId { get; set; }
+
+    public string QuestionnaireIdAsString => questionnaireId.ToString();
+
+}

@@ -1,6 +1,15 @@
 ﻿@implements IDisposable
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+<style>
+    .nav-buttons-container {
+        position: sticky;
+        top: 0; 
+        z-index: 1000; 
+        background-color: #fff;
+    }
+
+</style>
 
 <div class="page">
     <DxGridLayout CssClass="page-layout">
@@ -23,25 +32,22 @@
                 </Authorized>
             </AuthorizeView>         
             <DxGridLayoutItem Area="content" CssClass="content px-4">
-            <Template>                    
-                <div class="w-100 nav-buttons-container">
+            <Template>
+                    <div class="w-100 nav-buttons-container nav-buttons-container">
                     @* <CultureSelector /> *@
                     <NavLink id="menu-top" class="button-link hidden" onclick="(document.getElementById('sidebar').classList.toggle('auto-expanded'), document.getElementById('menu-top').classList.toggle('hidden'))">
                         <DxButton RenderStyle="@ButtonRenderStyle.Dark" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-menu"></DxButton>
                     </NavLink>
-                    @if(!string.IsNullOrEmpty(NavigationManager.ToBaseRelativePath(NavigationManager.Uri))) {
-                        <NavLink href="/" class="button-link">
-                            <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="Späť na Domov" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-back"></DxButton>
-                        </NavLink>
-                    }
+                    
                     <AuthorizeView>
-                        <Authorized>                              
+                        <Authorized>
+                            <ReturnButton />
                             <NavLink href="Account/Manage" class="button-link menubutton-float-end display-desktop">
                                 <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="@context.User.Identity?.Name" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-user"></DxButton>
                             </NavLink>
-                            <form action="Account/Logout" method="post" class="display-desktop">
+                            <form action="Account/Logout" method="post" class="display-desktop" onsubmit="localStorage.clear(); sessionStorage.clear();">
                                 <AntiforgeryToken />
-                                <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                                    <input type="hidden" name="ReturnUrl" value="Account/Login" />
                                 <DxButton RenderStyle="@ButtonRenderStyle.Dark" SubmitFormOnClick="true" Text="Odhlásiť sa" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button" IconCssClass="icon icon-log-out"></DxButton>
                             </form>
                         </Authorized>
