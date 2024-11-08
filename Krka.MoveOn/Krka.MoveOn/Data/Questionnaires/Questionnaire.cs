@@ -26,7 +26,11 @@ namespace Krka.MoveOn.Data.Questionnaires
 
         [Column("order_num")]
         public required QuestionnaireOrderEnum Order { get; set; }
-       
+
+        [Range(0, 100)]
+        [Column("progress_percentage", TypeName = "int")]
+        public int ProgressPercentage { get; set; } = 0;
+
         [Column("modified_at")]
         public required DateTime ModifiedAt { get; set; } = DateTime.Now;
 

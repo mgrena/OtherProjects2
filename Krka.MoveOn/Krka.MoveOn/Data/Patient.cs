@@ -51,5 +51,18 @@ namespace Krka.MoveOn.Data
         [NotMapped]
         public string? Doctor { get; set; }
 
+        [Range(0, 100)]
+        [Column("entry_progress_percentage", TypeName = "int")]
+        public int EntryProgressPercentage { get; set; } = 0;
+
+        [Range(0, 100)]
+        [Column("ongoing_progress_percentage", TypeName = "int")]
+        public int OngoingProgressPercentage { get; set; } = 0;
+
+        [Range(0, 100)]
+        [Column("result_progress_percentage", TypeName = "int")]
+        public int ResultProgressPercentage { get; set; } = 0;
+
+
     }
 }

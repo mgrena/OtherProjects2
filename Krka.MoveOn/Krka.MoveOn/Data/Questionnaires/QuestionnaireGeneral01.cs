@@ -160,6 +160,12 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("gen_13_1", TypeName = "nvarchar"), StringLength(30)]
         public string? Gen_13_1 { get; set; }
 
+
+        [Range(0, 100)]
+        [Column("progress_percentage", TypeName = "int")]
+        public int ProgressPercentage { get; set; } = 0;
+
+
         [Column("modified_at")]
         public  DateTime ModifiedAt { get; set; } = DateTime.Now;
 

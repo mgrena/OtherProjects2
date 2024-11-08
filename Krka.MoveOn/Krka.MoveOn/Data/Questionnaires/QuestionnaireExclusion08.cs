@@ -37,6 +37,10 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("exc_3")]
         public int? Exc_3 { get; set; }
 
+        [Range(0, 100)]
+        [Column("progress_percentage", TypeName = "int")]
+        public int ProgressPercentage { get; set; } = 0;
+
         [Column("modified_at")]
         public DateTime ModifiedAt { get; set; } = DateTime.Now;
 
