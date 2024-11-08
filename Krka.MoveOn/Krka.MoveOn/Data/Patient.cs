@@ -31,7 +31,7 @@ namespace Krka.MoveOn.Data
         public bool GDPRConfirmation { get; set; } = false;
 
         [Column("valid")]
-        public ValidEnum Valid { get; set; } = ValidEnum.active; 
+        public ValidEnum Valid { get; set; } = ValidEnum.active;
 
         /// <summary>
         ///  Patient code
