@@ -32,8 +32,8 @@
                     <DxFormLayoutItem Caption="Test cesty" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
                         <div style="display: flex; align-items: center;">
                             <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                
-                            <DxSpinEdit @bind-Value="@moca!.Moca_1" MinValue="0" MaxValue="1" Disabled="@isReadOnly" />
+
+                            <DxSpinEdit @bind-Value="@moca!.Moca_1" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen"
                                   PositionTarget=".info-icon-btn"
@@ -44,47 +44,35 @@
                     </DxFormLayoutItem>
 
                     <DxFormLayoutItem Caption="Kocka" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_2" MinValue="0" MaxValue="1" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn1" Click="() => IsInfoOpen1 = !IsInfoOpen1" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                 
-                                <DxSpinEdit @bind-Value="@moca!.Moca_2" MinValue="0" MaxValue="1" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen1"
-                                      PositionTarget=".info-icon-btn1"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 1.
-                            </DxFlyout>
-                        }
+
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn1" Click="() => IsInfoOpen1 = !IsInfoOpen1" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
+                            <DxSpinEdit @bind-Value="@moca!.Moca_2" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen1"
+                                  PositionTarget=".info-icon-btn1"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 1.
+                        </DxFlyout>
+
                     </DxFormLayoutItem>
 
                     <DxFormLayoutItem Caption="Hodiny" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="3">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="1" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn2" Click="() => IsInfoOpen2 = !IsInfoOpen2" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                    
-                                <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="3" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen2"
-                                      PositionTarget=".info-icon-btn2"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 3.
-                            </DxFlyout>
-                        }
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn2" Click="() => IsInfoOpen2 = !IsInfoOpen2" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
+                            <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen2"
+                                  PositionTarget=".info-icon-btn2"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 3.
+                        </DxFlyout>
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
@@ -96,25 +84,18 @@
             <DxFormLayoutGroup Caption="Pomenovanie zvierat" ColSpanMd="8" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Zvieratá" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_4" MinValue="0" MaxValue="3" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn3" Click="() => IsInfoOpen3 = !IsInfoOpen3" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn3" Click="() => IsInfoOpen3 = !IsInfoOpen3" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                            <DxSpinEdit @bind-Value="@moca!.Moca_4" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen3"
+                                  PositionTarget=".info-icon-btn3"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 3.
+                        </DxFlyout>
 
-                                <DxSpinEdit @bind-Value="@moca!.Moca_4" MinValue="0" MaxValue="3" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen3"
-                                      PositionTarget=".info-icon-btn3"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 3.
-                            </DxFlyout>
-                        }
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
@@ -126,69 +107,47 @@
             <DxFormLayoutGroup Caption="Pozornosť" ColSpanMd="8" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Vymenovanie čísel" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_5" MinValue="0" MaxValue="2" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn4" Click="() => IsInfoOpen4 = !IsInfoOpen4" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                
-                                <DxSpinEdit @bind-Value="@moca!.Moca_5" MinValue="0" MaxValue="2" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen4"
-                                      PositionTarget=".info-icon-btn4"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 2.
-                            </DxFlyout>
-                        }
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn4" Click="() => IsInfoOpen4 = !IsInfoOpen4" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                            <DxSpinEdit @bind-Value="@moca!.Moca_5" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen4"
+                                  PositionTarget=".info-icon-btn4"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 2.
+                        </DxFlyout>
                     </DxFormLayoutItem>
 
                     <DxFormLayoutItem Caption="Identifikácia písmena" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_6" MinValue="0" MaxValue="1" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn5" Click="() => IsInfoOpen5 = !IsInfoOpen5" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn5" Click="() => IsInfoOpen5 = !IsInfoOpen5" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
-                                <DxSpinEdit @bind-Value="@moca!.Moca_6" MinValue="0" MaxValue="1" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen5"
-                                      PositionTarget=".info-icon-btn5"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 1.
-                            </DxFlyout>
-                        }
+                            <DxSpinEdit @bind-Value="@moca!.Moca_6" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen5"
+                                  PositionTarget=".info-icon-btn5"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 1.
+                        </DxFlyout>
                     </DxFormLayoutItem>
 
                     <DxFormLayoutItem Caption="Odpočítavanie" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="3">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_7" MinValue="0" MaxValue="3" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn6" Click="() => IsInfoOpen6 = !IsInfoOpen6" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                    
-                                <DxSpinEdit @bind-Value="@moca!.Moca_7" MinValue="0" MaxValue="3" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen6"
-                                      PositionTarget=".info-icon-btn6"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 3.
-                            </DxFlyout>
-                        }
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn6" Click="() => IsInfoOpen6 = !IsInfoOpen6" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
+                            <DxSpinEdit @bind-Value="@moca!.Moca_7" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen6"
+                                  PositionTarget=".info-icon-btn6"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 3.
+                        </DxFlyout>
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
@@ -200,47 +159,33 @@
             <DxFormLayoutGroup Caption="Jazyk" ColSpanMd="8" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Opakovanie vety" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="6">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_8" MinValue="0" MaxValue="2" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn7" Click="() => IsInfoOpen7 = !IsInfoOpen7" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                  
-                                <DxSpinEdit @bind-Value="@moca!.Moca_8" MinValue="0" MaxValue="2" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen7"
-                                      PositionTarget=".info-icon-btn7"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 2.
-                            </DxFlyout>
-                        }
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn7" Click="() => IsInfoOpen7 = !IsInfoOpen7" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
+                            <DxSpinEdit @bind-Value="@moca!.Moca_8" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen7"
+                                  PositionTarget=".info-icon-btn7"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 2.
+                        </DxFlyout>
                     </DxFormLayoutItem>
 
                     <DxFormLayoutItem Caption="Verbálna fluencia" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="5">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_9" MinValue="0" MaxValue="1" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn8" Click="() => IsInfoOpen8 = !IsInfoOpen8" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None"/>
-                                  
-                                <DxSpinEdit @bind-Value="@moca!.Moca_9" MinValue="0" MaxValue="1" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen8"
-                                      PositionTarget=".info-icon-btn8"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 1.
-                            </DxFlyout>
-                        }
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn8" Click="() => IsInfoOpen8 = !IsInfoOpen8" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
+                            <DxSpinEdit @bind-Value="@moca!.Moca_9" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen8"
+                                  PositionTarget=".info-icon-btn8"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 1.
+                        </DxFlyout>
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
@@ -252,25 +197,18 @@
             <DxFormLayoutGroup Caption="Abstrakcia" ColSpanMd="8" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Abstrakcia" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_10" MinValue="0" MaxValue="3" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn9" Click="() => IsInfoOpen9 = !IsInfoOpen9" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                  
-                                <DxSpinEdit @bind-Value="@moca!.Moca_10" MinValue="0" MaxValue="3" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen9"
-                                      PositionTarget=".info-icon-btn9"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 3.
-                            </DxFlyout>
-                        }
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn9" Click="() => IsInfoOpen9 = !IsInfoOpen9" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
+                            <DxSpinEdit @bind-Value="@moca!.Moca_10" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen9"
+                                  PositionTarget=".info-icon-btn9"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 3.
+                        </DxFlyout>
                     </DxFormLayoutItem>
                     <p class="sum-style">
                         <span style="color: #6e7de8;">@(moca?.Moca_10)</span>/3
@@ -281,25 +219,17 @@
             <DxFormLayoutGroup Caption="Vybavovanie slov" ColSpanMd="8" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Vybavovanie slov" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_11" MinValue="0" MaxValue="5" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn10" Click="() => IsInfoOpen10 = !IsInfoOpen10" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                   
-                                <DxSpinEdit @bind-Value="@moca!.Moca_11" MinValue="0" MaxValue="5" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen10"
-                                      PositionTarget=".info-icon-btn10"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 5.
-                            </DxFlyout>
-                        }
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn10" Click="() => IsInfoOpen10 = !IsInfoOpen10" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                            <DxSpinEdit @bind-Value="@moca!.Moca_11" MinValue="0" MaxValue="5" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen10"
+                                  PositionTarget=".info-icon-btn10"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 5.
+                        </DxFlyout>
                     </DxFormLayoutItem>
                     <p class="sum-style">
                         <span style="color: #6e7de8;">@(moca?.Moca_11)</span>/5
@@ -310,25 +240,18 @@
             <DxFormLayoutGroup Caption="Orientácia" ColSpanMd="8" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Orientácia" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        @if (isReadOnly)
-                        {
-                            <DxSpinEdit @bind-Value="@moca!.Moca_12" MinValue="0" MaxValue="6" ReadOnly="true" />
-                        }
-                        else
-                        {
-                            <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn11" Click="() => IsInfoOpen11 = !IsInfoOpen11" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                                   
-                                <DxSpinEdit @bind-Value="@moca!.Moca_12" MinValue="0" MaxValue="6" />
-                            </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen11"
-                                      PositionTarget=".info-icon-btn11"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Min = 0 / Max = 6.
-                            </DxFlyout>
-                        }
+                        <div style="display: flex; align-items: center;">
+                            <DxButton CssClass="info-icon-btn11" Click="() => IsInfoOpen11 = !IsInfoOpen11" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
+                            <DxSpinEdit @bind-Value="@moca!.Moca_12" MinValue="0" MaxValue="6" ReadOnly="@isReadOnly" />
+                        </div>
+                        <DxFlyout @bind-IsOpen="@IsInfoOpen11"
+                                  PositionTarget=".info-icon-btn11"
+                                  Position="FlyoutPosition.Bottom"
+                                  PreventCloseOnPositionTargetClick="true"
+                                  Width="240">
+                            Min = 0 / Max = 6.
+                        </DxFlyout>
                     </DxFormLayoutItem>
                     <p class="sum-style">
                         <span style="color: #6e7de8;">@(moca?.Moca_12)</span>/6
@@ -351,8 +274,8 @@
                 {
                     <DxButton SubmitFormOnClick="true"
                               Text="Uložiť"
-                              RenderStyle="ButtonRenderStyle.Primary" 
-                              IconCssClass="grid-toolbar-save1"/>
+                              RenderStyle="ButtonRenderStyle.Primary"
+                              IconCssClass="grid-toolbar-save1" />
                 }
             </div>
         </DxFormLayoutItem>

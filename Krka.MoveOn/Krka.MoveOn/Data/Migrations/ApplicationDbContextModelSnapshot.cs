@@ -84,7 +84,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("adverse_effects");
+                    b.ToTable("adverse_effects", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.ApplicationUser", b =>
@@ -200,7 +200,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_active_ingredient");
+                    b.ToTable("dial_active_ingredient", (string)null);
 
                     b.HasData(
                         new
@@ -321,7 +321,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_adverse_effects");
+                    b.ToTable("dial_adverse_effects", (string)null);
 
                     b.HasData(
                         new
@@ -554,7 +554,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_exlusions");
+                    b.ToTable("dial_exlusions", (string)null);
 
                     b.HasData(
                         new
@@ -675,7 +675,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_indications");
+                    b.ToTable("dial_indications", (string)null);
 
                     b.HasData(
                         new
@@ -785,7 +785,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_mhs");
+                    b.ToTable("dial_mhs", (string)null);
 
                     b.HasData(
                         new
@@ -881,7 +881,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_medicines");
+                    b.ToTable("dial_medicines", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialQGeneral", b =>
@@ -912,7 +912,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_q_general");
+                    b.ToTable("dial_q_general", (string)null);
 
                     b.HasData(
                         new
@@ -1401,7 +1401,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_specialization");
+                    b.ToTable("dial_specialization", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialSymptoms", b =>
@@ -1432,7 +1432,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_symptoms");
+                    b.ToTable("dial_symptoms", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialUnit", b =>
@@ -1463,7 +1463,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_units");
+                    b.ToTable("dial_units", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.LogEntity", b =>
@@ -1504,7 +1504,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("logs");
+                    b.ToTable("logs", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Patient", b =>
@@ -1566,7 +1566,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("patients");
+                    b.ToTable("patients", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.Questionnaire", b =>
@@ -1602,7 +1602,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaires");
+                    b.ToTable("questionnaires", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireDrugEffect09", b =>
@@ -1654,7 +1654,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_drug_effect09");
+                    b.ToTable("questionnaire_drug_effect09", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireExclusion08", b =>
@@ -1702,7 +1702,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_exclusion08");
+                    b.ToTable("questionnaire_exclusion08", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireGeneral01", b =>
@@ -1833,7 +1833,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_general01");
+                    b.ToTable("questionnaire_general01", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireInitial02", b =>
@@ -1881,7 +1881,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_initial02");
+                    b.ToTable("questionnaire_initial02", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireMoca07", b =>
@@ -1965,7 +1965,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_moca07");
+                    b.ToTable("questionnaire_moca07", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireMotor05", b =>
@@ -2049,7 +2049,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_motor05");
+                    b.ToTable("questionnaire_motor05", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireMotorSkill06", b =>
@@ -2213,7 +2213,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_motorskill06");
+                    b.ToTable("questionnaire_motorskill06", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireNonMotor04", b =>
@@ -2297,7 +2297,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_nonmotor04");
+                    b.ToTable("questionnaire_nonmotor04", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireSatisfaction10", b =>
@@ -2345,7 +2345,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_satisfaction10");
+                    b.ToTable("questionnaire_satisfaction10", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireTreatment03", b =>
@@ -2393,7 +2393,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_treatment03");
+                    b.ToTable("questionnaire_treatment03", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

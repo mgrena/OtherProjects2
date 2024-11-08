@@ -27,6 +27,19 @@
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Nežiaduci účinok liečiva" ColSpanMd="12" CaptionCssClass="caption-styleH0">
 
+            <DxFormLayoutItem ColSpanMd="12">
+                <div style=" margin-top: 4px; margin-left: 2px;">
+                    <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                </div>
+                <DxFlyout @bind-IsOpen="@IsInfoOpen"
+                          PositionTarget=".info-icon-btn"
+                          Position="FlyoutPosition.Bottom"
+                          PreventCloseOnPositionTargetClick="true"
+                          Width="240">
+                    Keď pridávate účinné látky, nezabudnite uložiť záznamy kliknutím na tlačidlo <b>“Uložiť”</b>
+                </DxFlyout>
+            </DxFormLayoutItem>
+
             <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                 <InputRadioGroup @bind-Value="@druggEffect!.De_1" class="d-flex flex-wrap">
                     @foreach (var item in de_1_Answer)
@@ -127,7 +140,9 @@
                     {
                         <DxButton SubmitFormOnClick="true"
                                   Text="Uložiť"
-                                  RenderStyle="ButtonRenderStyle.Primary" />
+                                  RenderStyle="ButtonRenderStyle.Primary"
+                                  IconCssClass="grid-toolbar-save1"
+                                  Enabled="@isModified" />
                     }
                 </div>
             </DxFormLayoutItem>
@@ -143,10 +158,12 @@
 @code {
     [Parameter]
     public string questionnaireId { get; set; }
+    bool isModified = false;
 
     IGrid drugEffectGrid { get; set; }
     public List<Data.Questionnaires.QuestionnaireDrugEffect09> DrugEffects { get; set; }
 
+    bool IsInfoOpen = true;
     bool isDe1Answer = false;
 
     List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
@@ -210,6 +227,7 @@
     {
         if (!isReadOnly)
         {
+            isModified = false;
             await DrugEffectService.SaveDrugEffectAsync(druggEffect!);
             await Save_Click();
         }
@@ -279,10 +297,16 @@
         await ClearUnsavedChangesAsync();
     }
 
+    private void OnFieldChanged()
+    {
+        isModified = true;
+    }
+
     void OnD1QAnswer(int value)
     {
         druggEffect!.De_1 = value;
         isDe1Answer = (druggEffect!.De_1 == 14);
+        OnFieldChanged();
     }
 
     async Task ClearUnsavedChangesAsync()

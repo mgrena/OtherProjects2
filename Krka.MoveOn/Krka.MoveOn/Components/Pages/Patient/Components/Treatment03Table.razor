@@ -17,7 +17,18 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Zmena v liečbe pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.):" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-
+            <DxFormLayoutItem ColSpanMd="12">
+                <div style=" margin-top: 4px; margin-left: 2px;">
+                    <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                </div>
+                <DxFlyout @bind-IsOpen="@IsInfoOpen"
+                          PositionTarget=".info-icon-btn"
+                          Position="FlyoutPosition.Bottom"
+                          PreventCloseOnPositionTargetClick="true"
+                          Width="240">
+                    Keď pridávate účinné látky, nezabudnite uložiť záznamy kliknutím na tlačidlo <b>“Uložiť”</b>
+                </DxFlyout>
+            </DxFormLayoutItem>
             <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                 <InputRadioGroup @bind-Value="@treat03!.TreatQ1" class="d-flex flex-wrap">
                     @foreach (var item in treat_q_1_Answer)
@@ -129,7 +140,7 @@
     [Parameter]
     public string questionnaireId { get; set; }
     bool isModified = false;
-
+    bool IsInfoOpen = true;
     bool isSaveVisible = false;
 
     bool isTreatQ1Answer = false;

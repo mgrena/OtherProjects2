@@ -23,9 +23,8 @@
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_OngoingBtn />
-     
+
     <Motor06Table questionnaireId="@QuestionnaireIdAsString" />
-    
 </div>
 
 
@@ -36,6 +35,5 @@
 @code {
     [Parameter]
     public Guid questionnaireId { get; set; }
-
     public string QuestionnaireIdAsString => questionnaireId.ToString();
 }

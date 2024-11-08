@@ -39,89 +39,91 @@
                 IndicatorAreaVisible="false"
                 Text="Fetching Data...">
 
-        <EditForm Model="@SatisfactionQ"
-            Context="EditFormContext"
-            OnValidSubmit="@HandleValidSubmit"
-            >
-            <DxFormLayout>
-                <DxFormLayoutGroup Caption="Hodnotenie spokojnosti s liečbou">
+    <EditForm Model="@SatisfactionQ"
+              Context="EditFormContext"
+              OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <DxFormLayout>
+            <DxFormLayoutGroup Caption="Hodnotenie spokojnosti s liečbou" CaptionCssClass="caption-styleH0">
 
 
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Veľmi nespokojný</th>
-                                    <th>Nespokojný</th>
-                                    <th>Neutrálny</th>
-                                    <th>Spokojný</th>
-                                    <th>Veľmi spokojný</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Celková spokojnosť s liečbou</td>
-                                    @foreach (var option in ratingOptions)
-                                    {
-                                        <td>
-                                            <div class="radio-container">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Veľmi nespokojný</th>
+                            <th>Nespokojný</th>
+                            <th>Neutrálny</th>
+                            <th>Spokojný</th>
+                            <th>Veľmi spokojný</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Celková spokojnosť s liečbou</td>
+                            @foreach (var option in ratingOptions)
+                            {
+                                <td>
+                                    <div class="radio-container">
                                         <DxRadio @bind-GroupValue="@SatisfactionQ.SF_1" Value="@option" GroupName="sf_1_group" ReadOnly="@isReadOnly" />
-                                            </div>
-                                        </td>
-                                    }
-                                </tr>
-                                <tr>
-                                    <td>Spokojnosť so zlepšením depresívnych symptómov</td>
-                                    @foreach (var option in ratingOptions)
-                                    {
-                                        <td>
-                                            <div class="radio-container">
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Spokojnosť so zlepšením depresívnych symptómov</td>
+                            @foreach (var option in ratingOptions)
+                            {
+                                <td>
+                                    <div class="radio-container">
                                         <DxRadio @bind-GroupValue="@SatisfactionQ.SF_2" Value="@option" GroupName="sf_2_group" ReadOnly="@isReadOnly" />
-                                            </div>
-                                        </td>
-                                    }
-                                </tr>
-                                <tr>
-                                    <td>Spokojnosť so zlepšením ranných príznakov (t.j. ranná stuhnutosť, problém so vstávaním z postele)</td>
-                                    @foreach (var option in ratingOptions)
-                                    {
-                                        <td>
-                                            <div class="radio-container">
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Spokojnosť so zlepšením ranných príznakov (t.j. ranná stuhnutosť, problém so vstávaním z postele)</td>
+                            @foreach (var option in ratingOptions)
+                            {
+                                <td>
+                                    <div class="radio-container">
                                         <DxRadio @bind-GroupValue="@SatisfactionQ.SF_3" Value="@option" GroupName="sf_3_group" ReadOnly="@isReadOnly" />
-                                            </div>
-                                        </td>
-                                    }
-                                </tr>
-                                <tr>
-                                    <td>Spokojnosť so zlepšením únavy</td>
-                                    @foreach (var option in ratingOptions)
-                                    {
-                                        <td>
-                                            <div class="radio-container">
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Spokojnosť so zlepšením únavy</td>
+                            @foreach (var option in ratingOptions)
+                            {
+                                <td>
+                                    <div class="radio-container">
                                         <DxRadio @bind-GroupValue="@SatisfactionQ.SF_4" Value="@option" GroupName="sf_4_group" ReadOnly="@isReadOnly" />
-                                            </div>
-                                        </td>
-                                    }
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
 
 
-                        <DxFormLayoutItem ColSpanMd="12">
-                            <div style="margin-top: 5px">
-                                @if(!isReadOnly){
-                                <DxButton SubmitFormOnClick="true"
-                                          Text="Uložiť"
-                                          RenderStyle="ButtonRenderStyle.Primary" />
-                                }
-                            </div>
-                        </DxFormLayoutItem>
-                
-                </DxFormLayoutGroup>
-            </DxFormLayout>
-        </EditForm>
-        
-        
+                <DxFormLayoutItem ColSpanMd="12">
+                    <div style="margin-top: 5px">
+                        @if (!isReadOnly)
+                        {
+                            <DxButton SubmitFormOnClick="true"
+                                      Text="Uložiť"
+                                      RenderStyle="ButtonRenderStyle.Primary"
+                                      IconCssClass="grid-toolbar-save1" />
+                        }
+                    </div>
+                </DxFormLayoutItem>
+
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+
+
 </DxLoadingPanel>
 
 @code {
@@ -159,13 +161,13 @@
         if (SatisfactionQ == null)
         {
             SatisfactionQ = new QuestionnaireSatisfaction10
-            {
-                Questionnaire_id = questionnaireId,
-                SF_1 = 0,
-                SF_2 = 0,
-                SF_3 = 0,
-                SF_4 = 0
-            };
+                {
+                    Questionnaire_id = questionnaireId,
+                    SF_1 = 0,
+                    SF_2 = 0,
+                    SF_3 = 0,
+                    SF_4 = 0
+                };
         }
         PanelVisible = false;
     }

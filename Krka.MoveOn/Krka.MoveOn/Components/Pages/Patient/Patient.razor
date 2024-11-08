@@ -88,8 +88,10 @@
                 <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
                 @if (isAdminOrOffice)
                 {
-                    <DxGridDataColumn FieldName="Doctor" Caption="Doktor" />
+                    <DxGridDataColumn FieldName="Doctor" Caption="Doktor" TextAlignment="GridTextAlignment.Center" />
                 }
+                <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" />
+
 
                 <DxGridCommandColumn Width="30px" NewButtonVisible="false">
                     <CellDisplayTemplate Context="gridContext">

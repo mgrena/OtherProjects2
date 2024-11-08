@@ -81,7 +81,7 @@ namespace Krka.MoveOn.Services
             var doctorPatientCount = await _context.Patients
                     .CountAsync(p => p.UserId == patient.UserId && p.DeletedAt == null);
 
-            if (doctorPatientCount >= 20)
+            if (doctorPatientCount >= 21)
             {
                 throw new InvalidOperationException("Doktor môže pridať maximálne 20 pacientov.");
             }
