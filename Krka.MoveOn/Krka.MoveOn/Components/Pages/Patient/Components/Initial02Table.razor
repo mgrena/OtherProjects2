@@ -26,10 +26,7 @@
         EditModelSaving="Grid_EditModelSaving"
         DataItemDeleting="Grid_DataItemDeleting"
         HighlightRowOnHover="true"
-        FocusedRowEnabled="true"
-        >
-
-
+        FocusedRowEnabled="true">
     <ToolbarTemplate Context="toolbarContext">
         @if (!isReadOnly)
         {
@@ -99,7 +96,7 @@
         <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Init_2" ValueDisplayFormat=" {0}" />
         <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Init_3" ValueDisplayFormat=" {0}" />
     </TotalSummary>
-    
+
 </DxGrid>
 
 @code {
@@ -135,24 +132,17 @@
 
     }
 
-
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
     private void AddToast()
     {
         ToastService.ShowToast(new ToastOptions
-        {
-            ProviderName = "Overview",
-            Title = "Učinná látka bola pridaná",
-            ThemeMode = ToastThemeMode.Saturated,
-            RenderStyle = ToastRenderStyle.Success,
-        });
+            {
+                ProviderName = "Overview",
+                Title = "Učinná látka bola pridaná",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
     }
 
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
     private void ModifyToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -164,9 +154,6 @@
             });
     }
 
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
     private void DeleteToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -178,18 +165,13 @@
             });
     }
 
-
-
     async Task UpdateDataAsync()
     {
         Inits = await InitialService.GetQuestionnaireInitial02(questionnaireId);
         initGrid.Reload();
     }
 
-
-
     async Task New_Click() => await initGrid.StartEditNewRowAsync();
-
 
     async Task Cancel_Click() => await ClearUnsavedChangesAsync();
 
@@ -243,11 +225,6 @@
         }
     }
 
-    /// <summary>
-    /// Nastavenie objektu "DeletedAt"
-    /// </summary>
-    /// <param name="e"></param>
-    /// <returns></returns>
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
         var init = (Data.Questionnaires.QuestionnaireInitial02)e.DataItem;
@@ -257,10 +234,10 @@
     }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+
     enum DataChangeType { Modification, Addition, Delete }
 
-
-    //Trieda pre hromadne ukladanie 
+    //Trieda pre hromadne ukladanie
     public static class DataUtils
     {
         public static HashSet<string> ApplyModifiedFields<T>(T source, T target)

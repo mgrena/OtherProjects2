@@ -11,18 +11,6 @@
 
 <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; display: flex; align-items: center; font-weight: bold;">
     <span>MDS-UPDRS škála, časť III. – Nemotorické stránky denného života (nM-EDL)</span>
-    <DxButton CssClass="info-icon-btn3" Click="() => IsInfoOpen3 = !IsInfoOpen3" IconCssClass="grid-toolbar-save" style="margin-left: auto; margin-top: 5px;">
-        <ChildContent Context="buttonContext">
-            <img src="images/info.svg" width="16" height="16" alt="Info" />
-        </ChildContent>
-    </DxButton>
-    <DxFlyout @bind-IsOpen="@IsInfoOpen3"
-              PositionTarget=".info-icon-btn3"
-              Position="FlyoutPosition.Bottom"
-              PreventCloseOnPositionTargetClick="true"
-              Width="240">
-        Min = 0 / Max = 4.
-    </DxFlyout>
 </div>
 <DxGrid @ref="motskillGrid"
         Data="Motskill"
@@ -51,7 +39,7 @@
     </TotalSummary>
 </DxGrid>
 
-<p >
+<p>
     <span style=" font-weight: 600;"> *(P – pravá, Ľ – ľavá, PHK – pravá horná končatina, ĽHK – ľavá horná končatina, PDK – pravá dolná končatina, ĽDK – ľavá dolná končatina)</span>
 </p>
 

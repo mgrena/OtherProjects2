@@ -113,7 +113,9 @@
                     {
                         <DxButton SubmitFormOnClick="true"
                                   Text="Uložiť"
-                                  RenderStyle="ButtonRenderStyle.Primary"/>
+                                  RenderStyle="ButtonRenderStyle.Primary"
+                                  Enabled="@isModified"
+                                  IconCssClass="grid-toolbar-save1" />
                     }
                 </div>
             </DxFormLayoutItem>
@@ -199,7 +201,7 @@
         if (!isReadOnly)
         {
             isModified = false;
-            await TreatmentService.SaveTreatmentAsync(treat03!);            
+            await TreatmentService.SaveTreatmentAsync(treat03!);
             await Save_Click();
         }
     }

@@ -6,6 +6,14 @@ namespace Krka.MoveOn.Data
     [Table("patients")]
     public class Patient
     {
+        public enum ValidEnum
+        {
+            active,
+            terminated
+        }
+
+
+
         [Key]
         [Column("id")]
         public int Id { get; set; }
@@ -13,7 +21,7 @@ namespace Krka.MoveOn.Data
         /// <summary>
         /// User id -> "AspNetUser"
         /// </summary>
-        [Column("id_user", TypeName ="nvarchar"), StringLength(450)]
+        [Column("id_user", TypeName = "nvarchar"), StringLength(450)]
         public required string UserId { get; set; }
 
         [Column("info_confirm")]
@@ -22,8 +30,11 @@ namespace Krka.MoveOn.Data
         [Column("gdpr_confirm")]
         public bool GDPRConfirmation { get; set; } = false;
 
+        [Column("valid")]
+        public ValidEnum Valid { get; set; } = ValidEnum.active; 
+
         /// <summary>
-        ///  Patient code   
+        ///  Patient code
         /// </summary>
         [Column("patient_code", TypeName = "varchar"), StringLength(10)]
         public required string PatientCode { get; set; }

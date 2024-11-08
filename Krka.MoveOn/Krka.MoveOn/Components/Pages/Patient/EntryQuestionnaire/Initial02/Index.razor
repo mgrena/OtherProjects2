@@ -25,18 +25,29 @@
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_EntryBtn />
 
-    <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+    <div style="background-color: #f2f2f2; color: #363c41; border-radius: 2px; text-align: left; font-weight: bold; display:flex; margin-top:5px;">
+        <div style="margin-right: 2px;">
+            <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+        </div>
+        <DxFlyout @bind-IsOpen="@IsInfoOpen"
+                  PositionTarget=".info-icon-btn"
+                  Position="FlyoutPosition.Bottom"
+                  PreventCloseOnPositionTargetClick="true"
+                  Width="240">
+            Keď pridávate účinné látky, nezabudnite uložiť záznamy kliknutím na tlačidlo <b>“Uložiť”</b>
+        </DxFlyout>
         Začiatočná liečba Parkinsonovej choroby
     </div>
 
-    <Initial02Table questionnaireId="@QuestionnaireIdAsString" />
-    
+    <Initial02Table questionnaireId="@QuestionnaireIdAsString" />    
 </div>
 
 
 @code {
     [Parameter]
     public Guid questionnaireId { get; set; }
+    private bool IsInfoOpen = true;
+
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
 

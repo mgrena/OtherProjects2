@@ -31,11 +31,8 @@
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Test cesty" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
                         <div style="display: flex; align-items: center;">
-                            <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                <ChildContent Context="buttonContext">
-                                    <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                </ChildContent>
-                            </DxButton>
+                            <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                
                             <DxSpinEdit @bind-Value="@moca!.Moca_1" MinValue="0" MaxValue="1" Disabled="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen"
@@ -54,11 +51,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn1" Click="() => IsInfoOpen1 = !IsInfoOpen1" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn1" Click="() => IsInfoOpen1 = !IsInfoOpen1" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                 
                                 <DxSpinEdit @bind-Value="@moca!.Moca_2" MinValue="0" MaxValue="1" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen1"
@@ -79,11 +73,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn2" Click="() => IsInfoOpen2 = !IsInfoOpen2" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn2" Click="() => IsInfoOpen2 = !IsInfoOpen2" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                    
                                 <DxSpinEdit @bind-Value="@moca!.Moca_3" MinValue="0" MaxValue="3" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen2"
@@ -112,11 +103,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn3" Click="() => IsInfoOpen3 = !IsInfoOpen3" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn3" Click="() => IsInfoOpen3 = !IsInfoOpen3" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
                                 <DxSpinEdit @bind-Value="@moca!.Moca_4" MinValue="0" MaxValue="3" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen3"
@@ -145,11 +133,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn4" Click="() => IsInfoOpen4 = !IsInfoOpen4" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn4" Click="() => IsInfoOpen4 = !IsInfoOpen4" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                
                                 <DxSpinEdit @bind-Value="@moca!.Moca_5" MinValue="0" MaxValue="2" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen4"
@@ -170,11 +155,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn5" Click="() => IsInfoOpen5 = !IsInfoOpen5" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn5" Click="() => IsInfoOpen5 = !IsInfoOpen5" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+
                                 <DxSpinEdit @bind-Value="@moca!.Moca_6" MinValue="0" MaxValue="1" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen5"
@@ -195,11 +177,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn6" Click="() => IsInfoOpen6 = !IsInfoOpen6" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn6" Click="() => IsInfoOpen6 = !IsInfoOpen6" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                    
                                 <DxSpinEdit @bind-Value="@moca!.Moca_7" MinValue="0" MaxValue="3" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen6"
@@ -228,11 +207,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn7" Click="() => IsInfoOpen7 = !IsInfoOpen7" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn7" Click="() => IsInfoOpen7 = !IsInfoOpen7" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                  
                                 <DxSpinEdit @bind-Value="@moca!.Moca_8" MinValue="0" MaxValue="2" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen7"
@@ -253,11 +229,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn8" Click="() => IsInfoOpen8 = !IsInfoOpen8" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn8" Click="() => IsInfoOpen8 = !IsInfoOpen8" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None"/>
+                                  
                                 <DxSpinEdit @bind-Value="@moca!.Moca_9" MinValue="0" MaxValue="1" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen8"
@@ -286,11 +259,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn9" Click="() => IsInfoOpen9 = !IsInfoOpen9" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn9" Click="() => IsInfoOpen9 = !IsInfoOpen9" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                  
                                 <DxSpinEdit @bind-Value="@moca!.Moca_10" MinValue="0" MaxValue="3" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen9"
@@ -318,11 +288,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn10" Click="() => IsInfoOpen10 = !IsInfoOpen10" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn10" Click="() => IsInfoOpen10 = !IsInfoOpen10" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                   
                                 <DxSpinEdit @bind-Value="@moca!.Moca_11" MinValue="0" MaxValue="5" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen10"
@@ -350,11 +317,8 @@
                         else
                         {
                             <div style="display: flex; align-items: center;">
-                                <DxButton CssClass="info-icon-btn11" Click="() => IsInfoOpen11 = !IsInfoOpen11" IconCssClass="grid-toolbar-save" style="margin-right: 8px;">
-                                    <ChildContent Context="buttonContext">
-                                        <img src="images/info.svg" width="16" height="16" alt="Info" />
-                                    </ChildContent>
-                                </DxButton>
+                                <DxButton CssClass="info-icon-btn11" Click="() => IsInfoOpen11 = !IsInfoOpen11" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                   
                                 <DxSpinEdit @bind-Value="@moca!.Moca_12" MinValue="0" MaxValue="6" />
                             </div>
                             <DxFlyout @bind-IsOpen="@IsInfoOpen11"
@@ -387,13 +351,9 @@
                 {
                     <DxButton SubmitFormOnClick="true"
                               Text="Uložiť"
-                              RenderStyle="ButtonRenderStyle.Primary" />
+                              RenderStyle="ButtonRenderStyle.Primary" 
+                              IconCssClass="grid-toolbar-save1"/>
                 }
-
-                @*                 <DxButton SubmitFormOnClick="false"
-                Text="Dalšia záložka"
-                RenderStyle="ButtonRenderStyle.Secondary"
-                NavigateUrl="/entryQ/init" /> *@
             </div>
         </DxFormLayoutItem>
     </DxFormLayout>

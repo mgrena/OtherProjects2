@@ -78,6 +78,14 @@ namespace Krka.MoveOn.Services
 
         public async Task SavePatientAsync(Patient patient)
         {
+            var doctorPatientCount = await _context.Patients
+                    .CountAsync(p => p.UserId == patient.UserId && p.DeletedAt == null);
+
+            if (doctorPatientCount >= 2)
+            {
+                throw new InvalidOperationException("Doktor môže pridať maximálne 20 pacientov.");
+            }
+
             if (patient.Id == 0)
             {
                 _context.Patients.Add(patient);

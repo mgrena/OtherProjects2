@@ -1,18 +1,10 @@
 ﻿<DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
 
-    <DxToolbarItem Text="Pridať učinnú látku" Enabled="true" Click="NewClick">
-        <img src="images/pill.svg" width="24" height="24" alt="Pridať učinnú látku" />
-        <span style="margin-left: 2px">Pridať učinnú látку</span>
-    </DxToolbarItem>
-    <DxToolbarItem Text="Uložiť" BeginGroup="true" Click="SaveClick" Enabled="BatchItemsEnabled">
-        <img src="@(BatchItemsEnabled ? "images/save-enabled.svg" : "images/save.svg")" width="24" height="24" alt="Save" />
-        <span style="margin-left: 3px; color:@(BatchItemsEnabled ? "#6e7de8" : "inherit");">Uložiť</span>
-    </DxToolbarItem>
+    <DxToolbarItem Text="Pridať učinnú látku" Enabled="true" Click="NewClick" IconCssClass="grid-toolbar-pill"/>
 
-    <DxToolbarItem Text="Zrušiť" Click="CancelClick" Enabled="BatchItemsEnabled">
-        <img src="@(BatchItemsEnabled ? "images/cancel-enabled.svg" : "images/cancel.svg")" width="24" height="24" alt="Cancel" />
-        <span style="margin-left: 4px; color:@(BatchItemsEnabled ? "#6e7de8" : "inherit");">Zrušiť</span>
-    </DxToolbarItem>
+    <DxToolbarItem Text="Uložiť" BeginGroup="true" Click="SaveClick" Enabled="BatchItemsEnabled" IconCssClass="grid-toolbar-save2"/>
+
+    <DxToolbarItem Text="Zrušiť" Click="CancelClick" Enabled="BatchItemsEnabled" IconCssClass="grid-toolbar-cancel1"/>
 
     @ChildContent
 

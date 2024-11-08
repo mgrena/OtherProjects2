@@ -114,6 +114,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// Prvý príznak Parkinsonovej choroby (číselnik na DialSymptoms) !!!!!!!! 
         /// </summary>
         [Column("gen_9_ds")]
+        [Required(ErrorMessage = "Toto pole je povinné.")]
         public int Gen_9_DS { get; set; }
 
         /// <summary>
@@ -125,6 +126,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// <summary>
         /// 10.1 - Ak áno, ktorá špecializácia?   
         /// </summary>
+ 
         [Column("gen_10_1")]
         public int? Gen_10_1 { get; set; }
 
