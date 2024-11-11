@@ -286,10 +286,14 @@ else
         if (string.IsNullOrEmpty(user.LastName))
             e.AddError(nameof(user.LastName), "Priezvisko je povinný údaj.");
 
-        // if (string.IsNullOrEmpty(anUser.Password) || anUser.Password.Length < 6 || anUser.Password.Length > 100)
-        //     identityErrors.Add(new() { Code = "4", Description = "Pole Heslo musí byť aspoň 6 a maximálne 100 znakov dlhé." });
-        // if (!string.IsNullOrEmpty(anUser.ConfirmPassword) && !anUser.ConfirmPassword.Equals(anUser.Password))
-        //     identityErrors.Add(new() { Code = "5", Description = "Heslo a potvrdenie hesla sa nezhodujú." });
+        // check password for new user
+        if (user.Email == null)
+        {
+            if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 6 || user.Password.Length > 100)
+                e.AddError(nameof(user.Password), "Pole Heslo musí byť aspoň 6 a maximálne 100 znakov dlhé.");
+            if (string.IsNullOrEmpty(user.ConfirmPassword) || !user.ConfirmPassword.Equals(user.Password))
+                e.AddError(nameof(user.Password), "Heslo a potvrdenie hesla sa nezhodujú.");
+        }
     }
 
     private async Task OnResetPasswordClick(ApplicationUser user)
