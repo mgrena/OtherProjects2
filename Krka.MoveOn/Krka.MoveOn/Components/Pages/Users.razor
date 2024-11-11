@@ -8,6 +8,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
 @using System.ComponentModel.DataAnnotations
+@inject IToastNotificationService ToastService
 @inject UserService UserService
 
 @attribute [Authorize(Roles = "Admin")]
@@ -198,6 +199,7 @@ else
                 identityErrors = resultUser.Errors.ToList();
                 return;
             }
+            AddToast();
         }
         else
         {
@@ -230,6 +232,7 @@ else
                 if (!resultUser.Succeeded)
                     identityErrors.AddRange(resultUser.Errors.ToList());
             }
+            UpdateToast();
         }
         await UpdateDataAsync();
     }
@@ -243,6 +246,7 @@ else
         if (!resultUser.Succeeded)
             identityErrors.AddRange(resultUser.Errors.ToList());
 
+        DeleteToast();
         await UpdateDataAsync();
     }
     private async Task UpdateDataAsync() {
@@ -299,7 +303,50 @@ else
     private async Task OnResetPasswordClick(ApplicationUser user)
     {
         if (user == null) return;
+        ResetPwdToast();
         await UserService.GeneratePasswordResetTokenAsync(user);
+    }
+
+    // Notifikacie
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Používateľ bol úspešne pridaný",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+    private void UpdateToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje o používateľovi boli úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+    private void ResetPwdToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Bol odoslaný e-mail s linkou na reset hesla",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Používateľ bol úspešne odstránený",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
     }
 
     public void Dispose()
