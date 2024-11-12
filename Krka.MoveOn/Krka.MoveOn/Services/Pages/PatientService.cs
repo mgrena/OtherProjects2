@@ -82,7 +82,7 @@ namespace Krka.MoveOn.Services.Pages
             var doctorPatientCount = await _context.Patients
                     .CountAsync(p => p.UserId == patient.UserId && p.DeletedAt == null);
 
-            if (doctorPatientCount >= 2)
+            if (doctorPatientCount > 20)
             {
                 _logger.LogInformation("The patient limit has been reached for user {UserName}.", patient.UserId);
                 return OperationResult.FailureResult("Doktor môže pridať maximálne 20 pacientov.");
@@ -90,10 +90,12 @@ namespace Krka.MoveOn.Services.Pages
 
             if (patient.Id == 0)
             {
+                _logger.LogInformation("The patient with code {code} has been added.", patient.PatientCode);
                 _context.Patients.Add(patient);
             }
             else
             {
+                _logger.LogInformation("The patient with code {code} has been updated.", patient.PatientCode);
                 _context.Patients.Update(patient);
             }
 
@@ -104,10 +106,12 @@ namespace Krka.MoveOn.Services.Pages
             }
             catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed") == true)
             {
+                _logger.LogError(ex, ex.Message);
                 return OperationResult.FailureResult("Kód pacienta musí byť jedinečný.", ex.InnerException?.Message);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 var exx = ex;
                 while (exx.InnerException != null)
                 {
@@ -129,6 +133,7 @@ namespace Krka.MoveOn.Services.Pages
             var patient = await _context.Patients.FindAsync(patientId);
             if (patient != null)
             {
+                _logger.LogInformation("The patient with id {id} has been deleted.", patientId);
                 patient.DeletedAt = DateTime.Now;
                 _context.Patients.Update(patient);
                 await _context.SaveChangesAsync();

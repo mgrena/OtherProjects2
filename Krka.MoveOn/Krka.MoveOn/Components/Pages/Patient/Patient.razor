@@ -41,7 +41,7 @@
 <div style="display: flex; justify-content: space-between; width: 100%;">
     <div style="width: 52%;">
 
-        <PageTitle>Welcome</PageTitle>
+        <PageTitle>Pacienti</PageTitle>
         @if (isAdminOrOffice)
         {
             <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
@@ -73,7 +73,6 @@
                 TextWrapEnabled="false"
                 HighlightRowOnHover="true"
                 EditModelSaving="Grid_EditModelSaving"
-                CustomizeElement="Grid_CustomizeElement"
                 CustomizeEditModel="Grid_CustomizeEditModel_New"
                 DataItemDeleting="Grid_DataItemDeleting"
                 FocusedRowEnabled="true"
@@ -306,6 +305,7 @@
     private bool IsInfoOpen = true;
     private bool IsInfoOpen1 = true;
     private bool isAdminOrOffice;
+    private ValidationMessageStore messageStore;
 
     bool isReadOnly = false;
 
@@ -470,60 +470,51 @@
                 patient.UserId = selectedDoctorId; // selectedDoctorId from the combobox
             }
 
-            try
+            var result = await PatientService.SavePatientAsync(patient);
+            if (!result.Success)
             {
-                var result = await PatientService.SavePatientAsync(patient);
-                if (!result.Success)
-                {
-                    e.Cancel = true;
-                    var context = patientsGrid.GetEditContext();
-                    ValidationMessageStore messageStore = new(context);
-                    messageStore.Add(new FieldIdentifier(patient, patient.PatientCode), string.Format("{0}: {1}", result.ErrorMessage, result.AdditionalInfo));
-                    context.NotifyValidationStateChanged();
-                    StateHasChanged();
-                    return;
-                }
-
-                // Vytvorenie 3 sekcii dotazníkov (Vstupny, prebiehajúci, Vystupni)
-                var questionnaires = new List<Data.Questionnaires.Questionnaire>
-                    {
-                        new Data.Questionnaires.Questionnaire
-                        {
-                            PatientId = patient.Id,
-                            Date = DateTime.Now,
-                            Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.entry,
-                            CreatedAt = DateTime.Now,
-                            ModifiedAt = DateTime.Now
-                        },
-                        new Data.Questionnaires.Questionnaire
-                        {
-                            PatientId = patient.Id,
-                            Date = DateTime.Now,
-                            Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing,
-                            CreatedAt = DateTime.Now,
-                            ModifiedAt = DateTime.Now
-                        },
-                        new Data.Questionnaires.Questionnaire
-                        {
-                            PatientId = patient.Id,
-                            Date = DateTime.Now,
-                            Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.result,
-                            CreatedAt = DateTime.Now,
-                            ModifiedAt = DateTime.Now
-                        }
-                    };
-
-                foreach (var questionnaire in questionnaires)
-                {
-                    await QuestionnaireService.SaveQuestionnaireAsync(questionnaire);
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                // Zobrazenie chybovej správy pomocou toastu
-                MaxCapacityToast();
+                e.Cancel = true;
+                var context = patientsGrid.GetEditContext();
+                messageStore = new(context);
+                messageStore.Add(new FieldIdentifier(patient, patient.PatientCode), string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo));
+                context.NotifyValidationStateChanged();
                 return;
             }
+
+            // Vytvorenie 3 sekcii dotazníkov (Vstupny, prebiehajúci, Vystupni)
+            var questionnaires = new List<Data.Questionnaires.Questionnaire>
+                {
+                    new Data.Questionnaires.Questionnaire
+                    {
+                        PatientId = patient.Id,
+                        Date = DateTime.Now,
+                        Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.entry,
+                        CreatedAt = DateTime.Now,
+                        ModifiedAt = DateTime.Now
+                    },
+                    new Data.Questionnaires.Questionnaire
+                    {
+                        PatientId = patient.Id,
+                        Date = DateTime.Now,
+                        Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing,
+                        CreatedAt = DateTime.Now,
+                        ModifiedAt = DateTime.Now
+                    },
+                    new Data.Questionnaires.Questionnaire
+                    {
+                        PatientId = patient.Id,
+                        Date = DateTime.Now,
+                        Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.result,
+                        CreatedAt = DateTime.Now,
+                        ModifiedAt = DateTime.Now
+                    }
+                };
+
+            foreach (var questionnaire in questionnaires)
+            {
+                await QuestionnaireService.SaveQuestionnaireAsync(questionnaire);
+            }
+            AddToast();
         }
         else
         {
@@ -533,10 +524,10 @@
             }
 
             await PatientService.SavePatientAsync(patient);
+            UpdateToast();
         }
 
         await UpdateDataAsync();
-        AddToast();
     }
 
     // Nastavenie objektu "DeletedAt"
@@ -593,6 +584,7 @@
     private void ValidateGridData(ValidationMessageStoreEventArgs e)
     {
         var patient = (Data.Patient)e.EditModel;
+        messageStore?.Clear();
 
         // code validation
         if (string.IsNullOrEmpty(patient.PatientCode) || !Regex.IsMatch(patient.PatientCode, "^(ZV|MT|BAR|BAK|TT|NR|RK|BJ|KE|GA)\\d{2}$"))
@@ -605,22 +597,6 @@
         {
             if (string.IsNullOrEmpty(selectedDoctorId))
                 e.AddError(nameof(patient.UserId), "Výber lekára je povinný.");
-        }
-    }
-
-    void Grid_CustomizeElement(GridCustomizeElementEventArgs e)
-    {
-        if (e.ElementType == GridElementType.DataRow)
-        {
-            var patient = Patients[e.VisibleIndex];
-            if (patient.Valid == Data.Patient.ValidEnum.Predčasne_vylúčený)
-            {
-                e.Style = "background-color: #f0f0f0; color: #a0a0a0;";
-            }
-        }
-        if (e.ElementType == GridElementType.HeaderCell)
-        {
-            e.Style = "background-color: rgba(0, 0, 0, 0.08); font-weight: bold;";
         }
     }
 }
