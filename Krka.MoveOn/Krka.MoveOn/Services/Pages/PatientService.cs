@@ -85,7 +85,7 @@ namespace Krka.MoveOn.Services.Pages
             if (doctorPatientCount > 20)
             {
                 _logger.LogInformation("The patient limit has been reached for user {UserName}.", patient.UserId);
-                return OperationResult.FailureResult("Doktor môže pridať maximálne 20 pacientov.");
+                return OperationResult.FailureResult("Lekár môže pridať maximálne 20 pacientov.");
             }
 
             if (patient.Id == 0)
