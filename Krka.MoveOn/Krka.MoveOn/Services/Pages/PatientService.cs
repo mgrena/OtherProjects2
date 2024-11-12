@@ -24,15 +24,17 @@ namespace Krka.MoveOn.Services.Pages
                 var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 patients = await _context.Patients
                     .Where(p => p.DeletedAt == null && p.UserId == userId)
-                    .OrderByDescending(p => p.CreatedAt)
+                    .OrderBy(p => p.Valid == Patient.ValidEnum.Predčasne_vylúčený)
+                    .ThenByDescending(p => p.CreatedAt)
                     .ToListAsync();
             }
             else if (user.IsInRole("Admin") || user.IsInRole("Office"))
             {
                 patients = await _context.Patients
-                    .Where(p => p.DeletedAt == null)
-                    .OrderByDescending(p => p.CreatedAt)
-                    .ToListAsync();
+                   .Where(p => p.DeletedAt == null)
+                   .OrderBy(p => p.Valid == Patient.ValidEnum.Predčasne_vylúčený)
+                   .ThenByDescending(p => p.CreatedAt)
+                   .ToListAsync();
             }
             else
             {
@@ -49,7 +51,8 @@ namespace Krka.MoveOn.Services.Pages
             }
 
 
-            PatientCount = patients.Count;
+            PatientCount = patients.Count(p => p.Valid == Patient.ValidEnum.Aktivný);
+
             return patients;
         }
 

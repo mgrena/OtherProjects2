@@ -9,7 +9,7 @@ namespace Krka.MoveOn.Data
         public enum ValidEnum
         {
             Aktivný,
-            Predčasne_ukončený
+            Predčasne_vylúčený
         }
 
 

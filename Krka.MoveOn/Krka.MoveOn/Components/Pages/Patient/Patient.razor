@@ -73,6 +73,7 @@
                 TextWrapEnabled="false"
                 HighlightRowOnHover="true"
                 EditModelSaving="Grid_EditModelSaving"
+                CustomizeElement="Grid_CustomizeElement"
                 CustomizeEditModel="Grid_CustomizeEditModel_New"
                 DataItemDeleting="Grid_DataItemDeleting"
                 FocusedRowEnabled="true"
@@ -585,6 +586,22 @@
 
         if (string.IsNullOrEmpty(patient.PatientCode) || !Regex.IsMatch(patient.PatientCode, "^(ZV|MT|BAR|BAK|TT|NR|RK|BJ|KE|GA)\\d{2}$"))
             e.AddError(nameof(patient.PatientCode), "Neplatný formát. Použite napríklad ZV19, MT11 a pod");
+    }
+
+    void Grid_CustomizeElement(GridCustomizeElementEventArgs e)
+    {
+        if (e.ElementType == GridElementType.DataRow)
+        {
+            var patient = Patients[e.VisibleIndex];
+            if (patient.Valid == Data.Patient.ValidEnum.Predčasne_vylúčený)
+            {
+                e.Style = "background-color: #f0f0f0; color: #a0a0a0;";
+            }
+        }
+        if (e.ElementType == GridElementType.HeaderCell)
+        {
+            e.Style = "background-color: rgba(0, 0, 0, 0.08); font-weight: bold;";
+        }
     }
 }
 
