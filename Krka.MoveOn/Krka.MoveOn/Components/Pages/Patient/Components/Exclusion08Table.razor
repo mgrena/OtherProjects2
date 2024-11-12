@@ -152,7 +152,6 @@
                             </DxGridDataColumn>
 
                             <DxGridCommandColumn Width="30px" NewButtonVisible="false">
-
                                 <CellDisplayTemplate Context="gridContext">
                                     <div class="grid-cell-align-center">
                                         @if (!isReadOnly)
@@ -181,8 +180,6 @@
                                     </div>
                                 </CellEditTemplate>
                             </DxGridCommandColumn>
-
-
                         </Columns>
                         <EditFormTemplate Context="EditFormContext1">
 
@@ -384,7 +381,7 @@
     async Task UpdateDataAsync()
     {
         AdverseEffects = await ExclusionService.GetAdverseEffect(questionnaireId);
-        advEffGrid.Reload();
+        advEffGrid?.Reload();
     }
 
     async Task New_Click() => await advEffGrid.StartEditNewRowAsync();

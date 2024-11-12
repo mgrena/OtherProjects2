@@ -114,6 +114,7 @@
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || initGrid.IsEditing();
 
     bool isReadOnly = false;
+    bool isCancelClicked = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -223,6 +224,7 @@
                     UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
             }
         }
+        initGrid.Reload();
     }
 
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)

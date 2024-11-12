@@ -73,6 +73,27 @@ namespace Krka.MoveOn.Services.Questionnaires
                 _context.QuestionnaireExclusion08s.Add(questionnaire);
             }
 
+            // Ak Exc_Q je 14, aktualizuj pole Valid (Predčasne vylučený)
+            if (questionnaire.Exc_Q == 14)
+            {
+                var questionnaireRecord = await _context.Questionnaires
+                    .FirstOrDefaultAsync(q => q.Id == questionnaire.Questionnaire_id);
+
+                if (questionnaireRecord != null)
+                {
+                    var patient = await _context.Patients
+                        .FirstOrDefaultAsync(p => p.Id == questionnaireRecord.PatientId);
+
+                    if (patient != null)
+                    {
+                        patient.Valid = Patient.ValidEnum.Predčasne_vylúčený;
+                        patient.ModifiedAt = DateTime.Now;
+                        _context.Patients.Update(patient);
+                    }
+                }
+            }
+
+
             await _context.SaveChangesAsync();
         }
 
