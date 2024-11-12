@@ -314,3 +314,7 @@ html, body {
     -webkit-mask-image: url("/images/key.svg");
     mask-image: url("/images/key.svg");
 }
+/*:root {
+    --bs-primary: #34bc3f;
+}
+*/
