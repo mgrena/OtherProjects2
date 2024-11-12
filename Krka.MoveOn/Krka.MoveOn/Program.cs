@@ -31,7 +31,6 @@ builder.Services.AddDevExpressBlazor(options => {
     options.BootstrapVersion = DevExpress.Blazor.BootstrapVersion.v5;
     options.SizeMode = DevExpress.Blazor.SizeMode.Small;
 });
-builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddMvc();
 
 // configure services

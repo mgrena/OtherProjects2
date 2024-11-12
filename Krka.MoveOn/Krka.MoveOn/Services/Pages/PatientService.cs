@@ -1,17 +1,15 @@
 ﻿using Krka.MoveOn.Data;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Claims;
 
-
-
-namespace Krka.MoveOn.Services
+namespace Krka.MoveOn.Services.Pages
 {
-    public class PatientService(ApplicationDbContext context, AuthenticationStateProvider authenticationStateProvider)
+    public class PatientService(ApplicationDbContext context, AuthenticationStateProvider authenticationStateProvider, ILogger<UserService> logger)
     {
         private readonly ApplicationDbContext _context = context;
         private readonly AuthenticationStateProvider _authenticationStateProvider = authenticationStateProvider;
+        private readonly ILogger _logger = logger;
 
         public int PatientCount { get; private set; }
 
@@ -76,14 +74,15 @@ namespace Krka.MoveOn.Services
             return doctors;
         }
 
-        public async Task SavePatientAsync(Patient patient)
+        public async Task<OperationResult> SavePatientAsync(Patient patient)
         {
             var doctorPatientCount = await _context.Patients
                     .CountAsync(p => p.UserId == patient.UserId && p.DeletedAt == null);
 
             if (doctorPatientCount >= 21)
             {
-                throw new InvalidOperationException("Doktor môže pridať maximálne 20 pacientov.");
+                _logger.LogInformation("The patient limit has been reached for user {UserName}.", patient.UserId);
+                return OperationResult.FailureResult("Doktor môže pridať maximálne 20 pacientov.");
             }
 
             if (patient.Id == 0)
@@ -94,7 +93,20 @@ namespace Krka.MoveOn.Services
             {
                 _context.Patients.Update(patient);
             }
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return OperationResult.SuccessResult();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed") == true)
+            {
+                return OperationResult.FailureResult("Kód pacienta musí byť jedinečný.", ex.InnerException?.Message);
+            }
+            catch (Exception ex)
+            {
+                return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+            }
         }
 
         public async Task DeletePatientAsync(int patientId)

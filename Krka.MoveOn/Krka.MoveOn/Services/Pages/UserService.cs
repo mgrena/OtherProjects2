@@ -177,6 +177,7 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         _navigationManager.ToAbsoluteUri("Account/ConfirmEmailChange").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = user.Id, ["email"] = user.UserName!, ["code"] = code });
 
+        _logger.LogInformation("A change of e-mail address was requested for user {UserName}.", user.UserName);
         await _emailSender.SendConfirmationLinkAsync(user, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));
     }
     public async Task GeneratePasswordResetTokenAsync(ApplicationUser user)
@@ -187,6 +188,7 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
             _navigationManager.ToAbsoluteUri("Account/ResetPassword").AbsoluteUri,
             new Dictionary<string, object?> { ["code"] = code });
 
+        _logger.LogInformation("A password reset was requested for user {UserName}.", user.UserName);
         await _emailSender.SendPasswordResetLinkAsync(user, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));
     }
 

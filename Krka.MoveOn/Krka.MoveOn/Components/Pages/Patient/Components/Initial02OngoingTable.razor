@@ -184,7 +184,7 @@
         Inits = await InitialService.GetQuestionnaireInitial02(questionnaireId);
 
         dialActiveIngredient = await InitialService.GetDialActiveIngredientAsync();
-        init_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+        init_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).OrderBy(d => d.Name).ToList();
 
         questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId);
 

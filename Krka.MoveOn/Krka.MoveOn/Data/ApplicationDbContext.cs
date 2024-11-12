@@ -80,6 +80,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         {
             entity.Property(e => e.Message).HasColumnType("nvarchar(max)");
         });
+        modelBuilder.Entity<Patient>()
+        .HasIndex(e => e.PatientCode)
+        .IsUnique();
 
         // seed data
 

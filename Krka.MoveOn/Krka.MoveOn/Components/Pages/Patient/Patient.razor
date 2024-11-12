@@ -2,6 +2,7 @@
 
 @using Krka.MoveOn.Data
 @using Krka.MoveOn.Services
+@using Krka.MoveOn.Services.Pages
 @using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
@@ -10,7 +11,7 @@
 @using Krka.MoveOn.Resources;
 @using System.Globalization
 @using System.IdentityModel.Claims
-
+@using System.Text.RegularExpressions
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
@@ -64,7 +65,7 @@
                 PagerSwitchToInputBoxButtonCount="10"
                 PagerVisibleNumericButtonCount="10"
                 KeyFieldName="Id"
-                ValidationEnabled="false"
+                ValidationEnabled="true"
                 EditMode="GridEditMode.PopupEditForm"
                 FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
                 ColumnResizeMode="GridColumnResizeMode.NextColumn"
@@ -91,7 +92,6 @@
                     <DxGridDataColumn FieldName="Doctor" Caption="Doktor" TextAlignment="GridTextAlignment.Center" />
                 }
                 <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" />
-
 
                 <DxGridCommandColumn Width="30px" NewButtonVisible="false">
                     <CellDisplayTemplate Context="gridContext">
@@ -138,8 +138,15 @@
                             <DxComboBox Data="@Doctors" TextFieldName="FullName" ValueFieldName="Id" @bind-Value="selectedDoctorId" />
                         </DxFormLayoutItem>
                     }
+                    <DxFormLayoutItem ColSpanMd="12">
+                        <ValidationSummary />
+                    </DxFormLayoutItem>
                 </DxFormLayout>
             </EditFormTemplate>
+
+            <CustomValidators>
+                <MyCustomValidator DataItemValidating="ValidateGridData" />
+            </CustomValidators>
         </DxGrid>
     </div>
 
@@ -570,6 +577,14 @@
             await SetSelectedPatientId(selectedPatientId.Value);
             StateHasChanged(); //Aktualizacia, vykreslenie noveho obsahu
         }
+    }
+
+    private void ValidateGridData(ValidationMessageStoreEventArgs e)
+    {
+        var patient = (Data.Patient)e.EditModel;
+
+        if (string.IsNullOrEmpty(patient.PatientCode) || !Regex.IsMatch(patient.PatientCode, "^(ZV|MT|BAR|BAK|TT|NR|RK|BJ|KE|GA)\\d{2}$"))
+            e.AddError(nameof(patient.PatientCode), "Neplatný formát. Použite napríklad ZV19, MT11 a pod");
     }
 }
 
