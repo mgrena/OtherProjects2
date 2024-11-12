@@ -134,7 +134,7 @@
                     </div>
                     @if (isAdminOrOffice)
                     {
-                        <DxFormLayoutItem Caption="Pre doktora:" ColSpanMd="12">
+                        <DxFormLayoutItem Caption="Pre lekára:" ColSpanMd="12">
                             <DxComboBox Data="@Doctors" TextFieldName="FullName" ValueFieldName="Id" @bind-Value="selectedDoctorId" />
                         </DxFormLayoutItem>
                     }
@@ -471,36 +471,46 @@
 
             try
             {
-                await PatientService.SavePatientAsync(patient);
+                var result = await PatientService.SavePatientAsync(patient);
+                if (!result.Success)
+                {
+                    e.Cancel = true;
+                    var context = patientsGrid.GetEditContext();
+                    ValidationMessageStore messageStore = new(context);
+                    messageStore.Add(new FieldIdentifier(patient, patient.PatientCode), string.Format("{0}: {1}", result.ErrorMessage, result.AdditionalInfo));
+                    context.NotifyValidationStateChanged();
+                    StateHasChanged();
+                    return;
+                }
 
                 // Vytvorenie 3 sekcii dotazníkov (Vstupny, prebiehajúci, Vystupni)
                 var questionnaires = new List<Data.Questionnaires.Questionnaire>
-            {
-                new Data.Questionnaires.Questionnaire
-                {
-                    PatientId = patient.Id,
-                    Date = DateTime.Now,
-                    Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.entry,
-                    CreatedAt = DateTime.Now,
-                    ModifiedAt = DateTime.Now
-                },
-                new Data.Questionnaires.Questionnaire
-                {
-                    PatientId = patient.Id,
-                    Date = DateTime.Now,
-                    Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing,
-                    CreatedAt = DateTime.Now,
-                    ModifiedAt = DateTime.Now
-                },
-                new Data.Questionnaires.Questionnaire
-                {
-                    PatientId = patient.Id,
-                    Date = DateTime.Now,
-                    Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.result,
-                    CreatedAt = DateTime.Now,
-                    ModifiedAt = DateTime.Now
-                }
-            };
+                    {
+                        new Data.Questionnaires.Questionnaire
+                        {
+                            PatientId = patient.Id,
+                            Date = DateTime.Now,
+                            Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.entry,
+                            CreatedAt = DateTime.Now,
+                            ModifiedAt = DateTime.Now
+                        },
+                        new Data.Questionnaires.Questionnaire
+                        {
+                            PatientId = patient.Id,
+                            Date = DateTime.Now,
+                            Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.ongoing,
+                            CreatedAt = DateTime.Now,
+                            ModifiedAt = DateTime.Now
+                        },
+                        new Data.Questionnaires.Questionnaire
+                        {
+                            PatientId = patient.Id,
+                            Date = DateTime.Now,
+                            Order = Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum.result,
+                            CreatedAt = DateTime.Now,
+                            ModifiedAt = DateTime.Now
+                        }
+                    };
 
                 foreach (var questionnaire in questionnaires)
                 {
@@ -583,8 +593,18 @@
     {
         var patient = (Data.Patient)e.EditModel;
 
+        // code validation
         if (string.IsNullOrEmpty(patient.PatientCode) || !Regex.IsMatch(patient.PatientCode, "^(ZV|MT|BAR|BAK|TT|NR|RK|BJ|KE|GA)\\d{2}$"))
-            e.AddError(nameof(patient.PatientCode), "Neplatný formát. Použite napríklad ZV19, MT11 a pod");
+            e.AddError(nameof(patient.PatientCode), "Neplatný formát kódu pacienta. Použite napríklad ZV19, MT11 a pod");
+
+        // doctor validation
+        var authState = AuthenticationStateProvider.GetAuthenticationStateAsync().Result;
+        var user = authState.User;
+        if (user.IsInRole("Admin"))
+        {
+            if (string.IsNullOrEmpty(selectedDoctorId))
+                e.AddError(nameof(patient.UserId), "Výber lekára je povinný.");
+        }
     }
 }
 

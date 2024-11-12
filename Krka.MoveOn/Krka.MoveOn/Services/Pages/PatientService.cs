@@ -79,7 +79,7 @@ namespace Krka.MoveOn.Services.Pages
             var doctorPatientCount = await _context.Patients
                     .CountAsync(p => p.UserId == patient.UserId && p.DeletedAt == null);
 
-            if (doctorPatientCount >= 21)
+            if (doctorPatientCount >= 2)
             {
                 _logger.LogInformation("The patient limit has been reached for user {UserName}.", patient.UserId);
                 return OperationResult.FailureResult("Doktor môže pridať maximálne 20 pacientov.");
@@ -105,7 +105,19 @@ namespace Krka.MoveOn.Services.Pages
             }
             catch (Exception ex)
             {
-                return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+                var exx = ex;
+                while (exx.InnerException != null)
+                {
+                    if (exx.Message.Contains("id_user"))
+                        break;
+                    exx = exx.InnerException;
+                }
+                string message = string.Empty;
+                if (exx.Message.Contains("id_user"))
+                    message = "Výber lekára je povinný.";
+                else
+                    message = exx.Message;
+                return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", message);
             }
         }
 
