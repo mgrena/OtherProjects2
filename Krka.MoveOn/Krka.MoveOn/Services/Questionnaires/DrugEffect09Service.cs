@@ -40,10 +40,31 @@ public class DrugEffect09Service(ApplicationDbContext context)
 
     public async Task SaveDrugEffectAsync(QuestionnaireDrugEffect09 drugEffect)
     {
-        var existingEntity = await _context.QuestionnaireDrugEffect09s.FindAsync(drugEffect.Id);
+        var existingEntity = await _context.QuestionnaireDrugEffect09s
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.Id == drugEffect.Id);
+
         if (existingEntity != null)
         {
             _context.Entry(existingEntity).State = EntityState.Detached;
+        }
+
+        if (drugEffect.De_1 == 15)
+        {
+            var relatedEntities = await _context.QuestionnaireDrugEffect09s
+                .Where(q => q.Questionnaire_id == drugEffect.Questionnaire_id)
+                .ToListAsync();
+
+            foreach (var entity in relatedEntities)
+            {
+                entity.De_2 = null;
+                entity.De_3 = null;
+                entity.De_4 = null;
+                entity.De_5 = null;
+                entity.DeletedAt = DateTime.Now;
+                entity.ModifiedAt = DateTime.Now;
+                _context.QuestionnaireDrugEffect09s.Update(entity);
+            }
         }
 
         if (drugEffect.Id == 0)

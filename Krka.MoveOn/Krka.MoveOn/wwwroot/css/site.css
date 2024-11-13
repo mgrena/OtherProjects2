@@ -232,6 +232,7 @@ html, body {
 
 .grid-toolbar-new,
 .grid-toolbar-delete,
+.grid-toolbar-add1,
 .grid-toolbar-save,
 .grid-toolbar-info,
 .grid-toolbar-patient,
@@ -259,6 +260,12 @@ html, body {
 .grid-toolbar-delete {
     -webkit-mask-image: url("/images/trash.svg");
     mask-image: url("/images/trash.svg");
+    mask-size: 17px 17px;
+}
+
+.grid-toolbar-add1 {
+    -webkit-mask-image: url("/images/add1.svg");
+    mask-image: url("/images/add1.svg");
     mask-size: 17px 17px;
 }
 

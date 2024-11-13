@@ -1,0 +1,18 @@
+﻿<DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
+
+    <DxToolbarItem Text="Pridať učinnú látku" Enabled="true" Click="NewClick" IconCssClass="grid-toolbar-pill"/>
+
+    @ChildContent
+
+</DxToolbar>
+
+@code {
+    [Parameter, EditorRequired]
+    public bool BatchItemsEnabled { get; set; } = false;
+
+    [Parameter, EditorRequired]
+    public EventCallback NewClick { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

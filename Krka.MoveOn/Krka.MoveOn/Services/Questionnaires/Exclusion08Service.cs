@@ -73,8 +73,8 @@ namespace Krka.MoveOn.Services.Questionnaires
                 _context.QuestionnaireExclusion08s.Add(questionnaire);
             }
 
-            // Ak Exc_Q je 14, aktualizuj pole Valid (Predčasne vylučený)
-            if (questionnaire.Exc_Q == 14)
+            // prepnutie stavu na "Pred%case vylucený" a "Aktivný"
+            if (questionnaire.Exc_Q == 14 || questionnaire.Exc_Q == 15)
             {
                 var questionnaireRecord = await _context.Questionnaires
                     .FirstOrDefaultAsync(q => q.Id == questionnaire.Questionnaire_id);
@@ -86,7 +86,9 @@ namespace Krka.MoveOn.Services.Questionnaires
 
                     if (patient != null)
                     {
-                        patient.Valid = Patient.ValidEnum.Predčasne_vylúčený;
+                        patient.Valid = questionnaire.Exc_Q == 14
+                            ? Patient.ValidEnum.Predčasne_vylúčený
+                            : Patient.ValidEnum.Aktivný;
                         patient.ModifiedAt = DateTime.Now;
                         _context.Patients.Update(patient);
                     }

@@ -36,7 +36,7 @@
                           Position="FlyoutPosition.Bottom"
                           PreventCloseOnPositionTargetClick="true"
                           Width="240">
-                    Keď pridávate účinné látky, nezabudnite uložiť záznamy kliknutím na tlačidlo <b>“Uložiť”</b>
+                    Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
                 </DxFlyout>
             </DxFormLayoutItem>
 
@@ -77,7 +77,7 @@
                         <ToolbarTemplate Context="toolbarContext">
                             @if (!isReadOnly)
                             {
-                                <ManagementToolbarWithoutSave NewClick="New_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                                <ManagementToolbarOnlyAdd NewClick="New_Click" BatchItemsEnabled="@BatchItemsEnabled" />
                             }
                         </ToolbarTemplate>
 
@@ -89,7 +89,11 @@
                                 </EditSettings>
                             </DxGridDataColumn>
 
-                            <DxGridDataColumn FieldName="De_3" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+                            <DxGridDataColumn FieldName="De_3" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" > 
+                                <EditSettings>
+                                    <DxSpinEditSettings MinValue="@(0m)"/>
+                                </EditSettings>
+                            </DxGridDataColumn>
 
                             <DxGridDataColumn FieldName="De_4" Caption="Nežiaduci účinok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" /> @* Pozor toto budeme este naplnat *@
 
@@ -229,7 +233,7 @@
         {
             isModified = false;
             await DrugEffectService.SaveDrugEffectAsync(druggEffect!);
-            await Save_Click();
+            Add1Toast();
         }
     }
 
@@ -239,6 +243,17 @@
             {
                 ProviderName = "Overview",
                 Title = "Učinná látka bola pridaná",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private void Add1Toast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Nežiadúci účinok liečiva bol pridaný",
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
             });
@@ -274,29 +289,6 @@
 
     async Task New_Click() => await drugEffectGrid.StartEditNewRowAsync();
 
-    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
-
-    async Task Save_Click()
-    {
-        foreach (var unsavedChange in UnsavedChanges)
-        {
-            var changedItem = unsavedChange.Key;
-            var changeType = unsavedChange.Value.Type;
-            switch (changeType)
-            {
-                case DataChangeType.Addition:
-                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
-                    AddToast();
-                    break;
-                case DataChangeType.Modification:
-                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
-                    ModifyToast();
-                    break;
-            }
-        }
-        await ClearUnsavedChangesAsync();
-    }
-
     private void OnFieldChanged()
     {
         isModified = true;
@@ -315,12 +307,16 @@
         await UpdateDataAsync();
     }
 
-    void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
         var drugEffect = (Data.Questionnaires.QuestionnaireDrugEffect09)e.EditModel;
         var dataItem = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
         drugEffect.Questionnaire_id = questionnaireId;
-        if (e.IsNew)
+        if (drugEffect?.De_2 == null)
+        {
+            return;
+        }
+        else if (e.IsNew)
         {
             DrugEffects.Add(drugEffect);
             UnsavedChanges[drugEffect] = new(DataChangeType.Addition, new());
@@ -329,6 +325,27 @@
         {
             UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
         }
+
+        drugEffectGrid.Reload();
+
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Addition:
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
+                    AddToast();
+                    break;
+                case DataChangeType.Modification:
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+        await ClearUnsavedChangesAsync();
+
     }
 
 

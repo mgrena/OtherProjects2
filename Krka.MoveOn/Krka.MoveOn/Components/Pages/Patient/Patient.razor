@@ -81,7 +81,7 @@
 
             <ToolbarTemplate Context="toolbarContext">
                 <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
-                    <DxToolbarItem Text="Pridať pacienta" Click="New_Click" Enabled="true" IconCssClass="grid-toolbar-patient"/>                
+                    <DxToolbarItem Text="Pridať pacienta" Click="New_Click" Enabled="true" IconCssClass="grid-toolbar-patient" />
                 </DxToolbar>
             </ToolbarTemplate>
 
@@ -100,7 +100,7 @@
                             <DxButton IconCssClass="grid-toolbar-delete"
                                       RenderStyle="ButtonRenderStyle.Link"
                                       aria-label="Delete"
-                                      Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">                                
+                                      Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
                             </DxButton>
                         </div>
                     </CellDisplayTemplate>
@@ -163,51 +163,35 @@
             </div>
             <div>
                 <EditForm Model="@selectedPatient"
-                          Context="EditFormContext"
-                          OnValidSubmit="@HandleConfirmationSubmit">
+                          Context="EditFormContext">
                     <DxFormLayout CssClass="w-100">
                         <DxFormLayoutGroup Caption="Povolenia">
                             <div style=" margin-top: 2px; margin-left: 2px;">
-                                <DxButton CssClass="info-icon-btn1" Click="() => IsInfoOpen1 = !IsInfoOpen1" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
+                                <span style="font-weight: 700; color: red; margin-left: 5px; white-space: normal;">Na účasť pacienta v štúdii je potrebné mať podpísané súhlasy v papierovej forme. Zaškrtnutím políčok potvrdíte, že súhlasy pacientov máte k dispozícii. Po označení oboch políčok sa vám sprístupnia dotazníky pre konkrétneho pacienta.</span>
                             </div>
-                            <DxFlyout @bind-IsOpen="@IsInfoOpen1"
-                                      PositionTarget=".info-icon-btn1"
-                                      Position="FlyoutPosition.Bottom"
-                                      PreventCloseOnPositionTargetClick="true"
-                                      Width="240">
-                                Na sprístupnenie dotazníkov pre konkrétneho pacienta je potrebné mať <b>podpísané súhlasy</b>
-                            </DxFlyout>
                             <DxStackLayout CssClass="w-100" Orientation="@Orientation.Vertical">
                                 <Items>
                                     <DxStackLayoutItem>
                                         <Template>
                                             <DxFormLayoutItem Caption="Má pacient podpísaný informovaný súhlas so štúdiou?">
-                                                <DxCheckBox @bind-Checked="selectedPatient.InfoConfirmation" Text="áno" ReadOnly="@isReadOnly" />
+                                                <DxCheckBox @bind-Checked="selectedPatient.InfoConfirmation"
+                                                            Text="áno"
+                                                            ReadOnly="@isReadOnly"
+                                                            @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.InfoConfirmation)))" />
                                             </DxFormLayoutItem>
                                         </Template>
                                     </DxStackLayoutItem>
                                     <DxStackLayoutItem>
                                         <Template>
                                             <DxFormLayoutItem Caption="Má pacient podpísaný Formulár súhlasu s nariadením GDPR?">
-                                                <DxCheckBox @bind-Checked="selectedPatient.GDPRConfirmation" Text="áno" ReadOnly="@isReadOnly" />
+                                                <DxCheckBox @bind-Checked="selectedPatient.GDPRConfirmation" Text="áno"
+                                                            ReadOnly="@isReadOnly"
+                                                            @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.GDPRConfirmation)))" /> 
                                             </DxFormLayoutItem>
                                         </Template>
                                     </DxStackLayoutItem>
                                 </Items>
                             </DxStackLayout>
-
-                            <DxFormLayoutItem ColSpanMd="12">
-                                <div style="margin-top: 5px">
-                                    @if (!isReadOnly)
-                                    {
-                                        <DxButton SubmitFormOnClick="true"
-                                                  Text="Uložiť"
-                                                  RenderStyle="ButtonRenderStyle.Primary"
-                                                  IconCssClass="grid-toolbar-save1" />
-                                    }
-                                </div>
-                            </DxFormLayoutItem>
-
                         </DxFormLayoutGroup>
                     </DxFormLayout>
                 </EditForm>
@@ -378,7 +362,6 @@
                 RenderStyle = ToastRenderStyle.Success,
             });
     }
-
     private void AddToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -389,7 +372,6 @@
                 RenderStyle = ToastRenderStyle.Success,
             });
     }
-
     private void MaxCapacityToast()
     {
         var doctor = Doctors.FirstOrDefault(d => d.Id == selectedDoctorId);
@@ -402,16 +384,24 @@
                 RenderStyle = ToastRenderStyle.Danger,
             });
     }
-
-    // Notifikacia
-    private void UpdateToast()
+    private void AppoveSuccessToast()
     {
         ToastService.ShowToast(new ToastOptions
             {
                 ProviderName = "Overview",
-                Title = "Údaje o pacientovi boli úspešne aktualizované",
+                Title = "Povolenie bolo udelené",
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+    private void AppoveCancelToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Povolenie bolo zrušené",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Warning,
             });
     }
 
@@ -538,17 +528,44 @@
         DeleteToast();
     }
 
+    private async Task OnCheckBoxChanged(ChangeEventArgs args, string propertyName)
+    {
+        bool isChecked = (bool)args.Value;
 
-    async void HandleConfirmationSubmit()
+        if (propertyName == nameof(selectedPatient.InfoConfirmation))
+        {
+            selectedPatient.InfoConfirmation = isChecked;
+        }
+        else if (propertyName == nameof(selectedPatient.GDPRConfirmation))
+        {
+            selectedPatient.GDPRConfirmation = isChecked;
+        }
+
+        await SaveData(isChecked, propertyName);
+    }
+
+    private async Task SaveData(bool isChecked, string propertyName)
+    {
+        await HandleConfirmationSubmit();
+
+        if (isChecked)
+        {
+            AppoveSuccessToast();
+        }
+        else
+        {
+            AppoveCancelToast();
+        }
+    }
+
+    async Task HandleConfirmationSubmit()
     {
         if (selectedPatient.UserId != "default")
         {
             await PatientService.SavePatientAsync(selectedPatient);
             await UpdateDataAsync();
-            UpdateToast();
         }
     }
-
 
     // Nacitanie dotaznikov podla daneho pacienta
     private async Task LoadQuestionnairesAsync(int patientId)
@@ -556,12 +573,10 @@
         var questionnaires = await QuestionnaireService.GetQuestionnairesByPatientIdAsync(patientId);
         hasQuestionnaires = questionnaires.Any(); // ak obsahuje polozky
         Questionnaires = hasQuestionnaires ? questionnaires : new List<Data.Questionnaires.Questionnaire>();
+        patientsGrid.Reload();
     }
 
-    /// <summary>
-    /// Zmena focusnuteho riadku
-    /// </summary>
-    /// <param name="e"></param>
+    //Zmena focusnuteho riadku
     private async void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
     {
         var patient = e.DataItem as Data.Patient;
@@ -596,11 +611,14 @@
             if (patient.Valid == Data.Patient.ValidEnum.Predčasne_vylúčený)
             {
                 e.Style = "background-color: #f0f0f0; color: #a0a0a0;";
+
             }
+
         }
         if (e.ElementType == GridElementType.HeaderCell)
         {
             e.Style = "background-color: rgba(0, 0, 0, 0.08); font-weight: bold;";
+
         }
     }
 }

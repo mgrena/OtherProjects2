@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
 @using System.ComponentModel.DataAnnotations
+@using Krka.MoveOn.Services
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
@@ -36,7 +37,7 @@
               Context="EditFormContext"
               OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
-        <ValidationSummary />
+
         <DxFormLayout>
             <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
 
@@ -134,7 +135,7 @@
                         @if (!isGen7_1_1)
                         {
                             <DxFormLayoutItem Caption="Denná dávka">
-                                <DxSpinEdit @bind-Value="@gen!.Gen_7_2" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
+                                <DxSpinEdit @bind-Value="@gen!.Gen_7_2" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="@(0m)" />
                             </DxFormLayoutItem>
 
                             <DxFormLayoutItem Caption="Merná jednotka">
@@ -149,9 +150,13 @@
                             </DxFormLayoutItem>
 
                             <DxFormLayoutItem Caption="Dĺžka užívania (v rokoch)">
-                                <DxSpinEdit @bind-Value="@gen!.Gen_7_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
+                                <DxSpinEdit @bind-Value="@gen!.Gen_7_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="0" />
                             </DxFormLayoutItem>
                         }
+
+                        <DxFormLayoutItem ColSpanMd="12">
+                            <ValidationSummary />
+                        </DxFormLayoutItem>
                     </DxFormLayoutGroup>
 
                 }
@@ -166,7 +171,7 @@
                             </DxFormLayoutItem>
 
                             <DxFormLayoutItem Caption="Denná dávka">
-                                <DxSpinEdit @bind-Value="@gen!.Gen_7_1_2" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
+                                <DxSpinEdit @bind-Value="@gen!.Gen_7_1_2" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="@(0m)" />
                             </DxFormLayoutItem>
 
                             <DxFormLayoutItem Caption="Merná jednotka">
@@ -180,14 +185,14 @@
                             </DxFormLayoutItem>
 
                             <DxFormLayoutItem Caption="Dĺžka užívania (v rokoch)">
-                                <DxSpinEdit @bind-Value="@gen!.Gen_7_1_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
+                                <DxSpinEdit @bind-Value="@gen!.Gen_7_1_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="0" />
                             </DxFormLayoutItem>
                         </DxFormLayoutGroup>
                     </div>
                 }
                 <div class="new-row">
                     <DxFormLayoutItem Caption="Dĺžka trvania ťažkostí (v mesiacoch)" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
-                        <DxSpinEdit @bind-Value="@gen!.Gen_8" ShowValidationIcon="true" CssClass="form-item-full-width" ReadOnly="@isReadOnly" />
+                        <DxSpinEdit @bind-Value="@gen!.Gen_8" ShowValidationIcon="true" CssClass="form-item-full-width" ReadOnly="@isReadOnly" MinValue="0" />
                     </DxFormLayoutItem>
                 </div>
 
@@ -309,6 +314,9 @@
             </DxFormLayoutGroup>
 
 
+            <Krka.MoveOn.Services.MyCustomValidator DataItemValidating="ValidateGridData" />
+
+
         </DxFormLayout>
     </EditForm>
 </div>
@@ -370,7 +378,6 @@
             });
     }
 
-
     private void Gen_9_DSToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -381,7 +388,6 @@
                 RenderStyle = ToastRenderStyle.Warning,
             });
     }
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -426,7 +432,6 @@
         await LoadQuestionnaire(QuestionnaireIdAsString);
     }
 
-
     private async Task LoadQuestionnaire(string questionnaireId)
     {
         var questionnaire = await Q01Service.GetQuestionnaireGeneral01ByQuestionnaireIdAsync(questionnaireId);
@@ -467,8 +472,6 @@
         }
     }
 
-
-
     #region "Skrytie a zobrazenie riadkov"
 
     void OnGen7DGChanged(int value)
@@ -504,11 +507,42 @@
         OnFieldChanged();
     }
 
-
     #endregion
 
     private void OnDateChanged(DateTime newWalue)
     {
         OnFieldChanged();
+    }
+
+    private void ValidateGridData(ValidationMessageStoreEventArgs e)
+    {
+        var gQues = (Data.Questionnaires.QuestionnaireGeneral01)e.EditModel;
+
+        switch (gQues.Gen_7_DG)
+        {
+            case 16:
+                if (!gQues.Gen_7_1_DM.HasValue)
+                {
+                    e.AddError(nameof(gQues.Gen_7_1_DM), "Vyberte názov lieku !");
+                }
+                else if (!gQues.Gen_7_2.HasValue)
+                {
+                    e.AddError(nameof(gQues.Gen_7_2), "Vyberte dennú dávku !");
+                }
+                else if (!gQues.Gen_7_3_DU.HasValue)
+                {
+                    e.AddError(nameof(gQues.Gen_7_3_DU), "Vyberte mernú jednotku !");
+                }
+                else if (!gQues.Gen_7_4.HasValue)
+                {
+                    e.AddError(nameof(gQues.Gen_7_4), "Vyberte dĺžku užívania (v rokoch) !");
+                }
+                break;
+
+            // Pridajte ďalšie prípady podľa potreby
+            default:
+                // Akcia pre iné hodnoty
+                break;
+        }
     }
 }
