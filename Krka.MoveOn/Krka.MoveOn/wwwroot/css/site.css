@@ -404,11 +404,11 @@ html, body {
     -webkit-mask-image: url("/images/key.svg");
     mask-image: url("/images/key.svg");
 }
-._EntryBtn .nav-buttons-sub-container {
+._EntryBtn {
     position: sticky;
-    top: 90px;
+    top: 40px;
     z-index: 999;
-    background-color: rgba(109, 36, 120, 0.005);
+    background-color: #fff;
 }
 
 ._EntryBtn .rectangular-button {
@@ -425,11 +425,11 @@ html, body {
     border-color: rgba(109, 36, 120, 0.5);
     color: white;
 }
-._OngoingBtn .nav-buttons-sub-container {
+.nav-buttons-sub-container {
     position: sticky;
-    top: 90px;
+    top: 40px;
     z-index: 999;
-    background-color: rgba(109, 36, 120, 0.005);
+    background-color: #fff;
 }
 
 ._OngoingBtn .rectangular-button {

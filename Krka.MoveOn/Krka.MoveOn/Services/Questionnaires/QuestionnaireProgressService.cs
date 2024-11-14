@@ -1,7 +1,6 @@
 ﻿using Krka.MoveOn.Data;
-using Krka.MoveOn.Data.Dials;
 using Krka.MoveOn.Data.Questionnaires;
-using Krka.MoveOn.Services.Questionnaires;
+using Krka.MoveOn.Services.Pages;
 using Microsoft.EntityFrameworkCore;
 
 namespace Krka.MoveOn.Services.Questionnaires;
