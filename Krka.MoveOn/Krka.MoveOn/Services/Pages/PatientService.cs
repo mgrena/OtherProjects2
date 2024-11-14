@@ -1,4 +1,5 @@
 ﻿using Krka.MoveOn.Data;
+using Krka.MoveOn.Migrations;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Claims;
@@ -54,6 +55,12 @@ namespace Krka.MoveOn.Services.Pages
             PatientCount = patients.Count(p => p.Valid == Patient.ValidEnum.Aktivný);
 
             return patients;
+        }
+
+        public async Task<Patient?> GetPatientByIdAsync(int patientId)
+        {
+            return await _context.Patients
+                .FirstOrDefaultAsync(p => p.Id == patientId);
         }
 
         public async Task<List<ApplicationUser>> GetDoctorsAsync()

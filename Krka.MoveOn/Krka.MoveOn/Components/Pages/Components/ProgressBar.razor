@@ -1,0 +1,15 @@
+﻿<div class="progress" style="width: 100%;">
+    <div class="progress-bar bg-success" role="progressbar" style="width: @ProgressPercentage%" aria-valuenow="@ProgressPercentage" aria-valuemin="0" aria-valuemax="100">
+        @ProgressPercentage%
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int ProgressPercentage { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        StateHasChanged();
+    }
+}

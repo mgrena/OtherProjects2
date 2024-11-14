@@ -1,6 +1,7 @@
 ﻿using Krka.MoveOn.Data;
 using Krka.MoveOn.Data.Dials;
 using Krka.MoveOn.Data.Questionnaires;
+using Krka.MoveOn.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Krka.MoveOn.Services.Questionnaires;
@@ -23,6 +24,12 @@ public class Satisfaction10Service(ApplicationDbContext context)
         {
             _context.Entry(existingEntity).State = EntityState.Detached;
         }
+
+        satisfaction.ProgressPercentage = 
+            ((satisfaction.SF_1 != null ? 100 : 0) +
+            (satisfaction.SF_2 != null ? 100 : 0) +
+            (satisfaction.SF_3 != null ? 100 : 0) +
+            (satisfaction.SF_4 != null ? 100 : 0)) / 4;
 
         if (satisfaction.Id == 0)
         {

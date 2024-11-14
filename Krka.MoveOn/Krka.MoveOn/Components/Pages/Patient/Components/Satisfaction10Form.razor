@@ -131,6 +131,9 @@
     [Parameter]
     public string questionnaireId { get; set; }
 
+    [Parameter]
+public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
     bool PanelVisible { get; set; }
 
     private List<int> ratingOptions = new List<int> { 1, 2, 3, 4, 5 };
@@ -176,7 +179,13 @@
     {
         if (SatisfactionQ != null)
         {
+            if (OnSave.HasDelegate)
+            {
+                await OnSave.InvokeAsync((SatisfactionQ.ProgressPercentage, 100));
+            }
+
             await SatisfactionService.SaveSatisfactionAsync(SatisfactionQ);
+
             AddToast();
         }
     }

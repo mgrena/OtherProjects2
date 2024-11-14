@@ -6,6 +6,7 @@
 @using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
 @using Microsoft.AspNetCore.Authorization
+@using Krka.MoveOn.Components.Pages.Components
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
@@ -13,6 +14,7 @@
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject Treatment03Service TreatmentService
+@inject QuestionnaireProgressService QuestionnaireProgressService
 
 
 
@@ -30,8 +32,9 @@
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_OngoingBtn />
+    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
 
-    <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@QuestionnaireIdAsString" />
+    <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved"/>
 
 </div>
 
@@ -43,5 +46,26 @@
     public Guid questionnaireId { get; set; }
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
+    private QuestionnaireProgressBar QuestionnaireProgressBarRef;
+
+    private bool isProgressComplete = false;
+    private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
+    {
+        if (progressData.CurrentProgress == 100 && isProgressComplete)
+        {
+            return;
+        }
+
+        if (QuestionnaireProgressBarRef != null)
+        {
+            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
+
+            if (progressData.CurrentProgress == 100)
+            {
+                isProgressComplete = true;
+            }
+        }
+    }
 
 }

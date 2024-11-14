@@ -143,6 +143,10 @@
 @code {
     [Parameter]
     public string questionnaireId { get; set; }
+
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
     bool isModified = false;
     bool IsInfoOpen = true;
     bool isSaveVisible = false;
@@ -167,6 +171,7 @@
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || treatGrid.IsEditing();
 
     bool isReadOnly = false;
+    private int previousProgress = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -186,6 +191,8 @@
             };
 
         Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+
+        previousProgress = Treats.Count > 0 ? 100 : 0;
 
         dialActiveIngredient = await TreatmentService.GetDialActiveIngredientAsync();
         treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
@@ -296,6 +303,12 @@
         var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
         var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
         treat.Questionnaire_id = questionnaireId;
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+
         if (treat?.Treat_1 == null)
         {
             return;
