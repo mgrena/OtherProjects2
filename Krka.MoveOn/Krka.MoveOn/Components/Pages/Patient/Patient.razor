@@ -44,20 +44,17 @@
         <PageTitle>Pacienti</PageTitle>
         @if (isAdminOrOffice)
         {
-            <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+            <div class="Patient">
                 Pacienti (@PatientService.PatientCount)
             </div>
         }
         else
         {
-            <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
+            <div class="Patient">
                 Pacienti (@PatientService.PatientCount/20)
             </div>
         }
 
-        <div class="Patient">
-            Pacienti (@PatientService.PatientCount)
-        </div>
         <DxGrid @ref="patientsGrid"
                 Data="Patients"
                 PageSize="20"

@@ -485,10 +485,12 @@ html, body {
 .Initial02 {
     background-color: rgba(109, 36, 120, 0.01);
     color: #363c41;
-    padding: 5px;
     border-radius: 2px;
     text-align: left;
     font-weight: bold;
+    display: flex;
+    margin-top: 5px;
+    margin-left: 2px;
 }
 .Motor05Table {
     background-color: rgba(109, 36, 120, 0.01);
