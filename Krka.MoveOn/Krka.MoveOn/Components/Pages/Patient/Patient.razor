@@ -514,7 +514,6 @@
             }
 
             await PatientService.SavePatientAsync(patient);
-            UpdateToast();
         }
 
         await UpdateDataAsync();
@@ -605,13 +604,19 @@
         if (string.IsNullOrEmpty(patient.PatientCode) || !Regex.IsMatch(patient.PatientCode, "^(ZV|MT|BAR|BAK|TT|NR|RK|BJ|KE|GA)\\d{2}$"))
             e.AddError(nameof(patient.PatientCode), "Neplatný formát kódu pacienta. Použite napríklad ZV19, MT11 a pod");
 
-    void Grid_CustomizeElement(GridCustomizeElementEventArgs e)
-    {
-        if (e.ElementType == GridElementType.DataRow)
         // doctor validation
         var authState = AuthenticationStateProvider.GetAuthenticationStateAsync().Result;
         var user = authState.User;
         if (user.IsInRole("Admin"))
+        {
+            if (string.IsNullOrEmpty(selectedDoctorId))
+                e.AddError(nameof(patient.UserId), "Výber lekára je povinný.");
+        }
+    }
+
+    void Grid_CustomizeElement(GridCustomizeElementEventArgs e)
+    {
+        if (e.ElementType == GridElementType.DataRow)
         {
             var patient = Patients[e.VisibleIndex];
             if (patient.Valid == Data.Patient.ValidEnum.Predčasne_vylúčený)
@@ -622,10 +627,6 @@
         if (e.ElementType == GridElementType.HeaderCell)
         {
             e.Style = "background-color: rgba(0, 0, 0, 0.08); font-weight: bold;";
-            if (string.IsNullOrEmpty(selectedDoctorId))
-                e.AddError(nameof(patient.UserId), "Výber lekára je povinný.");
         }
     }
 }
-
-
