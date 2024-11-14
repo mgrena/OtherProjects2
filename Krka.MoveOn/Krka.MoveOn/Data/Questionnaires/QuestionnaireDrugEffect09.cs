@@ -50,6 +50,6 @@ namespace Krka.MoveOn.Data.Questionnaires
         public required DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Column("deleted_at")]
-        public DateTime? DeletedAt { get; set; } = DateTime.Now;
+        public DateTime? DeletedAt { get; set; }
     }
 }

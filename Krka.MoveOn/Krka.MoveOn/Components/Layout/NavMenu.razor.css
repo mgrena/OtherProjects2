@@ -23,7 +23,7 @@
     }
 
 ::deep .sidebar-header {
-    padding: 2rem 1rem;
+    padding: 0.3rem 1rem;
 }
 
 .logo {
@@ -155,6 +155,7 @@
         min-width: inherit;
         max-width: inherit;
         display: block;
+        
     }
 
         #sidebar .menu-closeonclick-placeholder {
@@ -196,5 +197,9 @@
 
     ::deep .footer {
         display: none;
+    }
+
+    ::deep .nav-button-container {
+        display: none !important;
     }
 }

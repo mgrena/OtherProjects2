@@ -11,10 +11,10 @@
     height: auto;
 }
 
-::deep .welcome-gridlayout .dxbl-gridlayout-root {
-    align-content: center;
-    justify-content: center;
-}
+    ::deep .welcome-gridlayout .dxbl-gridlayout-root {
+        align-content: center;
+        justify-content: center;
+    }
 
 ::deep .title {
     text-align: center;
@@ -60,18 +60,59 @@
         text-decoration: unset;
     }
 
-    ::deep .icon-fill {
-        fill: var(--bs-primary);
+::deep .icon-fill {
+    fill: var(--bs-primary);
+}
+
+::deep .welcome-card .welcome-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bs-body-color);
+    opacity: 0.05;
+    border-radius: 1rem;
+    z-index: -2;
+}
+
+/*::deep .item-caption-style {
+    white-space: normal;
+    overflow-wrap: break-word;
+    display: inline;
+}*/
+
+
+
+
+
+@media (max-width: 1180px) {
+    ::deep .item-caption-style {
+        content: " ";
+        display: inline-block;
+        width: 160%;
+    }
+}
+
+
+@media (max-width: 1250px) {
+    .flex-container {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    ::deep .welcome-card .welcome-card-back {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: var(--bs-body-color);
-        opacity: 0.05;
-        border-radius: 1rem;
-        z-index: -2;
+        .flex-container > div {
+            width: 100%;
+        }
+
+        .flex-container > .accestable {
+            margin-top: 2vh;
+        }
+}
+
+
+@media (max-width: 1250px) {
+    .first-div {
+        width: 100% !important;
     }
+}

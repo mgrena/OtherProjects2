@@ -41,10 +41,30 @@ public class Treatment03Service(ApplicationDbContext context)
 
     public async Task SaveTreatmentAsync(QuestionnaireTreatment03 treat)
     {
-        var existingEntity = await _context.QuestionnaireTreatment03s.FindAsync(treat.Id);
+        var existingEntity = await _context.QuestionnaireTreatment03s
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.Id == treat.Id);
+
         if (existingEntity != null)
         {
             _context.Entry(existingEntity).State = EntityState.Detached;
+        }
+
+        if (treat.TreatQ1 == 15)
+        {
+            var relatedEntities = await _context.QuestionnaireTreatment03s
+                .Where(q => q.Questionnaire_id == treat.Questionnaire_id)
+                .ToListAsync();
+
+            foreach (var entity in relatedEntities)
+            {
+                entity.Treat_1 = null;
+                entity.Treat_2 = null;
+                entity.Treat_3 = null;
+                entity.DeletedAt = DateTime.Now;
+                entity.ModifiedAt = DateTime.Now;
+                _context.QuestionnaireTreatment03s.Update(entity);
+            }
         }
 
         if (treat.Id == 0)

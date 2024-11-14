@@ -7,16 +7,17 @@
 
 @if (!string.IsNullOrEmpty(NavigationManager.ToBaseRelativePath(NavigationManager.Uri)))
 {
-    <DxButton RenderStyle="@ButtonRenderStyle.Dark"
-    Text="Späť"
-    RenderStyleMode="@ButtonRenderStyleMode.Text"
-    CssClass="menu-button"
-    IconCssClass="icon icon-back"
-    Click="OnBackButtonClick">
-    </DxButton>
-
-
+    <div class="backbutton">
+        <DxButton RenderStyle="@ButtonRenderStyle.Dark"
+                  Text="Späť"
+                  RenderStyleMode="@ButtonRenderStyleMode.Text"
+                  CssClass="menu-button"
+                  IconCssClass="icon icon-back"
+                  Click="OnBackButtonClick">
+        </DxButton>
+    </div>
 }
+
 
 @code {
     private bool _isRendered = false;

@@ -30,18 +30,10 @@
                 {
                     <DxFormLayoutItem Caption="Dátum predčasného vylúčenia" ColSpanMd="4" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <ChildContent Context="dateContext">
-                            @if (isReadOnly)
-                            {
-                                <DxDateEdit @bind-Date="@exc.Exc_1" ShowValidationIcon="true" required ReadOnly="true" />
-                            }
-                            else
-                            {
-                                <DxDateEdit @bind-Date="@exc.Exc_1" ShowValidationIcon="true" />
-                            }
-                            <ValidationMessage For="@(() => exc.Exc_1)" />
+                            <DxDateEdit @bind-Date="@exc.Exc_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
                         </ChildContent>
                     </DxFormLayoutItem>
-                    <DxFormLayoutItem ColSpanMd="8"/>
+                    <DxFormLayoutItem ColSpanMd="8" />
 
                     <DxFormLayoutItem Caption="Ako ste zbierali údaje o pacientoch?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <ChildContent Context="dataContext">
@@ -106,12 +98,11 @@
                         <ToolbarTemplate Context="toolbarContext">
                             @if (!isReadOnly)
                             {
-                                <ManagementToolbarWithoutSave NewClick="New_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                                <ManagementToolbarExclusion NewClick="New_Click" BatchItemsEnabled="@BatchItemsEnabled" />
                             }
                         </ToolbarTemplate>
 
                         <Columns>
-                            <DataAnnotationsValidator />
                             <DxGridDataColumn FieldName="Name" Caption="Nežiaduca udalosť " ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
                             <DxGridDataColumn FieldName="Start" Caption="Začiatok" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
 
@@ -183,8 +174,7 @@
                         </Columns>
                         <EditFormTemplate Context="EditFormContext1">
 
-                            <DxFormLayout>
-
+                            <DxFormLayout CssClass="w-100">
                                 <DxFormLayoutItem Caption="Nežiaduca udalosť:" ColSpanMd="12">
                                     @EditFormContext1.GetEditor("Name")
                                 </DxFormLayoutItem>
@@ -209,8 +199,8 @@
                                 <DxFormLayoutItem Caption="Výsledok:" ColSpanMd="12">
                                     @EditFormContext1.GetEditor("Result")
                                 </DxFormLayoutItem>
-
                             </DxFormLayout>
+
                         </EditFormTemplate>
                     </DxGrid>
                 </div>
@@ -374,7 +364,7 @@
         {
             isModified = false;
             await ExclusionService.SaveQuestionnaireExlusion08Async(exc!);
-            await Save_Click();
+            AddToast();
         }
     }
 
@@ -386,10 +376,33 @@
 
     async Task New_Click() => await advEffGrid.StartEditNewRowAsync();
 
-    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
-
-    async Task Save_Click()
+    async Task ClearUnsavedChangesAsync()
     {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var adverse = (Data.AdverseEffects.AdverseEffect)e.EditModel;
+        var dataItem = (Data.AdverseEffects.AdverseEffect)e.DataItem;
+        adverse.QuestionnaireId = questionnaireId;
+        if (adverse?.Name == null)
+        {
+            return;
+        }
+        else if (e.IsNew)
+        {
+            AdverseEffects.Add(adverse);
+            UnsavedChanges[adverse] = new(DataChangeType.Addition, new());
+
+        }
+        else
+        {
+            UnsavedChanges[adverse] = new(DataChangeType.Modification, new());
+        }
+        advEffGrid.Reload();
+
         foreach (var unsavedChange in UnsavedChanges)
         {
             var changedItem = unsavedChange.Key;
@@ -407,32 +420,7 @@
             }
         }
         await ClearUnsavedChangesAsync();
-    }
 
-    async Task ClearUnsavedChangesAsync()
-    {
-        UnsavedChanges.Clear();
-        await UpdateDataAsync();
-    }
-
-    async void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
-        var adverse = (Data.AdverseEffects.AdverseEffect)e.EditModel;
-        var dataItem = (Data.AdverseEffects.AdverseEffect)e.DataItem;
-        adverse.QuestionnaireId = questionnaireId;
-        if (e.IsNew)
-        {
-            AdverseEffects.Add(adverse);
-            UnsavedChanges[adverse] = new(DataChangeType.Addition, new());
-
-        }
-        else
-        {
-            UnsavedChanges[adverse] = new(DataChangeType.Modification, new());
-        }
-
-        // Zavolanie metódy Save_Click
-        await Save_Click();
     }
 
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)

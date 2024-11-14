@@ -14,3 +14,25 @@
     justify-content: space-between;
     width: 100%;
 }
+
+::deep .nav-buttons-sub-container {
+    position: sticky;
+    top: 90px;
+    z-index: 999;
+    background-color: #fff;
+}
+
+::deep .rectangular-button {
+    width: 100%;
+    min-width: 32.8%;
+}
+
+::deep .d-flex .flex-fill {
+    flex: 1 1 auto;
+}
+
+::deep .active-button {
+    background-color: #6e7de8;
+    border-color: #007bff;
+    color: white;
+}

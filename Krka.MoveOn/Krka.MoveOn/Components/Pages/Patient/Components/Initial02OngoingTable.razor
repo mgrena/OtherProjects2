@@ -26,7 +26,7 @@
                           Position="FlyoutPosition.Bottom"
                           PreventCloseOnPositionTargetClick="true"
                           Width="240">
-                    Keď pridávate účinné látky, nezabudnite uložiť záznamy kliknutím na tlačidlo <b>“Uložiť”</b>
+                    Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
                 </DxFlyout>
             </DxFormLayoutItem>
 
@@ -60,7 +60,7 @@
                     <ToolbarTemplate Context="toolbarContext">
                         @if (!isReadOnly)
                         {
-                            <ManagementToolbarWithoutSave NewClick="New_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                            <ManagementToolbarOnlyAdd NewClick="New_Click" BatchItemsEnabled="@BatchItemsEnabled" />
                         }
                     </ToolbarTemplate>
 
@@ -71,9 +71,17 @@
                             </EditSettings>
                         </DxGridDataColumn>
 
-                        <DxGridDataColumn FieldName="Init_2" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+                        <DxGridDataColumn FieldName="Init_2" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                            <EditSettings>
+                                <DxSpinEditSettings MinValue="@(0m)" />
+                            </EditSettings>
+                        </DxGridDataColumn>
 
-                        <DxGridDataColumn FieldName="Init_3" Caption="Počet dávok denne" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+                        <DxGridDataColumn FieldName="Init_3" Caption="Počet dávok denne" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                            <EditSettings>
+                                <DxSpinEditSettings MinValue="0" />
+                            </EditSettings>
+                        </DxGridDataColumn>
 
                         <DxGridDataColumn Caption="Denná dávka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                             <CellDisplayTemplate Context="gridContext">
@@ -201,6 +209,17 @@
             });
     }
 
+    private void Add1Toast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Liečba Parkinsonovej choroby uložená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
     private void ModifyToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -231,10 +250,40 @@
 
     async Task New_Click() => await initGrid.StartEditNewRowAsync();
 
-    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
-
-    async Task Save_Click()
+    async Task ClearUnsavedChangesAsync()
     {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var init = (Data.Questionnaires.QuestionnaireInitial02)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireInitial02)e.DataItem;
+        init.Questionnaire_id = questionnaireId;
+        if (init?.Init_1 == null)
+        {
+            return;
+        }
+        else if (e.IsNew)
+        {
+            Inits.Add(init);
+            UnsavedChanges[init] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            var changedFields = DataUtils.ApplyModifiedFields(init, dataItem);
+            if (changedFields.Count > 0)
+            {
+                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
+                    changes.ChangedFields.UnionWith(changedFields);
+                else
+                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
+            }
+        }
+
+        initGrid.Reload();
+
         foreach (var unsavedChange in UnsavedChanges)
         {
             var changedItem = unsavedChange.Key;
@@ -254,35 +303,6 @@
         await ClearUnsavedChangesAsync();
     }
 
-    async Task ClearUnsavedChangesAsync()
-    {
-        UnsavedChanges.Clear();
-        await UpdateDataAsync();
-    }
-
-    void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
-        var init = (Data.Questionnaires.QuestionnaireInitial02)e.EditModel;
-        var dataItem = (Data.Questionnaires.QuestionnaireInitial02)e.DataItem;
-        init.Questionnaire_id = questionnaireId;
-        if (e.IsNew)
-        {
-            Inits.Add(init);
-            UnsavedChanges[init] = new(DataChangeType.Addition, new());
-        }
-        else
-        {
-            var changedFields = DataUtils.ApplyModifiedFields(init, dataItem);
-            if (changedFields.Count > 0)
-            {
-                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
-                    changes.ChangedFields.UnionWith(changedFields);
-                else
-                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
-            }
-        }
-    }
-
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
         var init = (Data.Questionnaires.QuestionnaireInitial02)e.DataItem;
@@ -294,7 +314,7 @@
     private async Task HandleValidSubmit()
     {
         await QuestionnaireService.UpdateQuestionnaireAsync(questionnaire);
-        await Save_Click();
+        Add1Toast();
     }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);

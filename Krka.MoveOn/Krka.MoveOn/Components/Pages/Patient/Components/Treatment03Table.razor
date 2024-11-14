@@ -26,7 +26,7 @@
                           Position="FlyoutPosition.Bottom"
                           PreventCloseOnPositionTargetClick="true"
                           Width="240">
-                    Keď pridávate účinné látky, nezabudnite uložiť záznamy kliknutím na tlačidlo <b>“Uložiť”</b>
+                    Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
                 </DxFlyout>
             </DxFormLayoutItem>
             <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
@@ -67,7 +67,7 @@
                         <ToolbarTemplate Context="toolbarContext">
                             @if (!isReadOnly)
                             {
-                                <ManagementToolbarWithoutSave NewClick="New_Click" CancelClick="Cancel_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                                <ManagementToolbarOnlyAdd NewClick="New_Click" BatchItemsEnabled="@BatchItemsEnabled" />
                             }
                         </ToolbarTemplate>
 
@@ -78,7 +78,11 @@
                                 </EditSettings>
                             </DxGridDataColumn>
 
-                            <DxGridDataColumn FieldName="Treat_2" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+                            <DxGridDataColumn FieldName="Treat_2" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxSpinEditSettings MinValue="@(0m)" />
+                                </EditSettings>
+                            </DxGridDataColumn>
 
                             <DxGridDataColumn FieldName="Treat_3" Caption="Indikácia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                                 <EditSettings>
@@ -213,7 +217,7 @@
         {
             isModified = false;
             await TreatmentService.SaveTreatmentAsync(treat03!);
-            await Save_Click();
+            Add1Toast();
         }
     }
 
@@ -235,6 +239,17 @@
             {
                 ProviderName = "Overview",
                 Title = "Učinná látka bola pridaná",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private void Add1Toast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Zmena v liečbe pridružných problémov bola uložená",
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
             });
@@ -270,10 +285,40 @@
 
     async Task New_Click() => await treatGrid.StartEditNewRowAsync();
 
-    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
-
-    async Task Save_Click()
+    async Task ClearUnsavedChangesAsync()
     {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
+        treat.Questionnaire_id = questionnaireId;
+        if (treat?.Treat_1 == null)
+        {
+            return;
+        }
+        else if (e.IsNew)
+        {
+            Treats.Add(treat);
+            UnsavedChanges[treat] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            var changedFields = DataUtils.ApplyModifiedFields(treat, dataItem);
+            if (changedFields.Count > 0)
+            {
+                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
+                    changes.ChangedFields.UnionWith(changedFields);
+                else
+                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
+            }
+        }
+
+        treatGrid.Reload();
+
         foreach (var unsavedChange in UnsavedChanges)
         {
             var changedItem = unsavedChange.Key;
@@ -291,35 +336,6 @@
             }
         }
         await ClearUnsavedChangesAsync();
-    }
-
-    async Task ClearUnsavedChangesAsync()
-    {
-        UnsavedChanges.Clear();
-        await UpdateDataAsync();
-    }
-
-    void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
-        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
-        var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
-        treat.Questionnaire_id = questionnaireId;
-        if (e.IsNew)
-        {
-            Treats.Add(treat);
-            UnsavedChanges[treat] = new(DataChangeType.Addition, new());
-        }
-        else
-        {
-            var changedFields = DataUtils.ApplyModifiedFields(treat, dataItem);
-            if (changedFields.Count > 0)
-            {
-                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
-                    changes.ChangedFields.UnionWith(changedFields);
-                else
-                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
-            }
-        }
     }
 
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
