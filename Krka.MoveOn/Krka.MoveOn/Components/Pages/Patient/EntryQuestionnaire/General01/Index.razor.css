@@ -11,9 +11,8 @@
 
 ::deep .caption-styleH1 {
     font-size: 14px;
-    color: #6e7de8;
+    color: #000;
     font-weight: 600;
-
 }
 
 ::deep .caption-styleH0 {

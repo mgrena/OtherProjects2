@@ -9,34 +9,10 @@
 @inject ProtectedSessionStorage SessionStorage
 @inject NavigationManager NavigationManager
 
-<style>
-    .nav-buttons-sub-container {
-        position: sticky;
-        top: 90px;
-        z-index: 999;
-        background-color: #fff;
-    }
-
-    .rectangular-button {
-        width: 100%;
-        min-width: 27.8%;
-    }
-
-    .d-flex .flex-fill {
-        flex: 1 1 auto;
-    }
-
-    .active-button {
-        background-color: #6e7de8;
-        border-color: #007bff;
-        color:white;
-    }
-</style>
-
-
-<div class="nav-buttons-sub-container">
+<div class="nav-buttons-sub-container _ResultBtn">
+ 
     <h1>Výstupný klinický dotazník</h1>
-    <DxFormLayout>
+	<DxFormLayout>
         <DxFormLayoutItem>
             <div class="buttons-group mb-2">
                 <div class="d-flex flex-row w-100">
