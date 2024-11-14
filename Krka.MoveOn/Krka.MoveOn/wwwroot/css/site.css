@@ -314,7 +314,143 @@ html, body {
     -webkit-mask-image: url("/images/key.svg");
     mask-image: url("/images/key.svg");
 }
-/*:root {
-    --bs-primary: #34bc3f;
+._EntryBtn .nav-buttons-sub-container {
+    position: sticky;
+    top: 90px;
+    z-index: 999;
+    background-color: rgba(109, 36, 120, 0.005);
 }
-*/
+
+._EntryBtn .rectangular-button {
+    width: 100%;
+    min-width: 32.8%;
+}
+
+.d-flex .flex-fill {
+    flex: 1 1 auto;
+}
+
+._EntryBtn .active-button {
+    background-color: rgba(109, 36, 120, 0.5);
+    border-color: rgba(109, 36, 120, 0.5);
+    color: white;
+}
+._OngoingBtn .nav-buttons-sub-container {
+    position: sticky;
+    top: 90px;
+    z-index: 999;
+    background-color: rgba(109, 36, 120, 0.005);
+}
+
+._OngoingBtn .rectangular-button {
+    width: 100%;
+    min-width: 32.8%;
+}
+
+.d-flex .flex-fill {
+    flex: 1 1 auto;
+}
+
+._OngoingBtn .active-button {
+    background-color: #00ab4e;
+    border-color: #00ab4e;
+    color: white;
+}
+._ResultBtn .nav-buttons-sub-container {
+    position: sticky;
+    top: 90px;
+    z-index: 999;
+    background-color: rgba(109, 36, 120, 0.005);
+}
+
+._ResultBtn.rectangular-button {
+    width: 100%;
+    min-width: 27.8%;
+}
+
+.d-flex .flex-fill {
+    flex: 1 1 auto;
+}
+
+._ResultBtn .active-button {
+    background-color: #00ab4e;
+    border-color: #00ab4e;
+    color: white;
+}
+//MainLayout
+.nav-buttons-container {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: rgba(109, 36, 120, 0.005);
+}
+.DrugEffect09 {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    text-align: left;
+    font-weight: bold;
+}
+.Initial02 {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    text-align: left;
+    font-weight: bold;
+}
+.Motor05Table {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+.Motor04Table {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+.NavMenu {
+    color: white;
+}
+.Patient {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    text-align: left;
+    font-weight: bold;
+}
+.Exclusion08Table {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    text-align: left;
+    font-weight: bold;
+}
+.Motor06Table {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+.Treatment03 {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    text-align: left;
+    font-weight: bold;
+}
