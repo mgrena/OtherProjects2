@@ -1,6 +1,7 @@
 ﻿@page "/entryQ/gen/{questionnaireId:guid}"
 @using Krka.MoveOn.Services.Questionnaires
 @using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Components
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
@@ -11,6 +12,7 @@
 @rendermode InteractiveServer
 
 @inject General01Service Q01Service
+@inject QuestionnaireProgressService QuestionnaireProgressService
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
@@ -27,10 +29,10 @@
 </div>
 
 
-
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
 
     <_EntryBtn />
+    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
 
     <EditForm Model="@gen"
               Context="EditFormContext"
@@ -329,6 +331,7 @@
     bool isModified = false;
     bool showErrorIcon = false;
 
+    private QuestionnaireProgressBar QuestionnaireProgressBarRef;
     Data.Questionnaires.QuestionnaireGeneral01? gen;
 
     /// <summary>
@@ -462,7 +465,13 @@
         if (!isReadOnly)
         {
             isModified = false;
+            
+            await QuestionnaireProgressBarRef.RefreshDataAsync(gen.ProgressPercentage, 100);
+
             await Q01Service.SaveQuestionnaireGeneral01Async(gen);
+            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+
+
             AddToast();
         }
     }

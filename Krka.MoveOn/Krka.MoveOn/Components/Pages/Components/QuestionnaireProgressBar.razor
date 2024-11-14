@@ -1,0 +1,95 @@
+﻿@using Krka.MoveOn.Data.Questionnaires
+@using Krka.MoveOn.Services.Questionnaires
+@using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
+@using Krka.MoveOn.Components.Pages.Patient.Components
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject ProtectedSessionStorage SessionStorage
+
+<br />
+<div class="progress">
+    <div class="progress-bar bg-success" role="progressbar" style="width: @questionnaire.ProgressPercentage%; transition: none;" aria-valuenow="@questionnaire.ProgressPercentage" aria-valuemin="0" aria-valuemax="100">
+        @questionnaire.ProgressPercentage%
+    </div>
+</div>
+<br />
+
+@code {
+    [Parameter]
+    public string questionnaireId { get; set; }
+    private bool _firstRender = true;
+
+    Questionnaire questionnaire = new Questionnaire
+        {
+            Date = DateTime.Now,
+            PatientId = 0,
+            Order = Questionnaire.QuestionnaireOrderEnum.entry,
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now
+        };
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var result = await SessionStorage.GetAsync<QuestionnaireData>("questionnaireData");
+
+            if (result.Success && result.Value != null && result.Value.QuestionnaireId == questionnaireId)
+            {
+                questionnaire.ProgressPercentage = result.Value.ProgressPercentage;
+            }
+            else
+            {
+                questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId);
+
+                var data = new QuestionnaireData
+                    {
+                        QuestionnaireId = questionnaireId,
+                        ProgressPercentage = questionnaire.ProgressPercentage
+                    };
+                await SessionStorage.SetAsync("questionnaireData", data);
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    public async Task RefreshDataAsync(int previousProgress, int currentProgress)
+    {
+
+        int divisor = questionnaire.Order switch
+        {
+            Questionnaire.QuestionnaireOrderEnum.entry => 6,
+            Questionnaire.QuestionnaireOrderEnum.ongoing => 6,
+            Questionnaire.QuestionnaireOrderEnum.result => 7,
+            _ => throw new InvalidOperationException($"Unknown questionnaire order: {questionnaire.Order}")
+        };
+
+        questionnaire.ProgressPercentage += (currentProgress - previousProgress) / divisor;
+
+        questionnaire.ProgressPercentage = questionnaire.ProgressPercentage > 94
+            ? 100
+            : Math.Clamp(questionnaire.ProgressPercentage, 0, 100);
+
+        var data = new QuestionnaireData
+            {
+                QuestionnaireId = questionnaireId,
+                ProgressPercentage = questionnaire.ProgressPercentage
+            };
+        await SessionStorage.SetAsync("questionnaireData", data);
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    private class QuestionnaireData
+    {
+        public string QuestionnaireId { get; set; } = string.Empty;
+        public int ProgressPercentage { get; set; }
+    }
+}

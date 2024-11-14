@@ -6,12 +6,12 @@
 @using Krka.MoveOn.Components.Pages.Patient.ResultQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
 @using Microsoft.AspNetCore.Authorization
+@using Krka.MoveOn.Components.Pages.Components
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
-
-
+@inject QuestionnaireProgressService QuestionnaireProgressService
 
 
 
@@ -29,12 +29,13 @@
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_ResultBtn />
 
+    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
 
     <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
         Liečba pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.):
     </div>
 
-    <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@QuestionnaireIdAsString" />
+    <Krka.MoveOn.Components.Pages.Patient.Components.Treatment03Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
 
 </div>
 
@@ -46,5 +47,26 @@
     public Guid questionnaireId { get; set; }
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
+    private QuestionnaireProgressBar QuestionnaireProgressBarRef;
+
+    private bool isProgressComplete = false;
+    private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
+    {
+        if (progressData.CurrentProgress == 100 && isProgressComplete)
+        {
+            return;
+        }
+
+        if (QuestionnaireProgressBarRef != null)
+        {
+            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
+
+            if (progressData.CurrentProgress == 100)
+            {
+                isProgressComplete = true;
+            }
+        }
+    }
 
 }

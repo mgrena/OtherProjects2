@@ -5,11 +5,13 @@
 @using Krka.MoveOn.Components.Pages.Patient.ResultQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
 @using Microsoft.AspNetCore.Authorization
+@using Krka.MoveOn.Components.Pages.Components
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 @inject IToastNotificationService ToastService
+@inject QuestionnaireProgressService QuestionnaireProgressService
 
 <PageTitle>MoveOn - Moca</PageTitle>
 
@@ -25,7 +27,9 @@
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_ResultBtn />
-    <Moca07Table questionnaireId="@QuestionnaireIdAsString" />
+    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
+
+    <Moca07Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
     
 </div>
 
@@ -35,5 +39,15 @@
     public Guid questionnaireId { get; set; }
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
+    private QuestionnaireProgressBar QuestionnaireProgressBarRef;
+
+    private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
+    {
+        if (QuestionnaireProgressBarRef != null)
+        {
+            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
+        }
+    }
 
 }

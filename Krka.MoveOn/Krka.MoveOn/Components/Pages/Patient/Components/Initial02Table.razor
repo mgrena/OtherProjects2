@@ -103,6 +103,11 @@
     [Parameter]
     public string questionnaireId { get; set; }
 
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
+    private int ProgressPercentage = 0;
+
     IGrid initGrid { get; set; }
 
     public List<Data.Questionnaires.QuestionnaireInitial02> Inits { get; set; }
@@ -126,7 +131,7 @@
         }
 
         Inits = await InitialService.GetQuestionnaireInitial02(questionnaireId);
-
+        ProgressPercentage = Inits.Count > 0 ? 100 : 0;
         dialActiveIngredient = await InitialService.GetDialActiveIngredientAsync();
         init_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
 
@@ -177,6 +182,11 @@
 
     async Task Save_Click()
     {
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((ProgressPercentage, Inits.Count > 0 ? 100 : 0));
+        }
+
         foreach (var unsavedChange in UnsavedChanges)
         {
             var changedItem = unsavedChange.Key;
@@ -193,6 +203,7 @@
                     break;
             }
         }
+
         await ClearUnsavedChangesAsync();
     }
 

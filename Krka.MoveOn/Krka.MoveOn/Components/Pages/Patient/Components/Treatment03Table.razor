@@ -128,6 +128,10 @@
 @code {
     [Parameter]
     public string questionnaireId { get; set; }
+
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
     bool isModified = false;
 
     bool isSaveVisible = false;
@@ -152,6 +156,7 @@
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || treatGrid.IsEditing();
 
     bool isReadOnly = false;
+    private int previousProgress = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -171,6 +176,8 @@
             };
 
         Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+
+        previousProgress = Treats.Count > 0 ? 100 : 0;
 
         dialActiveIngredient = await TreatmentService.GetDialActiveIngredientAsync();
         treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
@@ -263,6 +270,13 @@
 
     async Task Save_Click()
     {
+        
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+
+
         foreach (var unsavedChange in UnsavedChanges)
         {
             var changedItem = unsavedChange.Key;
@@ -279,6 +293,7 @@
                     break;
             }
         }
+
         await ClearUnsavedChangesAsync();
     }
 

@@ -144,6 +144,9 @@
     [Parameter]
     public string questionnaireId { get; set; }
 
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
     IGrid drugEffectGrid { get; set; }
     public List<Data.Questionnaires.QuestionnaireDrugEffect09> DrugEffects { get; set; }
 
@@ -163,6 +166,7 @@
     Dictionary<QuestionnaireDrugEffect09, DataChange> UnsavedChanges { get; } = new();
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || drugEffectGrid.IsEditing();
     bool isReadOnly = false;
+    private int previousProgress = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -182,6 +186,8 @@
             };
 
         DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(questionnaireId);
+
+        previousProgress = DrugEffects.Count > 0 ? 100 : 0;
 
         dialActiveIngredient = await DrugEffectService.GetDialActiveIngredientAsync();
         De_2_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
@@ -276,6 +282,12 @@
                     break;
             }
         }
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+
         await ClearUnsavedChangesAsync();
     }
 

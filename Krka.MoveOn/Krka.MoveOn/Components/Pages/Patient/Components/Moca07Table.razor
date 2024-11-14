@@ -362,6 +362,10 @@
 @code {
     [Parameter]
     public string questionnaireId { get; set; }
+
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
     bool isReadOnly = false;
 
     bool IsInfoOpen { get; set; } = false;
@@ -381,6 +385,7 @@
 
     List<Data.Dials.DialMH> dialMH = new();
     List<Data.Dials.DialMH> mh_1_Answer = new();
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -444,7 +449,14 @@
     {
         if (!isReadOnly)
         {
+            if (OnSave.HasDelegate)
+            {
+                await OnSave.InvokeAsync((moca.ProgressPercentage, 100));
+            }
+
             await MocaService.SaveQuestionnaireMoca07Async(moca!);
+
+
             AddToast();
         }
 

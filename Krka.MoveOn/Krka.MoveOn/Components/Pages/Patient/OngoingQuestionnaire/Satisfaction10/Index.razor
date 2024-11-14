@@ -5,6 +5,7 @@
 @using Krka.MoveOn.Components.Pages.Patient.Components
 @using Krka.MoveOn.Data.Questionnaires
 @using Microsoft.AspNetCore.Authorization
+@using Krka.MoveOn.Components.Pages.Components
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
@@ -12,14 +13,16 @@
 
 @inject Satisfaction10Service SatisfactionService
 @inject IToastNotificationService ToastService
+@inject QuestionnaireProgressService QuestionnaireProgressService
 
 
 <PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_OngoingBtn />
+    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
 
-    <Satisfaction10Form questionnaireId="@QuestionnaireIdAsString" />
+    <Satisfaction10Form questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
 
 </div>
 
@@ -33,6 +36,16 @@
     public Guid questionnaireId { get; set; }
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
+    private QuestionnaireProgressBar QuestionnaireProgressBarRef;
+
+    private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
+    {
+        if (QuestionnaireProgressBarRef != null)
+        {
+            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
+        }
+    }
 
     
 }

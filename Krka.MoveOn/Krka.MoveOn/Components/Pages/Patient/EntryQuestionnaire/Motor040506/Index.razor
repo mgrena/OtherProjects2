@@ -4,10 +4,12 @@
 @using Krka.MoveOn.Components.Pages.Patient.EntryQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
 @using Microsoft.AspNetCore.Authorization
+@using Krka.MoveOn.Components.Pages.Components
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
+@inject QuestionnaireProgressService QuestionnaireProgressService
 
 <PageTitle>MoveOn - MDS-UPDRS škála </PageTitle>
 
@@ -22,15 +24,16 @@
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_EntryBtn />
+    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
 
     <div class="grid-container" style="display: flex;">
         <div class="grid-item" style="flex: 1;">
-            <Motor04Table questionnaireId="@QuestionnaireIdAsString" />
+            <Motor04Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
             <br>
-            <Motor05Table questionnaireId="@QuestionnaireIdAsString" />
+            <Motor05Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
         </div>
         <div class="grid-item" style="flex: 1; margin-left: 20px;">
-            <Motor06Table questionnaireId="@QuestionnaireIdAsString" />
+            <Motor06Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
         </div>
     </div>
 </div>
@@ -42,4 +45,16 @@
     public Guid questionnaireId { get; set; }
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
+
+    private QuestionnaireProgressBar QuestionnaireProgressBarRef;
+
+    private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
+    {
+        if (QuestionnaireProgressBarRef != null)
+        {
+            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress / 3, progressData.CurrentProgress / 3);
+        }
+    }
+
 }

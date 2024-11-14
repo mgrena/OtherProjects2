@@ -8,6 +8,8 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastNotificationService ToastService
 @inject IJSRuntime JSRuntime
+@inject QuestionnaireService QuestionnaireService
+
 
 <EditForm Model="@exc"
           Context="EditFormContext"
@@ -243,6 +245,10 @@
 @code {
     [Parameter]
     public string questionnaireId { get; set; }
+
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+    private int previousProgress = 0;
     bool isReadOnly = false;
     bool isExc_q_Answer = false;
     bool isExc_3_1_Answer = false;
@@ -317,6 +323,7 @@
     private async Task LoadQuestionnaire(string questionnaireId)
     {
         var questionnaire = await ExclusionService.GetQuestionnaireExclusion08ByQuestionnaireIdAsync(questionnaireId);
+        previousProgress = questionnaire != null ? 100 : 0;
         if (questionnaire != null)
         {
             exc = questionnaire;
@@ -376,7 +383,16 @@
         if (!isReadOnly)
         {
             isModified = false;
+
+            if (OnSave.HasDelegate)
+            {
+                await OnSave.InvokeAsync((previousProgress, 100));
+            }
+
             await ExclusionService.SaveQuestionnaireExlusion08Async(exc!);
+
+
+
             await Save_Click();
         }
     }
@@ -409,6 +425,8 @@
                     break;
             }
         }
+
+
         await ClearUnsavedChangesAsync();
     }
 

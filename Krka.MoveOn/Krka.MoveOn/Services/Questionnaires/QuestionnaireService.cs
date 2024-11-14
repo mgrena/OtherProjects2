@@ -1,6 +1,7 @@
 ﻿using Krka.MoveOn.Data;
 using Krka.MoveOn.Data.Dials;
 using Krka.MoveOn.Data.Questionnaires;
+using Krka.MoveOn.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Krka.MoveOn.Services.Questionnaires;
@@ -40,8 +41,10 @@ public class QuestionnaireService(ApplicationDbContext context)
     /// <returns></returns>
     public async Task<Questionnaire?> GetQuestionnairesByIdAsync(string id)
     {
-        return await Task.Run(() => _context.Questionnaires
-                             .FirstOrDefaultAsync(q => q.Id == id));
+
+        return await context.Questionnaires
+                            .FirstOrDefaultAsync(q => q.Id == id);
+        
     }
 
     public async Task UpdateQuestionnaireAsync(Questionnaire questionnaire)

@@ -49,6 +49,9 @@
     [EditorRequired]
     public string questionnaireId { get; set; }
 
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+    private int previousProgress = 0;
     bool IsInfoOpen2 { get; set; } = false;
 
     IGrid motGrid { get; set; }
@@ -77,6 +80,8 @@
     {
         var mot = await Motor05Service.GetQuestionnaireMotor05(questionnaireId);
         Mot = new List<MDSItem>();
+
+        previousProgress = mot != null ? 100 : 0;
 
         #region "Table mot"
         Mot.Add(new MDSItem() { Fieldname = "Mot_1", Number = "2.1", Name = "Reč", Value = (mot != null) ? mot.Mot_1 : 0 });
@@ -249,6 +254,12 @@
                 }
             }
         }
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+
         await ClearUnsavedChangesAsync();
 
         motGrid.Reload();

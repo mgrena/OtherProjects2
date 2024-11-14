@@ -61,6 +61,9 @@
     [EditorRequired]
     public string questionnaireId { get; set; }
 
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+    private int previousProgress = 0;
     bool IsInfoOpen1 { get; set; } = false;
     bool IsInfoOpen { get; set; } = true;
 
@@ -90,6 +93,8 @@
     {
         var nonmot = await Motor04Service.GetQuestionnaireNonMotor04(questionnaireId);
         Nonmot = new List<MDSItem>();
+
+        previousProgress = nonmot != null ? 100 : 0;
 
         #region "Table nonmot"
 
@@ -261,6 +266,11 @@
                         break;
                 }
             }
+        }
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
         }
 
         await ClearUnsavedChangesAsync();

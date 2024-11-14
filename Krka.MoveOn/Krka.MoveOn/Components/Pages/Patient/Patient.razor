@@ -91,6 +91,16 @@
                     <DxGridDataColumn FieldName="Doctor" Caption="Doktor" />
                 }
 
+                <DxGridDataColumn>
+                    <CellDisplayTemplate Context="gridContext">
+                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                            <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Patient)(gridContext.DataItem))?.EntryProgressPercentage ?? 0)" />
+                            <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Patient)(gridContext.DataItem))?.OngoingProgressPercentage ?? 0)" />
+                            <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Patient)(gridContext.DataItem))?.ResultProgressPercentage ?? 0)" />
+                        </div>
+                    </CellDisplayTemplate>
+                </DxGridDataColumn>
+
                 <DxGridCommandColumn Width="30px" NewButtonVisible="false">
                     <CellDisplayTemplate Context="gridContext">
                         <div class="grid-cell-align-center">
@@ -215,9 +225,12 @@
                             <div style="margin-bottom: 6px;">
                                 <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
                                     <Items>
-                                        <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
-                                                    Text="@GetMenuText(questionnaire.Order)"
-                                                    @onclick="() => SetCurrentId(questionnaire.Id)" />
+                                        <div style="display: flex; align-items: center;">
+                                            <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
+                                                        Text="@GetMenuText(questionnaire.Order)"
+                                                        @onclick="() => SetCurrentId(questionnaire.Id)" />
+                                            <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
+                                        </div>
                                     </Items>
                                 </DxMenu>
                             </div>

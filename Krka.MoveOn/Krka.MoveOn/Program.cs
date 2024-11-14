@@ -52,6 +52,7 @@ builder.Services.AddScoped<Exclusion08Service>();
 builder.Services.AddScoped<QuestionnaireService>();
 builder.Services.AddTransient<DrugEffect09Service>(); 
 builder.Services.AddScoped<Satisfaction10Service>();
+builder.Services.AddScoped<QuestionnaireProgressService>();
 
 // add authentication
 builder.Services.AddBlazoredLocalStorage();

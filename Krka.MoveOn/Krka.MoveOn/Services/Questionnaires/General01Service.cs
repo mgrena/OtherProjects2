@@ -27,6 +27,8 @@ namespace Krka.MoveOn.Services.Questionnaires
                 throw new ArgumentNullException(nameof(questionnaire));
             }
 
+            questionnaire.ProgressPercentage = 100;
+
             var existingQuestionnaire = await _context.QuestionnaireGeneral01s
                 .FirstOrDefaultAsync(q => q.Id == questionnaire.Id);
 
@@ -99,7 +101,7 @@ namespace Krka.MoveOn.Services.Questionnaires
 
                 existingQuestionnaire.ModifiedAt = DateTime.Now;
 
-                _context.QuestionnaireGeneral01s.Update(existingQuestionnaire);
+               _context.QuestionnaireGeneral01s.Update(existingQuestionnaire);
             }
             else
             {

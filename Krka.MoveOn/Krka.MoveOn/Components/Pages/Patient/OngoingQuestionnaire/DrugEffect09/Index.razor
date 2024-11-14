@@ -15,6 +15,7 @@
 @inject DrugEffect09Service DrugEffectService
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject QuestionnaireProgressService QuestionnaireProgressService
 
 
 
@@ -31,7 +32,9 @@
 
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_OngoingBtn />
-    <DrugEffect09Table questionnaireId="@QuestionnaireIdAsString"/>
+    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
+
+    <DrugEffect09Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
 </div>
 
 
@@ -57,6 +60,18 @@
     Dictionary<QuestionnaireDrugEffect09, DataChange> UnsavedChanges { get; } = new();
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || drugEffectGrid.IsEditing();
     bool isReadOnly = false;
+
+    private QuestionnaireProgressBar QuestionnaireProgressBarRef;
+
+    private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
+    {
+        if (QuestionnaireProgressBarRef != null)
+        {
+            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
+        }
+    }
+
 
     protected override async Task OnInitializedAsync()
     {

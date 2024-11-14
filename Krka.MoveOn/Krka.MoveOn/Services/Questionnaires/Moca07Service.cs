@@ -27,6 +27,8 @@ namespace Krka.MoveOn.Services.Questionnaires
                 throw new ArgumentNullException(nameof(questionnaire));
             }
 
+            questionnaire.ProgressPercentage = 100;
+
             var existingQuestionnaire = await _context.QuestionnaireMoca07s
                 .FirstOrDefaultAsync(q => q.Id == questionnaire.Id);
 

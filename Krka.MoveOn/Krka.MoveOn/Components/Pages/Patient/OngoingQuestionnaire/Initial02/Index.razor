@@ -5,15 +5,16 @@
 @using Krka.MoveOn.Components.Pages.Patient.OngoingQuestionnaire.Components
 @using Krka.MoveOn.Components.Pages.Patient.Components
 @using Microsoft.AspNetCore.Authorization
+@using Krka.MoveOn.Components.Pages.Components
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
 @inject Initial02Service InitialService
-@inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject QuestionnaireProgressService QuestionnaireProgressService
 
 <PageTitle>MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment </PageTitle>
 
@@ -30,11 +31,12 @@
 <div class="cw-880" style="width: 70%; margin: 0 auto;">
     <_OngoingBtn />
 
+    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
 
     <Initial02DateHeader questionnaireId="@QuestionnaireIdAsString" />
 
 
-    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@QuestionnaireIdAsString" />
+    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
 
 </div>
 
@@ -58,5 +60,28 @@
         }
 
     }
+
+    private QuestionnaireProgressBar QuestionnaireProgressBarRef;
+
+    private bool isProgressComplete = false;
+    private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
+    {
+        if (progressData.CurrentProgress == 100 && isProgressComplete)
+        {
+            return;
+        }
+
+        if (QuestionnaireProgressBarRef != null)
+        {
+            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
+
+            if (progressData.CurrentProgress == 100)
+            {
+                isProgressComplete = true;
+            }
+        }
+    }
+
 
 }
