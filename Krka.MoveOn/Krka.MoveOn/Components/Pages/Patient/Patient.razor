@@ -38,8 +38,8 @@
 </div>
 
 
-<div style="display: flex; justify-content: space-between; width: 100%;">
-    <div style="width: 52%;">
+<div class="flex-container" style="display: flex; justify-content: space-between; width: 100%;">
+    <div class="first-div" style="width: 52%;">
 
         <PageTitle>Welcome</PageTitle>
         @if (isAdminOrOffice)
@@ -152,7 +152,7 @@
     </div>
 
 
-    <div style="width: 45%">
+    <div style="width: 45%" class="accestable first-div" >
         <div style="background-color: #f2f2f2; color: #363c41; padding: 5px; border-radius: 2px; text-align: left; font-weight: bold;">
             Vybraný pacient
         </div>
@@ -173,7 +173,7 @@
                                 <Items>
                                     <DxStackLayoutItem>
                                         <Template>
-                                            <DxFormLayoutItem Caption="Má pacient podpísaný informovaný súhlas so štúdiou?">
+                                            <DxFormLayoutItem Caption="Má pacient podpísaný informovaný súhlas so štúdiou?" CaptionCssClass="item-caption-style">
                                                 <DxCheckBox @bind-Checked="selectedPatient.InfoConfirmation"
                                                             Text="áno"
                                                             ReadOnly="@isReadOnly"
@@ -183,7 +183,7 @@
                                     </DxStackLayoutItem>
                                     <DxStackLayoutItem>
                                         <Template>
-                                            <DxFormLayoutItem Caption="Má pacient podpísaný Formulár súhlasu s nariadením GDPR?">
+                                            <DxFormLayoutItem Caption="Má pacient podpísaný Formulár súhlasu s nariadením GDPR?" CaptionCssClass="item-caption-style">
                                                 <DxCheckBox @bind-Checked="selectedPatient.GDPRConfirmation" Text="áno"
                                                             ReadOnly="@isReadOnly"
                                                             @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.GDPRConfirmation)))" /> 
@@ -207,7 +207,7 @@
                         @foreach (var questionnaire in Questionnaires)
                         {
                             <div style="margin-bottom: 6px;">
-                                <DxMenu Orientation="@Orientation.Horizontal" CssClass="menu">
+                                <DxMenu Orientation="@Orientation.Horizontal">
                                     <Items>
                                         <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
                                                     Text="@GetMenuText(questionnaire.Order)"
