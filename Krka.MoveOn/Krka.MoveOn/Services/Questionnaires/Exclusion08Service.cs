@@ -2,13 +2,19 @@
 using Krka.MoveOn.Data.AdverseEffects;
 using Krka.MoveOn.Data.Dials;
 using Krka.MoveOn.Data.Questionnaires;
+using Krka.MoveOn.Services.Pages;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Krka.MoveOn.Services.Questionnaires
 {
-    public class Exclusion08Service(ApplicationDbContext context)
+    public class Exclusion08Service(ApplicationDbContext context, IServiceProvider serviceProvider, IOptions<ApplicationSettings> options)
     {
         private readonly ApplicationDbContext _context = context;
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly ApplicationSettings settings = options.Value;
 
         public async Task<QuestionnaireExclusion08?> GetQuestionnaireExclusion08ByQuestionnaireIdAsync(string questionnaireId)
         {
@@ -91,6 +97,22 @@ namespace Krka.MoveOn.Services.Questionnaires
                             : Patient.ValidEnum.Aktivný;
                         patient.ModifiedAt = DateTime.Now;
                         _context.Patients.Update(patient);
+
+                        if (serviceProvider.GetRequiredService<IEmailSender<ApplicationUser>>() is EmailSender emailSender)
+                        {
+                            var userService = serviceProvider.GetRequiredService<UserService>();
+                            string? doctorName = "?";
+                            if (userService != null)
+                            {
+                                var user = await userService.GetUserByIdAsync(patient.UserId);
+                                if (user != null) doctorName = user.FullName;
+                            }
+
+                            string body = string.Format("<p>Dobrý deň,</><p>toto je automaticky generovaný e-mail.</p>" +
+                                "<p>Na stránke <a href='https://studiamoveon.sk/'>studiamoveon.sk</a> bol predčasne vylúčený pacient {0} lekára {1}.</p>" +
+                                "<p>S pozdravom,<br>Váš tím podpory</p>", patient.PatientCode, doctorName);
+                            await emailSender.SendEmailAsync(settings.ExclusionEmail, "studiamoveon.sk predcasne vylucenie", body);
+                        }
                     }
                 }
             }

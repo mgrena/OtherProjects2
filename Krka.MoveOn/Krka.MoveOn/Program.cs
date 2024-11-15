@@ -92,6 +92,7 @@ builder.Services.AddScoped<UserManager<ApplicationUser>>();
 // configure EmailSender
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("SmtpOptions"));
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
+builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
 
 // configure Logger
 builder.Logging.AddDbLogger();
