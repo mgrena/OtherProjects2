@@ -2598,7 +2598,7 @@ textarea.form-control-lg {
 	}
 
 	.form-check-input[type=radio] {
-		border-radius: 500%
+		border-radius: 50%
 	}
 
 	.form-check-input:active {
