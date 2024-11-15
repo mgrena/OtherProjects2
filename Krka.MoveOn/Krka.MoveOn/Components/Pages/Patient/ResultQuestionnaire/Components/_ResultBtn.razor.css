@@ -1,11 +1,9 @@
 ﻿::deep .rectangular-button {
-    border-radius: 0;
-    padding: 30px 20px;
-    border: 1px solid black;
-    border-color: #dfdfdf;
+    min-width: 27.8%;
 }
 
+/*
 ::deep .style-btn {
     width: 100%;
 }
-
+*/

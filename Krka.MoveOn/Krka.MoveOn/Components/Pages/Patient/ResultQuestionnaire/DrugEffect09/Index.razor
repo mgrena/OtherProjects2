@@ -29,15 +29,14 @@
                      Width="320px" />
 </div>
 
-<div class="cw-880" style="width: 70%; margin: 0 auto;">
+<div class="cw-880 mo-main-layout">
     <_ResultBtn />
 
     <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
 
-    <div class="DrugEffect09">
+    <div class="mo-caption-styleH3">
         Nežiaduci účinok liečiva:
     </div>
-
 
     <DrugEffect09Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
 

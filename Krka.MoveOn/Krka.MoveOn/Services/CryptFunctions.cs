@@ -54,7 +54,7 @@ public class CryptFunctions
     /// <summary>
     /// Method that compares a plain string to a BCrypt hash
     /// </summary>
-    /// <param name="input">plain imput string</param>
+    /// <param name="input">plain input string</param>
     /// <param name="hash">hash string hashed by local algotitm</param>
     public static bool DoesBCryptPasswordMatch(string input, string hash)
     {
