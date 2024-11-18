@@ -46,10 +46,7 @@ namespace Krka.MoveOn.Services.Questionnaires
 
         public async Task SaveQuestionnaireExlusion08Async(QuestionnaireExclusion08 questionnaire)
         {
-            if (questionnaire == null)
-            {
-                throw new ArgumentNullException(nameof(questionnaire));
-            }
+            ArgumentNullException.ThrowIfNull(questionnaire);
 
             var existingQuestionnaire = await _context.QuestionnaireExclusion08s
                 .FirstOrDefaultAsync(q => q.Id == questionnaire.Id);
