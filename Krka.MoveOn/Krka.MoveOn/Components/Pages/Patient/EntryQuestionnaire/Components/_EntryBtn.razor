@@ -1,6 +1,7 @@
 ﻿@using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using Krka.MoveOn.Components.Pages.Components
+@using Krka.MoveOn
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
@@ -14,7 +15,7 @@
     <DxFormLayout>
         <DxFormLayoutItem>
             <div class="mo-buttons-group mb-2">
-                <div class="d-flex flex-row w-100">
+                <div class="mo-buttons-group mb-2 d-flex flex-row w-100">
                     <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                               RenderStyleMode="@ButtonRenderStyleMode.Outline"
                               Text="Detekcia príznakov"
@@ -47,17 +48,60 @@
                               NavigateUrl="@GetNavigateUrl("/entryQ/exc")" />
                 </div>
             </div>
+            <div class="hamburger-menu" style="font-size:18px;" @onclick="ToggleHamburgerMenu">
+                ☰ Dotazníky
+            </div>
+            <div class="hamburger-menu-content @(isHamburgerMenuVisible ? "show" : "")" id="hamburgerMenu">
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Detekcia príznakov"
+                          CssClass="@GetButtonCssClass("/entryQ/gen")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/gen")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Začiatočná liečba"
+                          CssClass="@GetButtonCssClass("/entryQ/init")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/init")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Liečba pridružených problémov"
+                          CssClass="@GetButtonCssClass("/entryQ/treat")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/treat")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="MDS-UPDRS škála"
+                          CssClass="@GetButtonCssClass("/entryQ/motor")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/motor")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Moca"
+                          CssClass="@GetButtonCssClass("/entryQ/moca")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/moca")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Predčasné vylúčenie"
+                          CssClass="@GetButtonCssClass("/entryQ/exc")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/exc")" />
+            </div>
+
         </DxFormLayoutItem>
     </DxFormLayout>
 
 </div>
 
 <ReturnLinkManager ReturnLink="/patients" />
-
 @code
 {
     private string currentId;
     private string currentUrl;
+
+    private bool isHamburgerMenuVisible = false;
+
+    private void ToggleHamburgerMenu()
+    {
+        isHamburgerMenuVisible = !isHamburgerMenuVisible;
+    }
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
