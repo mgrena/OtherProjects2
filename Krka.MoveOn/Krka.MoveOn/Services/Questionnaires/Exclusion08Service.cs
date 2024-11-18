@@ -129,6 +129,33 @@ namespace Krka.MoveOn.Services.Questionnaires
             if (exc.Id == 0)
             {
                 _context.AdverseEffects.Add(exc);
+
+                // send info email
+                // 1. questionnaire
+                var quest = _context.Questionnaires.FirstOrDefault(i => i.Id == exc.QuestionnaireId);
+                if (quest != null)
+                {
+                    // 2. patient
+                    var patient = _context.Patients.FirstOrDefault(i => i.Id == quest.PatientId);
+                    if (patient != null)
+                    {
+                        if (serviceProvider.GetRequiredService<IEmailSender<ApplicationUser>>() is EmailSender emailSender)
+                        {
+                            var userService = serviceProvider.GetRequiredService<UserService>();
+                            string? doctorName = "?";
+                            if (userService != null)
+                            {
+                                var user = await userService.GetUserByIdAsync(patient.UserId);
+                                if (user != null) doctorName = user.FullName;
+                            }
+
+                            string body = string.Format("<p>Dobrý deň,</><p>toto je automaticky generovaný e-mail.</p>" +
+                                "<p>Na stránke <a href='https://studiamoveon.sk/'>studiamoveon.sk</a> bola zaznamenaná nežiadúca udalosť {0} u pacienta s kódom {1} lekára {2}.</p>" +
+                                "<p>S pozdravom,<br>Váš tím podpory</p>", exc.Name, patient.PatientCode, doctorName);
+                            await emailSender.SendEmailAsync(settings.ExclusionEmail, "studiamoveon.sk neziaduce ucinky", body);
+                        }
+                    }
+                }
             }
             else
             {
