@@ -13,7 +13,7 @@ namespace Krka.MoveOn.Services.Questionnaires
     public class Exclusion08Service(ApplicationDbContext context, IServiceProvider serviceProvider, IOptions<ApplicationSettings> options)
     {
         private readonly ApplicationDbContext _context = context;
-        private readonly IServiceProvider _serviceProvider = serviceProvider;
+        private readonly IServiceProvider _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         private readonly ApplicationSettings settings = options.Value;
 
         public async Task<QuestionnaireExclusion08?> GetQuestionnaireExclusion08ByQuestionnaireIdAsync(string questionnaireId)

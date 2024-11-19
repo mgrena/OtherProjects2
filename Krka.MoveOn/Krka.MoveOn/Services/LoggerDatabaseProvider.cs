@@ -10,12 +10,12 @@ namespace Krka.MoveOn.Services;
 public class LoggerDatabaseProvider(ILogs logs, IServiceProvider serviceProvider) : ILoggerProvider
 {
     private readonly ILogs myLogs = logs;
-    private readonly IServiceProvider myServiceProvider = serviceProvider;
+    private readonly IServiceProvider myServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
     /// <inheritdoc/>
     public ILogger CreateLogger(string categoryName)
     {
-        return new DbLogger(categoryName, myLogs, serviceProvider);
+        return new DbLogger(categoryName, myLogs, myServiceProvider);
     }
 
     /// <inheritdoc/>
