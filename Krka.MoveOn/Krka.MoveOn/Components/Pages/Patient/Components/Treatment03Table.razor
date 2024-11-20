@@ -10,6 +10,7 @@
 @inject Treatment03Service TreatmentService
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
 
 <EditForm Model="@treat03"
           Context="EditFormContext"
@@ -23,7 +24,7 @@
                 </div>
                 <DxFlyout @bind-IsOpen="@IsInfoOpen"
                           PositionTarget=".info-icon-btn"
-                          Position="FlyoutPosition.Bottom"
+                          Position="FlyoutPosition.LeftEnd"
                           PreventCloseOnPositionTargetClick="true"
                           Width="240">
                     Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
@@ -53,9 +54,10 @@
                             PageSizeSelectorAllRowsItemVisible="true"
                             PagerSwitchToInputBoxButtonCount="10"
                             PagerVisibleNumericButtonCount="10"
+                            PopupEditFormHeaderText="Učinná látka"
                             KeyFieldName="Id"
                             ValidationEnabled="false"
-                            EditMode="GridEditMode.EditCell"
+                            EditMode="GridEditMode.PopupEditForm"
                             FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
                             ColumnResizeMode="GridColumnResizeMode.NextColumn"
                             TextWrapEnabled="false"
@@ -72,6 +74,12 @@
                         </ToolbarTemplate>
 
                         <Columns>
+                            <DxGridDataColumn FieldName="Treat_3" Caption="Indikácia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@treat_3_Answer" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
                             <DxGridDataColumn FieldName="Treat_1" Caption="Učinná látka" Width="" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                                 <EditSettings>
                                     <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
@@ -84,40 +92,54 @@
                                 </EditSettings>
                             </DxGridDataColumn>
 
-                            <DxGridDataColumn FieldName="Treat_3" Caption="Indikácia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                                <EditSettings>
-                                    <DxComboBoxSettings Data="@treat_3_Answer" ValueFieldName="Id" TextFieldName="Name" />
-                                </EditSettings>
-                            </DxGridDataColumn>
-
                             @if (!isReadOnly)
                             {
-                                <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+                                <DxGridCommandColumn Width="80px" NewButtonVisible="false">
 
                                     <CellDisplayTemplate Context="gridContext">
+
                                         <div class="grid-cell-align-center">
+                                            <DxButton IconCssClass="grid-icon grid-icon-edit"
+                                                      RenderStyle="ButtonRenderStyle.Link"
+                                                      title="Upraviť"
+                                                      Click="@(() => OnEditButtonClick((Data.Questionnaires.QuestionnaireTreatment03)gridContext.DataItem))" />
+
                                             <DxButton IconCssClass="grid-icon grid-icon-delete"
                                                       RenderStyle="ButtonRenderStyle.Link"
-                                                      aria-label="Delete"
-                                                      Click="@(() => treatGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                                                <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                                            </DxButton>
+                                                      title="Vymazať"
+                                                      Click="@(() => treatGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
                                         </div>
                                     </CellDisplayTemplate>
-
-                                    <CellEditTemplate Context="editContext">
-                                        <div class="grid-cell-align-center">
-                                            <DxButton Enabled="false"
-                                                      aria-label="Delete"
-                                                      CssClass="grid-disabled-button"
-                                                      IconCssClass="grid-icon grid-icon-delete"
-                                                      RenderStyle="ButtonRenderStyle.Link" />
-
-                                        </div>
-                                    </CellEditTemplate>
                                 </DxGridCommandColumn>
                             }
                         </Columns>
+
+                        <EditFormTemplate Context="EditFormContext12">
+                            @{
+                                var treat = (Data.Questionnaires.QuestionnaireTreatment03)EditFormContext12.EditModel;
+                            }
+                            <DxFormLayout CssClass="w-100">
+                                <DxFormLayoutItem Caption="Indikácia:" ColSpanMd="12">
+                                    <DxComboBox Value="treat.Treat_3"
+                                                Data="@treat_3_Answer"
+                                                ValueFieldName="Id"
+                                                TextFieldName="Name"
+                                                ValueChanged="(int? newCellValue) => {treat.Treat_3 = newCellValue; UpdateTreat1Answers(newCellValue);}">
+                                    </DxComboBox>
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Učinná látka" ColSpanMd="12">
+                                    <DxComboBox Value="treat.Treat_1"
+                                                Data="@treat_1_Answer"
+                                                ValueFieldName="Id"
+                                                TextFieldName="Name"
+                                                ValueChanged="(int? newCellValue) => {treat.Treat_1 = newCellValue;}">
+                                    </DxComboBox>
+                                </DxFormLayoutItem>
+                                <DxFormLayoutItem Caption="Dávka (mg):" ColSpanMd="12">
+                                    @EditFormContext12.GetEditor("Treat_2")
+                                </DxFormLayoutItem>
+                            </DxFormLayout>
+                        </EditFormTemplate>
                     </DxGrid>
                 </div>
             }
@@ -145,6 +167,9 @@
     [Parameter]
     public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
 
+    private bool isFirstRender = true;
+    private int? SelectedTreat3Id { get; set; }
+
     bool isModified = false;
     bool IsInfoOpen = true;
     bool isSaveVisible = false;
@@ -171,6 +196,7 @@
     bool isReadOnly = false;
     private int previousProgress = 0;
 
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -193,11 +219,10 @@
         previousProgress = Treats.Count > 0 ? 100 : 0;
 
         dialActiveIngredient = await TreatmentService.GetDialActiveIngredientAsync();
-        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 2).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         dialIndication = await TreatmentService.GetDialIndicationAsync();
-        treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
-
+        treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         dialQGenerals = await TreatmentService.GetDialGeneralAsync();
         treat_q_1_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
@@ -257,7 +282,7 @@
         {
             return;
         }
-        else if (e.IsNew)
+        if (e.IsNew)
         {
             Treats.Add(treat);
             UnsavedChanges[treat] = new(DataChangeType.Addition, new());
@@ -290,6 +315,7 @@
                     break;
             }
         }
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         await ClearUnsavedChangesAsync();
         isModified = false;
     }
@@ -302,61 +328,53 @@
         DeleteToast();
     }
 
-    async Task ClearUnsavedChangesAsync()
+    void UpdateTreat1Answers(int? selectedTreat3)
     {
-        UnsavedChanges.Clear();
-        if (isTreatQ1Answer)
-            await UpdateDataAsync();
-    }
+        switch (selectedTreat3)
+        {
+            case 1:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 1).ToList();
+                break;
+            case 2:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 2).ToList();
+                break;
+            case 3:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 3).ToList();
+                break;
+            case 4:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 4).ToList();
+                break;
+            case 5:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 5).ToList();
+                break;
+            case 6:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 6).ToList();
+                break;
+            case 7:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 7).ToList();
+                break;
+            case 8:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 8).ToList();
+                break;
+            case 9:
+                treat_1_Answer = null;
+                break;
+            case 10:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 10).ToList();
+                break;
+            default:
+                treat_1_Answer = dialActiveIngredient;
+                break;
+        }
 
-    async Task UpdateDataAsync()
-    {
-        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
         treatGrid.Reload();
     }
 
-    private void AddToast()
+    async Task OnEditButtonClick(Data.Questionnaires.QuestionnaireTreatment03 selectedItem)
     {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Učinná látka bola pridaná",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
-    }
+        UpdateTreat1Answers(selectedItem.Treat_3);
 
-    private void Add1Toast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Zmena v liečbe pridružných problémov bola uložená",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
-    }
-
-    private void ModifyToast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Učinná látka bola zmenená",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
-    }
-
-    private void DeleteToast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Učinná látka bola odstránená",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
+        await treatGrid!.StartEditDataItemAsync(selectedItem);
     }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);

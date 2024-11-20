@@ -14,6 +14,9 @@ namespace Krka.MoveOn.Data.Dials
         [Column("type_q")]
         public required int Type_q { get; set; }
 
+        [Column("indication_id")]
+        public int? Indication_id { get; set; }
+
         [Column(TypeName = "nvarchar"), StringLength(50)]
         public required string Name { get; set; }
 

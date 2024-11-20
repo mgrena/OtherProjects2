@@ -400,6 +400,8 @@ html, body {
     margin-top: 6px;
 }
 
+
+
 .grid-icon-key {
     -webkit-mask-image: url("/images/key.svg");
     mask-image: url("/images/key.svg");
@@ -467,6 +469,12 @@ html, body {
 .mo-main-layout {
     width: 70%;
     margin: 0 auto;
+}
+
+@media (max-width: 769px) {
+    .mo-main-layout {
+        width: 100%;
+    }
 }
 
 .caption-styleH0 {

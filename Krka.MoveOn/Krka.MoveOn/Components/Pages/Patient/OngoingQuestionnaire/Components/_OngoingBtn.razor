@@ -8,9 +8,11 @@
 @inject General01Service Q01Service
 @inject ProtectedSessionStorage SessionStorage
 @inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContextAccessor
 
 <div class="mo-nav-submenu-bar">
     <h1>Priebežný klinický dotazník</h1>
+    <span style="color:#6e7de8; font-weight: bold;">@SelectedPatientCode</span>
     <DxFormLayout>
         <DxFormLayoutItem>
             <div class="mo-buttons-group mb-2">
@@ -93,6 +95,7 @@
 {
     private string currentId;
     private string currentUrl;
+    private string? SelectedPatientCode;
 
     private bool isHamburgerMenuVisible = false;
 
@@ -105,10 +108,17 @@
     {
         if (firstRender)
         {
-            var result = await SessionStorage.GetAsync<string>("currentId");
-            if (result.Success && NavigationManager != null)
+            // Načítanie hodnoty zo Session Storage
+            var result = await SessionStorage.GetAsync<string>("selectedPatientCode");
+            if (result.Success)
             {
-                currentId = result.Value;
+                SelectedPatientCode = result.Value;
+            }
+
+            var idResult = await SessionStorage.GetAsync<string>("currentId");
+            if (idResult.Success && NavigationManager != null)
+            {
+                currentId = idResult.Value;
                 currentUrl = NavigationManager.Uri; // Získaj aktuálnu URL
                 StateHasChanged();
             }

@@ -5,5 +5,12 @@
 
 ::deep .grid-item {
     flex: 1;
-    min-width: 300px;
+    min-width: 600px;
 }
+
+@media (max-width: 1174px) {
+    .grid-item {
+        margin-left: 0 !important;
+       margin-top: 20px;
+    }
+} 
