@@ -238,6 +238,11 @@
         if (!isReadOnly)
         {
             isModified = false;
+            if (OnSave.HasDelegate)
+            {
+                await OnSave.InvokeAsync((previousProgress, 100));
+                previousProgress = 100;
+            }
             await DrugEffectService.SaveDrugEffectAsync(druggEffect!);
             Add1Toast();
         }
@@ -354,6 +359,7 @@
         if (OnSave.HasDelegate)
         {
             await OnSave.InvokeAsync((previousProgress, 100));
+            previousProgress = 100;
         }
 
         await ClearUnsavedChangesAsync();

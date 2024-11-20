@@ -50,10 +50,10 @@
     private bool isProgressComplete = false;
     private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
     {
-        if (progressData.CurrentProgress == 100 && isProgressComplete)
-        {
-            return;
-        }
+        // if (progressData.CurrentProgress == 100 && isProgressComplete)
+        // {
+        //     return;
+        // }
 
         if (QuestionnaireProgressBarRef != null)
         {

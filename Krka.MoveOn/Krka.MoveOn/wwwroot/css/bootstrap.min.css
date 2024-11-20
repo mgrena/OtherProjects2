@@ -5305,7 +5305,7 @@ textarea.form-control-lg {
 .progress, .progress-stacked {
 	--bs-progress-height: 1rem;
 	--bs-progress-font-size: 0.75rem;
-	--bs-progress-bg: var(--bs-secondary-bg);
+	--bs-progress-bg: #cfcfcf;
 	--bs-progress-border-radius: var(--bs-border-radius);
 	--bs-progress-box-shadow: var(--bs-box-shadow-inset);
 	--bs-progress-bar-color: #fff;

@@ -223,6 +223,12 @@
         if (!isReadOnly)
         {
             isModified = false;
+            if (OnSave.HasDelegate)
+            {
+                await OnSave.InvokeAsync((previousProgress, 100));
+                previousProgress = 100;
+            }
+
             await TreatmentService.SaveTreatmentAsync(treat03!);
             Add1Toast();
         }
@@ -307,6 +313,7 @@
         if (OnSave.HasDelegate)
         {
             await OnSave.InvokeAsync((previousProgress, 100));
+            previousProgress = 100;
         }
 
         if (treat?.Treat_1 == null)

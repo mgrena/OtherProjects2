@@ -161,6 +161,11 @@
 
     public List<Data.Questionnaires.QuestionnaireInitial02> Inits { get; set; }
 
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
+    private int ProgressPercentage = 0;
+
     List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
     List<Data.Dials.DialActiveIngredient> init_1_Answer = new();
 
@@ -190,7 +195,7 @@
         }
 
         Inits = await InitialService.GetQuestionnaireInitial02(questionnaireId);
-
+        ProgressPercentage = Inits.Count > 0 ? 100 : 0;
         dialActiveIngredient = await InitialService.GetDialActiveIngredientAsync();
         init_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).OrderBy(d => d.Name).ToList();
 
@@ -261,6 +266,13 @@
         var init = (Data.Questionnaires.QuestionnaireInitial02)e.EditModel;
         var dataItem = (Data.Questionnaires.QuestionnaireInitial02)e.DataItem;
         init.Questionnaire_id = questionnaireId;
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((ProgressPercentage, Inits.Count > 0 ? 100 : 0));
+            ProgressPercentage = Inits.Count > 0 ? 100 : 0;
+        }
+
         if (init?.Init_1 == null)
         {
             return;
@@ -313,6 +325,12 @@
 
     private async Task HandleValidSubmit()
     {
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((ProgressPercentage, Inits.Count > 0 ? 100 : 0));
+            ProgressPercentage = Inits.Count > 0 ? 100 : 0;
+        }
+
         await QuestionnaireService.UpdateQuestionnaireAsync(questionnaire);
         Add1Toast();
     }
