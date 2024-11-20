@@ -56,23 +56,23 @@
             {
                 <div style="width: 98%; margin-left: 15px;">
                     <DxGrid @ref="drugEffectGrid"
-                            Data="DrugEffects"
-                            PageSize="20"
-                            PagerPosition="GridPagerPosition.Bottom"
-                            PageSizeSelectorVisible="true"
-                            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-                            PageSizeSelectorAllRowsItemVisible="true"
-                            PagerSwitchToInputBoxButtonCount="10"
-                            PagerVisibleNumericButtonCount="10"
-                            KeyFieldName="Id"
-                            ValidationEnabled="false"
-                            EditMode="GridEditMode.EditCell"
-                            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-                            ColumnResizeMode="GridColumnResizeMode.NextColumn"
-                            TextWrapEnabled="false"
-                            EditModelSaving="Grid_EditModelSaving"
-                            HighlightRowOnHover="true"
-                            FocusedRowEnabled="true">
+                    Data="DrugEffects"
+                    PageSize="20"
+                    PagerPosition="GridPagerPosition.Bottom"
+                    PageSizeSelectorVisible="true"
+                    PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                    PageSizeSelectorAllRowsItemVisible="true"
+                    PagerSwitchToInputBoxButtonCount="10"
+                    PagerVisibleNumericButtonCount="10"
+                    KeyFieldName="Id"
+                    ValidationEnabled="false"
+                    EditMode="GridEditMode.EditCell"
+                    FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                    ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                    TextWrapEnabled="false"
+                    EditModelSaving="Grid_EditModelSaving"
+                    HighlightRowOnHover="true"
+                    FocusedRowEnabled="true">
 
                         <ToolbarTemplate Context="toolbarContext">
                             @if (!isReadOnly)
@@ -110,9 +110,9 @@
                                         @if (!isReadOnly)
                                         {
                                             <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                                      RenderStyle="ButtonRenderStyle.Link"
-                                                      aria-label="Delete"
-                                                      Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                            RenderStyle="ButtonRenderStyle.Link"
+                                            aria-label="Delete"
+                                            Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
                                                 <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
                                             </DxButton>
                                         }
@@ -124,10 +124,10 @@
                                         @if (!isReadOnly)
                                         {
                                             <DxButton Enabled="false"
-                                                      aria-label="Delete"
-                                                      CssClass="grid-disabled-button"
-                                                      IconCssClass="grid-icon grid-icon-delete"
-                                                      RenderStyle="ButtonRenderStyle.Link" />
+                                            aria-label="Delete"
+                                            CssClass="grid-disabled-button"
+                                            IconCssClass="grid-icon grid-icon-delete"
+                                            RenderStyle="ButtonRenderStyle.Link" />
                                         }
                                     </div>
                                 </CellEditTemplate>
@@ -143,21 +143,16 @@
                     @if (!isReadOnly)
                     {
                         <DxButton SubmitFormOnClick="true"
-                                  Text="Uložiť"
-                                  RenderStyle="ButtonRenderStyle.Primary"
-                                  IconCssClass="grid-toolbar-save1"
-                                  Enabled="@isModified" />
+                        Text="Uložiť"
+                        RenderStyle="ButtonRenderStyle.Primary"
+                        IconCssClass="grid-toolbar-save1"
+                        Enabled="@isModified" />
                     }
                 </div>
             </DxFormLayoutItem>
         </DxFormLayoutGroup>
     </DxFormLayout>
 </EditForm>
-
-
-
-
-
 
 @code {
     [Parameter]
@@ -228,19 +223,92 @@
         if (questionnaire != null)
         {
             druggEffect = questionnaire;
-
             isDe1Answer = (druggEffect.De_1 == 14);
         }
     }
+    async Task New_Click() => await drugEffectGrid.StartEditNewRowAsync();
 
     private async Task HandleValidSubmit()
     {
-        if (!isReadOnly)
+        if (!isReadOnly && isModified)
         {
             isModified = false;
+            if (druggEffect?.De_1 == 14 && druggEffect.De_2 == null)
+                return;
             await DrugEffectService.SaveDrugEffectAsync(druggEffect!);
             Add1Toast();
+            await ClearUnsavedChangesAsync();
         }
+    }
+
+    private void OnFieldChanged()
+    {
+        isModified = true;
+    }
+
+    void OnD1QAnswer(int value)
+    {
+        druggEffect!.De_1 = value;
+        isDe1Answer = (druggEffect!.De_1 == 14);
+        OnFieldChanged();
+    }
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var drugEffect = (Data.Questionnaires.QuestionnaireDrugEffect09)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
+        drugEffect.Questionnaire_id = questionnaireId;
+        if (drugEffect?.De_2 == null)
+        {
+            return;
+        }
+        else if (e.IsNew)
+        {
+            DrugEffects.Add(drugEffect);
+            UnsavedChanges[drugEffect] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
+        }
+
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Addition:
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
+                    AddToast();
+                    break;
+                case DataChangeType.Modification:
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+
+        await ClearUnsavedChangesAsync();
+        isModified = false;
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        if (isDe1Answer)
+            await UpdateDataAsync();
+    }
+
+    async Task UpdateDataAsync()
+    {
+        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(questionnaireId);
+        drugEffectGrid.Reload();
     }
 
     private void AddToast()
@@ -286,80 +354,6 @@
                 RenderStyle = ToastRenderStyle.Success,
             });
     }
-
-    async Task UpdateDataAsync()
-    {
-        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(questionnaireId);
-        drugEffectGrid.Reload();
-    }
-
-    async Task New_Click() => await drugEffectGrid.StartEditNewRowAsync();
-
-    private void OnFieldChanged()
-    {
-        isModified = true;
-    }
-
-    void OnD1QAnswer(int value)
-    {
-        druggEffect!.De_1 = value;
-        isDe1Answer = (druggEffect!.De_1 == 14);
-        OnFieldChanged();
-    }
-
-    async Task ClearUnsavedChangesAsync()
-    {
-        UnsavedChanges.Clear();
-        await UpdateDataAsync();
-    }
-
-    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
-        var drugEffect = (Data.Questionnaires.QuestionnaireDrugEffect09)e.EditModel;
-        var dataItem = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
-        drugEffect.Questionnaire_id = questionnaireId;
-        if (drugEffect?.De_2 == null)
-        {
-            return;
-        }
-        else if (e.IsNew)
-        {
-            DrugEffects.Add(drugEffect);
-            UnsavedChanges[drugEffect] = new(DataChangeType.Addition, new());
-        }
-        else
-        {
-            UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
-        }
-
-        drugEffectGrid.Reload();
-
-        foreach (var unsavedChange in UnsavedChanges)
-        {
-            var changedItem = unsavedChange.Key;
-            var changeType = unsavedChange.Value.Type;
-            switch (changeType)
-            {
-                case DataChangeType.Addition:
-                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
-                    AddToast();
-                    break;
-                case DataChangeType.Modification:
-                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
-                    ModifyToast();
-                    break;
-            }
-        }
-
-        if (OnSave.HasDelegate)
-        {
-            await OnSave.InvokeAsync((previousProgress, 100));
-        }
-
-        await ClearUnsavedChangesAsync();
-
-    }
-
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification, Addition, Delete }
