@@ -28,6 +28,12 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         foreach (var user in users)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles == null || userRoles.Count == 0)
+            {
+                user.Role = roles.FirstOrDefault(i => i.Name == "Doctor");
+                await AddUserToRoleAsync(user);
+                userRoles = await _userManager.GetRolesAsync(user);
+            }
             user.Role = roles.FirstOrDefault(i => i.Name == userRoles.First());
         }
         return users;
