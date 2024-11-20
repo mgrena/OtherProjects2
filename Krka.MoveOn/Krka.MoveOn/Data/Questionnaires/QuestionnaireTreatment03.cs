@@ -38,8 +38,11 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("treat_3")]
         public int? Treat_3 { get; set; }
 
-        [Column("other", TypeName = "varchar"), StringLength(100)]
-        public string? Other { get; set; }
+        [Column("other_indication", TypeName = "varchar"), StringLength(100)]
+        public string? OtherIndication { get; set; }
+
+        [Column("other_treat", TypeName = "varchar"), StringLength(100)]
+        public string? OtherTreat { get; set; }
 
         [Column("modified_at")]
         public required DateTime ModifiedAt { get; set; } = DateTime.Now;

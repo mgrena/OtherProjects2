@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120130511_Treatment03Other")]
+    partial class Treatment03Other
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3095,15 +3098,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
 
-                    b.Property<string>("OtherIndication")
+                    b.Property<string>("Other")
                         .HasMaxLength(100)
                         .HasColumnType("varchar")
-                        .HasColumnName("other_indication");
-
-                    b.Property<string>("OtherTreat")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar")
-                        .HasColumnName("other_treat");
+                        .HasColumnName("other");
 
                     b.Property<string>("Questionnaire_id")
                         .IsRequired()
