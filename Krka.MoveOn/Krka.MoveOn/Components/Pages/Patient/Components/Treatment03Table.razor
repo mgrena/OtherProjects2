@@ -138,8 +138,6 @@
     </DxFormLayout>
 </EditForm>
 
-
-
 @code {
     [Parameter]
     public string questionnaireId { get; set; }
@@ -218,14 +216,23 @@
         }
     }
 
+    async Task New_Click() => await treatGrid.StartEditNewRowAsync();
+
     private async Task HandleValidSubmit()
     {
-        if (!isReadOnly)
+        if (!isReadOnly && isModified)
         {
             isModified = false;
+            if (treat03?.TreatQ1 == 14 && treat03.Treat_1 == null)
+                return;
             await TreatmentService.SaveTreatmentAsync(treat03!);
             Add1Toast();
         }
+    }
+
+    private void OnFieldChanged()
+    {
+        isModified = true;
     }
 
     void OnTreatQAnswer(int value)
@@ -235,9 +242,77 @@
         OnFieldChanged();
     }
 
-    private void OnFieldChanged()
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
-        isModified = true;
+        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
+        treat.Questionnaire_id = questionnaireId;
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+
+        if (treat?.Treat_1 == null)
+        {
+            return;
+        }
+        else if (e.IsNew)
+        {
+            Treats.Add(treat);
+            UnsavedChanges[treat] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            var changedFields = DataUtils.ApplyModifiedFields(treat, dataItem);
+            if (changedFields.Count > 0)
+            {
+                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
+                    changes.ChangedFields.UnionWith(changedFields);
+                else
+                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
+            }
+        }
+
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Addition:
+                    await TreatmentService.SaveTreatmentAsync(changedItem);
+                    AddToast();
+                    break;
+                case DataChangeType.Modification:
+                    await TreatmentService.SaveTreatmentAsync(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+        await ClearUnsavedChangesAsync();
+        isModified = false;
+    }
+
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
+        await TreatmentService.DeleteTreatAsync(treat.Id);
+        await UpdateDataAsync();
+        DeleteToast();
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        if (isTreatQ1Answer)
+            await UpdateDataAsync();
+    }
+
+    async Task UpdateDataAsync()
+    {
+        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+        treatGrid.Reload();
     }
 
     private void AddToast()
@@ -282,81 +357,6 @@
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
             });
-    }
-
-    async Task UpdateDataAsync()
-    {
-        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
-        treatGrid.Reload();
-    }
-
-    async Task New_Click() => await treatGrid.StartEditNewRowAsync();
-
-    async Task ClearUnsavedChangesAsync()
-    {
-        UnsavedChanges.Clear();
-        await UpdateDataAsync();
-    }
-
-    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
-        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
-        var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
-        treat.Questionnaire_id = questionnaireId;
-
-        if (OnSave.HasDelegate)
-        {
-            await OnSave.InvokeAsync((previousProgress, 100));
-        }
-
-        if (treat?.Treat_1 == null)
-        {
-            return;
-        }
-        else if (e.IsNew)
-        {
-            Treats.Add(treat);
-            UnsavedChanges[treat] = new(DataChangeType.Addition, new());
-        }
-        else
-        {
-            var changedFields = DataUtils.ApplyModifiedFields(treat, dataItem);
-            if (changedFields.Count > 0)
-            {
-                if (UnsavedChanges.TryGetValue(dataItem, out var changes))
-                    changes.ChangedFields.UnionWith(changedFields);
-                else
-                    UnsavedChanges.Add(dataItem, new(DataChangeType.Modification, changedFields));
-            }
-        }
-
-        treatGrid.Reload();
-
-        foreach (var unsavedChange in UnsavedChanges)
-        {
-            var changedItem = unsavedChange.Key;
-            var changeType = unsavedChange.Value.Type;
-            switch (changeType)
-            {
-                case DataChangeType.Addition:
-                    await TreatmentService.SaveTreatmentAsync(changedItem);
-                    AddToast();
-                    break;
-                case DataChangeType.Modification:
-                    await TreatmentService.SaveTreatmentAsync(changedItem);
-                    ModifyToast();
-                    break;
-            }
-        }
-        await ClearUnsavedChangesAsync();
-    }
-
-    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
-    {
-        var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
-        await TreatmentService.DeleteTreatAsync(treat.Id);
-        await UpdateDataAsync();
-        DeleteToast();
     }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);

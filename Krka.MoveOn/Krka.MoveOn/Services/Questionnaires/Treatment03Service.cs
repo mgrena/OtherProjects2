@@ -19,10 +19,22 @@ public class Treatment03Service(ApplicationDbContext context)
 
     public async Task<QuestionnaireTreatment03?> GetQuestionnaireTreatment03ByQuestionnaireIdAsync(string questionnaireId)
     {
-        return await Task.Run(() => _context.QuestionnaireTreatment03s
-                             .FirstOrDefault(q => q.Questionnaire_id == questionnaireId));
+        return await Task.Run(() => {
+            var items = _context.QuestionnaireTreatment03s.Where(q => q.Questionnaire_id == questionnaireId);
+            // find item with yes answer
+            var itemYes = items.FirstOrDefault(q => q.TreatQ1 == 14 && q.DeletedAt == null);
+            if (itemYes != null) { return itemYes; }
+            // check for item with no answer
+            var itemNo = items.FirstOrDefault(q => q.TreatQ1 == 15 && q.DeletedAt == null);
+            if (itemNo != null) { return itemNo; }
+            // exists deleted items, return answer no
+            var itemsDeleted = items.Where(q => q.DeletedAt != null);
+            if (itemsDeleted.Any())
+                return new QuestionnaireTreatment03() { Questionnaire_id = questionnaireId, TreatQ1 = 15, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+            // return nothing
+            return null;
+        });
     }
-
 
     public async Task<List<DialIndication>> GetDialIndicationAsync()
     {
@@ -41,19 +53,10 @@ public class Treatment03Service(ApplicationDbContext context)
 
     public async Task SaveTreatmentAsync(QuestionnaireTreatment03 treat)
     {
-        var existingEntity = await _context.QuestionnaireTreatment03s
-            .AsNoTracking()
-            .FirstOrDefaultAsync(e => e.Id == treat.Id);
-
-        if (existingEntity != null)
-        {
-            _context.Entry(existingEntity).State = EntityState.Detached;
-        }
-
         if (treat.TreatQ1 == 15)
         {
             var relatedEntities = await _context.QuestionnaireTreatment03s
-                .Where(q => q.Questionnaire_id == treat.Questionnaire_id)
+                .Where(q => q.Questionnaire_id == treat.Questionnaire_id && q.DeletedAt == null)
                 .ToListAsync();
 
             foreach (var entity in relatedEntities)
@@ -69,11 +72,27 @@ public class Treatment03Service(ApplicationDbContext context)
 
         if (treat.Id == 0)
         {
-            _context.QuestionnaireTreatment03s.Add(treat);
+            var newEntity = new QuestionnaireTreatment03() { Questionnaire_id = treat.Questionnaire_id, TreatQ1 = treat.TreatQ1, Treat_1 = treat.Treat_1, Treat_2 = treat.Treat_2, 
+                                                             Treat_3 = treat.Treat_3, ModifiedAt = DateTime.Now, CreatedAt = DateTime.Now};
+            if (newEntity.TreatQ1 == null && newEntity.Treat_1 != null)
+                newEntity.TreatQ1 = 14;
+
+            // check for existing no items
+            var noitems = _context.QuestionnaireTreatment03s.Where(q => q.Questionnaire_id == treat.Questionnaire_id && q.DeletedAt == null && q.TreatQ1 == 15);
+            foreach (var item in noitems)
+                item.DeletedAt = DateTime.Now;
+
+            _context.QuestionnaireTreatment03s.Add(newEntity);
         }
         else
         {
-            _context.QuestionnaireTreatment03s.Update(treat);
+            var existingEntity = await _context.QuestionnaireTreatment03s.FirstAsync(d => d.Id == treat.Id);
+            existingEntity.TreatQ1 = treat.TreatQ1;
+            existingEntity.Treat_1 = treat.Treat_1;
+            existingEntity.Treat_2 = treat.Treat_2;
+            existingEntity.Treat_3 = treat.Treat_3;
+            existingEntity.ModifiedAt = DateTime.Now;
+            _context.QuestionnaireTreatment03s.Update(existingEntity);
         }
         await _context.SaveChangesAsync();
     }
