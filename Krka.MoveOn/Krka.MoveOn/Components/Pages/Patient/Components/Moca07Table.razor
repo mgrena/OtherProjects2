@@ -19,7 +19,7 @@
                     @foreach (var item in mh_1_Answer)
                     {
                         <label class="d-block m-2">
-                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Number | @item.Name
                         </label>
                     }
                 </InputRadioGroup>

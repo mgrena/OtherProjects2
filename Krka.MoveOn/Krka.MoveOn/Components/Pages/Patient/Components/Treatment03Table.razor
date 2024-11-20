@@ -35,7 +35,7 @@
                     @foreach (var item in treat_q_1_Answer)
                     {
                         <label class="d-block m-2">
-                            <InputRadio class="m-2" @onclick="() => {OnTreatQAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="() => {OnTreatQAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" />@item.Name
                         </label>
                     }
                 </InputRadioGroup>

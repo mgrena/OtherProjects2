@@ -279,7 +279,7 @@
                     <ValidationMessage For="@(() => gen.Gen_12)" />
                 </DxFormLayoutItem>
 
-                <DxFormLayoutItem Caption="Pacientovi je diagnostikované/je podozrenie na" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="U pacienta je podozrenie na:" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_13" @onchange="OnFieldChanged">
                         @foreach (var item in gen_13_Answer)
                         {
