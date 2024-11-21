@@ -306,12 +306,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 3, Type_q = 1, Name = "Na diaľku prostredníctvom elektronických médií.", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         //exc_3
         modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 4, Type_q = 2, Name = "Výskyt závažnej nežiaducej reakcie počas pozorovacieho obdobia v tejto štúdii. *", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-        modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 5, Type_q = 2, Name = "Smrť", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-        modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 6, Type_q = 2, Name = "Hospitalizácia", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 5, Type_q = 2, Name = "Smrť *", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 6, Type_q = 2, Name = "Hospitalizácia *", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 7, Type_q = 2, Name = "Rozhodnutie pacienta ukončiť liečbu a odvolanie jeho informovaného súhlasu.", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 8, Type_q = 2, Name = "Rozhodnutie pacienta ukončiť liečbu a odvolanie informovaného súhlasu a GDPR formulára.", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 9, Type_q = 2, Name = "Bezpečnosť pacienta (napr. rozhodnutie skúšajúceho vylúčiť pacienta zo štúdie v jeho najlepšom záujme, nežiaduce účinky vyžadujúce medikamentózny zásah alebo ukončenie liečby). *", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
-        modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 10, Type_q = 2, Name = "O alebo zhoršenie existujúceho ochorenia počas štúdie, ktoré si vyžaduje používanie liekov, ktoré nie sú povolené v spojení so súhrnom charakteristických vlastností lieku použitých liekov.", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 10, Type_q = 2, Name = "Aktuálne ochorenie alebo zhoršenie existujúceho ochorenia počas štúdie, ktoré si vyžaduje používanie liekov, ktoré nie sú povolené v spojení so súhrnom charakteristických vlastností lieku použitých liekov. *", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         modelBuilder.Entity<DialExclusion>().HasData(new DialExclusion() { Id = 11, Type_q = 2, Name = "Iné...", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         #endregion
 

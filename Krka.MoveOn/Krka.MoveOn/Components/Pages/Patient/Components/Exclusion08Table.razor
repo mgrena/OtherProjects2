@@ -22,13 +22,13 @@
                     @foreach (var item in exc_q_Answer)
                     {
                         <label class="d-block m-2">
-                            <InputRadio class="m-2" @onclick="() => {OnExcQAnswer(item.Id); OnExc31Answer(item.Id); OnExc36Answer(item.Id);} " Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="() => {OnExcQAnswer(item.Id); OnExc31Answer(item.Id);} " Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         </label>
                     }
                 </InputRadioGroup>
                 <ValidationMessage For="@(() => exc.Exc_Q)" />
 
-                @if (isExc_q_Answer || isExc_3_1_Answer || isExc_3_6_Answer)
+                @if (isExc_q_Answer || isExc_3_1_Answer)
                 {
                     <DxFormLayoutItem Caption="Dátum predčasného vylúčenia" ColSpanMd="4" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <ChildContent Context="dateContext">
@@ -57,7 +57,7 @@
                                 @foreach (var item in exc_3_Answer)
                                 {
                                     <label class="d-block m-2">
-                                        <InputRadio class="m-2" @onclick="() => { OnExc31Answer(item.Id); OnExc36Answer(item.Id); }" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                                        <InputRadio class="m-2" @onclick="() => { OnExc31Answer(item.Id); }" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                                     </label>
                                 }
                             </InputRadioGroup>
@@ -65,12 +65,12 @@
                         </ChildContent>
                     </DxFormLayoutItem>
                     <p style="color:red; margin-left: 20px; font-weight: 600;">
-                        * V prípade, že sú odpovede označené "*", zobrazí sa tabuľka pre zápis nežiaducich udalostí.
+                        * V prípade, že sú odpovede označené <b style="color:black;">"*"</b>, zobrazí sa tabuľka pre zápis nežiaducich udalostí.
                     </p>
                 }
             </DxFormLayoutItem>
 
-            @if (isExc_3_1_Answer || isExc_3_6_Answer)
+            @if (isExc_3_1_Answer)
             {
                 <div style="width: 98%; margin-left: 15px;">
                     <div class="mo-caption-styleH3">
@@ -239,7 +239,7 @@
     bool isReadOnly = false;
     bool isExc_q_Answer = false;
     bool isExc_3_1_Answer = false;
-    bool isExc_3_6_Answer = false;
+    bool isExc_3_2_Answer = false;
 
     bool isModified = false;
 
@@ -317,7 +317,6 @@
 
             isExc_q_Answer = (exc.Exc_Q == 14);
             isExc_3_1_Answer = (exc!.Exc_3 == 4);
-            isExc_3_6_Answer = (exc!.Exc_3 == 9);
         }
     }
 
@@ -456,14 +455,7 @@
     void OnExc31Answer(int value)
     {
         exc!.Exc_3 = value;
-        isExc_3_1_Answer = (exc!.Exc_3 == 4);
-        OnFieldChanged();
-    }
-
-    void OnExc36Answer(int value)
-    {
-        exc!.Exc_3 = value;
-        isExc_3_6_Answer = (exc!.Exc_3 == 9);
+        isExc_3_1_Answer = (exc!.Exc_3 == 4) || (exc!.Exc_3 == 5) || (exc!.Exc_3 == 6) || (exc!.Exc_3 == 9) || (exc!.Exc_3 == 10);
         OnFieldChanged();
     }
 
