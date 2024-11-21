@@ -10,6 +10,7 @@
 @inject Treatment03Service TreatmentService
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
 
 <EditForm Model="@treat03"
           Context="EditFormContext"
@@ -23,7 +24,7 @@
                 </div>
                 <DxFlyout @bind-IsOpen="@IsInfoOpen"
                           PositionTarget=".info-icon-btn"
-                          Position="FlyoutPosition.Bottom"
+                          Position="FlyoutPosition.LeftEnd"
                           PreventCloseOnPositionTargetClick="true"
                           Width="240">
                     Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
@@ -34,7 +35,7 @@
                     @foreach (var item in treat_q_1_Answer)
                     {
                         <label class="d-block m-2">
-                            <InputRadio class="m-2" @onclick="() => {OnTreatQAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="() => {OnTreatQAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" />@item.Name
                         </label>
                     }
                 </InputRadioGroup>
@@ -53,9 +54,10 @@
                             PageSizeSelectorAllRowsItemVisible="true"
                             PagerSwitchToInputBoxButtonCount="10"
                             PagerVisibleNumericButtonCount="10"
+                            PopupEditFormHeaderText="Učinná látka"
                             KeyFieldName="Id"
                             ValidationEnabled="false"
-                            EditMode="GridEditMode.EditCell"
+                            EditMode="GridEditMode.PopupEditForm"
                             FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
                             ColumnResizeMode="GridColumnResizeMode.NextColumn"
                             TextWrapEnabled="false"
@@ -72,6 +74,12 @@
                         </ToolbarTemplate>
 
                         <Columns>
+                            <DxGridDataColumn FieldName="Treat_3" Caption="Indikácia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxComboBoxSettings Data="@treat_3_Answer" ValueFieldName="Id" TextFieldName="Name" />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
                             <DxGridDataColumn FieldName="Treat_1" Caption="Učinná látka" Width="" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                                 <EditSettings>
                                     <DxComboBoxSettings Data="@treat_1_Answer" ValueFieldName="Id" TextFieldName="Name" />
@@ -84,41 +92,114 @@
                                 </EditSettings>
                             </DxGridDataColumn>
 
-                            <DxGridDataColumn FieldName="Treat_3" Caption="Indikácia" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                            <DxGridDataColumn FieldName="OtherIndication" Caption="Iná indikácia" Visible="false" DataRowEditorVisible="@(!isReadOnly)">
                                 <EditSettings>
-                                    <DxComboBoxSettings Data="@treat_3_Answer" ValueFieldName="Id" TextFieldName="Name" />
+                                    <DxTextBoxSettings NullText="Napíšte inú indikáciu..." />
                                 </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="OtherTreat" Caption="Iná učinná látka" Visible="false" DataRowEditorVisible="@(!isReadOnly)">
+                                <EditSettings>
+                                    <DxTextBoxSettings NullText="Napíšte inú učinnú látku..." />
+                                </EditSettings>
+                            </DxGridDataColumn>
+
+                            <DxGridDataColumn FieldName="Id" AllowSort="false" Width="90px" MinWidth="100" TextAlignment="GridTextAlignment.Center">
+                                <CellDisplayTemplate Context="context">
+                                    @if (context.DataItem is Data.Questionnaires.QuestionnaireTreatment03 treatment)
+                                    {
+                                        <button @onclick="() => ShowDetails(treatment)">
+                                            Viac Informácií 
+                                        </button>
+                                    }
+                                </CellDisplayTemplate>
+                                <HeaderCaptionTemplate>
+                                    <span>Detaily</span>
+                                </HeaderCaptionTemplate>
                             </DxGridDataColumn>
 
                             @if (!isReadOnly)
                             {
-                                <DxGridCommandColumn Width="30px" NewButtonVisible="false">
+                                <DxGridCommandColumn Width="80px" NewButtonVisible="false">
 
                                     <CellDisplayTemplate Context="gridContext">
+
                                         <div class="grid-cell-align-center">
+                                            <DxButton IconCssClass="grid-icon grid-icon-edit"
+                                                      RenderStyle="ButtonRenderStyle.Link"
+                                                      title="Upraviť"
+                                                      Click="@(() => OnEditButtonClick((Data.Questionnaires.QuestionnaireTreatment03)gridContext.DataItem))" />
+
                                             <DxButton IconCssClass="grid-icon grid-icon-delete"
                                                       RenderStyle="ButtonRenderStyle.Link"
-                                                      aria-label="Delete"
-                                                      Click="@(() => treatGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
-                                                <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
-                                            </DxButton>
+                                                      title="Vymazať"
+                                                      Click="@(() => treatGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
                                         </div>
                                     </CellDisplayTemplate>
-
-                                    <CellEditTemplate Context="editContext">
-                                        <div class="grid-cell-align-center">
-                                            <DxButton Enabled="false"
-                                                      aria-label="Delete"
-                                                      CssClass="grid-disabled-button"
-                                                      IconCssClass="grid-icon grid-icon-delete"
-                                                      RenderStyle="ButtonRenderStyle.Link" />
-
-                                        </div>
-                                    </CellEditTemplate>
                                 </DxGridCommandColumn>
                             }
                         </Columns>
+
+                        <EditFormTemplate Context="EditFormContext12">
+                            @{
+                                var treat = (Data.Questionnaires.QuestionnaireTreatment03)EditFormContext12.EditModel;
+                            }
+                            <DxFormLayout CssClass="w-100">
+                                <DxFormLayoutItem Caption="Indikácia:" ColSpanMd="12">
+                                    <DxComboBox Value="treat.Treat_3"
+                                                Data="@treat_3_Answer"
+                                                ValueFieldName="Id"
+                                                TextFieldName="Name"
+                                                ValueChanged="(int? newCellValue) => {treat.Treat_3 = newCellValue; UpdateTreat1Answers(newCellValue);}">
+                                    </DxComboBox>
+                                </DxFormLayoutItem>
+
+                                @if (ShowOtherInput)
+                                {
+                                    <DxFormLayoutItem Caption="Iná indikácia:" ColSpanMd="12">
+                                        @EditFormContext12.GetEditor("OtherIndication")
+                                    </DxFormLayoutItem>
+                                }
+
+                                @if (!ShowOtherInput)
+                                {
+                                    <DxFormLayoutItem Caption="Učinná látka" ColSpanMd="12">
+                                        <DxComboBox Value="treat.Treat_1"
+                                                    Data="@treat_1_Answer"
+                                                    ValueFieldName="Id"
+                                                    TextFieldName="Name"
+                                                    ValueChanged="(int? newCellValue) => {treat.Treat_1 = newCellValue; OnTreat1Changed(newCellValue); }">
+                                        </DxComboBox>
+                                    </DxFormLayoutItem>
+
+                                }
+
+
+                                @if (ShowOtherInput1 || ShowOtherInput)
+                                {
+                                    <DxFormLayoutItem Caption="Iná učinná látka:" ColSpanMd="12">
+                                        @EditFormContext12.GetEditor("OtherTreat")
+                                    </DxFormLayoutItem>
+                                }
+
+                                <DxFormLayoutItem Caption="Dávka (mg):" ColSpanMd="12">
+                                    @EditFormContext12.GetEditor("Treat_2")
+                                </DxFormLayoutItem>
+                            </DxFormLayout>
+                        </EditFormTemplate>
                     </DxGrid>
+
+                    <DxPopup @bind-Visible="@PopupVisible"
+                             HeaderText="@PopupHeaderText"
+                             HorizontalAlignment="HorizontalAlignment.Center"
+                             VerticalAlignment="VerticalAlignment.Center"
+                             CloseOnEscape="true"
+                             CloseOnOutsideClick="true">
+                        <div style="padding: 10px;">
+                            <p><strong>Iná indikácia:</strong> @PopupOtherIndication</p>
+                            <p><strong>Iná účinná látka:</strong> @PopupOtherTreat</p>
+                        </div>
+                    </DxPopup>
                 </div>
             }
 
@@ -144,6 +225,18 @@
 
     [Parameter]
     public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
+    private bool isFirstRender = true;
+    private int? SelectedTreat3Id { get; set; }
+    private bool ShowOtherInput { get; set; } = false;
+    private bool ShowOtherInput1 { get; set; } = false;
+    private int? SelectedTreat1 { get; set; }
+
+    private bool PopupVisible { get; set; } = false;
+    private string PopupHeaderText { get; set; } = "Details";
+
+    private string PopupOtherTreat { get; set; } = string.Empty;
+    private string PopupOtherIndication { get; set; } = string.Empty;
 
     bool isModified = false;
     bool IsInfoOpen = true;
@@ -171,6 +264,21 @@
     bool isReadOnly = false;
     private int previousProgress = 0;
 
+
+    private void ShowDetails(QuestionnaireTreatment03 treatment)
+    {
+        if (treatment != null)
+        {
+            // Nastavenie detailov do popupu
+            PopupHeaderText = $"Detail záznamu";
+            PopupOtherTreat = treatment.OtherTreat ?? "N/A";
+            PopupOtherIndication = treatment.OtherIndication ?? "N/A";
+
+            // Zobrazenie popupu
+            PopupVisible = true;
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -193,11 +301,10 @@
         previousProgress = Treats.Count > 0 ? 100 : 0;
 
         dialActiveIngredient = await TreatmentService.GetDialActiveIngredientAsync();
-        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 2).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         dialIndication = await TreatmentService.GetDialIndicationAsync();
-        treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
-
+        treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         dialQGenerals = await TreatmentService.GetDialGeneralAsync();
         treat_q_1_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
@@ -253,11 +360,11 @@
             await OnSave.InvokeAsync((previousProgress, 100));
         }
 
-        if (treat?.Treat_1 == null)
+        if (treat?.Treat_3 == null)
         {
             return;
         }
-        else if (e.IsNew)
+        if (e.IsNew)
         {
             Treats.Add(treat);
             UnsavedChanges[treat] = new(DataChangeType.Addition, new());
@@ -290,6 +397,8 @@
                     break;
             }
         }
+
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         await ClearUnsavedChangesAsync();
         isModified = false;
     }
@@ -302,18 +411,92 @@
         DeleteToast();
     }
 
-    async Task ClearUnsavedChangesAsync()
+    void UpdateTreat1Answers(int? selectedTreat3)
     {
-        UnsavedChanges.Clear();
-        if (isTreatQ1Answer)
-            await UpdateDataAsync();
-    }
+        switch (selectedTreat3)
+        {
+            case 1:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 1).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            case 2:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 2).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            case 3:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 3).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            case 4:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 4).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            case 5:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 5).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            case 6:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 6).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            case 7:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 7).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            case 8:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 8).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            case 9:
+                treat_1_Answer = null;
+                ShowOtherInput = true;
+                ShowOtherInput1 = false;
+                break;
+            case 10:
+                treat_1_Answer = dialActiveIngredient.Where(d => d.Indication_id == 10).ToList();
+                ShowOtherInput = false;
+                ShowOtherInput1 = false;
+                break;
+            default:
+                treat_1_Answer = dialActiveIngredient;
+                break;
+        }
 
-    async Task UpdateDataAsync()
-    {
-        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
         treatGrid.Reload();
     }
+
+    private void OnTreat1Changed(int? newValue)
+    {
+        SelectedTreat1 = newValue;
+
+        // Zistíme, či je vybraná možnosť "Iné..."
+        var selectedOption = treat_1_Answer.FirstOrDefault(x => x.Id == SelectedTreat1);
+        ShowOtherInput1 = selectedOption?.Name == "Iné...";
+
+        // Ak je "Iné...", vynulujeme pole Other
+        if (ShowOtherInput1)
+        {
+            treat03!.OtherTreat = string.Empty;
+        }
+    }
+
+    async Task OnEditButtonClick(Data.Questionnaires.QuestionnaireTreatment03 selectedItem)
+    {
+        UpdateTreat1Answers(selectedItem.Treat_3);
+
+        await treatGrid!.StartEditDataItemAsync(selectedItem);
+    }
+
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification, Addition, Delete }
 
     private void AddToast()
     {
@@ -359,7 +542,16 @@
             });
     }
 
-    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
-    enum DataChangeType { Modification, Addition, Delete }
+    async Task UpdateDataAsync()
+    {
+        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+        treatGrid.Reload();
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        await UpdateDataAsync();
+    }
 
 }

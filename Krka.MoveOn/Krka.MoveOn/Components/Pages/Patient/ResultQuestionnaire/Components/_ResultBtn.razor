@@ -10,7 +10,7 @@
 @inject NavigationManager NavigationManager
 
 <div class="mo-nav-submenu-bar">
-    <h1>Výstupný klinický dotazník</h1>
+    <h1><span style="color:#b691bc; font-weight: bold;">@SelectedPatientCode</span> - Výstupný klinický dotazník</h1>
 	<DxFormLayout>
         <DxFormLayoutItem>
             <div class="mo-buttons-group mb-2">
@@ -101,6 +101,7 @@
 {
     private string currentId;
     private string currentUrl;
+    private string? SelectedPatientCode;
 
     private bool isHamburgerMenuVisible = false;
 
@@ -114,10 +115,17 @@
     {
         if (firstRender)
         {
-            var result = await SessionStorage.GetAsync<string>("currentId");
-            if (result.Success && NavigationManager != null)
+            // Načítanie hodnoty zo Session Storage
+            var result = await SessionStorage.GetAsync<string>("selectedPatientCode");
+            if (result.Success)
             {
-                currentId = result.Value;
+                SelectedPatientCode = result.Value;
+            }
+
+            var idResult = await SessionStorage.GetAsync<string>("currentId");
+            if (idResult.Success && NavigationManager != null)
+            {
+                currentId = idResult.Value;
                 currentUrl = NavigationManager.Uri; // Získaj aktuálnu URL
                 StateHasChanged();
             }

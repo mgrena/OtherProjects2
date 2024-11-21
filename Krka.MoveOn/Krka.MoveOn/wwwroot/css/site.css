@@ -400,6 +400,8 @@ html, body {
     margin-top: 6px;
 }
 
+
+
 .grid-icon-key {
     -webkit-mask-image: url("/images/key.svg");
     mask-image: url("/images/key.svg");
@@ -420,6 +422,7 @@ html, body {
     position: sticky;
     top: 40px;
     z-index: 999;
+    width: 100%;
     background-color: #fff;
 }
 .mo-nav-submenu-bar .rectangular-button {
@@ -428,7 +431,7 @@ html, body {
     border: 1px solid black;
     border-color: #dfdfdf;
     width: 100%;
-    min-width: 32.8%;
+    min-width: 31.8%;
     min-height: 90px;
 }
 .mo-nav-submenu-bar .active-button {
@@ -467,6 +470,12 @@ html, body {
 .mo-main-layout {
     width: 70%;
     margin: 0 auto;
+}
+
+@media (max-width: 769px) {
+    .mo-main-layout {
+        width: 100%;
+    }
 }
 
 .caption-styleH0 {

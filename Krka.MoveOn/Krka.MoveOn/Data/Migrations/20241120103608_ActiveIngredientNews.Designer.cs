@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120103608_ActiveIngredientNews")]
+    partial class ActiveIngredientNews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1148,7 +1151,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 14,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Smrť",
+                            Name = "Smrť",
                             Type_q = 3
                         },
                         new
@@ -1180,7 +1183,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 18,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ťažká (Spôsobuje neschopnosť vykonávať bežné činnosti, pacient môže pociťovať neznesiteľné nepohodlie alebo bolesť)",
+                            Name = "Ťažká (Spôsobuje neschopnosť vykonávať bežné činnosti, pacient môže pociťovať neznesiteľné nepohodlie alebo bolesť)",
                             Type_q = 4
                         },
                         new
@@ -1835,7 +1838,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 25,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Chlorprotixen",
+                            Name = "Chloprprotixen",
                             Type_q = 7
                         },
                         new
@@ -3094,16 +3097,6 @@ namespace Krka.MoveOn.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
-
-                    b.Property<string>("OtherIndication")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar")
-                        .HasColumnName("other_indication");
-
-                    b.Property<string>("OtherTreat")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar")
-                        .HasColumnName("other_treat");
 
                     b.Property<string>("Questionnaire_id")
                         .IsRequired()

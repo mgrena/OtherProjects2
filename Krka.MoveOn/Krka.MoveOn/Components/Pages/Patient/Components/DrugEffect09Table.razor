@@ -33,7 +33,7 @@
                 </div>
                 <DxFlyout @bind-IsOpen="@IsInfoOpen"
                           PositionTarget=".info-icon-btn"
-                          Position="FlyoutPosition.Bottom"
+                          Position="FlyoutPosition.LeftEnd"
                           PreventCloseOnPositionTargetClick="true"
                           Width="240">
                     Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
@@ -206,10 +206,10 @@
         previousProgress = DrugEffects.Count > 0 ? 100 : 0;
 
         dialActiveIngredient = await DrugEffectService.GetDialActiveIngredientAsync();
-        De_2_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+        De_2_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).OrderBy(d => d.Name).ToList();
 
         dialIndication = await DrugEffectService.GetDialIndicationAsync();
-        De_5_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
+        De_5_Answer = dialIndication.Where(d => d.Type_q == 1).OrderBy(d => d.Name).ToList();
 
         dialQGenerals = await DrugEffectService.GetDialGeneralAsync();
         de_1_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();

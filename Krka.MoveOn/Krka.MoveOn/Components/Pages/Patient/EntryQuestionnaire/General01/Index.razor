@@ -279,7 +279,7 @@
                     <ValidationMessage For="@(() => gen.Gen_12)" />
                 </DxFormLayoutItem>
 
-                <DxFormLayoutItem Caption="Pacientovi je diagnostikované/je podozrenie na" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="U pacienta je podozrenie na:" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_13" @onchange="OnFieldChanged">
                         @foreach (var item in gen_13_Answer)
                         {
@@ -417,15 +417,15 @@
 
         gen_7_DGAnswer = dialQGenerals.Where(d => d.Type_q == 6).ToList();
 
-        gen_7_1_DMAnswer = dialQGenerals.Where(d => d.Type_q == 7).ToList();
+        gen_7_1_DMAnswer = dialQGenerals.Where(d => d.Type_q == 7).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         gen_7_3_DU_Answer = dialQGenerals.Where(d => d.Type_q == 8).ToList();
         gen_7_1_3_DUAnswer = dialQGenerals.Where(d => d.Type_q == 8).ToList();
 
-        gen_9_DSAnswer = dialQGenerals.Where(d => d.Type_q == 9).ToList();
+        gen_9_DSAnswer = dialQGenerals.Where(d => d.Type_q == 9).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         gen_10_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
-        gen_10_1_Answer = dialQGenerals.Where(d => d.Type_q == 10).ToList();
+        gen_10_1_Answer = dialQGenerals.Where(d => d.Type_q == 10).OrderBy(d => d.Name == "Iná..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         gen_11_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
         gen_12_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();

@@ -16,7 +16,7 @@
         <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" style="margin-right: 10px; margin-top: 5px; " RenderStyle="ButtonRenderStyle.None"/>
         <DxFlyout @bind-IsOpen="@IsInfoOpen"
                   PositionTarget=".info-icon-btn"
-                  Position="FlyoutPosition.Bottom"
+                  Position="FlyoutPosition.LeftEnd"
                   PreventCloseOnPositionTargetClick="true"
                   Width="240">
             Tabuľky sa <b>automaticky</b> ukladajú počas vyplňovania. <br /> <br /> Všetky položky v týchto tabuľkách hodnotíte v <b>rozsahu od 0 do 4.</b>
@@ -39,6 +39,7 @@
         HighlightRowOnHover="true"
         EditModelSaving="Grid_EditModelSaving"
         FocusedRowEnabled="false">
+        
 
     <Columns>
         <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />

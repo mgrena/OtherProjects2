@@ -27,6 +27,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ProtectedSessionStorage SessionStorage
 @inject ILogger<Patient> Logger
+@inject IHttpContextAccessor HttpContextAccessor
 
 <div class="d-flex align-items-center custom-toast-background">
     <DxToastProvider Name="Overview"
@@ -167,7 +168,7 @@
         </div>
         <div class="simple-table" style=" border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
             <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
-                Pacient č.  <span style="color:#6e7de8; font-weight: bold;">@selectedPatientCode</span>
+                Pacient č.  <span style="color:#b691bc; font-weight: bold;">@selectedPatientCode</span>
 
             </div>
             <div>
@@ -238,14 +239,11 @@
             </div>
 
             @code {
-
-
                 // Zachytenie aktualnej Questionnaire_id
                 private async Task SetCurrentId(string id)
                 {
                     await SessionStorage.SetAsync("currentId", id);
                 }
-
 
                 private string GetNavigateUrl(Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum order, string id)
                 {
@@ -297,6 +295,7 @@
 
     private string? selectedDoctorId;
     private string? selectedPatientCode;
+
     private int? selectedPatientId;
     private bool hasQuestionnaires;
     private bool isRendered = false;
@@ -304,6 +303,8 @@
     private bool IsInfoOpen1 = true;
     private bool isAdminOrOffice;
     private ValidationMessageStore messageStore;
+
+
 
     bool isReadOnly = false;
 
@@ -338,6 +339,12 @@
                 await patientsGrid.SetFocusedDataItemAsync(selectedPatient);
             }
         }
+
+        var selectedPatientCode = await GetSelectedPatientCode();
+        if (!string.IsNullOrEmpty(selectedPatientCode))
+        {
+            this.selectedPatientCode = selectedPatientCode;
+        }
     }
 
     private async Task SetSelectedPatientId(int PatientId)
@@ -348,12 +355,25 @@
         }
     }
 
+    private async Task SetSelectedPatientCode(string? patientCode)
+    {
+        if (isRendered && !string.IsNullOrEmpty(patientCode))
+        {
+            await SessionStorage.SetAsync("selectedPatientCode", patientCode);
+        }
+    }
+
     private async Task<int?> GetSelectedPatientId()
     {
         var result = await SessionStorage.GetAsync<int?>("selectedPatientId");
         return result.Success ? result.Value : null;
     }
 
+    private async Task<string?> GetSelectedPatientCode()
+    {
+        var result = await SessionStorage.GetAsync<string>("selectedPatientCode");
+        return result.Success ? result.Value : null;
+    }
 
     // Nacitanie Id aktualneho pouzivatela
     async Task<string> GetCurrentUserIdAsync()
@@ -606,8 +626,14 @@
         {
             await LoadQuestionnairesAsync(selectedPatientId.Value);
             await SetSelectedPatientId(selectedPatientId.Value);
-            StateHasChanged(); //Aktualizacia, vykreslenie noveho obsahu
         }
+
+        if (!string.IsNullOrEmpty(selectedPatientCode))
+        {
+            await SetSelectedPatientCode(selectedPatientCode);
+        }
+
+        StateHasChanged();
     }
 
     private void ValidateGridData(ValidationMessageStoreEventArgs e)
