@@ -16,7 +16,7 @@
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
 
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(false))
 
 @inject IStringLocalizer<Patient> localizer
 @inject PatientService PatientService
@@ -56,27 +56,27 @@
         }
 
         <DxGrid @ref="patientsGrid"
-                Data="Patients"
-                PageSize="20"
-                PagerPosition="GridPagerPosition.Bottom"
-                PageSizeSelectorVisible="true"
-                PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-                PageSizeSelectorAllRowsItemVisible="true"
-                PagerSwitchToInputBoxButtonCount="10"
-                PagerVisibleNumericButtonCount="10"
-                KeyFieldName="Id"
-                ValidationEnabled="true"
-                EditMode="GridEditMode.PopupEditForm"
-                FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-                ColumnResizeMode="GridColumnResizeMode.NextColumn"
-                PopupEditFormHeaderText="Pridať pacienta"
-                TextWrapEnabled="false"
-                HighlightRowOnHover="true"
-                EditModelSaving="Grid_EditModelSaving"
-                CustomizeEditModel="Grid_CustomizeEditModel_New"
-                DataItemDeleting="Grid_DataItemDeleting"
-                FocusedRowEnabled="true"
-                FocusedRowChanged="OnFocusedRowChanged">
+        Data="Patients"
+        PageSize="20"
+        PagerPosition="GridPagerPosition.Bottom"
+        PageSizeSelectorVisible="true"
+        PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+        PageSizeSelectorAllRowsItemVisible="true"
+        PagerSwitchToInputBoxButtonCount="10"
+        PagerVisibleNumericButtonCount="10"
+        KeyFieldName="Id"
+        ValidationEnabled="true"
+        EditMode="GridEditMode.PopupEditForm"
+        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+        ColumnResizeMode="GridColumnResizeMode.NextColumn"
+        PopupEditFormHeaderText="Pridať pacienta"
+        TextWrapEnabled="false"
+        HighlightRowOnHover="true"
+        EditModelSaving="Grid_EditModelSaving"
+        CustomizeEditModel="Grid_CustomizeEditModel_New"
+        DataItemDeleting="Grid_DataItemDeleting"
+        FocusedRowEnabled="true"
+        FocusedRowChanged="OnFocusedRowChanged">
 
             <ToolbarTemplate Context="toolbarContext">
                 <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
@@ -107,19 +107,19 @@
                     <CellDisplayTemplate Context="gridContext">
                         <div class="grid-cell-align-center">
                             <DxButton IconCssClass="grid-toolbar-delete"
-                                      RenderStyle="ButtonRenderStyle.Link"
-                                      aria-label="Delete"
-                                      Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                            RenderStyle="ButtonRenderStyle.Link"
+                            aria-label="Delete"
+                            Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
                             </DxButton>
                         </div>
                     </CellDisplayTemplate>
                     <CellEditTemplate Context="editContext">
                         <div class="grid-cell-align-center">
                             <DxButton Enabled="false"
-                                      aria-label="Delete"
-                                      CssClass="grid-disabled-button"
-                                      IconCssClass="grid-toolbar-delete"
-                                      RenderStyle="ButtonRenderStyle.Link" />
+                            aria-label="Delete"
+                            CssClass="grid-disabled-button"
+                            IconCssClass="grid-toolbar-delete"
+                            RenderStyle="ButtonRenderStyle.Link" />
                         </div>
                     </CellEditTemplate>
                 </DxGridCommandColumn>
@@ -135,10 +135,10 @@
                             <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen"
-                                  PositionTarget=".info-icon-btn"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Údaje o všetkých pacientoch budú anonymizované. Jednotliví pacienti budú figurovať pod všeobecným <b>označením miesta centra</b> (ZV – Zvolen, MT– Martin, BAR – Bratislava Ružinov, BAK – Bratislava Kramáre, TT – Trnava, NR – Nitra, RK – Ružomberok, BJ – Bardejov, KE – Košice, GA– Galanta) a <b>poradového čísla pacienta</b> v danom centre, <span style="color:cornflowerblue">napríklad ZV19, MT11 a pod </span>
                         </DxFlyout>
                     </div>
@@ -172,7 +172,7 @@
             </div>
             <div>
                 <EditForm Model="@selectedPatient"
-                          Context="EditFormContext">
+                Context="EditFormContext">
                     <DxFormLayout CssClass="w-100">
                         <DxFormLayoutGroup Caption="Povolenia">
                             <div style=" margin-top: 2px; margin-left: 2px;">
@@ -184,9 +184,9 @@
                                         <Template>
                                             <DxFormLayoutItem Caption="Má pacient podpísaný informovaný súhlas so štúdiou?" CaptionCssClass="item-caption-style">
                                                 <DxCheckBox @bind-Checked="selectedPatient.InfoConfirmation"
-                                                            Text="áno"
-                                                            ReadOnly="@isReadOnly"
-                                                            @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.InfoConfirmation)))" />
+                                                Text="áno"
+                                                ReadOnly="@isReadOnly"
+                                                @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.InfoConfirmation)))" />
                                             </DxFormLayoutItem>
                                         </Template>
                                     </DxStackLayoutItem>
@@ -194,8 +194,8 @@
                                         <Template>
                                             <DxFormLayoutItem Caption="Má pacient podpísaný Formulár súhlasu s nariadením GDPR?" CaptionCssClass="item-caption-style">
                                                 <DxCheckBox @bind-Checked="selectedPatient.GDPRConfirmation" Text="áno"
-                                                            ReadOnly="@isReadOnly"
-                                                            @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.GDPRConfirmation)))" /> 
+                                                ReadOnly="@isReadOnly"
+                                                @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.GDPRConfirmation)))" /> 
                                             </DxFormLayoutItem>
                                         </Template>
                                     </DxStackLayoutItem>
@@ -220,8 +220,8 @@
                                     <Items>
                                         <div style="display: flex; align-items: center;">
                                             <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
-                                                        Text="@GetMenuText(questionnaire.Order)"
-                                                        @onclick="() => SetCurrentId(questionnaire.Id)" />
+                                            Text="@GetMenuText(questionnaire.Order)"
+                                            @onclick="() => SetCurrentId(questionnaire.Id)" />
                                             <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
                                         </div>
                                     </Items>
@@ -334,6 +334,7 @@
             var selectedPatient = Patients.FirstOrDefault(p => p.Id == selectedPatientId.Value);
             if (selectedPatient != null)
             {
+                //patientsGrid.SetFocusedRowIndex(Patients.IndexOf(selectedPatient));
                 await patientsGrid.SetFocusedDataItemAsync(selectedPatient);
             }
         }

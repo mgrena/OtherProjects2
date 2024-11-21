@@ -14,6 +14,7 @@
 @attribute [Authorize(Roles = "Admin")]
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
+@* @rendermode @(new InteractiveServerRenderMode(false)) *@
 
 @implements IDisposable
 
