@@ -14,7 +14,7 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Modifikovaná škála podľa Hoehenovej a Yahra" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
-            <DxFormLayoutItem Caption="Vyznačte prosím odpoveď, ktorá vyjadruje štádium ochorenia." CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1" ColSpanMd="12">
+            <DxFormLayoutItem Caption="Vyberte číslo, ktoré vyjadruje štádium ochorenia" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1" ColSpanMd="12">
                 <InputRadioGroup @bind-Value="@moca!.Mh_1" class="d-flex flex-wrap">
                     @foreach (var item in mh_1_Answer)
                     {
@@ -77,7 +77,7 @@
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
-                        <span style="color: #6e7de8;">@(moca!.Moca_1 + moca.Moca_2 + moca.Moca_3)</span>/5
+                        <span style="color: #b691bc;">@(moca!.Moca_1 + moca.Moca_2 + moca.Moca_3)</span>/5
                     </p>
                 </div>
             </DxFormLayoutGroup>
@@ -100,7 +100,7 @@
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
-                        <span style="color: #6e7de8;">@(moca?.Moca_4)</span>/3
+                        <span style="color: #b691bc;">@(moca?.Moca_4)</span>/3
                     </p>
                 </div>
             </DxFormLayoutGroup>
@@ -152,7 +152,7 @@
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
-                        <span style="color: #6e7de8;"> @(moca?.Moca_5 + moca?.Moca_6 + moca?.Moca_7)</span>/5
+                        <span style="color: #b691bc;"> @(moca?.Moca_5 + moca?.Moca_6 + moca?.Moca_7)</span>/5
                     </p>
                 </div>
             </DxFormLayoutGroup>
@@ -190,7 +190,7 @@
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
-                        <span style="color: #6e7de8;">@(moca?.Moca_8 + moca?.Moca_9)</span>/3
+                        <span style="color: #b691bc;">@(moca?.Moca_8 + moca?.Moca_9)</span>/3
                     </p>
                 </div>
             </DxFormLayoutGroup>
@@ -212,7 +212,7 @@
                         </DxFlyout>
                     </DxFormLayoutItem>
                     <p class="sum-style">
-                        <span style="color: #6e7de8;">@(moca?.Moca_10)</span>/3
+                        <span style="color: #b691bc;">@(moca?.Moca_10)</span>/3
                     </p>
                 </div>
             </DxFormLayoutGroup>
@@ -233,7 +233,7 @@
                         </DxFlyout>
                     </DxFormLayoutItem>
                     <p class="sum-style">
-                        <span style="color: #6e7de8;">@(moca?.Moca_11)</span>/5
+                        <span style="color: #b691bc;">@(moca?.Moca_11)</span>/5
                     </p>
                 </div>
             </DxFormLayoutGroup>
@@ -255,7 +255,7 @@
                         </DxFlyout>
                     </DxFormLayoutItem>
                     <p class="sum-style">
-                        <span style="color: #6e7de8;">@(moca?.Moca_12)</span>/6
+                        <span style="color: #b691bc;">@(moca?.Moca_12)</span>/6
                     </p>
                 </div>
             </DxFormLayoutGroup>
@@ -263,7 +263,7 @@
             <div class="group-style">
                 <DxFormLayoutItem>
                     <p class="sum-style">
-                        Spolu: <span style="color: #6e7de8;">@(moca?.Moca_1 + moca?.Moca_2 + moca?.Moca_3 + moca?.Moca_4 + moca?.Moca_5 + moca?.Moca_6 + moca?.Moca_7 + moca?.Moca_8 + moca?.Moca_9 + moca?.Moca_10 + moca?.Moca_11 + moca?.Moca_12)</span>/30
+                        Spolu: <span style="color: #b691bc;">@(moca?.Moca_1 + moca?.Moca_2 + moca?.Moca_3 + moca?.Moca_4 + moca?.Moca_5 + moca?.Moca_6 + moca?.Moca_7 + moca?.Moca_8 + moca?.Moca_9 + moca?.Moca_10 + moca?.Moca_11 + moca?.Moca_12)</span>/30
                     </p>
                 </DxFormLayoutItem>
             </div>

@@ -422,6 +422,7 @@ html, body {
     position: sticky;
     top: 40px;
     z-index: 999;
+    width: 100%;
     background-color: #fff;
 }
 .mo-nav-submenu-bar .rectangular-button {
@@ -430,7 +431,7 @@ html, body {
     border: 1px solid black;
     border-color: #dfdfdf;
     width: 100%;
-    min-width: 32.8%;
+    min-width: 31.8%;
     min-height: 90px;
 }
 .mo-nav-submenu-bar .active-button {
