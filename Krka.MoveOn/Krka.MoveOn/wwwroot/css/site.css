@@ -230,6 +230,22 @@ html, body {
     }
 }
 
+.table-bordered {
+    border: 1px outset black;
+    border-color: gainsboro;
+    margin: 10px;
+}
+
+.grid-toolbar-save1-button {
+    width: 100%;
+    border-radius: 50px;
+}
+
+.grid-toolbar-save1-button1 {
+    width: 10%;
+    border-radius: 50px;
+}
+
 .grid-toolbar-new,
 .grid-toolbar-delete,
 .grid-toolbar-add1,
@@ -411,12 +427,23 @@ html, body {
 .d-flex .flex-fill {
     flex: 1 1 auto;
 }
+
 .mo-buttons-group {
     display: flex;
     justify-content: space-between;
     width: 100%;
     gap: 10px;
 }
+
+.mo-nav-submenu-bar1 {
+    position: sticky;
+    top: 180px;
+    z-index: 999;
+    width: 100%;
+    padding: 0;
+    background-color: #fff;
+}
+
 
 .mo-nav-submenu-bar {
     position: sticky;
@@ -425,28 +452,36 @@ html, body {
     width: 100%;
     background-color: #fff;
 }
-.mo-nav-submenu-bar .rectangular-button {
-    border-radius: 0;
-    padding: 10px 10px;
-    border: 1px solid black;
-    border-color: #dfdfdf;
-    width: 100%;
-    min-width: 31.8%;
-    min-height: 90px;
-}
-.mo-nav-submenu-bar .active-button {
-    background-color: rgba(109, 36, 120, 0.5);
-    border-color: rgba(109, 36, 120, 0.5);
-    color: white;
-}
+
+    .mo-nav-submenu-bar .rectangular-button {
+        border-radius: 0;
+        padding: 10px 10px;
+        border: 1px solid black;
+        border-color: #dfdfdf;
+        width: 100%;
+        min-width: 31.8%;
+        min-height: 80px;
+    }
+
+    .mo-nav-submenu-bar .active-button {
+        background-color: rgba(109, 36, 120, 0.5);
+        border-color: rgba(109, 36, 120, 0.5);
+        color: white;
+    }
+
+
 
 @media (max-width: 1367px) {
     .mo-buttons-group {
         display: none; /* Skryj tlaèidlá */
     }
 
-     .hamburger-menu {
+    .hamburger-menu {
         display: block !important; /* Zobraz hamburger */
+    }
+
+    .mo-nav-submenu-bar1 {
+        top: 80px;
     }
 }
 
@@ -472,6 +507,10 @@ html, body {
     margin: 0 auto;
 }
 
+.custom-min-width {
+    width: 800px;
+}
+
 @media (max-width: 769px) {
     .mo-main-layout {
         width: 100%;
@@ -483,10 +522,12 @@ html, body {
     font-weight: bold;
     font-style: italic;
 }
+
 .caption-styleH01 {
     font-size: 18px;
     font-weight: bold;
 }
+
 .caption-styleH1 {
     font-size: 14px;
     color: #000;
@@ -499,6 +540,7 @@ html, body {
     z-index: 1000;
     background-color: rgba(109, 36, 120, 0.005);
 }
+
 .mo-caption-styleH3 {
     background-color: rgba(109, 36, 120, 0.01);
     color: #363c41;
@@ -510,6 +552,7 @@ html, body {
     margin-top: 5px;
     margin-left: 2px;
 }
+
 .mo-caption-styleH4 {
     background-color: rgba(109, 36, 120, 0.01);
     color: #363c41;
@@ -519,16 +562,95 @@ html, body {
     align-items: center;
     font-weight: bold;
 }
+
 .NavMenu {
     color: white;
 }
+
 input[type="radio"]:checked {
     accent-color: rgb(109, 36, 120);
 }
+
 .radio-container input[type="radio"]:checked {
     accent-color: rgb(109, 36, 120);
 }
+
 .dx-radio input[type="radio"]:checked {
     accent-color: rgb(109, 36, 120);
 }
 
+
+.container-login {
+    display: flex;
+    height: 100vh; 
+    overflow:auto; 
+}
+
+.left-half {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+    position: relative; 
+}
+
+    .left-half img {
+        width: auto; 
+        height: 100%; 
+        object-fit: contain; 
+        transform: rotate(20deg); 
+        position: absolute; 
+        top: 50%;
+        left: 50%;
+        transform-origin: center; 
+        transform: translate(-50%, -50%) rotate(20deg);
+    }
+
+.right-half {
+    flex: 1; 
+    display: flex;
+    justify-content: flex-start; 
+    align-items: center; 
+    padding: 0; 
+    position: relative; 
+}
+
+.right-half .main-content {
+    width: auto; 
+    margin: 16%; 
+    padding: 0;
+}
+
+
+
+.container-welcome {
+    position: relative;
+    overflow: hidden;
+}
+
+.background-image-welcome {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/images/welcome.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3; 
+    z-index: 0; 
+}
+
+.container-welcome .background-image + div {
+    position: relative;
+    z-index: 1; 
+}
+
+    .container-welcome .background-image + div div {
+        /*background: rgba(0, 0, 0, 0.7);*/ 
+        color: black; 
+        font-weight: bold; 
+        padding: 20px;
+        border-radius: 10px;
+    }

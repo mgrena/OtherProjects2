@@ -13,7 +13,7 @@
           OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <DxFormLayout>
-        <DxFormLayoutGroup Caption="Modifikovaná škála podľa Hoehenovej a Yahra" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
+        <DxFormLayoutGroup Caption="Modifikovaná škála podľa Hoehenovej a Yahra" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide" CssClass="custom-min-width">
             <DxFormLayoutItem Caption="Vyberte číslo, ktoré vyjadruje štádium ochorenia" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1" ColSpanMd="12">
                 <InputRadioGroup @bind-Value="@moca!.Mh_1" class="d-flex flex-wrap">
                     @foreach (var item in mh_1_Answer)
@@ -27,7 +27,7 @@
             </DxFormLayoutItem>
         </DxFormLayoutGroup>
 
-        <DxFormLayoutGroup Caption="Montrealský kognitívny test (MOCA)" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
+        <DxFormLayoutGroup Caption="Montrealský kognitívny test (MOCA)" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide" >
             <DxFormLayoutGroup Caption="Vizuálno-priestorové schopnosti" ColSpanMd="8" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Test cesty" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
@@ -276,6 +276,7 @@
                     <DxButton SubmitFormOnClick="true"
                               Text="Uložiť"
                               RenderStyle="ButtonRenderStyle.Primary"
+                              CssClass="grid-toolbar-save1-button1"
                               IconCssClass="grid-toolbar-save1" />
                 }
             </div>

@@ -56,23 +56,23 @@
             {
                 <div style="width: 98%; margin-left: 15px;">
                     <DxGrid @ref="drugEffectGrid"
-                    Data="DrugEffects"
-                    PageSize="20"
-                    PagerPosition="GridPagerPosition.Bottom"
-                    PageSizeSelectorVisible="true"
-                    PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-                    PageSizeSelectorAllRowsItemVisible="true"
-                    PagerSwitchToInputBoxButtonCount="10"
-                    PagerVisibleNumericButtonCount="10"
-                    KeyFieldName="Id"
-                    ValidationEnabled="false"
-                    EditMode="GridEditMode.EditCell"
-                    FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-                    ColumnResizeMode="GridColumnResizeMode.NextColumn"
-                    TextWrapEnabled="false"
-                    EditModelSaving="Grid_EditModelSaving"
-                    HighlightRowOnHover="true"
-                    FocusedRowEnabled="true">
+                            Data="DrugEffects"
+                            PageSize="20"
+                            PagerPosition="GridPagerPosition.Bottom"
+                            PageSizeSelectorVisible="true"
+                            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                            PageSizeSelectorAllRowsItemVisible="true"
+                            PagerSwitchToInputBoxButtonCount="10"
+                            PagerVisibleNumericButtonCount="10"
+                            KeyFieldName="Id"
+                            ValidationEnabled="false"
+                            EditMode="GridEditMode.EditCell"
+                            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                            TextWrapEnabled="false"
+                            EditModelSaving="Grid_EditModelSaving"
+                            HighlightRowOnHover="true"
+                            FocusedRowEnabled="true">
 
                         <ToolbarTemplate Context="toolbarContext">
                             @if (!isReadOnly)
@@ -89,9 +89,9 @@
                                 </EditSettings>
                             </DxGridDataColumn>
 
-                            <DxGridDataColumn FieldName="De_3" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" > 
+                            <DxGridDataColumn FieldName="De_3" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                                 <EditSettings>
-                                    <DxSpinEditSettings MinValue="@(0m)"/>
+                                    <DxSpinEditSettings MinValue="@(0m)" />
                                 </EditSettings>
                             </DxGridDataColumn>
 
@@ -110,9 +110,9 @@
                                         @if (!isReadOnly)
                                         {
                                             <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                            RenderStyle="ButtonRenderStyle.Link"
-                                            aria-label="Delete"
-                                            Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                                                      RenderStyle="ButtonRenderStyle.Link"
+                                                      aria-label="Delete"
+                                                      Click="@(() => drugEffectGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
                                                 <img src="images/delete.svg" width="16" height="16" alt="Vymazať" />
                                             </DxButton>
                                         }
@@ -124,10 +124,10 @@
                                         @if (!isReadOnly)
                                         {
                                             <DxButton Enabled="false"
-                                            aria-label="Delete"
-                                            CssClass="grid-disabled-button"
-                                            IconCssClass="grid-icon grid-icon-delete"
-                                            RenderStyle="ButtonRenderStyle.Link" />
+                                                      aria-label="Delete"
+                                                      CssClass="grid-disabled-button"
+                                                      IconCssClass="grid-icon grid-icon-delete"
+                                                      RenderStyle="ButtonRenderStyle.Link" />
                                         }
                                     </div>
                                 </CellEditTemplate>
@@ -143,10 +143,11 @@
                     @if (!isReadOnly)
                     {
                         <DxButton SubmitFormOnClick="true"
-                        Text="Uložiť"
-                        RenderStyle="ButtonRenderStyle.Primary"
-                        IconCssClass="grid-toolbar-save1"
-                        Enabled="@isModified" />
+                                  Text="Uložiť"
+                                  RenderStyle="ButtonRenderStyle.Primary"
+                                  IconCssClass="grid-toolbar-save1"
+                                  CssClass="grid-toolbar-save1-button1"
+                                  Enabled="true" />
                     }
                 </div>
             </DxFormLayoutItem>
@@ -206,10 +207,10 @@
         previousProgress = DrugEffects.Count > 0 ? 100 : 0;
 
         dialActiveIngredient = await DrugEffectService.GetDialActiveIngredientAsync();
-        De_2_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).OrderBy(d => d.Name).ToList();
+        De_2_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).OrderBy(d => d.Name).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         dialIndication = await DrugEffectService.GetDialIndicationAsync();
-        De_5_Answer = dialIndication.Where(d => d.Type_q == 1).OrderBy(d => d.Name).ToList();
+        De_5_Answer = dialIndication.Where(d => d.Type_q == 1).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         dialQGenerals = await DrugEffectService.GetDialGeneralAsync();
         de_1_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();

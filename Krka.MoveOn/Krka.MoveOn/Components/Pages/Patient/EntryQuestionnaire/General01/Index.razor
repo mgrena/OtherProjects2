@@ -33,17 +33,18 @@
 <div class="cw-880 mo-main-layout">
 
     <_EntryBtn />
-    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
-
+    <div class="mo-nav-submenu-bar1">
+        <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
+    </div>
     <EditForm Model="@gen"
               Context="EditFormContext"
               OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
 
         <DxFormLayout>
-            <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide">
+            <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="6" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide" CssClass="custom-min-width">
 
-                <DxFormLayoutItem Caption="Dátum" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="Dátum" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <DxDateEdit @bind-Date="gen!.Gen_1" ShowValidationIcon="true" required ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" ReadOnly="@isReadOnly" />
                     <ValidationMessage For="@(() => gen.Gen_1)" />
                 </DxFormLayoutItem>
@@ -52,7 +53,7 @@
                     <InputRadioGroup @bind-Value="@gen!.Gen_2_DG" class="d-flex flex-wrap">
                         @foreach (var item in gen_2_DGAnswer)
                         {
-                            <InputRadio class="m-2" @onclick="OnFieldChanged" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
                     <ValidationMessage For="@(() => gen.Gen_2_DG)" />
@@ -63,7 +64,7 @@
                         @foreach (var item in gen_3_DGAnswer)
                         {
                             <label class="d-block m-2">
-                                <InputRadio Value="@item.Id" @onclick="OnFieldChanged" required Disabled="@isReadOnly" /> @item.Name
+                                <InputRadio Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                             </label>
                         }
                     </InputRadioGroup>
@@ -75,7 +76,7 @@
                         @foreach (var item in gen_4_DGAnswer)
                         {
                             <label class="d-block m-2">
-                                <InputRadio Value="@item.Id" @onclick="OnFieldChanged" required Disabled="@isReadOnly" /> @item.Name
+                                <InputRadio Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                             </label>
                         }
                     </InputRadioGroup>
@@ -86,7 +87,7 @@
                     <InputRadioGroup @bind-Value="@gen!.Gen_5_D" class="d-flex flex-wrap">
                         @foreach (var item in gen_5_DGAnswer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" @onclick="OnFieldChanged" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
                     <ValidationMessage For="@(() => gen.Gen_5_D)" />
@@ -96,14 +97,14 @@
                     <InputRadioGroup @bind-Value="@gen!.Gen_6_DG" class="d-flex flex-wrap">
                         @foreach (var item in gen_6_DGAnswer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" @onclick="OnFieldChanged" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
                     <ValidationMessage For="@(() => gen.Gen_6_DG)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Anamnéza užívania antipsychotík" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
-                    <InputRadioGroup @bind-Value="@gen!.Gen_7_DG" @onchange="OnFieldChanged" class="d-flex flex-wrap">
+                    <InputRadioGroup @bind-Value="@gen!.Gen_7_DG" class="d-flex flex-wrap">
                         @foreach (var item in gen_7_DGAnswer)
                         {
                             <InputRadio class="m-2" Value="@item.Id" @onclick="() => OnGen7DGChanged(item.Id)" required Disabled="@isReadOnly" /> @item.Name
@@ -114,7 +115,7 @@
 
                 @if (isGen7_1_DM)
                 {
-                    <DxFormLayoutGroup Caption="Ak áno, ktoré lieky (názov, denná dávka)?" ColSpanMd="6">
+                    <DxFormLayoutGroup Caption="Ak áno, ktoré lieky (názov, denná dávka)?" ColSpanMd="12">
                         <DxFormLayoutItem Caption="Názov lieku ">
                             <DxComboBox NullText="Vyberte liek...."
                                         Data="@gen_7_1_DMAnswer"
@@ -122,7 +123,6 @@
                                         ValueFieldName="Id"
                                         ReadOnly="@isReadOnly"
                                         @bind-Value="gen!.Gen_7_1_DM"
-                                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
                                         ShowValidationIcon="true">
                                 <ItemTemplate Context="item">
                                     <text>
@@ -155,10 +155,6 @@
                                 <DxSpinEdit @bind-Value="@gen!.Gen_7_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="0" />
                             </DxFormLayoutItem>
                         }
-
-                        <DxFormLayoutItem ColSpanMd="12">
-                            <ValidationSummary />
-                        </DxFormLayoutItem>
                     </DxFormLayoutGroup>
 
                 }
@@ -166,7 +162,7 @@
                 @if (isGen7_1_1 && isGen7_1_DM)
                 {
                     <div class="new-row" style="margin-left: 3%">
-                        <DxFormLayoutGroup Caption="Iné..." ColSpanMd="6">
+                        <DxFormLayoutGroup Caption="Iné..." ColSpanMd="12">
 
                             <DxFormLayoutItem Caption="Názov lieku">
                                 <DxTextBox NullText="Napíšte názov lieku..." @bind-Text="@gen!.Gen_7_1_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
@@ -193,13 +189,13 @@
                     </div>
                 }
                 <div class="new-row">
-                    <DxFormLayoutItem Caption="Dĺžka trvania ťažkostí (v mesiacoch)" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                    <DxFormLayoutItem Caption="Dĺžka trvania ťažkostí (v mesiacoch)" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <DxSpinEdit @bind-Value="@gen!.Gen_8" ShowValidationIcon="true" CssClass="form-item-full-width" ReadOnly="@isReadOnly" MinValue="0" />
                     </DxFormLayoutItem>
                 </div>
 
                 <div class="new-row">
-                    <DxFormLayoutItem Caption="Prvý príznak Parkinsonovej choroby " ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                    <DxFormLayoutItem Caption="Prvý príznak Parkinsonovej choroby " ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <DxComboBox NullText="Vyberte príznak..."
                                     Data="@gen_9_DSAnswer"
                                     TextFieldName="Name"
@@ -214,7 +210,7 @@
 
 
                 <DxFormLayoutItem Caption="Bol pacient už kvôli tomuto príznaku vyšetrený .ortopédom, psychiatrom a pod.?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
-                    <InputRadioGroup @bind-Value="@gen!.Gen_10" class="d-flex flex-wrap" @onchange="OnFieldChanged">
+                    <InputRadioGroup @bind-Value="@gen!.Gen_10" class="d-flex flex-wrap">
                         @foreach (var item in gen_10_Answer)
                         {
                             <InputRadio class="m-2" Value="@item.Id" @onclick="() => OnGen10Changed(item.Id)" required Disabled="@isReadOnly" /> @item.Name
@@ -225,7 +221,7 @@
 
                 @if (isGen10_1)
                 {
-                    <DxFormLayoutGroup Caption="Ak áno, ktorá špecializácia?" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical">
+                    <DxFormLayoutGroup Caption="Ak áno, ktorá špecializácia?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical">
                         <DxFormLayoutItem Caption="Špecializácia">
                             <DxComboBox NullText="Vyberte špecializáciu..."
                                         Data="@gen_10_1_Answer"
@@ -233,7 +229,6 @@
                                         ValueFieldName="Id"
                                         ReadOnly="@isReadOnly"
                                         @bind-Value="@gen!.Gen_10_1"
-                                        ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
                                         ShowValidationIcon="true">
                                 <ItemTemplate Context="item">
                                     <text>
@@ -249,7 +244,7 @@
                     @if (isGen10_1_1)
                     {
                         <div class="new-row" style="margin-left: 3%">
-                            <DxFormLayoutGroup Caption="Iné..." ColSpanMd="6">
+                            <DxFormLayoutGroup Caption="Iné..." ColSpanMd="12">
 
                                 <DxFormLayoutItem Caption="Názov špecializácie">
                                     <DxTextBox NullText="Napíšte názov špecializácie..." @bind-Text="@gen!.Gen_10_1_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
@@ -263,7 +258,7 @@
                     <InputRadioGroup @bind-Value="@gen!.Gen_11" class="d-flex flex-wrap">
                         @foreach (var item in gen_11_Answer)
                         {
-                            <InputRadio class="m-2" @onclick="OnFieldChanged" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
                     <ValidationMessage For="@(() => gen.Gen_11)" />
@@ -273,14 +268,14 @@
                     <InputRadioGroup @bind-Value="@gen!.Gen_12" class="d-flex flex-wrap">
                         @foreach (var item in gen_12_Answer)
                         {
-                            <InputRadio class="m-2" @onclick="OnFieldChanged" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
                     <ValidationMessage For="@(() => gen.Gen_12)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="U pacienta je podozrenie na:" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
-                    <InputRadioGroup @bind-Value="@gen!.Gen_13" @onchange="OnFieldChanged">
+                    <InputRadioGroup @bind-Value="@gen!.Gen_13">
                         @foreach (var item in gen_13_Answer)
                         {
                             <label class="d-block m-2">
@@ -293,14 +288,13 @@
 
                 @if (isGen13_1)
                 {
-                    <DxFormLayoutGroup Caption="Iný parkinsonský syndróm " ColSpanMd="6">
+                    <DxFormLayoutGroup Caption="Iný parkinsonský syndróm " ColSpanMd="12">
                         <DxFormLayoutItem Caption="Uveďte">
                             <DxTextBox NullText="Napíšte iný..." @bind-Text="@gen!.Gen_13_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
                         </DxFormLayoutItem>
                     </DxFormLayoutGroup>
 
                 }
-
                 <DxFormLayoutItem ColSpanMd="12">
                     <div style="margin-top: 5px">
                         @if (!isReadOnly)
@@ -308,19 +302,16 @@
                             <DxButton SubmitFormOnClick="true"
                                       Text="Uložiť"
                                       RenderStyle="ButtonRenderStyle.Primary"
-                                      Enabled="@isModified"
+                                      Enabled="true"
+                                      CssClass="grid-toolbar-save1-button"
                                       IconCssClass="grid-toolbar-save1" />
                         }
                     </div>
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
-
-
-            <Krka.MoveOn.Services.MyCustomValidator DataItemValidating="ValidateGridData" />
-
-
         </DxFormLayout>
     </EditForm>
+
 </div>
 
 @code {
@@ -336,15 +327,11 @@
     bool isGen10_1_1 = false;
 
     bool isReadOnly = false;
-    bool isModified = false;
     bool showErrorIcon = false;
 
     private QuestionnaireProgressBar QuestionnaireProgressBarRef;
     Data.Questionnaires.QuestionnaireGeneral01? gen;
 
-    /// <summary>
-    /// DialQGeneral
-    /// </summary>
     List<Data.Dials.DialQGeneral> dialQGenerals = new();
     List<Data.Dials.DialQGeneral> gen_2_DGAnswer = new(); //Pohlavie
     List<Data.Dials.DialQGeneral> gen_3_DGAnswer = new(); //Rodinný stav
@@ -367,9 +354,6 @@
 
     List<Data.Dials.DialQGeneral> gen_13_Answer = new(); //Pacientovi je diagnostikované/je podozrenie na
 
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
     private void AddToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -450,12 +434,6 @@
         }
     }
 
-
-    private void OnFieldChanged()
-    {
-        isModified = true;
-    }
-
     private async Task HandleValidSubmit()
     {
         if (gen!.Gen_9_DS == 0)
@@ -469,89 +447,39 @@
 
         if (!isReadOnly)
         {
-            isModified = false;
-            
             await QuestionnaireProgressBarRef.RefreshDataAsync(gen.ProgressPercentage, 100);
-
             await Q01Service.SaveQuestionnaireGeneral01Async(gen);
             await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
-
-
             AddToast();
         }
     }
-
-    #region "Skrytie a zobrazenie riadkov"
 
     void OnGen7DGChanged(int value)
     {
         gen!.Gen_7_DG = value;
         isGen7_1_DM = (gen.Gen_7_DG == 16);
-        OnFieldChanged();
     }
 
     private void OnComboBoxItemClicked(int id)
     {
         isGen7_1_1 = (id == 34);
-        OnFieldChanged();
     }
 
     void OnGen10Changed(int value)
     {
         gen!.Gen_10 = value;
         isGen10_1 = (gen.Gen_10 == 14);
-        OnFieldChanged();
     }
 
     void OnGen13Changed(int value)
     {
         gen!.Gen_13 = value;
         isGen13_1 = (gen.Gen_13 == 55);
-        OnFieldChanged();
     }
 
     private void OnComboBoxItemClickedGen101(int id)
     {
         isGen10_1_1 = (id == 57);
-        OnFieldChanged();
     }
 
-    #endregion
-
-    private void OnDateChanged(DateTime newWalue)
-    {
-        OnFieldChanged();
-    }
-
-    private void ValidateGridData(ValidationMessageStoreEventArgs e)
-    {
-        var gQues = (Data.Questionnaires.QuestionnaireGeneral01)e.EditModel;
-
-        switch (gQues.Gen_7_DG)
-        {
-            case 16:
-                if (!gQues.Gen_7_1_DM.HasValue)
-                {
-                    e.AddError(nameof(gQues.Gen_7_1_DM), "Vyberte názov lieku !");
-                }
-                else if (!gQues.Gen_7_2.HasValue)
-                {
-                    e.AddError(nameof(gQues.Gen_7_2), "Vyberte dennú dávku !");
-                }
-                else if (!gQues.Gen_7_3_DU.HasValue)
-                {
-                    e.AddError(nameof(gQues.Gen_7_3_DU), "Vyberte mernú jednotku !");
-                }
-                else if (!gQues.Gen_7_4.HasValue)
-                {
-                    e.AddError(nameof(gQues.Gen_7_4), "Vyberte dĺžku užívania (v rokoch) !");
-                }
-                break;
-
-            // Pridajte ďalšie prípady podľa potreby
-            default:
-                // Akcia pre iné hodnoty
-                break;
-        }
-    }
 }

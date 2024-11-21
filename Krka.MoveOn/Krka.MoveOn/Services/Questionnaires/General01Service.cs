@@ -67,6 +67,22 @@ namespace Krka.MoveOn.Services.Questionnaires
                     existingQuestionnaire.Gen_7_1_4 = questionnaire.Gen_7_1_4;
                 }
 
+                // Ak áno, ktoré lieky
+                if (questionnaire.Gen_7_1_DM != 34)
+                {
+                    existingQuestionnaire.Gen_7_1_1 = null;
+                    existingQuestionnaire.Gen_7_1_2 = null;
+                    existingQuestionnaire.Gen_7_1_3_DU = null;
+                    existingQuestionnaire.Gen_7_1_4 = null;
+                }
+                else
+                {
+                    existingQuestionnaire.Gen_7_1_1 = questionnaire.Gen_7_1_1;
+                    existingQuestionnaire.Gen_7_1_2 = questionnaire.Gen_7_1_2;
+                    existingQuestionnaire.Gen_7_1_3_DU = questionnaire.Gen_7_1_3_DU;
+                    existingQuestionnaire.Gen_7_1_4 = questionnaire.Gen_7_1_4;
+                }
+
                 existingQuestionnaire.Gen_8 = questionnaire.Gen_8;
                 existingQuestionnaire.Gen_9_DS = questionnaire.Gen_9_DS;
 

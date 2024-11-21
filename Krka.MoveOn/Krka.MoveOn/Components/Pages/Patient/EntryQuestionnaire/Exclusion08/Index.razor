@@ -27,10 +27,11 @@
 
 <div class="cw-880 mo-main-layout">
     <_EntryBtn />
-    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
-
+    <div class="mo-nav-submenu-bar1">
+        <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
+    </div>
     <Exclusion08Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
-    
+
 </div>
 
 
