@@ -57,27 +57,28 @@
         }
 
         <DxGrid @ref="patientsGrid"
-        Data="Patients"
-        PageSize="20"
-        PagerPosition="GridPagerPosition.Bottom"
-        PageSizeSelectorVisible="true"
-        PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-        PageSizeSelectorAllRowsItemVisible="true"
-        PagerSwitchToInputBoxButtonCount="10"
-        PagerVisibleNumericButtonCount="10"
-        KeyFieldName="Id"
-        ValidationEnabled="true"
-        EditMode="GridEditMode.PopupEditForm"
-        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-        ColumnResizeMode="GridColumnResizeMode.NextColumn"
-        PopupEditFormHeaderText="Pridať pacienta"
-        TextWrapEnabled="false"
-        HighlightRowOnHover="true"
-        EditModelSaving="Grid_EditModelSaving"
-        CustomizeEditModel="Grid_CustomizeEditModel_New"
-        DataItemDeleting="Grid_DataItemDeleting"
-        FocusedRowEnabled="true"
-        FocusedRowChanged="OnFocusedRowChanged">
+                Data="Patients"
+                PageSize="20"
+                PagerPosition="GridPagerPosition.Bottom"
+                PageSizeSelectorVisible="true"
+                PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                PageSizeSelectorAllRowsItemVisible="true"
+                PagerSwitchToInputBoxButtonCount="10"
+                PagerVisibleNumericButtonCount="10"
+                KeyFieldName="Id"
+                ValidationEnabled="true"
+                EditMode="GridEditMode.PopupEditForm"
+                FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                PopupEditFormHeaderText="Pridať pacienta"
+                TextWrapEnabled="false"
+                HighlightRowOnHover="true"
+                EditModelSaving="Grid_EditModelSaving"
+                CustomizeEditModel="Grid_CustomizeEditModel_New"
+                DataItemDeleting="Grid_DataItemDeleting"
+                CustomizeElement="Grid_CustomizeElement"
+                FocusedRowEnabled="true"
+                FocusedRowChanged="OnFocusedRowChanged">
 
             <ToolbarTemplate Context="toolbarContext">
                 <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
@@ -283,6 +284,10 @@
     public List<Data.Patient> Patients { get; set; }
     public List<Data.Questionnaires.Questionnaire> Questionnaires { get; set; }
 
+    private bool isFocusedRowEnabled = false;
+
+    private Data.Patient? selectedPatient1 = null;
+
     private Data.Patient selectedPatient = new Data.Patient
         {
             UserId = "default",
@@ -313,6 +318,7 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
+
         isAdminOrOffice = user.IsInRole("Admin") || user.IsInRole("Office");
 
         if (user.IsInRole("Office"))
@@ -330,6 +336,7 @@
     {
         isRendered = true;
         var selectedPatientId = await GetSelectedPatientId();
+
         if (selectedPatientId.HasValue)
         {
             var selectedPatient = Patients.FirstOrDefault(p => p.Id == selectedPatientId.Value);
@@ -615,9 +622,9 @@
     private async void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
     {
         var patient = e.DataItem as Data.Patient;
-        if (patient is not null)
+        if (e.DataItem is Data.Patient patient1)
         {
-            selectedPatient = patient;
+            selectedPatient = patient1;
         }
         selectedPatientCode = patient?.PatientCode;
         selectedPatientId = patient?.Id;
@@ -662,7 +669,7 @@
             var patient = Patients[e.VisibleIndex];
             if (patient.Valid == Data.Patient.ValidEnum.Predčasne_vylúčený)
             {
-                e.Style = "background-color: #f0f0f0; color: #a0a0a0;";
+                e.Style = "background-color: #f0f0f0; color: black;";
             }
         }
         if (e.ElementType == GridElementType.HeaderCell)

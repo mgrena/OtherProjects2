@@ -210,7 +210,8 @@
                         <DxButton SubmitFormOnClick="true"
                                   Text="Uložiť"
                                   RenderStyle="ButtonRenderStyle.Primary"
-                                  Enabled="@isModified"
+                                  Enabled="true"
+                                  CssClass="grid-toolbar-save1-button1"
                                   IconCssClass="grid-toolbar-save1" />
                     }
                 </div>
@@ -330,9 +331,10 @@
         if (!isReadOnly && isModified)
         {
             isModified = false;
-            if (treat03?.TreatQ1 == 14 && treat03.Treat_1 == null)
+            if (treat03?.TreatQ1 == 14 && treat03.Treat_3 == null)
                 return;
             await TreatmentService.SaveTreatmentAsync(treat03!);
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
             Add1Toast();
         }
     }
@@ -398,7 +400,7 @@
             }
         }
 
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        // 
         await ClearUnsavedChangesAsync();
         isModified = false;
     }

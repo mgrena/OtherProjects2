@@ -65,6 +65,7 @@ public class Treatment03Service(ApplicationDbContext context)
                 entity.Treat_2 = null;
                 entity.Treat_3 = null;
                 entity.OtherIndication = null;
+                entity.OtherTreat = null;
                 entity.DeletedAt = DateTime.Now;
                 entity.ModifiedAt = DateTime.Now;
                 _context.QuestionnaireTreatment03s.Update(entity);
@@ -75,7 +76,7 @@ public class Treatment03Service(ApplicationDbContext context)
         {
             var newEntity = new QuestionnaireTreatment03() { Questionnaire_id = treat.Questionnaire_id, TreatQ1 = treat.TreatQ1, OtherIndication = treat.OtherIndication, OtherTreat = treat.OtherTreat, Treat_1 = treat.Treat_1, Treat_2 = treat.Treat_2, 
                                                              Treat_3 = treat.Treat_3, ModifiedAt = DateTime.Now, CreatedAt = DateTime.Now};
-            if (newEntity.TreatQ1 == null && newEntity.Treat_1 != null)
+            if (newEntity.TreatQ1 == null && newEntity.Treat_3 != null)
                 newEntity.TreatQ1 = 14;
 
             // check for existing no items
@@ -94,6 +95,19 @@ public class Treatment03Service(ApplicationDbContext context)
             existingEntity.Treat_3 = treat.Treat_3;
             existingEntity.OtherIndication = treat.OtherIndication;
             existingEntity.OtherTreat = treat.OtherTreat;
+            existingEntity.ModifiedAt = DateTime.Now;
+            _context.QuestionnaireTreatment03s.Update(existingEntity);
+
+            if (existingEntity.Treat_3 != 9)
+            {
+                existingEntity.OtherIndication = null;
+                existingEntity.OtherTreat = null;
+            }
+
+            if (existingEntity.Treat_3 == 9)
+            {
+                existingEntity.Treat_1 = null;
+            }
             existingEntity.ModifiedAt = DateTime.Now;
             _context.QuestionnaireTreatment03s.Update(existingEntity);
         }
