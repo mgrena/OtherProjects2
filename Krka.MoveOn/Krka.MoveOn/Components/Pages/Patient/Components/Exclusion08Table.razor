@@ -22,7 +22,7 @@
                     @foreach (var item in exc_q_Answer)
                     {
                         <label class="d-block m-2">
-                            <InputRadio class="m-2" @onclick="() => {OnExcQAnswer(item.Id); OnExc31Answer(item.Id);} " Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="async() => { await OnExcQAnswer(item.Id); OnExc31Answer(item.Id);} " Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         </label>
                     }
                 </InputRadioGroup>
@@ -32,9 +32,10 @@
                 {
                     <DxFormLayoutItem Caption="Dátum predčasného vylúčenia" ColSpanMd="4" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <ChildContent Context="dateContext">
-                            <DxDateEdit @bind-Date="@exc.Exc_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+                            <DxDateEdit Date="@exc.Exc_1" DateChanged="@((DateTime? newValue) => DateChangeValue(newValue))" DateExpression="@(() => exc.Exc_1)" ShowValidationIcon="true" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
                         </ChildContent>
                     </DxFormLayoutItem>
+
                     <DxFormLayoutItem ColSpanMd="8" />
 
                     <DxFormLayoutItem Caption="Ako ste zbierali údaje o pacientoch?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
@@ -43,7 +44,7 @@
                                 @foreach (var item in exc_2_Answer)
                                 {
                                     <label class="d-block m-2">
-                                        <InputRadio class="m-2" @onclick="OnFieldChanged" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                                        <InputRadio class="m-2" @onclick="async() => await GroupChange(item.Id , 1)" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                                     </label>
                                 }
                             </InputRadioGroup>
@@ -57,7 +58,7 @@
                                 @foreach (var item in exc_3_Answer)
                                 {
                                     <label class="d-block m-2">
-                                        <InputRadio class="m-2" @onclick="() => { OnExc31Answer(item.Id); }" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                                        <InputRadio class="m-2" @onclick="async() => await GroupChange(item.Id , 2)" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                                     </label>
                                 }
                             </InputRadioGroup>
@@ -207,22 +208,6 @@
                     </DxGrid>
                 </div>
             }
-
-
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style="margin-top: 5px">
-                    @if (!isReadOnly)
-                    {
-                        <DxButton SubmitFormOnClick="true"
-                                  Text="Uložiť"
-                                  RenderStyle="ButtonRenderStyle.Primary"
-                                  CssClass="grid-toolbar-save1-button1"
-                                  Enabled="true"
-                                  IconCssClass="grid-toolbar-save1" />
-                    }
-                </div>
-            </DxFormLayoutItem>
-
         </DxFormLayoutGroup>
     </DxFormLayout>
 </EditForm>
@@ -446,21 +431,55 @@
         DeleteToast();
     }
 
-    void OnExcQAnswer(int value)
+    async Task OnExcQAnswer(int value)
     {
         exc!.Exc_Q = value;
         isExc_q_Answer = (exc!.Exc_Q == 14);
-        OnFieldChanged();
+
+        if(exc!.Exc_Q == 14)
+        {
+            await HandleValidSubmit();
+        }
+
+        if (exc!.Exc_Q == 15)
+        {
+            await HandleValidSubmit();
+        }
+
     }
 
     void OnExc31Answer(int value)
     {
         exc!.Exc_3 = value;
         isExc_3_1_Answer = (exc!.Exc_3 == 4) || (exc!.Exc_3 == 5) || (exc!.Exc_3 == 6) || (exc!.Exc_3 == 9) || (exc!.Exc_3 == 10);
-        OnFieldChanged();
+
     }
 
-    private void OnFieldChanged()
+    async Task DateChangeValue(DateTime? date)
+    {
+        exc!.Exc_1 = date;
+        await HandleValidSubmit();
+    }
+
+    async Task GroupChange(int value, int excIndex)
+    {
+        switch (excIndex)
+        {
+            case 1:
+                exc!.Exc_2 = value;
+                break;
+            case 2:
+                exc!.Exc_3 = value;
+                isExc_3_1_Answer = true;
+                break;
+            default:
+                throw new ArgumentException("Neznámy index Exc");
+        }
+
+        await HandleValidSubmit();
+    }
+
+    async Task OnFieldChanged()
     {
         isModified = true;
     }

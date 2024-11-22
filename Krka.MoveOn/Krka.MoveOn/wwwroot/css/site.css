@@ -638,7 +638,7 @@ input[type="radio"]:checked {
     background-image: url('/images/welcome.png');
     background-size: cover;
     background-position: center;
-    opacity: 0.3; 
+    opacity: 0.2; 
     z-index: 0; 
 }
 

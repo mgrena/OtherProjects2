@@ -65,7 +65,7 @@
                             {
                                 <td>
                                     <div class="radio-container">
-                                        <DxRadio @bind-GroupValue="@SatisfactionQ.SF_1" Value="@option" GroupName="sf_1_group" ReadOnly="@isReadOnly" />
+                                        <DxRadio GroupValue="@SatisfactionQ.SF_1" Value="@option" GroupValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => GroupChangeValue(newValue, 1)))" GroupValueExpression="@(() => SatisfactionQ.SF_1)" GroupName="sf_1_group" ReadOnly="@isReadOnly" />
                                     </div>
                                 </td>
                             }
@@ -76,7 +76,7 @@
                             {
                                 <td>
                                     <div class="radio-container">
-                                        <DxRadio @bind-GroupValue="@SatisfactionQ.SF_2" Value="@option" GroupName="sf_2_group" ReadOnly="@isReadOnly" />
+                                        <DxRadio GroupValue="@SatisfactionQ.SF_2" Value="@option" GroupValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => GroupChangeValue(newValue, 2)))" GroupValueExpression="@(() => SatisfactionQ.SF_2)" GroupName="sf_2_group" ReadOnly="@isReadOnly" />
                                     </div>
                                 </td>
                             }
@@ -87,7 +87,7 @@
                             {
                                 <td>
                                     <div class="radio-container">
-                                        <DxRadio @bind-GroupValue="@SatisfactionQ.SF_3" Value="@option" GroupName="sf_3_group" ReadOnly="@isReadOnly" />
+                                        <DxRadio GroupValue="@SatisfactionQ.SF_3" Value="@option" GroupValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => GroupChangeValue(newValue, 3)))" GroupValueExpression="@(() => SatisfactionQ.SF_3)" GroupName="sf_3_group" ReadOnly="@isReadOnly" />
                                     </div>
                                 </td>
                             }
@@ -98,28 +98,13 @@
                             {
                                 <td>
                                     <div class="radio-container">
-                                        <DxRadio @bind-GroupValue="@SatisfactionQ.SF_4" Value="@option" GroupName="sf_4_group" ReadOnly="@isReadOnly" />
+                                        <DxRadio GroupValue="@SatisfactionQ.SF_4" Value="@option" GroupValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => GroupChangeValue(newValue, 4)))" GroupValueExpression="@(() => SatisfactionQ.SF_4)" GroupName="sf_4_group" ReadOnly="@isReadOnly" />
                                     </div>
                                 </td>
                             }
                         </tr>
                     </tbody>
                 </table>
-
-
-                <DxFormLayoutItem ColSpanMd="12">
-                    <div style="margin-top: 5px">
-                        @if (!isReadOnly)
-                        {
-                            <DxButton SubmitFormOnClick="true"
-                                      Text="Uložiť"
-                                      RenderStyle="ButtonRenderStyle.Primary"
-                                      CssClass="grid-toolbar-save1-button1"
-                                      IconCssClass="grid-toolbar-save1" />
-                        }
-                    </div>
-                </DxFormLayoutItem>
-
             </DxFormLayoutGroup>
         </DxFormLayout>
     </EditForm>
@@ -133,7 +118,7 @@
     public string questionnaireId { get; set; }
 
     [Parameter]
-public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
 
     bool PanelVisible { get; set; }
 
@@ -203,5 +188,28 @@ public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; 
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
             });
+    }
+
+    async Task GroupChangeValue(int value, int groupIndex)
+    {
+        switch (groupIndex)
+        {
+            case 1:
+                SatisfactionQ.SF_1 = value;
+                break;
+            case 2:
+                SatisfactionQ.SF_2 = value;
+                break;
+            case 3:
+                SatisfactionQ.SF_3 = value;
+                break;
+            case 4:
+                SatisfactionQ.SF_4 = value;
+                break;
+            default:
+                throw new ArgumentException("Neznámy index Group");
+        }
+
+        await HandleValidSubmit();
     }
 }
