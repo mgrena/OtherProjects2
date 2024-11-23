@@ -26,20 +26,6 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Nežiaduci účinok liečiva" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style=" margin-top: 4px; margin-left: 2px;">
-                    <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                </div>
-                <DxFlyout @bind-IsOpen="@IsInfoOpen"
-                          PositionTarget=".info-icon-btn"
-                          Position="FlyoutPosition.LeftEnd"
-                          PreventCloseOnPositionTargetClick="true"
-                          Width="240">
-                    Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
-                </DxFlyout>
-            </DxFormLayoutItem>
-
             <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                 <InputRadioGroup @bind-Value="@druggEffect!.De_1" class="d-flex flex-wrap">
                     @foreach (var item in de_1_Answer)
