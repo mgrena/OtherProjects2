@@ -136,11 +136,11 @@
 
                         @if (!isGen7_1_1)
                         {
-                            <DxFormLayoutItem Caption="Denná dávka">
+                            <DxFormLayoutItem Caption="Denná dávka (v mg)">
                                 <DxSpinEdit @bind-Value="@gen!.Gen_7_2" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="@(0m)" />
                             </DxFormLayoutItem>
 
-                            <DxFormLayoutItem Caption="Merná jednotka">
+@*                             <DxFormLayoutItem Caption="Merná jednotka">
                                 <DxComboBox Data="@gen_7_3_DU_Answer"
                                             TextFieldName="Name"
                                             ValueFieldName="Id"
@@ -149,7 +149,7 @@
                                             ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
                                             ShowValidationIcon="true" />
 
-                            </DxFormLayoutItem>
+                                </DxFormLayoutItem> *@
 
                             <DxFormLayoutItem Caption="Dĺžka užívania (v rokoch)">
                                 <DxSpinEdit @bind-Value="@gen!.Gen_7_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="0" />
@@ -168,11 +168,11 @@
                                 <DxTextBox NullText="Napíšte názov lieku..." @bind-Text="@gen!.Gen_7_1_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
                             </DxFormLayoutItem>
 
-                            <DxFormLayoutItem Caption="Denná dávka">
+                            <DxFormLayoutItem Caption="Denná dávka (v mg)">
                                 <DxSpinEdit @bind-Value="@gen!.Gen_7_1_2" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="@(0m)" />
                             </DxFormLayoutItem>
 
-                            <DxFormLayoutItem Caption="Merná jednotka">
+                            @* <DxFormLayoutItem Caption="Merná jednotka">
                                 <DxComboBox Data="@gen_7_1_3_DUAnswer"
                                             TextFieldName="Name"
                                             ValueFieldName="Type_q"
@@ -180,7 +180,7 @@
                                             @bind-Value="@gen!.Gen_7_1_3_DU"
                                             ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
                                             ShowValidationIcon="true" />
-                            </DxFormLayoutItem>
+                                </DxFormLayoutItem> *@
 
                             <DxFormLayoutItem Caption="Dĺžka užívania (v rokoch)">
                                 <DxSpinEdit @bind-Value="@gen!.Gen_7_1_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="0" />
