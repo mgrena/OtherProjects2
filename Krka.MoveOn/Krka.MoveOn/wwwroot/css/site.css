@@ -251,6 +251,7 @@ html, body {
 .grid-toolbar-add1,
 .grid-toolbar-save,
 .grid-toolbar-info,
+.grid-toolbar-info1,
 .grid-toolbar-patient,
 .grid-toolbar-pill,
 .grid-toolbar-save1,
@@ -332,6 +333,13 @@ html, body {
     mask-image: url("/images/info.svg");
     mask-size: 17px 18px;
     color: #6d2478;
+}
+
+
+.grid-toolbar-info1 {
+    -webkit-mask-image: url("/images/info1.svg");
+    mask-image: url("/images/info1.svg");
+    mask-size: 17px 18px;
 }
 
 .grid-modified-cell {
@@ -638,7 +646,8 @@ input[type="radio"]:checked {
     background-image: url('/images/welcome.png');
     background-size: cover;
     background-position: center;
-    opacity: 0.3; 
+    opacity: 0.2; 
+    border-radius: 5%;
     z-index: 0; 
 }
 
@@ -654,3 +663,21 @@ input[type="radio"]:checked {
         padding: 20px;
         border-radius: 10px;
     }
+
+.welcome-text {
+    width: 40%;
+    text-align: justify;
+    opacity: 1;
+    background: rgba(245, 245, 245, 1);
+    padding: 20px;
+    color: black;
+    font-weight: bold;
+    border-radius: 5%;
+    overflow: auto;
+}
+
+@media (max-width: 1367px) {
+    .welcome-text {
+        width: 90%;
+    }
+}

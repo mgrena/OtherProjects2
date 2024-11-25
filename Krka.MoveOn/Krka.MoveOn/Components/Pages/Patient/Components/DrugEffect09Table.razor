@@ -26,26 +26,12 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Nežiaduci účinok liečiva" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style=" margin-top: 4px; margin-left: 2px;">
-                    <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                </div>
-                <DxFlyout @bind-IsOpen="@IsInfoOpen"
-                          PositionTarget=".info-icon-btn"
-                          Position="FlyoutPosition.LeftEnd"
-                          PreventCloseOnPositionTargetClick="true"
-                          Width="240">
-                    Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
-                </DxFlyout>
-            </DxFormLayoutItem>
-
             <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                 <InputRadioGroup @bind-Value="@druggEffect!.De_1" class="d-flex flex-wrap">
                     @foreach (var item in de_1_Answer)
                     {
                         <label class="d-block m-2">
-                            <InputRadio class="m-2" @onclick="() => {OnD1QAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="async() => await OnD1QAnswer(item.Id)" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         </label>
                     }
                 </InputRadioGroup>
@@ -137,20 +123,6 @@
                     </DxGrid>
                 </div>
             }
-
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style="margin-top: 5px">
-                    @if (!isReadOnly)
-                    {
-                        <DxButton SubmitFormOnClick="true"
-                                  Text="Uložiť"
-                                  RenderStyle="ButtonRenderStyle.Primary"
-                                  IconCssClass="grid-toolbar-save1"
-                                  CssClass="grid-toolbar-save1-button1"
-                                  Enabled="true" />
-                    }
-                </div>
-            </DxFormLayoutItem>
         </DxFormLayoutGroup>
     </DxFormLayout>
 </EditForm>
@@ -232,7 +204,7 @@
 
     private async Task HandleValidSubmit()
     {
-        if (!isReadOnly && isModified)
+        if (!isReadOnly)
         {
             isModified = false;
             if (druggEffect?.De_1 == 14 && druggEffect.De_2 == null)
@@ -248,11 +220,16 @@
         isModified = true;
     }
 
-    void OnD1QAnswer(int value)
+    async Task OnD1QAnswer(int value)
     {
         druggEffect!.De_1 = value;
         isDe1Answer = (druggEffect!.De_1 == 14);
-        OnFieldChanged();
+
+        if (druggEffect!.De_1 == 15 || druggEffect!.De_1 == 14)
+        {
+            await HandleValidSubmit();
+        }
+
     }
 
     async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)

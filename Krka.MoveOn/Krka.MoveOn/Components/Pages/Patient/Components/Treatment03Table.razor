@@ -18,24 +18,12 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Zmena v liečbe pridružených problémov (napr. obstipácia, depresia, kognitívne poruchy atď.):" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style=" margin-top: 4px; margin-left: 2px;">
-                    <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                </div>
-                <DxFlyout @bind-IsOpen="@IsInfoOpen"
-                          PositionTarget=".info-icon-btn"
-                          Position="FlyoutPosition.LeftEnd"
-                          PreventCloseOnPositionTargetClick="true"
-                          Width="240">
-                    Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
-                </DxFlyout>
-            </DxFormLayoutItem>
             <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                 <InputRadioGroup @bind-Value="@treat03!.TreatQ1" class="d-flex flex-wrap">
                     @foreach (var item in treat_q_1_Answer)
                     {
                         <label class="d-block m-2">
-                            <InputRadio class="m-2" @onclick="() => {OnTreatQAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" />@item.Name
+                            <InputRadio class="m-2" @onclick="async() => await OnTreatQAnswer(item.Id)" Value="@item.Id" required Disabled="@isReadOnly" />@item.Name
                         </label>
                     }
                 </InputRadioGroup>
@@ -108,9 +96,7 @@
                                 <CellDisplayTemplate Context="context">
                                     @if (context.DataItem is Data.Questionnaires.QuestionnaireTreatment03 treatment)
                                     {
-                                        <button @onclick="() => ShowDetails(treatment)">
-                                            Viac Informácií 
-                                        </button>
+                                        <DxButton IconCssClass="grid-toolbar-info" @onclick="() => ShowDetails(treatment)" />
                                     }
                                 </CellDisplayTemplate>
                                 <HeaderCaptionTemplate>
@@ -202,53 +188,39 @@
                     </DxPopup>
                 </div>
             }
-
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style="margin-top: 5px">
-                    @if (!isReadOnly)
-                    {
-                        <DxButton SubmitFormOnClick="true"
-                                  Text="Uložiť"
-                                  RenderStyle="ButtonRenderStyle.Primary"
-                                  Enabled="true"
-                                  CssClass="grid-toolbar-save1-button1"
-                                  IconCssClass="grid-toolbar-save1" />
-                    }
-                </div>
-            </DxFormLayoutItem>
         </DxFormLayoutGroup>
     </DxFormLayout>
 </EditForm>
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public string? questionnaireId { get; set; }
 
     [Parameter]
     public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
 
-    private bool isFirstRender = true;
-    private int? SelectedTreat3Id { get; set; }
+    bool IsInfoOpen = true;
+    bool isTreatQ1Answer = false;
+    bool isReadOnly = false;
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || treatGrid!.IsEditing();
+
     private bool ShowOtherInput { get; set; } = false;
     private bool ShowOtherInput1 { get; set; } = false;
+    private bool PopupVisible { get; set; } = false;
+
+    private int previousProgress = 0;
+    private int? SelectedTreat3Id { get; set; }
     private int? SelectedTreat1 { get; set; }
 
-    private bool PopupVisible { get; set; } = false;
     private string PopupHeaderText { get; set; } = "Details";
-
     private string PopupOtherTreat { get; set; } = string.Empty;
     private string PopupOtherIndication { get; set; } = string.Empty;
 
-    bool isModified = false;
-    bool IsInfoOpen = true;
-    bool isSaveVisible = false;
 
-    bool isTreatQ1Answer = false;
-
-    IGrid treatGrid { get; set; }
-    public List<Data.Questionnaires.QuestionnaireTreatment03> Treats { get; set; }
+    IGrid? treatGrid { get; set; }
 
     Data.Questionnaires.QuestionnaireTreatment03? treat03;
+    List<Data.Questionnaires.QuestionnaireTreatment03>? Treats { get; set; }
 
     List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
     List<Data.Dials.DialActiveIngredient> treat_1_Answer = new();
@@ -260,23 +232,15 @@
     List<Data.Dials.DialQGeneral> treat_q_1_Answer = new();
 
     Dictionary<QuestionnaireTreatment03, DataChange> UnsavedChanges { get; } = new();
-    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || treatGrid.IsEditing();
-
-    bool isReadOnly = false;
-    private int previousProgress = 0;
-
 
     private void ShowDetails(QuestionnaireTreatment03 treatment)
     {
         if (treatment != null)
         {
-            // Nastavenie detailov do popupu
+            PopupVisible = true;
             PopupHeaderText = $"Detail záznamu";
             PopupOtherTreat = treatment.OtherTreat ?? "N/A";
             PopupOtherIndication = treatment.OtherIndication ?? "N/A";
-
-            // Zobrazenie popupu
-            PopupVisible = true;
         }
     }
 
@@ -292,12 +256,12 @@
 
         treat03 = new Data.Questionnaires.QuestionnaireTreatment03
             {
-                Questionnaire_id = questionnaireId,
+                Questionnaire_id = questionnaireId!,
                 CreatedAt = DateTime.Now,
                 ModifiedAt = DateTime.Now
             };
 
-        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
+        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId!);
 
         previousProgress = Treats.Count > 0 ? 100 : 0;
 
@@ -310,7 +274,7 @@
         dialQGenerals = await TreatmentService.GetDialGeneralAsync();
         treat_q_1_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
 
-        await LoadQuestionnaire(questionnaireId);
+        await LoadQuestionnaire(questionnaireId!);
     }
 
     private async Task LoadQuestionnaire(string questionnaireid)
@@ -324,13 +288,12 @@
         }
     }
 
-    async Task New_Click() => await treatGrid.StartEditNewRowAsync();
+    async Task New_Click() => await treatGrid!.StartEditNewRowAsync();
 
     private async Task HandleValidSubmit()
     {
-        if (!isReadOnly && isModified)
+        if (!isReadOnly)
         {
-            isModified = false;
             if (treat03?.TreatQ1 == 14 && treat03.Treat_3 == null)
                 return;
             await TreatmentService.SaveTreatmentAsync(treat03!);
@@ -339,23 +302,22 @@
         }
     }
 
-    private void OnFieldChanged()
-    {
-        isModified = true;
-    }
-
-    void OnTreatQAnswer(int value)
+    async Task OnTreatQAnswer(int value)
     {
         treat03!.TreatQ1 = value;
         isTreatQ1Answer = (treat03!.TreatQ1 == 14);
-        OnFieldChanged();
+
+        if (treat03!.TreatQ1 == 15)
+        {
+            await HandleValidSubmit();
+        }
     }
 
     async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
     {
         var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
         var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
-        treat.Questionnaire_id = questionnaireId;
+        treat.Questionnaire_id = questionnaireId!;
 
         if (OnSave.HasDelegate)
         {
@@ -368,7 +330,7 @@
         }
         if (e.IsNew)
         {
-            Treats.Add(treat);
+            Treats!.Add(treat);
             UnsavedChanges[treat] = new(DataChangeType.Addition, new());
         }
         else
@@ -399,10 +361,7 @@
                     break;
             }
         }
-
-        // 
         await ClearUnsavedChangesAsync();
-        isModified = false;
     }
 
     async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
@@ -458,7 +417,7 @@
                 ShowOtherInput1 = false;
                 break;
             case 9:
-                treat_1_Answer = null;
+                treat_1_Answer = null!;
                 ShowOtherInput = true;
                 ShowOtherInput1 = false;
                 break;
@@ -472,18 +431,16 @@
                 break;
         }
 
-        treatGrid.Reload();
+        treatGrid!.Reload();
     }
 
     private void OnTreat1Changed(int? newValue)
     {
         SelectedTreat1 = newValue;
 
-        // Zistíme, či je vybraná možnosť "Iné..."
         var selectedOption = treat_1_Answer.FirstOrDefault(x => x.Id == SelectedTreat1);
         ShowOtherInput1 = selectedOption?.Name == "Iné...";
 
-        // Ak je "Iné...", vynulujeme pole Other
         if (ShowOtherInput1)
         {
             treat03!.OtherTreat = string.Empty;
@@ -546,8 +503,8 @@
 
     async Task UpdateDataAsync()
     {
-        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId);
-        treatGrid.Reload();
+        Treats = await TreatmentService.GetQuestionnaireTreatment03(questionnaireId!);
+        treatGrid!.Reload();
     }
 
     async Task ClearUnsavedChangesAsync()

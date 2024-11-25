@@ -9,6 +9,7 @@
 @inject IdentityRedirectManager RedirectManager
 <PageTitle>Profil</PageTitle>
 
+
 <div class="block-content">
     <StatusMessage Message="@message" />
     <EditForm Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync" method="post" Context="profileform">
@@ -34,7 +35,7 @@
                 <InteractiveServerMaskedInput Name="Input.TitleAfter" Value="@Input.TitleAfter"></InteractiveServerMaskedInput>
             </DxFormLayoutItem>
             <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Uložiť"></DxButton>
+                <DxButton CssClass="w-100 grid-toolbar-save1-button" SubmitFormOnClick="true" Text="Uložiť"></DxButton>
             </DxFormLayoutItem>
         </DxFormLayout>
     </EditForm>
