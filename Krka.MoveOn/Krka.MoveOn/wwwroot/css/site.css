@@ -571,6 +571,13 @@ html, body {
     font-weight: bold;
 }
 
+.moca {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
 .NavMenu {
     color: white;
 }
@@ -592,6 +599,28 @@ input[type="radio"]:checked {
     display: flex;
     height: 100vh; 
     overflow:auto; 
+}
+
+@media (max-width: 430px) {
+    .block-content {
+       width: 100%;
+       margin-top: 50%;
+    }
+    .container-login {
+        display:block;
+    }
+    .welcome-text {
+        height: 90%;
+        overflow-y: auto;
+    }
+
+    .group-style {
+        flex-direction: column; /* Zoradenie skupín pod seba */
+    }
+
+    .welcome-text {
+        
+    }
 }
 
 .left-half {

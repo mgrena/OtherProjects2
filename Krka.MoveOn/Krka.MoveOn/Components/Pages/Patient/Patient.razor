@@ -141,7 +141,7 @@
                         Position="FlyoutPosition.Bottom"
                         PreventCloseOnPositionTargetClick="true"
                         Width="240">
-                            Údaje o všetkých pacientoch budú anonymizované. Jednotliví pacienti budú figurovať pod všeobecným <b>označením miesta centra</b> (ZV – Zvolen, MT– Martin, BAR – Bratislava Ružinov, BAK – Bratislava Kramáre, TT – Trnava, NR – Nitra, RK – Ružomberok, BJ – Bardejov, KE – Košice, GA– Galanta) a <b>poradového čísla pacienta</b> v danom centre, <span style="color:cornflowerblue">napríklad ZV19, MT11 a pod </span>
+                            Údaje o všetkých pacientoch budú anonymizované. Jednotliví pacienti budú figurovať pod všeobecným <b>označením miesta centra</b> (ZV – Zvolen, MT– Martin, BAR – Bratislava Ružinov, BAK – Bratislava Kramáre, TT – Trnava, NR – Nitra, RK – Ružomberok, BJ – Bardejov, KE – Košice, GA– Galanta) a <b>poradového čísla pacienta</b> v danom centre, <span style="color:cornflowerblue">napríklad ZV01, ZV02 a pod </span>
                         </DxFlyout>
                     </div>
                     @if (isAdminOrOffice)
@@ -616,6 +616,7 @@
         hasQuestionnaires = questionnaires.Any(); // ak obsahuje polozky
         Questionnaires = hasQuestionnaires ? questionnaires : new List<Data.Questionnaires.Questionnaire>();
         patientsGrid.Reload();
+        StateHasChanged();
     }
 
     //Zmena focusnuteho riadku

@@ -31,7 +31,7 @@
             <DxFormLayoutGroup Caption="Vizuálno-priestorové schopnosti" ColSpanMd="12" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Test cesty" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        <div style="display: flex; align-items: center; width: 100%">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_1" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 1)))" ValueExpression="@(() => moca!.Moca_1)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
@@ -46,7 +46,7 @@
 
                     <DxFormLayoutItem Caption="Kocka" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
 
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn1" Click="() => IsInfoOpen1 = !IsInfoOpen1" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_2" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 2)))" ValueExpression="@(() => moca!.Moca_2)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
@@ -152,7 +152,7 @@
                     </DxFormLayoutItem>
 
                     <p class="sum-style">
-                        <span style="color: #b691bc;"> @(moca?.Moca_5 + moca?.Moca_6 + moca?.Moca_7)</span>/5
+                        <span style="color: #b691bc;"> @(moca?.Moca_5 + moca?.Moca_6 + moca?.Moca_7)</span>/6
                     </p>
                 </div>
             </DxFormLayoutGroup>
@@ -201,18 +201,18 @@
                         <div style="display: flex; align-items: center;">
                             <DxButton CssClass="info-icon-btn9" Click="() => IsInfoOpen9 = !IsInfoOpen9" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
-                            <DxSpinEdit Value="@moca!.Moca_10" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 10)))" ValueExpression="@(() => moca!.Moca_10)" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
+                            <DxSpinEdit Value="@moca!.Moca_10" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 10)))" ValueExpression="@(() => moca!.Moca_10)" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen9"
                                   PositionTarget=".info-icon-btn9"
                                   Position="FlyoutPosition.Bottom"
                                   PreventCloseOnPositionTargetClick="true"
                                   Width="240">
-                            Min = 0 / Max = 3.
+                            Min = 0 / Max = 2.
                         </DxFlyout>
                     </DxFormLayoutItem>
                     <p class="sum-style">
-                        <span style="color: #b691bc;">@(moca?.Moca_10)</span>/3
+                        <span style="color: #b691bc;">@(moca?.Moca_10)</span>/2
                     </p>
                 </div>
             </DxFormLayoutGroup>
