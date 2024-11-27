@@ -16,6 +16,7 @@
 @inject QuestionnaireProgressService QuestionnaireProgressService
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
 
 
 <PageTitle>MoveOn - Detekcia pacientov s príznakmi PC</PageTitle>
@@ -115,79 +116,173 @@
 
                 @if (isGen7_1_DM)
                 {
-                    <DxFormLayoutGroup Caption="Ak áno, ktoré lieky (názov, denná dávka)?" ColSpanMd="12">
-                        <DxFormLayoutItem Caption="Názov lieku ">
-                            <DxComboBox NullText="Vyberte liek...."
-                                        Data="@gen_7_1_DMAnswer"
-                                        TextFieldName="Name"
-                                        ValueFieldName="Id"
-                                        ReadOnly="@isReadOnly"
-                                        @bind-Value="gen!.Gen_7_1_DM"
-                                        ShowValidationIcon="true">
-                                <ItemTemplate Context="item">
-                                    <text>
-                                        <div @onclick="() => OnComboBoxItemClicked(item.Id)">
-                                            @item.Name
-                                        </div>
-                                    </text>
-                                </ItemTemplate>
-                            </DxComboBox>
-                        </DxFormLayoutItem>
+                    <div style="width: 98%; margin-left: 15px; margin-right:15px;">
+                        <DxGrid @ref="Gen7YesGrid"
+                                Data="Gen7YesTable"
+                                PageSize="10"
+                                PagerPosition="GridPagerPosition.Bottom"
+                                PageSizeSelectorVisible="true"
+                                PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                                PageSizeSelectorAllRowsItemVisible="true"
+                                PagerSwitchToInputBoxButtonCount="10"
+                                PagerVisibleNumericButtonCount="10"
+                                KeyFieldName="Id"
+                                ValidationEnabled="false"
+                                EditMode="GridEditMode.PopupEditForm"
+                                PopupEditFormHeaderText="Ak áno, ktoré lieky (názov, denná dávka)?"
+                                FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                                ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                                TextWrapEnabled="true"
+                                HighlightRowOnHover="true"
+                                FocusedRowEnabled="true"
+                                CustomizeEditModel="OnCustomizeEditModel"
+                                EditModelSaving="Grid_EditModelSaving"
+                                DataItemDeleting="Grid_DataItemDeleting">
 
-                        @if (!isGen7_1_1)
-                        {
-                            <DxFormLayoutItem Caption="Denná dávka (v mg)">
-                                <DxSpinEdit @bind-Value="@gen!.Gen_7_2" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="@(0m)" />
-                            </DxFormLayoutItem>
+                            <ToolbarTemplate Context="toolbarContext">
+                                @if (!isReadOnly)
+                                {
+                                    <ManagementToolbarGeneral NewClick="New_Click" BatchItemsEnabled="@BatchItemsEnabled" />
+                                }
+                            </ToolbarTemplate>
 
-@*                             <DxFormLayoutItem Caption="Merná jednotka">
-                                <DxComboBox Data="@gen_7_3_DU_Answer"
-                                            TextFieldName="Name"
-                                            ValueFieldName="Id"
-                                            ReadOnly="@isReadOnly"
-                                            @bind-Value="@gen!.Gen_7_3_DU"
-                                            ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                                            ShowValidationIcon="true" />
+                            <Columns>
+                                <DxGridDataColumn FieldName="Gen_7_1_DM" Caption="Názov lieku" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                    <EditSettings>
+                                        <DxComboBoxSettings Data="@gen_7_1_DMAnswer" ValueFieldName="Id" TextFieldName="Name" />
+                                    </EditSettings>
+                                </DxGridDataColumn>
 
-                                </DxFormLayoutItem> *@
+                                <DxGridDataColumn FieldName="Gen_7_2" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                    <EditSettings>
+                                        <DxSpinEditSettings MinValue="@(0m)" />
+                                    </EditSettings>
+                                </DxGridDataColumn>
 
-                            <DxFormLayoutItem Caption="Dĺžka užívania (v rokoch)">
-                                <DxSpinEdit @bind-Value="@gen!.Gen_7_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="0" />
-                            </DxFormLayoutItem>
-                        }
-                    </DxFormLayoutGroup>
+                                <DxGridDataColumn FieldName="Gen_7_4" Caption="Dĺžka užívanie (v rokoch)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                                    <EditSettings>
+                                        <DxSpinEditSettings MinValue="@(0m)" />
+                                    </EditSettings>
+                                </DxGridDataColumn>
 
-                }
+                                <DxGridDataColumn FieldName="Gen_7_1_1" Visible="false" DataRowEditorVisible="@(!isReadOnly)">
+                                    <EditSettings>
+                                        <DxTextBoxSettings />
+                                    </EditSettings>
+                                </DxGridDataColumn>
 
-                @if (isGen7_1_1 && isGen7_1_DM)
-                {
-                    <div class="new-row" style="margin-left: 3%">
-                        <DxFormLayoutGroup Caption="Iné..." ColSpanMd="12">
+                                <DxGridDataColumn FieldName="Gen_7_1_2" Visible="false" DataRowEditorVisible="@(!isReadOnly)">
+                                    <EditSettings>
+                                        <DxSpinEditSettings MinValue="@(0m)" />
+                                    </EditSettings>
+                                </DxGridDataColumn>
 
-                            <DxFormLayoutItem Caption="Názov lieku">
-                                <DxTextBox NullText="Napíšte názov lieku..." @bind-Text="@gen!.Gen_7_1_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
-                            </DxFormLayoutItem>
+                                <DxGridDataColumn FieldName="Gen_7_1_4" Visible="false" DataRowEditorVisible="@(!isReadOnly)">
+                                    <EditSettings>
+                                        <DxSpinEditSettings MinValue="@(0m)" />
+                                    </EditSettings>
+                                </DxGridDataColumn>
 
-                            <DxFormLayoutItem Caption="Denná dávka (v mg)">
-                                <DxSpinEdit @bind-Value="@gen!.Gen_7_1_2" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="@(0m)" />
-                            </DxFormLayoutItem>
+                                <DxGridDataColumn FieldName="Id" AllowSort="false" Width="90px" MinWidth="100" TextAlignment="GridTextAlignment.Center">
+                                    <CellDisplayTemplate Context="context">
+                                        @if (context.DataItem is Data.RelationalTables.Gen7YesRelational Gen7)
+                                        {
+                                            <DxButton IconCssClass="grid-toolbar-info" @onclick="() => ShowDetails(Gen7)" />
+                                        }
+                                    </CellDisplayTemplate>
+                                    <HeaderCaptionTemplate>
+                                        <span>Detaily</span>
+                                    </HeaderCaptionTemplate>
+                                </DxGridDataColumn>
 
-                            @* <DxFormLayoutItem Caption="Merná jednotka">
-                                <DxComboBox Data="@gen_7_1_3_DUAnswer"
-                                            TextFieldName="Name"
-                                            ValueFieldName="Type_q"
-                                            ReadOnly="@isReadOnly"
-                                            @bind-Value="@gen!.Gen_7_1_3_DU"
-                                            ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                                            ShowValidationIcon="true" />
-                                </DxFormLayoutItem> *@
+                                @if (!isReadOnly)
+                                {
+                                    <DxGridCommandColumn Width="80px" NewButtonVisible="false">
 
-                            <DxFormLayoutItem Caption="Dĺžka užívania (v rokoch)">
-                                <DxSpinEdit @bind-Value="@gen!.Gen_7_1_4" ShowValidationIcon="true" ReadOnly="@isReadOnly" MinValue="0" />
-                            </DxFormLayoutItem>
-                        </DxFormLayoutGroup>
+                                        <CellDisplayTemplate Context="gridContext123">
+
+                                            <div class="grid-cell-align-center">
+                                                <DxButton IconCssClass="grid-icon grid-icon-edit"
+                                                          RenderStyle="ButtonRenderStyle.Link"
+                                                          title="Upraviť"
+                                                          Click="@(() => OnEditButtonClick((Data.RelationalTables.Gen7YesRelational)gridContext123.DataItem))" />
+
+                                                <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                                          RenderStyle="ButtonRenderStyle.Link"
+                                                          title="Vymazať"
+                                                          Click="@(() => Gen7YesGrid!.ShowRowDeleteConfirmation(gridContext123.VisibleIndex))" />
+                                            </div>
+                                        </CellDisplayTemplate>
+                                    </DxGridCommandColumn>
+                                }
+
+                            </Columns>
+
+                            <EditFormTemplate Context="Gen7YesGridContext">
+                                @if (Gen7YesGridContext.EditModel is Data.RelationalTables.Gen7YesRelational gen7Yes)
+                                {
+                                    currentEditModel = gen7Yes;
+                                    <DxFormLayout>
+                                        <DxFormLayoutItem Caption="Názov lieku:" ColSpanMd="12">
+                                            <DxComboBox Value="@gen7Yes.Gen_7_1_DM"
+                                                        Data="@gen_7_1_DMAnswer"
+                                                        ValueFieldName="Id"
+                                                        TextFieldName="Name">
+                                                <ItemTemplate Context="item">
+                                                    <text>
+                                                        <div @onclick="() => OnComboBoxItemClicked(item.Id)">
+                                                            @item.Name
+                                                        </div>
+                                                    </text>
+                                                </ItemTemplate>
+                                            </DxComboBox>
+                                        </DxFormLayoutItem>
+                                    </DxFormLayout>
+
+                                    @if (!isGen7_1_1)
+                                    {
+                                        <DxFormLayoutItem Caption="Dávka (mg):" ColSpanMd="12">
+                                            @Gen7YesGridContext.GetEditor("Gen_7_2")
+                                        </DxFormLayoutItem>
+
+                                        <DxFormLayoutItem Caption="Dĺžka užívanie (v rokoch):" ColSpanMd="12">
+                                            @Gen7YesGridContext.GetEditor("Gen_7_4")
+                                        </DxFormLayoutItem>
+                                    }
+
+                                    @if (isGen7_1_1 && isGen7_1_DM)
+                                    {
+                                        <DxFormLayoutItem Caption="Názov lieku:">
+                                            @Gen7YesGridContext.GetEditor("Gen_7_1_1")
+                                        </DxFormLayoutItem>
+
+                                        <DxFormLayoutItem Caption="Dávka (mg):">
+                                            @Gen7YesGridContext.GetEditor("Gen_7_1_2")
+                                        </DxFormLayoutItem>
+
+                                        <DxFormLayoutItem Caption="Dĺžka užívanie (v rokoch):">
+                                            @Gen7YesGridContext.GetEditor("Gen_7_1_4")
+                                        </DxFormLayoutItem>
+                                    }
+                                }
+                            </EditFormTemplate>
+
+                        </DxGrid>
+
+                        <DxPopup @bind-Visible="@PopupVisible"
+                                 HeaderText="@PopupHeaderText"
+                                 HorizontalAlignment="HorizontalAlignment.Center"
+                                 VerticalAlignment="VerticalAlignment.Center"
+                                 CloseOnEscape="true"
+                                 CloseOnOutsideClick="true">
+                            <div style="padding: 0px;">
+                                <p><strong>Iný názov lieku:</strong> @PopupOtherGen711</p>
+                                <p><strong>Iná dávka (v mg):</strong> @PopupOtherGen712</p>
+                                <p><strong>Iná dĺžka užívania (v rokoch):</strong> @PopupOtherGen714</p>
+                            </div>
+                        </DxPopup>
                     </div>
-                }
+                }               
                 <div class="new-row">
                     <DxFormLayoutItem Caption="Dĺžka trvania ťažkostí (v mesiacoch)" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <DxSpinEdit @bind-Value="@gen!.Gen_8" ShowValidationIcon="true" CssClass="form-item-full-width" ReadOnly="@isReadOnly" MinValue="0" />
@@ -196,20 +291,20 @@
 
                 <div class="new-row">
                     <DxFormLayoutItem Caption="Prvý príznak Parkinsonovej choroby " ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
-                        <DxComboBox NullText="Vyberte príznak..."
-                                    Data="@gen_9_DSAnswer"
-                                    TextFieldName="Name"
-                                    ValueFieldName="Id"
-                                    @bind-Value="@gen!.Gen_9_DS"
-                                    ReadOnly="@isReadOnly"
-                                    ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto"
-                                    ShowValidationIcon="true" />
-                        <ValidationMessage For="@(() => gen.Gen_9_DS)" />
+                        <DxListBox Data="@gen_9_DSAnswer"
+                                   TextFieldName="Name"
+                                   ValueFieldName="Id"
+                                   SelectionMode="ListBoxSelectionMode.Multiple"
+                                   ShowCheckboxes="@ShowCheckboxes"
+                                   style="flex-basis: 240px"
+                                   @bind-Values="@Gen_9_DSList"
+                                   ReadOnly="@isReadOnly">
+                        </DxListBox>
                     </DxFormLayoutItem>
                 </div>
 
 
-                <DxFormLayoutItem Caption="Bol pacient už kvôli tomuto príznaku vyšetrený .ortopédom, psychiatrom a pod.?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="Bol pacient už kvôli týmto príznakom vyšetrený .ortopédom, psychiatrom a pod.?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_10" class="d-flex flex-wrap">
                         @foreach (var item in gen_10_Answer)
                         {
@@ -254,7 +349,7 @@
                     }
                 }
 
-                <DxFormLayoutItem Caption="Stal sa pacientovi pred objavením príznaku úraz hlavy?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="Stal sa pacientovi pred objavením príznakov úraz hlavy?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_11" class="d-flex flex-wrap">
                         @foreach (var item in gen_11_Answer)
                         {
@@ -264,7 +359,7 @@
                     <ValidationMessage For="@(() => gen.Gen_11)" />
                 </DxFormLayoutItem>
 
-                <DxFormLayoutItem Caption="Celková anestézia pred objavením sa príznaku? " ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="Celková anestézia pred objavením sa príznakov? " ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_12" class="d-flex flex-wrap">
                         @foreach (var item in gen_12_Answer)
                         {
@@ -320,6 +415,12 @@
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
 
+    string PopupHeaderText { get; set; } = "Details";
+    string PopupOtherGen711 { get; set; } = string.Empty;
+    string PopupOtherGen712 { get; set; }
+    string PopupOtherGen714 { get; set; }
+
+    bool ShowCheckboxes { get; set; } = true;
     bool isGen7_1_DM = false;
     bool isGen7_1_1 = false;
     bool isGen10_1 = false;
@@ -328,8 +429,18 @@
 
     bool isReadOnly = false;
     bool showErrorIcon = false;
+    bool PopupVisible { get; set; } = false;
+    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || Gen7YesGrid!.IsEditing();
 
     private QuestionnaireProgressBar QuestionnaireProgressBarRef;
+
+    private List<int> selectedValues = new List<int>();
+    private Data.RelationalTables.Gen7YesRelational? currentEditModel;
+
+    Dictionary<Data.RelationalTables.Gen7YesRelational, DataChange> UnsavedChanges { get; } = new();
+
+    IGrid? Gen7YesGrid { get; set; }
+
     Data.Questionnaires.QuestionnaireGeneral01? gen;
 
     List<Data.Dials.DialQGeneral> dialQGenerals = new();
@@ -354,12 +465,87 @@
 
     List<Data.Dials.DialQGeneral> gen_13_Answer = new(); //Pacientovi je diagnostikované/je podozrenie na
 
+    List<Data.RelationalTables.Gen7YesRelational> Gen7YesTable { get; set; }
+
+    IEnumerable<int> Gen_9_DSList = new List<int>();
+
+    private void ShowDetails(Data.RelationalTables.Gen7YesRelational Gen7Detail)
+    {
+        if (Gen7Detail != null)
+        {
+            PopupVisible = true;
+            PopupHeaderText = $"Detail záznamu";
+            PopupOtherGen711 = Gen7Detail.Gen_7_1_1 ?? "N/A";
+            PopupOtherGen712 = Gen7Detail.Gen_7_1_2.HasValue ? Gen7Detail.Gen_7_1_2.Value.ToString() : "N/A"; 
+            PopupOtherGen714 = Gen7Detail.Gen_7_1_4.HasValue ? Gen7Detail.Gen_7_1_4.Value.ToString() : "N/A";
+        }
+    }
+
+    async Task New_Click() => await Gen7YesGrid!.StartEditNewRowAsync();
+
+    private void OnCustomizeEditModel(GridCustomizeEditModelEventArgs e)
+    {
+        if (e.EditModel == null)
+        {
+            e.EditModel = new Data.RelationalTables.Gen7YesRelational();
+        }
+    }
+
+    async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var gen7Yes = (Data.RelationalTables.Gen7YesRelational)e.DataItem;
+        await Q01Service.DeleteGen7YesAsync(gen7Yes.Id);
+        Gen7YesGrid!.Reload();
+    }
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {        
+        var gen7Yes = (Data.RelationalTables.Gen7YesRelational)e.EditModel;
+
+        if (e.IsNew)
+        {
+            await Q01Service.SaveGen7YesRelationAsync(gen!.Id, gen7Yes);
+        }
+        else
+        {
+            await Q01Service.SaveGen7YesRelationAsync(gen!.Id, gen7Yes);
+        }
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        currentEditModel = null;
+
+    }
+
+    async Task OnEditButtonClick(Data.RelationalTables.Gen7YesRelational selectedItem)
+    {
+        if (selectedItem.Gen_7_1_DM != 34)
+        {
+            isGen7_1_1 = false;
+        }
+        else 
+        {
+            isGen7_1_1 = true;
+        }
+
+        await Gen7YesGrid!.StartEditDataItemAsync(selectedItem);
+    }
+
     private void AddToast()
     {
         ToastService.ShowToast(new ToastOptions
             {
                 ProviderName = "Overview",
                 Title = "Detekcia príznakov úspešne uložená",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Záznam bol zmenený",
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
             });
@@ -416,6 +602,7 @@
 
         gen_13_Answer = dialQGenerals.Where(d => d.Type_q == 11).ToList();
 
+
         await LoadQuestionnaire(QuestionnaireIdAsString);
     }
 
@@ -427,30 +614,24 @@
             gen = questionnaire;
 
             isGen7_1_DM = (gen.Gen_7_DG == 16);
-            isGen7_1_1 = (gen.Gen_7_1_DM == 34);
             isGen10_1_1 = (gen.Gen_10_1 == 57);
             isGen10_1 = (gen.Gen_10 == 14);
             isGen13_1 = (gen.Gen_13 == 55);
+
+            Gen_9_DSList = await Q01Service.LoadSelectedGen9DSAsync(gen.Id);
+            Gen7YesTable = await Q01Service.LoadGen7YesTableAsync(gen.Id);
         }
     }
 
     private async Task HandleValidSubmit()
     {
-        if (gen!.Gen_9_DS == 0)
-        {
-            showErrorIcon = true;
-            Gen_9_DSToast();
-            return;
-        }
-
-        showErrorIcon = false;
-
         if (!isReadOnly)
         {
-            await QuestionnaireProgressBarRef.RefreshDataAsync(gen.ProgressPercentage, 100);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(gen!.ProgressPercentage, 100);
             await Q01Service.SaveQuestionnaireGeneral01Async(gen);
+            await Q01Service.SaveGen9DSRelationAsync(gen.Id, Gen_9_DSList.Cast<int?>());
             await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
-            AddToast();
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
         }
     }
 
@@ -462,6 +643,11 @@
 
     private void OnComboBoxItemClicked(int id)
     {
+        if (currentEditModel != null)
+        {
+            currentEditModel.Gen_7_1_DM = id;
+        }
+
         isGen7_1_1 = (id == 34);
     }
 
@@ -482,4 +668,6 @@
         isGen10_1_1 = (id == 57);
     }
 
+    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
+    enum DataChangeType { Modification, Addition, Delete }
 }

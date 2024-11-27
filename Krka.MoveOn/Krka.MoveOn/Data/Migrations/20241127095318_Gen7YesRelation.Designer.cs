@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127095318_Gen7YesRelation")]
+    partial class Gen7YesRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2498,6 +2501,39 @@ namespace Krka.MoveOn.Migrations
                     b.Property<int>("Gen_6_DG")
                         .HasColumnType("int")
                         .HasColumnName("gen_6_dg");
+
+                    b.Property<string>("Gen_7_1_1")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar")
+                        .HasColumnName("gen_7_1_1");
+
+                    b.Property<decimal?>("Gen_7_1_2")
+                        .HasColumnType("decimal(5,2)")
+                        .HasColumnName("gen_7_1_2");
+
+                    b.Property<int?>("Gen_7_1_3_DU")
+                        .HasColumnType("int")
+                        .HasColumnName("gen_7_1_3_du");
+
+                    b.Property<decimal?>("Gen_7_1_4")
+                        .HasColumnType("decimal(3,1)")
+                        .HasColumnName("gen_7_1_4");
+
+                    b.Property<int?>("Gen_7_1_DM")
+                        .HasColumnType("int")
+                        .HasColumnName("gen_7_1_dm");
+
+                    b.Property<decimal?>("Gen_7_2")
+                        .HasColumnType("decimal(5,2)")
+                        .HasColumnName("gen_7_2");
+
+                    b.Property<int?>("Gen_7_3_DU")
+                        .HasColumnType("int")
+                        .HasColumnName("gen_7_3_du");
+
+                    b.Property<decimal?>("Gen_7_4")
+                        .HasColumnType("decimal(3,1)")
+                        .HasColumnName("gen_7_4");
 
                     b.Property<int>("Gen_7_DG")
                         .HasColumnType("int")

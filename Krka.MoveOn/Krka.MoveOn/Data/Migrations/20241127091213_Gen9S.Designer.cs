@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127091213_Gen9S")]
+    partial class Gen9S
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2499,6 +2502,39 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("gen_6_dg");
 
+                    b.Property<string>("Gen_7_1_1")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar")
+                        .HasColumnName("gen_7_1_1");
+
+                    b.Property<decimal?>("Gen_7_1_2")
+                        .HasColumnType("decimal(5,2)")
+                        .HasColumnName("gen_7_1_2");
+
+                    b.Property<int?>("Gen_7_1_3_DU")
+                        .HasColumnType("int")
+                        .HasColumnName("gen_7_1_3_du");
+
+                    b.Property<decimal?>("Gen_7_1_4")
+                        .HasColumnType("decimal(3,1)")
+                        .HasColumnName("gen_7_1_4");
+
+                    b.Property<int?>("Gen_7_1_DM")
+                        .HasColumnType("int")
+                        .HasColumnName("gen_7_1_dm");
+
+                    b.Property<decimal?>("Gen_7_2")
+                        .HasColumnType("decimal(5,2)")
+                        .HasColumnName("gen_7_2");
+
+                    b.Property<int?>("Gen_7_3_DU")
+                        .HasColumnType("int")
+                        .HasColumnName("gen_7_3_du");
+
+                    b.Property<decimal?>("Gen_7_4")
+                        .HasColumnType("decimal(3,1)")
+                        .HasColumnName("gen_7_4");
+
                     b.Property<int>("Gen_7_DG")
                         .HasColumnType("int")
                         .HasColumnName("gen_7_dg");
@@ -3094,61 +3130,6 @@ namespace Krka.MoveOn.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("questionnaire_treatment03");
-                });
-
-            modelBuilder.Entity("Krka.MoveOn.Data.RelationalTables.Gen7YesRelational", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<int?>("GenQuestId")
-                        .HasColumnType("int")
-                        .HasColumnName("GenQuestId");
-
-                    b.Property<string>("Gen_7_1_1")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar")
-                        .HasColumnName("gen_7_1_1");
-
-                    b.Property<decimal?>("Gen_7_1_2")
-                        .HasColumnType("decimal(5,2)")
-                        .HasColumnName("gen_7_1_2");
-
-                    b.Property<decimal?>("Gen_7_1_4")
-                        .HasColumnType("decimal(3,1)")
-                        .HasColumnName("gen_7_1_4");
-
-                    b.Property<int?>("Gen_7_1_DM")
-                        .HasColumnType("int")
-                        .HasColumnName("gen_7_1_dm");
-
-                    b.Property<decimal?>("Gen_7_2")
-                        .HasColumnType("decimal(5,2)")
-                        .HasColumnName("gen_7_2");
-
-                    b.Property<decimal?>("Gen_7_4")
-                        .HasColumnType("decimal(3,1)")
-                        .HasColumnName("gen_7_4");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("modified_at");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("rel_Gen7Yes");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.RelationalTables.Gen9DSRelational", b =>

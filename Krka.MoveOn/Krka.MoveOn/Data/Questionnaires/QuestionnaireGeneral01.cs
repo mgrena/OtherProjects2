@@ -56,66 +56,10 @@ namespace Krka.MoveOn.Data.Questionnaires
         public int Gen_7_DG { get; set; }
 
         /// <summary>
-        ///   -Ak áno názov mediciny (číselnik na DialMedicines) !!!!!!!!!!
-        /// </summary>
-        [Column("gen_7_1_dm")]
-        public int? Gen_7_1_DM { get; set; }
-
-        /// <summary>
-        ///  - Davka 
-        /// </summary>
-        [Column("gen_7_2", TypeName = "decimal(5,2)")]
-        public decimal? Gen_7_2 { get; set; }
-
-        /// <summary>
-        /// - jednotka (číselnýk na DialUnits) !!!!!!!!! 
-        /// </summary>
-        [Column("gen_7_3_du")]
-        public int? Gen_7_3_DU { get; set; }
-
-
-        /// <summary>
-        /// - Dĺžka užívania v rokoch 
-        /// </summary>
-        [Column("gen_7_4", TypeName = "decimal(3,1)")]
-        public decimal? Gen_7_4 { get; set; }
-
-        /// <summary>
-        /// Ak na Otazku 7 dá odpoveď ine (Názov Mediciny)
-        /// </summary>
-        [Column("gen_7_1_1", TypeName = "varchar"), StringLength(20)]
-        public string? Gen_7_1_1 { get; set; }
-
-        /// <summary>
-        /// Ak na Otazku 7 dá odpoveď ine (Davka)
-        /// </summary>
-        [Column("gen_7_1_2", TypeName = "decimal(5,2)")]
-        public decimal? Gen_7_1_2 { get; set; }
-
-        /// <summary>
-        /// Ak na Otazku 7 dá odpoveď ine - jednotka (číselnýk na DialUnits) !!!!!!!!!!!!!
-        /// </summary>
-        [Column("gen_7_1_3_du")]
-        public int? Gen_7_1_3_DU { get; set; }
-
-        /// <summary>
-        ///  Ak na Otazku 7 dá odpoveď ine - ( Dĺžka užívania v rokoch )
-        /// </summary>
-        [Column("gen_7_1_4", TypeName = "decimal(3,1)")]
-        public decimal? Gen_7_1_4 { get; set; }
-
-        /// <summary>
         /// Dĺžka trvania ťažkostí (v mesiacoch)
         /// </summary>
         [Column("gen_8")]
         public int Gen_8 { get; set; }
-
-        /// <summary>
-        /// Prvý príznak Parkinsonovej choroby (číselnik na DialSymptoms) !!!!!!!! 
-        /// </summary>
-        [Column("gen_9_ds")]
-        [Required(ErrorMessage = "Toto pole je povinné.")]
-        public int Gen_9_DS { get; set; }
 
         /// <summary>
         /// Bol pacient už kvôli tomuto príznaku vyšetrený .ortopédom, psychiatrom a pod.?
