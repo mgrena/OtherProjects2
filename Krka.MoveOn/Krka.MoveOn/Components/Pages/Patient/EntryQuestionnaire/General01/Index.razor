@@ -40,24 +40,20 @@
     <EditForm Model="@gen"
               Context="EditFormContext"
               OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-
         <DxFormLayout>
             <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="6" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide" CssClass="custom-min-width">
 
                 <DxFormLayoutItem Caption="Dátum" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
-                    <DxDateEdit @bind-Date="gen!.Gen_1" ShowValidationIcon="true" required ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" ReadOnly="@isReadOnly" />
-                    <ValidationMessage For="@(() => gen.Gen_1)" />
+                    <DxDateEdit Date="gen!.Gen_1" DateChanged="@((DateTime newValue) => DateChangeValue(newValue))" DateExpression="@(() => gen!.Gen_1)" ShowValidationIcon="true" ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" ReadOnly="@isReadOnly" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Pohlavie" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_2_DG" class="d-flex flex-wrap">
                         @foreach (var item in gen_2_DGAnswer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="async() => await SaveInbox(item.Id, 1)" Value="@item.Id" Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_2_DG)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Rodinný stav" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
@@ -65,11 +61,10 @@
                         @foreach (var item in gen_3_DGAnswer)
                         {
                             <label class="d-block m-2">
-                                <InputRadio Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                                <InputRadio @onclick="async() => await SaveInbox(item.Id, 2)" Value="@item.Id" Disabled="@isReadOnly" /> @item.Name
                             </label>
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_3_DG)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Pracovný pomer" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
@@ -77,41 +72,37 @@
                         @foreach (var item in gen_4_DGAnswer)
                         {
                             <label class="d-block m-2">
-                                <InputRadio Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                                <InputRadio @onclick="async() => await SaveInbox(item.Id, 3)" Value="@item.Id" Disabled="@isReadOnly" /> @item.Name
                             </label>
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_4_DG)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Fajčenie" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_5_D" class="d-flex flex-wrap">
                         @foreach (var item in gen_5_DGAnswer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="async() => await SaveInbox(item.Id, 4)" Value="@item.Id" Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_5_D)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Pozitívna rodinná anamnéza Parkinsonovej choroby" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_6_DG" class="d-flex flex-wrap">
                         @foreach (var item in gen_6_DGAnswer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="async() => await SaveInbox(item.Id, 5)" Value="@item.Id" Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_6_DG)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Anamnéza užívania antipsychotík" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_7_DG" class="d-flex flex-wrap">
                         @foreach (var item in gen_7_DGAnswer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" @onclick="() => OnGen7DGChanged(item.Id)" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" Value="@item.Id" @onclick="async() => { await SaveInbox(item.Id, 6); OnGen7DGChanged(item.Id);}" Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_7_DG)" />
                 </DxFormLayoutItem>
 
                 @if (isGen7_1_DM)
@@ -282,14 +273,14 @@
                             </div>
                         </DxPopup>
                     </div>
-                }               
+                }
                 <div class="new-row">
                     <DxFormLayoutItem Caption="Dĺžka trvania ťažkostí (v mesiacoch)" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
-                        <DxSpinEdit @bind-Value="@gen!.Gen_8" ShowValidationIcon="true" CssClass="form-item-full-width" ReadOnly="@isReadOnly" MinValue="0" />
+                        <DxSpinEdit Value="@gen!.Gen_8" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SaveInbox(newValue, 7)))" ValueExpression="@(() => gen.Gen_8)" ShowValidationIcon="true" CssClass="form-item-full-width" ReadOnly="@isReadOnly" MinValue="0" />
                     </DxFormLayoutItem>
                 </div>
 
-                <div class="new-row">
+                <div class="new-row" style="margin-top: 4%; margin-bottom: 7%;">
                     <DxFormLayoutItem Caption="Prvý príznak Parkinsonovej choroby " ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <DxListBox Data="@gen_9_DSAnswer"
                                    TextFieldName="Name"
@@ -301,6 +292,20 @@
                                    ReadOnly="@isReadOnly">
                         </DxListBox>
                     </DxFormLayoutItem>
+
+                    <DxFormLayoutItem ColSpanMd="12">
+                        <div style="margin-top: 5px">
+                            @if (!isReadOnly)
+                            {
+                                <DxButton SubmitFormOnClick="true"
+                                          Text="Uložiť"
+                                          RenderStyle="ButtonRenderStyle.Primary"
+                                          Enabled="true"
+                                          CssClass="grid-toolbar-save1-button"
+                                          IconCssClass="grid-toolbar-save1" />
+                            }
+                        </div>
+                    </DxFormLayoutItem>
                 </div>
 
 
@@ -308,10 +313,9 @@
                     <InputRadioGroup @bind-Value="@gen!.Gen_10" class="d-flex flex-wrap">
                         @foreach (var item in gen_10_Answer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" @onclick="() => OnGen10Changed(item.Id)" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" Value="@item.Id" @onclick="async() => { await SaveInbox(item.Id, 9); OnGen10Changed(item.Id); }" Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_10)" />
                 </DxFormLayoutItem>
 
                 @if (isGen10_1)
@@ -327,7 +331,7 @@
                                         ShowValidationIcon="true">
                                 <ItemTemplate Context="item">
                                     <text>
-                                        <div @onclick="() => OnComboBoxItemClickedGen101(item.Id)">
+                                        <div @onclick="async() => await OnComboBoxItemClickedGen101(item.Id)">
                                             @item.Name
                                         </div>
                                     </text>
@@ -342,7 +346,7 @@
                             <DxFormLayoutGroup Caption="Iné..." ColSpanMd="12">
 
                                 <DxFormLayoutItem Caption="Názov špecializácie">
-                                    <DxTextBox NullText="Napíšte názov špecializácie..." @bind-Text="@gen!.Gen_10_1_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
+                                    <DxTextBox NullText="Napíšte názov špecializácie..." Text="@gen!.Gen_10_1_1" TextChanged="@((string newValue) => TextChangeValue(newValue))" TextExpression="@(() => gen!.Gen_10_1_1)" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
                                 </DxFormLayoutItem>
                             </DxFormLayoutGroup>
                         </div>
@@ -353,20 +357,18 @@
                     <InputRadioGroup @bind-Value="@gen!.Gen_11" class="d-flex flex-wrap">
                         @foreach (var item in gen_11_Answer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="async() => await SaveInbox(item.Id, 10)" Value="@item.Id" Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_11)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Celková anestézia pred objavením sa príznakov? " ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_12" class="d-flex flex-wrap">
                         @foreach (var item in gen_12_Answer)
                         {
-                            <InputRadio class="m-2" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="async() => await SaveInbox(item.Id, 11)" Value="@item.Id" Disabled="@isReadOnly" /> @item.Name
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_12)" />
                 </DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="U pacienta je podozrenie na:" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
@@ -374,35 +376,21 @@
                         @foreach (var item in gen_13_Answer)
                         {
                             <label class="d-block m-2">
-                                <InputRadio Value="@item.Id" @onclick="() => OnGen13Changed(item.Id)" required Disabled="@isReadOnly" /> @item.Name
+                                <InputRadio Value="@item.Id" @onclick="async() => {await SaveInbox(item.Id, 12); OnGen13Changed(item.Id);}" Disabled="@isReadOnly" /> @item.Name
                             </label>
                         }
                     </InputRadioGroup>
-                    <ValidationMessage For="@(() => gen.Gen_13)" />
                 </DxFormLayoutItem>
 
                 @if (isGen13_1)
                 {
                     <DxFormLayoutGroup Caption="Iný parkinsonský syndróm " ColSpanMd="12">
                         <DxFormLayoutItem Caption="Uveďte">
-                            <DxTextBox NullText="Napíšte iný..." @bind-Text="@gen!.Gen_13_1" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
+                            <DxTextBox NullText="Napíšte iný..." Text="@gen!.Gen_13_1" TextChanged="@((string newValue) => TextChangeValue13(newValue))" TextExpression="@(() => gen!.Gen_13_1)" ShowValidationIcon="true" ReadOnly="@isReadOnly" />
                         </DxFormLayoutItem>
                     </DxFormLayoutGroup>
 
                 }
-                <DxFormLayoutItem ColSpanMd="12">
-                    <div style="margin-top: 5px">
-                        @if (!isReadOnly)
-                        {
-                            <DxButton SubmitFormOnClick="true"
-                                      Text="Uložiť"
-                                      RenderStyle="ButtonRenderStyle.Primary"
-                                      Enabled="true"
-                                      CssClass="grid-toolbar-save1-button"
-                                      IconCssClass="grid-toolbar-save1" />
-                        }
-                    </div>
-                </DxFormLayoutItem>
             </DxFormLayoutGroup>
         </DxFormLayout>
     </EditForm>
@@ -476,7 +464,7 @@
             PopupVisible = true;
             PopupHeaderText = $"Detail záznamu";
             PopupOtherGen711 = Gen7Detail.Gen_7_1_1 ?? "N/A";
-            PopupOtherGen712 = Gen7Detail.Gen_7_1_2.HasValue ? Gen7Detail.Gen_7_1_2.Value.ToString() : "N/A"; 
+            PopupOtherGen712 = Gen7Detail.Gen_7_1_2.HasValue ? Gen7Detail.Gen_7_1_2.Value.ToString() : "N/A";
             PopupOtherGen714 = Gen7Detail.Gen_7_1_4.HasValue ? Gen7Detail.Gen_7_1_4.Value.ToString() : "N/A";
         }
     }
@@ -499,7 +487,7 @@
     }
 
     async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {        
+    {
         var gen7Yes = (Data.RelationalTables.Gen7YesRelational)e.EditModel;
 
         if (e.IsNew)
@@ -521,7 +509,7 @@
         {
             isGen7_1_1 = false;
         }
-        else 
+        else
         {
             isGen7_1_1 = true;
         }
@@ -534,31 +522,9 @@
         ToastService.ShowToast(new ToastOptions
             {
                 ProviderName = "Overview",
-                Title = "Detekcia príznakov úspešne uložená",
+                Title = "Stav úspešne uložený",
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
-            });
-    }
-
-    private void ModifyToast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Záznam bol zmenený",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
-    }
-
-    private void Gen_9_DSToast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Vyplnte otázku 'Prvý príznak Parkinsonovej choroby' ",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Warning,
             });
     }
 
@@ -602,7 +568,6 @@
 
         gen_13_Answer = dialQGenerals.Where(d => d.Type_q == 11).ToList();
 
-
         await LoadQuestionnaire(QuestionnaireIdAsString);
     }
 
@@ -631,7 +596,7 @@
             await Q01Service.SaveQuestionnaireGeneral01Async(gen);
             await Q01Service.SaveGen9DSRelationAsync(gen.Id, Gen_9_DSList.Cast<int?>());
             await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
-            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+            AddToast();
         }
     }
 
@@ -663,9 +628,76 @@
         isGen13_1 = (gen.Gen_13 == 55);
     }
 
-    private void OnComboBoxItemClickedGen101(int id)
+    async Task OnComboBoxItemClickedGen101(int id)
     {
+
         isGen10_1_1 = (id == 57);
+        gen!.Gen_10_1 = id;
+        await HandleValidSubmit();
+    }
+
+    async Task SaveInbox(int value, int genIndex)
+    {
+        switch (genIndex)
+        {
+            case 1:
+                gen!.Gen_2_DG = value;
+                break;
+            case 2:
+                gen!.Gen_3_DG = value;
+                break;
+            case 3:
+                gen!.Gen_4_DG = value;
+                break;
+            case 4:
+                gen!.Gen_5_D = value;
+                break;
+            case 5:
+                gen!.Gen_6_DG = value;
+                break;
+            case 6:
+                gen!.Gen_7_DG = value;
+                await HandleValidSubmit();
+                NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+                break;
+            case 7:
+                gen!.Gen_8 = value;
+                break;
+            case 9:
+                gen!.Gen_10 = value;
+                break;
+            case 10:
+                gen!.Gen_11 = value;
+                break;
+            case 11:
+                gen!.Gen_12 = value;
+                break;
+            case 12:
+                gen!.Gen_13 = value;
+                break;
+            default:
+                throw new ArgumentException("Neznámy index gen");
+
+        }
+        await HandleValidSubmit();
+    }
+
+    async Task DateChangeValue(DateTime date)
+    {
+        gen!.Gen_1 = date;
+        await HandleValidSubmit();
+    }
+
+    async Task TextChangeValue(string value)
+    {
+        gen!.Gen_10_1_1 = value;
+        await HandleValidSubmit();
+    }
+
+    async Task TextChangeValue13(string value)
+    {
+        gen!.Gen_13_1 = value;
+        await HandleValidSubmit();
     }
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
