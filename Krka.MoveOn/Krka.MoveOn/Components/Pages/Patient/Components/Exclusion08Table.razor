@@ -488,7 +488,7 @@
         exc!.Exc_1 = date;
         await HandleValidSubmit();
     }
-
+    W
     async Task GroupChange(int value, int excIndex)
     {
         switch (excIndex)
@@ -498,7 +498,7 @@
                 break;
             case 2:
                 exc!.Exc_3 = value;
-                isExc_3_1_Answer = true;
+                OnExc31Answer(value);
                 break;
             default:
                 throw new ArgumentException("Neznámy index Exc");
