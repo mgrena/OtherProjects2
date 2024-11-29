@@ -23,8 +23,7 @@ public class EmailSender(IOptions<SmtpOptions> optionsAccessor, ILogger<EmailSen
     public Task SendConfirmationLinkAsync(ApplicationUser user, string email,
         string confirmationLink) => SendEmailAsync(email, "studiamoveon.sk overenie e-mail adresy",
         $"<!DOCTYPE html><html><body><p>Dobrý deň,</p>" +
-            $"<p>Prijali sme žiadosť o potvrdenie e-mail adresy pre váš účet na stránke <a href='https://studiamoveon.sk/' style='color: blue; text-decoration: underline;'>studiamoveon.sk</a> " +
-            $"spoločnosti Krka. Tento e-mal Vám prišiel pretože ste boli zaradený/á do projektu MoveOn alebo ste požiadali o znovu odoslanie potvrdenia e-mailom. " +
+            $"<p>Prijali sme žiadosť o potvrdenie e-mail adresy pre váš účet na stránke studiamoveon.sk spoločnosti Krka. Tento e-mal Vám prišiel pretože ste požiadali o znovu odoslanie potvrdenia e-mailom. " +
             $"Ak ste túto požiadavku nevykonali, môžete túto správu ignorovať.</p>" +
             $"<p>E-mail adresu potvrdíte kliknutím na nasledujúci odkaz:</p>" +
             $"<p><a href='{confirmationLink}' style='color: blue; text-decoration: underline;'>Potvrdiť e-mail</a></p>" +

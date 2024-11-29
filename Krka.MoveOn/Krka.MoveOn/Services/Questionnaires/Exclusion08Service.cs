@@ -139,9 +139,9 @@ namespace Krka.MoveOn.Services.Questionnaires
                     var patient = _context.Patients.FirstOrDefault(i => i.Id == quest.PatientId);
                     if (patient != null)
                     {
-                        if (serviceProvider.GetRequiredService<IEmailSender<ApplicationUser>>() is EmailSender emailSender)
+                        if (_serviceProvider.GetRequiredService<IEmailSender<ApplicationUser>>() is EmailSender emailSender)
                         {
-                            var userService = serviceProvider.GetRequiredService<UserService>();
+                            var userService = _serviceProvider.GetRequiredService<UserService>();
                             string? doctorName = "?";
                             if (userService != null)
                             {

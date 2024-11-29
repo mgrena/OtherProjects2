@@ -1,4 +1,5 @@
 ﻿using Krka.MoveOn.Data;
+using Krka.MoveOn.Migrations;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -81,10 +82,29 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(dummyUser);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var callbackUrl = _navigationManager.GetUriWithQueryParameters(
-            _navigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+            _navigationManager.ToAbsoluteUri("Account/ConfirmEmailRegister").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = @"/" });
 
-        await _emailSender.SendConfirmationLinkAsync(dummyUser, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));
+        if (_emailSender is EmailSender eSender)
+        {
+            string body = string.Format("<!DOCTYPE html><html><body><p>Vážená pani doktorka/Vážený pán doktor,</p>" +
+                "<p>pozývame Vás k účasti na projekte zameranom na zlepšenie starostlivosti o pacientov s Parkinsonovou chorobou.</p>" +
+                "<p>Aby ste mohli začať využívať systém určený na zber a spracovanie údajov o pacientoch, postupujte podľa týchto krokov:</p>" +
+                "<ol type='1'>" +
+                    "<li>Overte svoju emailovú adresu kliknutím na nasledujúci <a href='{0}' style='color: blue; text-decoration: underline;'>link</a>.</li>" +
+                    "<p>Ak odkaz nefunguje, skopírujte a vložte nasledujúcu adresu do vášho webového prehliadača:</p>" +
+                    "<p>{0}</p>" +
+                    "<p>Odkaz je platný po obmedzený čas.</p>" +
+                    "<li>Následne si na stránke zvoľte vlastné heslo.</li>" +
+                    "<li>Po dokončení registrácie môžete ihneď začať pracovať so systémom.</li>" +
+                "</ol>" +
+                "<p>V prípade akýchkoľvek otázok alebo problémov s registráciou nás neváhajte kontaktovať na telefónnom čísle +421 948 634 336. Radi Vám pomôžeme.<br>" +
+                "Ďakujeme za Vašu účasť a tešíme sa na spoluprácu.</p>" +
+                "<p>S pozdravom,<br>Váš tím podpory</p></body></html>", HtmlEncoder.Default.Encode(callbackUrl));
+            await eSender.SendEmailAsync(user.UserName!, "Pozvanka k ucasti na projekte o Parkinsonovej chorobe", body);
+        }
+
+        //await _emailSender.SendConfirmationLinkAsync(dummyUser, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));
 
         if (result.Succeeded)
         {
