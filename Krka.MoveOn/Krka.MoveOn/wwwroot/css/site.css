@@ -257,6 +257,7 @@ html, body {
 .grid-toolbar-save1,
 .grid-toolbar-save2,
 .grid-toolbar-cancel,
+.grid-icon-column-chooser,
 .grid-toolbar-cancel1 {
     background-size: contain;
     mask-repeat: no-repeat;
@@ -283,6 +284,12 @@ html, body {
 .grid-toolbar-add1 {
     -webkit-mask-image: url("/images/add1.svg");
     mask-image: url("/images/add1.svg");
+    mask-size: 17px 17px;
+}
+
+.grid-icon-column-chooser {
+    -webkit-mask-image: url("/images/columns.svg");
+    mask-image: url("/images/columns.svg");
     mask-size: 17px 17px;
 }
 
@@ -709,4 +716,35 @@ input[type="radio"]:checked {
     .welcome-text {
         width: 90%;
     }
+}
+
+.grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.fab-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    user-select: none;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+}
+
+.fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.35) !important;
+}
+
+.flexGrid {
+    flex: 1 1 auto;
+    overflow-y: auto;
 }

@@ -1,6 +1,7 @@
 using Krka.MoveOn.Data.AdverseEffects;
 using Krka.MoveOn.Data.Dials;
 using Krka.MoveOn.Data.Questionnaires;
+using Krka.MoveOn.Data.RelationalTables;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -70,6 +71,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<DialSymptoms> DialSymptomses { get; set; }
 
     public DbSet<DialUnit> DialUnits { get; set; }
+
+    /// <summary>
+    /// Relation Tables
+    /// </summary>
+    public DbSet<Gen9DSRelational> Gen9DSRelationals { get; set; }
+    public DbSet<Gen7YesRelational> Gen7YesRelationals { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
