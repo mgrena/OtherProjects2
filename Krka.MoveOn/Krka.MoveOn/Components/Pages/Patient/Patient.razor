@@ -218,11 +218,12 @@
                         @foreach (var questionnaire in Questionnaires)
                         {
                             <div style="margin-bottom: 6px;">
-                                <DxMenu Orientation="@Orientation.Horizontal">
+                                <DxMenu s Orientation="@Orientation.Horizontal" CollapseItemsToHamburgerMenu="false">
                                     <Items>
-                                        <div style="display: flex; align-items: center;">
+                                        <div style="display: flex; flex-direction: column; align-items: stretch; border-radius: 50%;">
                                             <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
                                             Text="@GetMenuText(questionnaire.Order)"
+                                            CssClass="questionnare-buttons"
                                             @onclick="() => SetCurrentId(questionnaire.Id)" />
                                             <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
                                         </div>

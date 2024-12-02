@@ -9,40 +9,41 @@
 @inject IToastNotificationService ToastService
 
 
-<div class="mo-caption-styleH4">
-    <span>MDS-UPDRS škála, časť III. – Nemotorické stránky denného života (nM-EDL)</span>
+<div class="mo-caption-styleH4 grid-motor06Cap">
+    <span>MDS-UPDRS škála, časť III. – Vyšetrenie motoriky (nM-EDL)</span>
 </div>
-<DxGrid @ref="motskillGrid"
-        Data="Motskill"
-        KeyFieldName="Fieldname"
-        PageSize="35"
-        ValidationEnabled="false"
-        EditMode="GridEditMode.EditCell"
-        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-        ColumnResizeMode="GridColumnResizeMode.NextColumn"
-        TextWrapEnabled="false"
-        HighlightRowOnHover="true"
-        EditModelSaving="Grid_EditModelSaving"
-        FocusedRowEnabled="false">
-    <Columns>
-        <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
-        <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
-        <DxGridDataColumn FieldName="Value" Caption="Počet bodov" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-            <EditSettings>
-                <DxSpinEditSettings MinValue="0" MaxValue="4" />
-            </EditSettings>
-        </DxGridDataColumn>
-    </Columns>
+<div class="grid-motor06">
+    <DxGrid @ref="motskillGrid"
+            Data="Motskill"
+            KeyFieldName="Fieldname"
+            PageSize="35"
+            ValidationEnabled="false"
+            EditMode="GridEditMode.EditCell"
+            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+            TextWrapEnabled="false"
+            HighlightRowOnHover="true"
+            EditModelSaving="Grid_EditModelSaving"
+            FocusedRowEnabled="false">
+        <Columns>
+            <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
+            <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
+            <DxGridDataColumn FieldName="Value" Caption="Počet bodov" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                <EditSettings>
+                    <DxSpinEditSettings MinValue="0" MaxValue="4" />
+                </EditSettings>
+            </DxGridDataColumn>
+        </Columns>
 
-    <TotalSummary>
-        <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
-    </TotalSummary>
-</DxGrid>
+        <TotalSummary>
+            <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
+        </TotalSummary>
+    </DxGrid>
 
-<p>
-    <span style=" font-weight: 600;"> *(P – pravá, Ľ – ľavá, PHK – pravá horná končatina, ĽHK – ľavá horná končatina, PDK – pravá dolná končatina, ĽDK – ľavá dolná končatina)</span>
-</p>
-
+    <p>
+        <span style=" font-weight: 600;"> *(P – pravá, Ľ – ľavá, PHK – pravá horná končatina, ĽHK – ľavá horná končatina, PDK – pravá dolná končatina, ĽDK – ľavá dolná končatina)</span>
+    </p>
+</div>
 
 
 @code {

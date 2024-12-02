@@ -14,44 +14,7 @@
     <h1><span style="color:#b691bc; font-weight: bold;">@SelectedPatientCode</span> - Priebežný klinický dotazník</h1>
     <DxFormLayout>
         <DxFormLayoutItem>
-            <div class="mo-buttons-group mb-2">
-                <div class="mo-buttons-group d-flex flex-row w-100">
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Liečba Parkinsonovej choroby"
-                              CssClass="@GetButtonCssClass("/ongoingQ/init")"
-                              NavigateUrl="@GetNavigateUrl("/ongoingQ/init")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Zmena v liečbe pridružených problémov"
-                              CssClass="@GetButtonCssClass("/ongoingQ/treat")"
-                              NavigateUrl="@GetNavigateUrl("/ongoingQ/treat")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Nežiaduci účinok liečiva"
-                              CssClass="@GetButtonCssClass("/ongoingQ/drugEffect")"
-                              NavigateUrl="@GetNavigateUrl("/ongoingQ/drugEffect")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="MDS-UPDRS škála"
-                              CssClass="@GetButtonCssClass("/ongoingQ/motor")"
-                              NavigateUrl="@GetNavigateUrl("/ongoingQ/motor")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Hodnotenie spokojnosti s liečbou "
-                              CssClass="@GetButtonCssClass("/ongoingQ/satisfaction")"
-                              NavigateUrl="@GetNavigateUrl("/ongoingQ/satisfaction")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Predčasné vylúčenie"
-                              CssClass="@GetButtonCssClass("/ongoingQ/exc")"
-                              NavigateUrl="@GetNavigateUrl("/ongoingQ/exc")" />
-                </div>
-            </div>
-            <div class="hamburger-menu" style="font-size:18px;" @onclick="ToggleHamburgerMenu">
-                ☰ Dotazníky
-            </div>
-            <div class="hamburger-menu-content @(isHamburgerMenuVisible ? "show" : "")" id="hamburgerMenu">
+            <div class="mo-buttons-group">
                 <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
                           RenderStyleMode="@ButtonRenderStyleMode.Outline"
                           Text="Liečba Parkinsonovej choroby"
@@ -82,7 +45,6 @@
                           Text="Predčasné vylúčenie"
                           CssClass="@GetButtonCssClass("/ongoingQ/exc")"
                           NavigateUrl="@GetNavigateUrl("/ongoingQ/exc")" />
-
             </div>
         </DxFormLayoutItem>
     </DxFormLayout>

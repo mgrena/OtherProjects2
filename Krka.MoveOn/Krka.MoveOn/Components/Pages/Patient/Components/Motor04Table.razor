@@ -11,9 +11,9 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastNotificationService ToastService
 
-<div class="mo-caption-styleH4">
+<div class="mo-caption-styleH4 grid-motor">
     <div style="display: flex; align-items: center;">
-        <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" style="margin-right: 10px; margin-top: 5px; " RenderStyle="ButtonRenderStyle.None"/>
+        <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" style="margin-right: 10px; margin-top: 5px; " RenderStyle="ButtonRenderStyle.None" />
         <DxFlyout @bind-IsOpen="@IsInfoOpen"
                   PositionTarget=".info-icon-btn"
                   Position="FlyoutPosition.LeftEnd"
@@ -26,36 +26,36 @@
 </div>
 
 
+<div class="grid-motor">
+    <DxGrid @ref="nonmotGrid"
+            Data="Nonmot"
+            KeyFieldName="Fieldname"
+            PageSize="15"
+            ValidationEnabled="false"
+            EditMode="GridEditMode.EditCell"
+            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+            TextWrapEnabled="false"
+            HighlightRowOnHover="true"
+            EditModelSaving="Grid_EditModelSaving"
+            FocusedRowEnabled="false">
 
-<DxGrid @ref="nonmotGrid"
-        Data="Nonmot"
-        KeyFieldName="Fieldname"
-        PageSize="15"
-        ValidationEnabled="false"
-        EditMode="GridEditMode.EditCell"
-        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-        ColumnResizeMode="GridColumnResizeMode.NextColumn"
-        TextWrapEnabled="false"
-        HighlightRowOnHover="true"
-        EditModelSaving="Grid_EditModelSaving"
-        FocusedRowEnabled="false">
-        
 
-    <Columns>
-        <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
-        <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
-        <DxGridDataColumn FieldName="Value" Caption="Počet bodov" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-            <EditSettings>
-                <DxSpinEditSettings MinValue="0" MaxValue="4" />
-            </EditSettings>
-        </DxGridDataColumn>
-    </Columns>
+        <Columns>
+            <DxGridDataColumn FieldName="Number" Caption=" " ReadOnly="true" />
+            <DxGridDataColumn FieldName="Name" Caption="Doména" ReadOnly="true" />
+            <DxGridDataColumn FieldName="Value" Caption="Počet bodov" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                <EditSettings>
+                    <DxSpinEditSettings MinValue="0" MaxValue="4" />
+                </EditSettings>
+            </DxGridDataColumn>
+        </Columns>
 
-    <TotalSummary>
-        <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
-    </TotalSummary>
-</DxGrid>
-
+        <TotalSummary>
+            <DxGridSummaryItem SummaryType="GridSummaryItemType.Sum" FieldName="Value" ValueDisplayFormat=" {0}" />
+        </TotalSummary>
+    </DxGrid>
+</div>
 
 @code {
     [Parameter]

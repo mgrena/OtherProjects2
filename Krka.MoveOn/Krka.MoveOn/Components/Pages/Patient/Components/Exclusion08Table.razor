@@ -74,7 +74,7 @@
             @if (isExc_3_1_Answer)
             {
                 <div class="h-100 grid-wrapper">
-                    <div style="width: 98%; margin-left: 15px;">
+                    <div style="width: 100%; padding: 3px;">
                         <div class="mo-caption-styleH3">
                             Tabuľka nežiadúcej udalosti
                         </div>
@@ -86,15 +86,6 @@
                                           IconCssClass="grid-icon-column-chooser"
                                           CssClass="fab"
                                           aria-label="Výber stĺpcov"
-                                          Click="@ShowColumnChooser" />
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="align-self-start p-2">
-                                <DxButton Text="Výber stĺpcov"
-                                          RenderStyle="ButtonRenderStyle.Secondary"
-                                          IconCssClass="grid-icon-column-chooser"
                                           Click="@ShowColumnChooser" />
                             </div>
                         }
@@ -278,7 +269,7 @@
     Dictionary<Data.AdverseEffects.AdverseEffect, DataChange> UnsavedChanges { get; } = new();
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || advEffGrid.IsEditing();
 
-    void ShowColumnChooser()
+    void ShowColumnChooser()        
     {
         advEffGrid.ShowColumnChooser(new DialogDisplayOptions($".flexGrid", HorizontalAlignment.Center, VerticalAlignment.Center));
     }
@@ -488,7 +479,7 @@
         exc!.Exc_1 = date;
         await HandleValidSubmit();
     }
-    W
+
     async Task GroupChange(int value, int excIndex)
     {
         switch (excIndex)

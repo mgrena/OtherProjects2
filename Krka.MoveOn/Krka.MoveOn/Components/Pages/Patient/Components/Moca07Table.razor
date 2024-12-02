@@ -34,7 +34,7 @@
                         <div class="moca">
                             <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
-                            <DxSpinEdit Value="@moca!.Moca_1" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 1)))" ValueExpression="@(() => moca!.Moca_1)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
+                            <DxSpinEdit CssClass="spin-moca" Value="@moca!.Moca_1" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 1)))" ValueExpression="@(() => moca!.Moca_1)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen"
                                   PositionTarget=".info-icon-btn"
@@ -62,7 +62,7 @@
                     </DxFormLayoutItem>
 
                     <DxFormLayoutItem Caption="Hodiny" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="3">
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn2" Click="() => IsInfoOpen2 = !IsInfoOpen2" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_3" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 3)))" ValueExpression="@(() => moca!.Moca_3)" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
@@ -85,7 +85,7 @@
             <DxFormLayoutGroup Caption="Pomenovanie zvierat" ColSpanMd="12" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Zvieratá" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn3" Click="() => IsInfoOpen3 = !IsInfoOpen3" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
                             <DxSpinEdit Value="@moca!.Moca_4" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 4)))" ValueExpression="@(() => moca!.Moca_4)" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
                         </div>
@@ -108,7 +108,7 @@
             <DxFormLayoutGroup Caption="Pozornosť" ColSpanMd="12" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Vymenovanie čísel" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn4" Click="() => IsInfoOpen4 = !IsInfoOpen4" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
                             <DxSpinEdit Value="@moca!.Moca_5" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 5)))" ValueExpression="@(() => moca!.Moca_5)" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
                         </div>
@@ -121,8 +121,8 @@
                         </DxFlyout>
                     </DxFormLayoutItem>
 
-                    <DxFormLayoutItem Caption="Identifikácia písmena" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        <div style="display: flex; align-items: center;">
+                    <DxFormLayoutItem Caption="Identifikácia písmena" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="3">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn5" Click="() => IsInfoOpen5 = !IsInfoOpen5" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_6" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 6)))" ValueExpression="@(() => moca!.Moca_6)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
@@ -136,8 +136,8 @@
                         </DxFlyout>
                     </DxFormLayoutItem>
 
-                    <DxFormLayoutItem Caption="Odpočítavanie" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="3">
-                        <div style="display: flex; align-items: center;">
+                    <DxFormLayoutItem Caption="Odpočítavanie" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn6" Click="() => IsInfoOpen6 = !IsInfoOpen6" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_7" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 7)))" ValueExpression="@(() => moca!.Moca_7)" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
@@ -160,7 +160,7 @@
             <DxFormLayoutGroup Caption="Jazyk" ColSpanMd="12" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Opakovanie vety" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="6">
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn7" Click="() => IsInfoOpen7 = !IsInfoOpen7" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_8" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 8)))" ValueExpression="@(() => moca!.Moca_8)" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
@@ -175,7 +175,7 @@
                     </DxFormLayoutItem>
 
                     <DxFormLayoutItem Caption="Verbálna fluencia" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="5">
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn8" Click="() => IsInfoOpen8 = !IsInfoOpen8" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_9" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 9)))" ValueExpression="@(() => moca!.Moca_9)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
@@ -198,7 +198,7 @@
             <DxFormLayoutGroup Caption="Abstrakcia" ColSpanMd="12" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Abstrakcia" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn9" Click="() => IsInfoOpen9 = !IsInfoOpen9" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_10" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 10)))" ValueExpression="@(() => moca!.Moca_10)" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
@@ -220,7 +220,7 @@
             <DxFormLayoutGroup Caption="Vybavovanie slov" ColSpanMd="12" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Vybavovanie slov" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn10" Click="() => IsInfoOpen10 = !IsInfoOpen10" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
                             <DxSpinEdit Value="@moca!.Moca_11" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 11)))" ValueExpression="@(() => moca!.Moca_11)" MinValue="0" MaxValue="5" ReadOnly="@isReadOnly" />
                         </div>
@@ -241,7 +241,7 @@
             <DxFormLayoutGroup Caption="Orientácia" ColSpanMd="12" CaptionCssClass="caption-styleH01">
                 <div class="group-style">
                     <DxFormLayoutItem Caption="Orientácia" CaptionPosition="CaptionPosition.Horizontal" CaptionCssClass="caption-styleH1" ColSpanMd="4">
-                        <div style="display: flex; align-items: center;">
+                        <div class="moca">
                             <DxButton CssClass="info-icon-btn11" Click="() => IsInfoOpen11 = !IsInfoOpen11" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
 
                             <DxSpinEdit Value="@moca!.Moca_12" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 12)))" ValueExpression="@(() => moca!.Moca_11)" MinValue="0" MaxValue="6" ReadOnly="@isReadOnly" />

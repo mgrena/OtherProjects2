@@ -108,7 +108,7 @@
                 @if (isGen7_1_DM)
                 {
                     <div class="h-100 grid-wrapper">
-                        <div style="width: 98%; margin-left: 15px; margin-right:15px;">
+                        <div style="width: 100%; padding: 1%;">
                             <DxLayoutBreakpoint DeviceSize="DeviceSize.XSmall" @bind-IsActive="@isXSmallScreen" />
                             @if (isXSmallScreen)
                             {
@@ -120,16 +120,6 @@
                                               Click="@ShowColumnChooser" />
                                 </div>
                             }
-                            else
-                            {
-                                <div class="align-self-start p-2">
-                                    <DxButton Text="Výber stĺpcov"
-                                              RenderStyle="ButtonRenderStyle.Secondary"
-                                              IconCssClass="grid-icon-column-chooser"
-                                              Click="@ShowColumnChooser" />
-                                </div>
-                            }
-
 
                             <DxGrid @ref="Gen7YesGrid"
                                     Data="Gen7YesTable"
