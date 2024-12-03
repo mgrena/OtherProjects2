@@ -191,7 +191,10 @@
                                         <CellDisplayTemplate Context="context">
                                             @if (context.DataItem is Data.RelationalTables.Gen7YesRelational Gen7)
                                             {
-                                                <DxButton IconCssClass="grid-toolbar-info" @onclick="() => ShowDetails(Gen7)" />
+                                                if (Gen7.Gen_7_1_DM == 34)
+                                                {
+                                                    <DxButton IconCssClass="grid-toolbar-info" @onclick="() => ShowDetails(Gen7)" />
+                                                }
                                             }
                                         </CellDisplayTemplate>
                                         <HeaderCaptionTemplate>

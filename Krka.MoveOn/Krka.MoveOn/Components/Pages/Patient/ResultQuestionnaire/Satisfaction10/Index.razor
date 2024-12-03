@@ -20,8 +20,9 @@
 
 <div class="cw-880 mo-main-layout">
     <_ResultBtn />
-    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
-
+    <div class="mo-nav-submenu-bar2">
+        <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
+    </div>
     <Satisfaction10Form questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
 
 </div>

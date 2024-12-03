@@ -218,18 +218,23 @@
                         @foreach (var questionnaire in Questionnaires)
                         {
                             <div style="margin-bottom: 6px;">
-                                <DxMenu s Orientation="@Orientation.Horizontal" CollapseItemsToHamburgerMenu="false">
-                                    <Items>
-                                        <div style="display: flex; flex-direction: column; align-items: stretch; border-radius: 50%;">
+                                <DxMenu Orientation="@Orientation.Horizontal" CollapseItemsToHamburgerMenu="false">
+                                    <Items >
                                             <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
                                             Text="@GetMenuText(questionnaire.Order)"
-                                            CssClass="questionnare-buttons"
                                             @onclick="() => SetCurrentId(questionnaire.Id)" />
                                             <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
-                                        </div>
                                     </Items>
                                 </DxMenu Orientation="@Orientation.Horizontal">
-
+                                @if (questionnaire.CheckedAt.HasValue)
+                                {
+                                    <label style="color: rgb(182 145 188);">Skontrolované: @questionnaire.CheckedAt.Value.ToString("dd.MM.yyyy HH:mm:ss")  (@UserFullNameChecked(questionnaire.UserId)) </label>
+                                }
+                                else
+                                {
+                                    
+                                    <DxButton Text="Skontrolované" RenderStyle="ButtonRenderStyle.Primary" @onclick="() => MarkAsChecked(questionnaire.Id)" />                                           
+                                }
                             </div>
                         }
                     }
@@ -282,6 +287,7 @@
 @code {
     IGrid patientsGrid { get; set; }
     private List<ApplicationUser> Doctors;
+    private List<ApplicationUser> User;
     public List<Data.Patient> Patients { get; set; }
     public List<Data.Questionnaires.Questionnaire> Questionnaires { get; set; }
 
@@ -310,8 +316,6 @@
     private bool isAdminOrOffice;
     private ValidationMessageStore messageStore;
 
-
-
     bool isReadOnly = false;
 
     protected override async Task OnInitializedAsync()
@@ -329,6 +333,7 @@
 
         Patients = await PatientService.GetPatientsAsync();
         Doctors = await PatientService.GetDoctorsAsync();
+        User = await QuestionnaireService.GetAllUsersAsync();
 
         Logger.LogInformation("Stranka patients bola nacitana");
     }
@@ -446,6 +451,12 @@
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Warning,
             });
+    }
+
+    private string UserFullNameChecked(string userId)
+    {
+        var user = User.FirstOrDefault(u => u.Id == userId);
+        return user != null ? user.FullName : " ";
     }
 
     //Reload Grid
@@ -677,6 +688,26 @@
         if (e.ElementType == GridElementType.HeaderCell)
         {
             e.Style = "background-color: rgba(0, 0, 0, 0.08); font-weight: bold;";
+        }
+    }
+
+    private async Task MarkAsChecked(string questionnaireId)
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var currentUser = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        var questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId);
+        if (questionnaire != null)
+        {
+            questionnaire.CheckedAt = DateTime.Now;
+            questionnaire.UserId = currentUser;
+            await QuestionnaireService.UpdateQuestionnaireAsync(questionnaire);
+            AddToast();
+        }
+        else
+        {
+            AddToast();
         }
     }
 }

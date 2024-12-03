@@ -36,5 +36,12 @@ namespace Krka.MoveOn.Data.Questionnaires
 
         [Column("created_at")]
         public required DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        [Column("id_user")]
+        public string? UserId { get; set; }
+
+        [Column("checked_at")]
+        public DateTime? CheckedAt { get; set; }
+
     }
 }
