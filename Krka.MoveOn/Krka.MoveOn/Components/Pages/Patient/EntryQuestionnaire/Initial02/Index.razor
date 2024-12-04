@@ -60,10 +60,6 @@
             await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
             await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
 
-            if (progressData.CurrentProgress == 100)
-            {
-                isProgressComplete = true;
-            }
         }
     }
 

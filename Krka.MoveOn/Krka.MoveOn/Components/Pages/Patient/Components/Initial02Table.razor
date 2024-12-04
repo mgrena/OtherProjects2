@@ -200,7 +200,7 @@
 
 	   if (OnSave.HasDelegate)
         {
-            await OnSave.InvokeAsync((ProgressPercentage, Inits.Count > 0 ? 100 : 0));
+            await OnSave.InvokeAsync((ProgressPercentage, 100));
             ProgressPercentage = Inits.Count > 0 ? 100 : 0;
         }
 
