@@ -57,28 +57,28 @@
         }
 
         <DxGrid @ref="patientsGrid"
-                Data="Patients"
-                PageSize="20"
-                PagerPosition="GridPagerPosition.Bottom"
-                PageSizeSelectorVisible="true"
-                PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-                PageSizeSelectorAllRowsItemVisible="true"
-                PagerSwitchToInputBoxButtonCount="10"
-                PagerVisibleNumericButtonCount="10"
-                KeyFieldName="Id"
-                ValidationEnabled="true"
-                EditMode="GridEditMode.PopupEditForm"
-                FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-                ColumnResizeMode="GridColumnResizeMode.NextColumn"
-                PopupEditFormHeaderText="Pridať pacienta"
-                TextWrapEnabled="false"
-                HighlightRowOnHover="true"
-                EditModelSaving="Grid_EditModelSaving"
-                CustomizeEditModel="Grid_CustomizeEditModel_New"
-                DataItemDeleting="Grid_DataItemDeleting"
-                CustomizeElement="Grid_CustomizeElement"
-                FocusedRowEnabled="true"
-                FocusedRowChanged="OnFocusedRowChanged">
+        Data="Patients"
+        PageSize="20"
+        PagerPosition="GridPagerPosition.Bottom"
+        PageSizeSelectorVisible="true"
+        PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+        PageSizeSelectorAllRowsItemVisible="true"
+        PagerSwitchToInputBoxButtonCount="10"
+        PagerVisibleNumericButtonCount="10"
+        KeyFieldName="Id"
+        ValidationEnabled="true"
+        EditMode="GridEditMode.PopupEditForm"
+        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+        ColumnResizeMode="GridColumnResizeMode.NextColumn"
+        PopupEditFormHeaderText="Pridať pacienta"
+        TextWrapEnabled="false"
+        HighlightRowOnHover="true"
+        EditModelSaving="Grid_EditModelSaving"
+        CustomizeEditModel="Grid_CustomizeEditModel_New"
+        DataItemDeleting="Grid_DataItemDeleting"
+        CustomizeElement="Grid_CustomizeElement"
+        FocusedRowEnabled="true"
+        FocusedRowChanged="OnFocusedRowChanged">
 
             <ToolbarTemplate Context="toolbarContext">
                 <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
@@ -220,20 +220,23 @@
                             <div style="margin-bottom: 6px;">
                                 <DxMenu Orientation="@Orientation.Horizontal" CollapseItemsToHamburgerMenu="false">
                                     <Items >
-                                            <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
-                                            Text="@GetMenuText(questionnaire.Order)"
-                                            @onclick="() => SetCurrentId(questionnaire.Id)" />
-                                            <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
+                                        <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
+                                        Text="@GetMenuText(questionnaire.Order)"
+                                        @onclick="() => SetCurrentId(questionnaire.Id)" />
+                                        <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
                                     </Items>
                                 </DxMenu Orientation="@Orientation.Horizontal">
-                                @if (questionnaire.CheckedAt.HasValue)
-                                {
-                                    <label style="color: rgb(182 145 188);">Skontrolované: @questionnaire.CheckedAt.Value.ToString("dd.MM.yyyy HH:mm:ss")  (@UserFullNameChecked(questionnaire.UserId)) </label>
-                                }
-                                else
-                                {
+                                @if (isAdminOrOffice)
+                                { 
+                                    @if (questionnaire.CheckedAt.HasValue)
+                                    {
+                                        <label style="color: rgb(182 145 188);">Skontrolované: @questionnaire.CheckedAt.Value.ToString("dd.MM.yyyy HH:mm:ss")  (@UserFullNameChecked(questionnaire.UserId)) </label>
+                                    }
+                                    else
+                                    {
                                     
-                                    <DxButton Text="Skontrolované" RenderStyle="ButtonRenderStyle.Primary" @onclick="() => MarkAsChecked(questionnaire.Id)" />                                           
+                                        <DxButton Text="Skontrolované" RenderStyle="ButtonRenderStyle.Primary" @onclick="() => MarkAsChecked(questionnaire.Id)" />                                           
+                                    }
                                 }
                             </div>
                         }
