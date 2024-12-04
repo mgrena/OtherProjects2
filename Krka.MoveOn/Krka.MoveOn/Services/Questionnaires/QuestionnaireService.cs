@@ -66,4 +66,11 @@ public class QuestionnaireService(ApplicationDbContext context)
 
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<ApplicationUser>> GetAllUsersAsync()
+    {
+        var users = await _context.Users.ToListAsync();
+        return users;
+    }
+
 }

@@ -96,7 +96,10 @@
                                 <CellDisplayTemplate Context="context">
                                     @if (context.DataItem is Data.Questionnaires.QuestionnaireTreatment03 treatment)
                                     {
-                                        <DxButton IconCssClass="grid-toolbar-info" @onclick="() => ShowDetails(treatment)" />
+                                        @if(treatment.Treat_3 == 9)
+                                        {
+                                            <DxButton IconCssClass="grid-toolbar-info" @onclick="() => ShowDetails(treatment)" />                                            
+                                        }
                                     }
                                 </CellDisplayTemplate>
                                 <HeaderCaptionTemplate>
