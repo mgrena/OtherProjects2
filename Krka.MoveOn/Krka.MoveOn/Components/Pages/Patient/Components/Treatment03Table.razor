@@ -297,6 +297,13 @@
             if (treat03?.TreatQ1 == 14 && treat03.Treat_3 == null)
                 return;
             await TreatmentService.SaveTreatmentAsync(treat03!);
+
+            if (OnSave.HasDelegate)
+            {
+                await OnSave.InvokeAsync((previousProgress, 100));
+            }
+            previousProgress = Treats.Count > 0 ? 100 : 0;
+
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
             Add1Toast();
         }
@@ -318,11 +325,6 @@
         var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.EditModel;
         var dataItem = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
         treat.Questionnaire_id = questionnaireId!;
-
-        if (OnSave.HasDelegate)
-        {
-            await OnSave.InvokeAsync((previousProgress, 100));
-        }
 
         if (treat?.Treat_3 == null)
         {
@@ -361,6 +363,13 @@
                     break;
             }
         }
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+        previousProgress = Treats.Count > 0 ? 100 : 0;
+
         await ClearUnsavedChangesAsync();
     }
 
@@ -368,6 +377,13 @@
     {
         var treat = (Data.Questionnaires.QuestionnaireTreatment03)e.DataItem;
         await TreatmentService.DeleteTreatAsync(treat.Id);
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+        previousProgress = Treats.Count > 0 ? 100 : 0;
+
         await UpdateDataAsync();
         DeleteToast();
     }

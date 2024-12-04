@@ -21,7 +21,7 @@
 
 @code {
     [Parameter]
-    public string questionnaireId { get; set; }
+    public string questionnaireId { get; set; } = string.Empty;
     private bool _firstRender = true;
 
     Questionnaire questionnaire = new Questionnaire
@@ -46,7 +46,7 @@
             }
             else
             {
-                questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId);
+                questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId) ?? throw new InvalidOperationException($"Questionnaire with ID {questionnaireId} not found.");
 
                 var data = new QuestionnaireData
                     {

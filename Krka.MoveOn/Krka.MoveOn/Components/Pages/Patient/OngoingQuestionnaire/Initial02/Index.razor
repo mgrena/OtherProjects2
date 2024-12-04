@@ -33,7 +33,7 @@
 
     <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
 
-    <Krka.MoveOn.Components.Pages.Patient.Components.Initial02OngoingTable questionnaireId="@QuestionnaireIdAsString" />
+    <Initial02OngoingTable questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
 
 </div>
 
@@ -73,10 +73,7 @@
             await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
             await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
 
-            if (progressData.CurrentProgress == 100)
-            {
-                isProgressComplete = true;
-            }
+            isProgressComplete = (progressData.CurrentProgress == 100);
         }
     }
 

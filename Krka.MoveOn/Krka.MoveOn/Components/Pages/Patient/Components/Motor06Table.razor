@@ -376,11 +376,6 @@
             UnsavedChanges[questionnaire] = new DataChange(DataChangeType.Modification, new HashSet<string> { item.Fieldname });
         }
 
-        if (OnSave.HasDelegate)
-        {
-            await OnSave.InvokeAsync((previousProgress, 100));
-        }
-
         if (hasChanges)
         {
             foreach (var unsavedChange in UnsavedChanges)
@@ -396,6 +391,12 @@
                 }
             }
         }
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+        }
+        previousProgress = 100;
 
         await ClearUnsavedChangesAsync();
 

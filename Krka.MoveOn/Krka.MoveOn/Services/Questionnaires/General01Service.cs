@@ -24,10 +24,7 @@ namespace Krka.MoveOn.Services.Questionnaires
 
         public async Task SaveQuestionnaireGeneral01Async(QuestionnaireGeneral01 questionnaire)
         {
-            if (questionnaire == null)
-            {
-                throw new ArgumentNullException(nameof(questionnaire));
-            }
+            ArgumentNullException.ThrowIfNull(questionnaire);
 
             questionnaire.ProgressPercentage = 100;
 

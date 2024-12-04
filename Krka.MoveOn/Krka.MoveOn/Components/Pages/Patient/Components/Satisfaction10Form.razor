@@ -9,39 +9,39 @@
 
 <style>
     table {
-        width: 100%;
+    width: 100%;
     }
 
     th {
-        text-align: center;
+    text-align: center;
     }
 
     .radio-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     }
 </style>
 
 <div class="d-flex align-items-center custom-toast-background">
     <DxToastProvider Name="Overview"
-                     MaxToastCount="3"
-                     AnimationType="ToastAnimationType.Slide"
-                     HorizontalAlignment="HorizontalAlignment.Right"
-                     VerticalAlignment="VerticalEdge.Top"
-                     Width="320px" />
+    MaxToastCount="3"
+    AnimationType="ToastAnimationType.Slide"
+    HorizontalAlignment="HorizontalAlignment.Right"
+    VerticalAlignment="VerticalEdge.Top"
+    Width="320px" />
 </div>
 
 <DxLoadingPanel @bind-Visible="PanelVisible"
-                IsContentBlocked="true"
-                ApplyBackgroundShading="true"
-                IndicatorAreaVisible="false"
-                Text="Fetching Data...">
+IsContentBlocked="true"
+ApplyBackgroundShading="true"
+IndicatorAreaVisible="false"
+Text="Fetching Data...">
 
     <EditForm Model="@SatisfactionQ"
-              Context="EditFormContext"
-              OnValidSubmit="@HandleValidSubmit">
+    Context="EditFormContext"
+    OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <DxFormLayout>
             <DxFormLayoutGroup Caption="Hodnotenie spokojnosti s liečbou" CaptionCssClass="caption-styleH0">
@@ -165,12 +165,13 @@
     {
         if (SatisfactionQ != null)
         {
+            int previousProgress = SatisfactionQ.ProgressPercentage;
+            await SatisfactionService.SaveSatisfactionAsync(SatisfactionQ);
+
             if (OnSave.HasDelegate)
             {
-                await OnSave.InvokeAsync((SatisfactionQ.ProgressPercentage, 100));
+                await OnSave.InvokeAsync((previousProgress, 100));
             }
-
-            await SatisfactionService.SaveSatisfactionAsync(SatisfactionQ);
 
             AddToast();
         }

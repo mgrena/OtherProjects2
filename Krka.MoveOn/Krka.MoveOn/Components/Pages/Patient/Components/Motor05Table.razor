@@ -260,6 +260,7 @@
         {
             await OnSave.InvokeAsync((previousProgress, 100));
         }
+        previousProgress = 100;
 
         await ClearUnsavedChangesAsync();
 

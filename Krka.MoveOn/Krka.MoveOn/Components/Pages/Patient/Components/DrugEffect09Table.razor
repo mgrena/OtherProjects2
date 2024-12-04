@@ -210,6 +210,13 @@
             if (druggEffect?.De_1 == 14 && druggEffect.De_2 == null)
                 return;
             await DrugEffectService.SaveDrugEffectAsync(druggEffect!);
+
+            if (OnSave.HasDelegate)
+            {
+                await OnSave.InvokeAsync((previousProgress, 100));
+            }
+            previousProgress = DrugEffects.Count > 0 ? 100 : 0;
+
             Add1Toast();
             await ClearUnsavedChangesAsync();
         }
@@ -272,6 +279,7 @@
         {
             await OnSave.InvokeAsync((previousProgress, 100));
         }
+        previousProgress = DrugEffects.Count > 0 ? 100 : 0;
 
         await ClearUnsavedChangesAsync();
         isModified = false;
