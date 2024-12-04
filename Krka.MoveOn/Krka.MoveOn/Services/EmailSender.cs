@@ -21,16 +21,27 @@ public class EmailSender(IOptions<SmtpOptions> optionsAccessor, ILogger<EmailSen
     public SmtpOptions Options { get; } = optionsAccessor.Value;
 
     public Task SendConfirmationLinkAsync(ApplicationUser user, string email,
-        string confirmationLink) => SendEmailAsync(email, "Potvrďte svoj e-mail",
-        "Potvrďte svoj účet " +
-        $"<a href='{confirmationLink}'>kliknutím sem</a>.");
+        string confirmationLink) => SendEmailAsync(email, "studiamoveon.sk overenie e-mail adresy",
+        $"<!DOCTYPE html><html><body><p>Dobrý deň,</p>" +
+            $"<p>Prijali sme žiadosť o potvrdenie e-mail adresy pre váš účet na stránke studiamoveon.sk spoločnosti Krka. Tento e-mal Vám prišiel pretože ste požiadali o znovu odoslanie potvrdenia e-mailom. " +
+            $"Ak ste túto požiadavku nevykonali, môžete túto správu ignorovať.</p>" +
+            $"<p>E-mail adresu potvrdíte kliknutím na nasledujúci odkaz:</p>" +
+            $"<p><a href='{confirmationLink}' style='color: blue; text-decoration: underline;'>Potvrdiť e-mail</a></p>" +
+            $"<p>Ak odkaz nefunguje, skopírujte a vložte nasledujúcu adresu do vášho webového prehliadača:</p>" +
+            $"<p>{confirmationLink}</p>" +
+            $"<p>Odkaz je platný po obmedzený čas.</p><p>S pozdravom,<br>Váš tím podpory</p></body></html>");
 
     public Task SendPasswordResetLinkAsync(ApplicationUser user, string email,
-        string resetLink) => SendEmailAsync(email, "Obnovte svoje heslo",
-        $"Obnovte si heslo <a href='{resetLink}'>kliknutím sem</a>.");
+        string resetLink) => SendEmailAsync(email, "studiamoveon.sk obnovenie hesla",
+        $"<!DOCTYPE html><html><body><p>Dobrý deň,</p>" +
+            $"<p>Prijali sme vašu žiadosť o zmenu hesla pre váš účet. Ak ste túto požiadavku nevykonali, môžete túto správu ignorovať.</p>" +
+            $"<p>Na zmenu vášho hesla kliknite na nasledujúci odkaz:</p><p><a href='{resetLink}' style='color: blue; text-decoration: underline;'>Potvrdiť zmenu hesla</a></p>" +
+            $"<p>Ak odkaz nefunguje, skopírujte a vložte nasledujúcu adresu do vášho webového prehliadača:</p>" +
+            $"<p>{resetLink}</p>" +
+            $"<p>Odkaz je platný po obmedzený čas.</p><p>S pozdravom,<br>Váš tím podpory</p></body></html>");
 
     public Task SendPasswordResetCodeAsync(ApplicationUser user, string email,
-        string resetCode) => SendEmailAsync(email, "Obnovte svoje heslo",
+        string resetCode) => SendEmailAsync(email, "studiamoveon.sk obnovenie hesla",
         $"Obnovte svoje heslo pomocou nasledujúceho kódu: {resetCode}");
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)

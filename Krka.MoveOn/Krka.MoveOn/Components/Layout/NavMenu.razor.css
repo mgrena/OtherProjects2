@@ -152,10 +152,14 @@
 
 @media (max-width: 768px) {
     #sidebar {
-        min-width: inherit;
-        max-width: inherit;
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+        height: auto;
+        min-width: unset;
+        max-width: unset;
         display: block;
-        
+        z-index: 1000;
     }
 
         #sidebar .menu-closeonclick-placeholder {

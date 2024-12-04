@@ -26,26 +26,12 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Nežiaduci účinok liečiva" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style=" margin-top: 4px; margin-left: 2px;">
-                    <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                </div>
-                <DxFlyout @bind-IsOpen="@IsInfoOpen"
-                          PositionTarget=".info-icon-btn"
-                          Position="FlyoutPosition.Bottom"
-                          PreventCloseOnPositionTargetClick="true"
-                          Width="240">
-                    Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
-                </DxFlyout>
-            </DxFormLayoutItem>
-
             <DxFormLayoutItem Caption="Ak áno, prosím vyplňte tabuľku" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                 <InputRadioGroup @bind-Value="@druggEffect!.De_1" class="d-flex flex-wrap">
                     @foreach (var item in de_1_Answer)
                     {
                         <label class="d-block m-2">
-                            <InputRadio class="m-2" @onclick="() => {OnD1QAnswer(item.Id);}" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
+                            <InputRadio class="m-2" @onclick="async() => await OnD1QAnswer(item.Id)" Value="@item.Id" required Disabled="@isReadOnly" /> @item.Name
                         </label>
                     }
                 </InputRadioGroup>
@@ -89,9 +75,9 @@
                                 </EditSettings>
                             </DxGridDataColumn>
 
-                            <DxGridDataColumn FieldName="De_3" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" > 
+                            <DxGridDataColumn FieldName="De_3" Caption="Dávka (mg)" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
                                 <EditSettings>
-                                    <DxSpinEditSettings MinValue="@(0m)"/>
+                                    <DxSpinEditSettings MinValue="@(0m)" />
                                 </EditSettings>
                             </DxGridDataColumn>
 
@@ -137,27 +123,9 @@
                     </DxGrid>
                 </div>
             }
-
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style="margin-top: 5px">
-                    @if (!isReadOnly)
-                    {
-                        <DxButton SubmitFormOnClick="true"
-                                  Text="Uložiť"
-                                  RenderStyle="ButtonRenderStyle.Primary"
-                                  IconCssClass="grid-toolbar-save1"
-                                  Enabled="@isModified" />
-                    }
-                </div>
-            </DxFormLayoutItem>
         </DxFormLayoutGroup>
     </DxFormLayout>
 </EditForm>
-
-
-
-
-
 
 @code {
     [Parameter]
@@ -211,10 +179,10 @@
         previousProgress = DrugEffects.Count > 0 ? 100 : 0;
 
         dialActiveIngredient = await DrugEffectService.GetDialActiveIngredientAsync();
-        De_2_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
+        De_2_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).OrderBy(d => d.Name).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         dialIndication = await DrugEffectService.GetDialIndicationAsync();
-        De_5_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
+        De_5_Answer = dialIndication.Where(d => d.Type_q == 1).OrderBy(d => d.Name == "Iné..." ? 1 : 0).ThenBy(d => d.Name).ToList();
 
         dialQGenerals = await DrugEffectService.GetDialGeneralAsync();
         de_1_Answer = dialQGenerals.Where(d => d.Type_q == 5).ToList();
@@ -228,24 +196,107 @@
         if (questionnaire != null)
         {
             druggEffect = questionnaire;
-
             isDe1Answer = (druggEffect.De_1 == 14);
         }
     }
+
+    async Task New_Click() => await drugEffectGrid.StartEditNewRowAsync();
 
     private async Task HandleValidSubmit()
     {
         if (!isReadOnly)
         {
             isModified = false;
+            if (druggEffect?.De_1 == 14 && druggEffect.De_2 == null)
+                return;
+            await DrugEffectService.SaveDrugEffectAsync(druggEffect!);
+
             if (OnSave.HasDelegate)
             {
                 await OnSave.InvokeAsync((previousProgress, 100));
-                previousProgress = 100;
             }
-            await DrugEffectService.SaveDrugEffectAsync(druggEffect!);
+            previousProgress = DrugEffects.Count > 0 ? 100 : 0;
+
             Add1Toast();
+            await ClearUnsavedChangesAsync();
         }
+    }
+
+    private void OnFieldChanged()
+    {
+        isModified = true;
+    }
+
+    async Task OnD1QAnswer(int value)
+    {
+        druggEffect!.De_1 = value;
+        isDe1Answer = (druggEffect!.De_1 == 14);
+
+        if (druggEffect!.De_1 == 15 || druggEffect!.De_1 == 14)
+        {
+            await HandleValidSubmit();
+        }
+
+    }
+
+    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var drugEffect = (Data.Questionnaires.QuestionnaireDrugEffect09)e.EditModel;
+        var dataItem = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
+        drugEffect.Questionnaire_id = questionnaireId;
+        if (drugEffect?.De_2 == null)
+        {
+            return;
+        }
+        else if (e.IsNew)
+        {
+            DrugEffects.Add(drugEffect);
+            UnsavedChanges[drugEffect] = new(DataChangeType.Addition, new());
+        }
+        else
+        {
+            UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
+        }
+
+        foreach (var unsavedChange in UnsavedChanges)
+        {
+            var changedItem = unsavedChange.Key;
+            var changeType = unsavedChange.Value.Type;
+            switch (changeType)
+            {
+                case DataChangeType.Addition:
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
+                    AddToast();
+                    break;
+                case DataChangeType.Modification:
+                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
+                    ModifyToast();
+                    break;
+            }
+        }
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((previousProgress, 100));
+            previousProgress = 100;
+        }
+        previousProgress = DrugEffects.Count > 0 ? 100 : 0;
+
+        await ClearUnsavedChangesAsync();
+        isModified = false;
+    }
+
+    async Task ClearUnsavedChangesAsync()
+    {
+        UnsavedChanges.Clear();
+        if (isDe1Answer)
+            await UpdateDataAsync();
+    }
+
+    async Task UpdateDataAsync()
+    {
+        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(questionnaireId);
+        drugEffectGrid.Reload();
     }
 
     private void AddToast()
@@ -291,81 +342,6 @@
                 RenderStyle = ToastRenderStyle.Success,
             });
     }
-
-    async Task UpdateDataAsync()
-    {
-        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(questionnaireId);
-        drugEffectGrid.Reload();
-    }
-
-    async Task New_Click() => await drugEffectGrid.StartEditNewRowAsync();
-
-    private void OnFieldChanged()
-    {
-        isModified = true;
-    }
-
-    void OnD1QAnswer(int value)
-    {
-        druggEffect!.De_1 = value;
-        isDe1Answer = (druggEffect!.De_1 == 14);
-        OnFieldChanged();
-    }
-
-    async Task ClearUnsavedChangesAsync()
-    {
-        UnsavedChanges.Clear();
-        await UpdateDataAsync();
-    }
-
-    async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
-        var drugEffect = (Data.Questionnaires.QuestionnaireDrugEffect09)e.EditModel;
-        var dataItem = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
-        drugEffect.Questionnaire_id = questionnaireId;
-        if (drugEffect?.De_2 == null)
-        {
-            return;
-        }
-        else if (e.IsNew)
-        {
-            DrugEffects.Add(drugEffect);
-            UnsavedChanges[drugEffect] = new(DataChangeType.Addition, new());
-        }
-        else
-        {
-            UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
-        }
-
-        drugEffectGrid.Reload();
-
-        foreach (var unsavedChange in UnsavedChanges)
-        {
-            var changedItem = unsavedChange.Key;
-            var changeType = unsavedChange.Value.Type;
-            switch (changeType)
-            {
-                case DataChangeType.Addition:
-                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
-                    AddToast();
-                    break;
-                case DataChangeType.Modification:
-                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
-                    ModifyToast();
-                    break;
-            }
-        }
-
-        if (OnSave.HasDelegate)
-        {
-            await OnSave.InvokeAsync((previousProgress, 100));
-            previousProgress = 100;
-        }
-
-        await ClearUnsavedChangesAsync();
-
-    }
-
 
     record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
     enum DataChangeType { Modification, Addition, Delete }

@@ -17,7 +17,7 @@ namespace Krka.MoveOn.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -84,7 +84,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("adverse_effects", (string)null);
+                    b.ToTable("adverse_effects");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.ApplicationUser", b =>
@@ -185,6 +185,10 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
+                    b.Property<int?>("Indication_id")
+                        .HasColumnType("int")
+                        .HasColumnName("indication_id");
+
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
@@ -200,7 +204,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_active_ingredient", (string)null);
+                    b.ToTable("dial_active_ingredient");
 
                     b.HasData(
                         new
@@ -290,6 +294,717 @@ namespace Krka.MoveOn.Migrations
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Amantadín",
                             Type_q = 1
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 1,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Solifenacín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 1,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Mirabegron",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 1,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Trospium",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 1,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Avanafil",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 1,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 2,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Sildenafil",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 2,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tadalafil",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 2,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Avanafil",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 2,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 3,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bisakodyl",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 3,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Laklulóza",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 3,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Makrogol",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 3,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Binatriumpikosulfát",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 3,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Prukaloprid",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 3,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Glycerol",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 3,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 4,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Klonazepam",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 4,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Melatonín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 4,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Zopiklón",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 4,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Eszopiklón",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 4,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Zolpidem",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 33,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 4,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Cinalozepam",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 34,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 4,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 35,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 10,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Donepezil",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 36,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 10,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Rivastigmín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 37,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 10,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Galantamín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 38,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 10,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Ginkgo biloba",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 39,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 10,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Memantín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 40,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 10,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 41,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 5,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Midodrin",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 42,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 5,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Fludrokortizón",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 43,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 5,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 44,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Agomelatín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 45,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Venlafaxín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 46,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Amitriptylín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 47,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Imipramín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 48,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Klomipramín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 49,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Paroxetín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 50,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Moklobemid",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 51,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Vortioxetín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 52,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bupropion",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 53,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Citalopram",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 54,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Escitalopram",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 55,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tianeptín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 56,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Duloxetín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 57,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Mirtazapín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 58,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Fluvoxamín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 59,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Fluoxetín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 60,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Mianserín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 61,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Lítium",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 62,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Sertralín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 63,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Trazodon",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 64,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 6,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 65,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 7,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Diazepam",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 66,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 7,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Hydroxyzín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 67,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 7,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Bromazepam",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 68,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 7,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Buspirón",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 69,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 7,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Alprazolam",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 70,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 7,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Chlórdiazepoxid",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 71,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 7,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tofizopam",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 72,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 7,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 73,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Aripiprazol",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 74,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Amilsulprid",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 75,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Sulpirid",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 76,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Olanzapín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 77,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Zuklopentixol",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 78,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Klozapín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 79,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Kvetiapín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 80,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Palliperidón",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 81,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Tiapridal",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 82,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Haloperidol",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 83,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Lurazidón",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 84,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Lítium",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 85,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Kariprazín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 86,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Risperinón",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 87,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Sertindol",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 88,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Ziprasidón",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 89,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Zotepín",
+                            Type_q = 2
+                        },
+                        new
+                        {
+                            Id = 90,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Indication_id = 8,
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Iné...",
+                            Type_q = 2
                         });
                 });
 
@@ -321,7 +1036,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_adverse_effects", (string)null);
+                    b.ToTable("dial_adverse_effects");
 
                     b.HasData(
                         new
@@ -433,7 +1148,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 14,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Smrť",
+                            Name = "Smrť",
                             Type_q = 3
                         },
                         new
@@ -465,7 +1180,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 18,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Ťažká (Spôsobuje neschopnosť vykonávať bežné činnosti, pacient môže pociťovať neznesiteľné nepohodlie alebo bolesť)",
+                            Name = "Ťažká (Spôsobuje neschopnosť vykonávať bežné činnosti, pacient môže pociťovať neznesiteľné nepohodlie alebo bolesť)",
                             Type_q = 4
                         },
                         new
@@ -554,7 +1269,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_exlusions", (string)null);
+                    b.ToTable("dial_exlusions");
 
                     b.HasData(
                         new
@@ -594,7 +1309,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 5,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Smrť",
+                            Name = "Smrť *",
                             Type_q = 2
                         },
                         new
@@ -602,7 +1317,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 6,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Hospitalizácia",
+                            Name = "Hospitalizácia *",
                             Type_q = 2
                         },
                         new
@@ -634,7 +1349,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 10,
                             CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "O alebo zhoršenie existujúceho ochorenia počas štúdie, ktoré si vyžaduje používanie liekov, ktoré nie sú povolené v spojení so súhrnom charakteristických vlastností lieku použitých liekov.",
+                            Name = "Aktuálne ochorenie alebo zhoršenie existujúceho ochorenia počas štúdie, ktoré si vyžaduje používanie liekov, ktoré nie sú povolené v spojení so súhrnom charakteristických vlastností lieku použitých liekov. *",
                             Type_q = 2
                         },
                         new
@@ -675,7 +1390,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_indications", (string)null);
+                    b.ToTable("dial_indications");
 
                     b.HasData(
                         new
@@ -749,6 +1464,14 @@ namespace Krka.MoveOn.Migrations
                             ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Iné...",
                             Type_q = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedAt = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Poruchy pamäti a kognície",
+                            Type_q = 1
                         });
                 });
 
@@ -785,7 +1508,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_mhs", (string)null);
+                    b.ToTable("dial_mhs");
 
                     b.HasData(
                         new
@@ -881,7 +1604,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_medicines", (string)null);
+                    b.ToTable("dial_medicines");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialQGeneral", b =>
@@ -912,7 +1635,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_q_general", (string)null);
+                    b.ToTable("dial_q_general");
 
                     b.HasData(
                         new
@@ -1112,7 +1835,7 @@ namespace Krka.MoveOn.Migrations
                             Id = 25,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Chloprprotixen",
+                            Name = "Chlorprotixen",
                             Type_q = 7
                         },
                         new
@@ -1401,7 +2124,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_specialization", (string)null);
+                    b.ToTable("dial_specialization");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialSymptoms", b =>
@@ -1432,7 +2155,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_symptoms", (string)null);
+                    b.ToTable("dial_symptoms");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Dials.DialUnit", b =>
@@ -1463,7 +2186,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("dial_units", (string)null);
+                    b.ToTable("dial_units");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.LogEntity", b =>
@@ -1504,7 +2227,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("logs", (string)null);
+                    b.ToTable("logs");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Patient", b =>
@@ -1570,7 +2293,6 @@ namespace Krka.MoveOn.Migrations
                         .IsUnique();
 
                     b.ToTable("patients");
-                    b.ToTable("patients", (string)null);
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.Questionnaire", b =>
@@ -1579,6 +2301,10 @@ namespace Krka.MoveOn.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar")
                         .HasColumnName("id");
+
+                    b.Property<DateTime?>("CheckedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("checked_at");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -1604,9 +2330,13 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("progress_percentage");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("id_user");
+
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaires", (string)null);
+                    b.ToTable("questionnaires");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireDrugEffect09", b =>
@@ -1634,8 +2364,9 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("decimal(5,2)")
                         .HasColumnName("de_3");
 
-                    b.Property<int?>("De_4")
-                        .HasColumnType("int")
+                    b.Property<string>("De_4")
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar")
                         .HasColumnName("de_4");
 
                     b.Property<int?>("De_5")
@@ -1658,7 +2389,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_drug_effect09", (string)null);
+                    b.ToTable("questionnaire_drug_effect09");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireExclusion08", b =>
@@ -1706,7 +2437,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_exclusion08", (string)null);
+                    b.ToTable("questionnaire_exclusion08");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireGeneral01", b =>
@@ -1776,39 +2507,6 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("gen_6_dg");
 
-                    b.Property<string>("Gen_7_1_1")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar")
-                        .HasColumnName("gen_7_1_1");
-
-                    b.Property<decimal?>("Gen_7_1_2")
-                        .HasColumnType("decimal(5,2)")
-                        .HasColumnName("gen_7_1_2");
-
-                    b.Property<int?>("Gen_7_1_3_DU")
-                        .HasColumnType("int")
-                        .HasColumnName("gen_7_1_3_du");
-
-                    b.Property<decimal?>("Gen_7_1_4")
-                        .HasColumnType("decimal(3,1)")
-                        .HasColumnName("gen_7_1_4");
-
-                    b.Property<int?>("Gen_7_1_DM")
-                        .HasColumnType("int")
-                        .HasColumnName("gen_7_1_dm");
-
-                    b.Property<decimal?>("Gen_7_2")
-                        .HasColumnType("decimal(5,2)")
-                        .HasColumnName("gen_7_2");
-
-                    b.Property<int?>("Gen_7_3_DU")
-                        .HasColumnType("int")
-                        .HasColumnName("gen_7_3_du");
-
-                    b.Property<decimal?>("Gen_7_4")
-                        .HasColumnType("decimal(3,1)")
-                        .HasColumnName("gen_7_4");
-
                     b.Property<int>("Gen_7_DG")
                         .HasColumnType("int")
                         .HasColumnName("gen_7_dg");
@@ -1816,10 +2514,6 @@ namespace Krka.MoveOn.Migrations
                     b.Property<int>("Gen_8")
                         .HasColumnType("int")
                         .HasColumnName("gen_8");
-
-                    b.Property<int>("Gen_9_DS")
-                        .HasColumnType("int")
-                        .HasColumnName("gen_9_ds");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2")
@@ -1837,7 +2531,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_general01", (string)null);
+                    b.ToTable("questionnaire_general01");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireInitial02", b =>
@@ -1885,7 +2579,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_initial02", (string)null);
+                    b.ToTable("questionnaire_initial02");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireMoca07", b =>
@@ -1969,7 +2663,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_moca07", (string)null);
+                    b.ToTable("questionnaire_moca07");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireMotor05", b =>
@@ -2053,7 +2747,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_motor05", (string)null);
+                    b.ToTable("questionnaire_motor05");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireMotorSkill06", b =>
@@ -2217,7 +2911,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_motorskill06", (string)null);
+                    b.ToTable("questionnaire_motorskill06");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireNonMotor04", b =>
@@ -2301,7 +2995,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_nonmotor04", (string)null);
+                    b.ToTable("questionnaire_nonmotor04");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireSatisfaction10", b =>
@@ -2349,7 +3043,7 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_satisfaction10", (string)null);
+                    b.ToTable("questionnaire_satisfaction10");
                 });
 
             modelBuilder.Entity("Krka.MoveOn.Data.Questionnaires.QuestionnaireTreatment03", b =>
@@ -2372,6 +3066,16 @@ namespace Krka.MoveOn.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_at");
+
+                    b.Property<string>("OtherIndication")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar")
+                        .HasColumnName("other_indication");
+
+                    b.Property<string>("OtherTreat")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar")
+                        .HasColumnName("other_treat");
 
                     b.Property<string>("Questionnaire_id")
                         .IsRequired()
@@ -2397,7 +3101,92 @@ namespace Krka.MoveOn.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("questionnaire_treatment03", (string)null);
+                    b.ToTable("questionnaire_treatment03");
+                });
+
+            modelBuilder.Entity("Krka.MoveOn.Data.RelationalTables.Gen7YesRelational", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<int?>("GenQuestId")
+                        .HasColumnType("int")
+                        .HasColumnName("GenQuestId");
+
+                    b.Property<string>("Gen_7_1_1")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar")
+                        .HasColumnName("gen_7_1_1");
+
+                    b.Property<decimal?>("Gen_7_1_2")
+                        .HasColumnType("decimal(5,2)")
+                        .HasColumnName("gen_7_1_2");
+
+                    b.Property<decimal?>("Gen_7_1_4")
+                        .HasColumnType("decimal(3,1)")
+                        .HasColumnName("gen_7_1_4");
+
+                    b.Property<int?>("Gen_7_1_DM")
+                        .HasColumnType("int")
+                        .HasColumnName("gen_7_1_dm");
+
+                    b.Property<decimal?>("Gen_7_2")
+                        .HasColumnType("decimal(5,2)")
+                        .HasColumnName("gen_7_2");
+
+                    b.Property<decimal?>("Gen_7_4")
+                        .HasColumnType("decimal(3,1)")
+                        .HasColumnName("gen_7_4");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("modified_at");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("rel_Gen7Yes");
+                });
+
+            modelBuilder.Entity("Krka.MoveOn.Data.RelationalTables.Gen9DSRelational", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<int?>("Gen9DSAnswerId")
+                        .HasColumnType("int")
+                        .HasColumnName("Gen9DS_Answer_Id");
+
+                    b.Property<int?>("GenQuestId")
+                        .HasColumnType("int")
+                        .HasColumnName("GenQuestId");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("modified_at");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("rel_Gen9DS");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -16,7 +16,7 @@
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
 
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(false))
 
 @inject IStringLocalizer<Patient> localizer
 @inject PatientService PatientService
@@ -27,6 +27,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ProtectedSessionStorage SessionStorage
 @inject ILogger<Patient> Logger
+@inject IHttpContextAccessor HttpContextAccessor
 
 <div class="d-flex align-items-center custom-toast-background">
     <DxToastProvider Name="Overview"
@@ -75,6 +76,7 @@
                 EditModelSaving="Grid_EditModelSaving"
                 CustomizeEditModel="Grid_CustomizeEditModel_New"
                 DataItemDeleting="Grid_DataItemDeleting"
+                CustomizeElement="Grid_CustomizeElement"
                 FocusedRowEnabled="true"
                 FocusedRowChanged="OnFocusedRowChanged">
 
@@ -107,19 +109,19 @@
                     <CellDisplayTemplate Context="gridContext">
                         <div class="grid-cell-align-center">
                             <DxButton IconCssClass="grid-toolbar-delete"
-                                      RenderStyle="ButtonRenderStyle.Link"
-                                      aria-label="Delete"
-                                      Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
+                            RenderStyle="ButtonRenderStyle.Link"
+                            aria-label="Delete"
+                            Click="@(() => patientsGrid.ShowRowDeleteConfirmation(gridContext.VisibleIndex))">
                             </DxButton>
                         </div>
                     </CellDisplayTemplate>
                     <CellEditTemplate Context="editContext">
                         <div class="grid-cell-align-center">
                             <DxButton Enabled="false"
-                                      aria-label="Delete"
-                                      CssClass="grid-disabled-button"
-                                      IconCssClass="grid-toolbar-delete"
-                                      RenderStyle="ButtonRenderStyle.Link" />
+                            aria-label="Delete"
+                            CssClass="grid-disabled-button"
+                            IconCssClass="grid-toolbar-delete"
+                            RenderStyle="ButtonRenderStyle.Link" />
                         </div>
                     </CellEditTemplate>
                 </DxGridCommandColumn>
@@ -135,11 +137,11 @@
                             <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen"
-                                  PositionTarget=".info-icon-btn"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
-                            Údaje o všetkých pacientoch budú anonymizované. Jednotliví pacienti budú figurovať pod všeobecným <b>označením miesta centra</b> (ZV – Zvolen, MT– Martin, BAR – Bratislava Ružinov, BAK – Bratislava Kramáre, TT – Trnava, NR – Nitra, RK – Ružomberok, BJ – Bardejov, KE – Košice, GA– Galanta) a <b>poradového čísla pacienta</b> v danom centre, <span style="color:cornflowerblue">napríklad ZV19, MT11 a pod </span>
+                        PositionTarget=".info-icon-btn"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
+                            Údaje o všetkých pacientoch budú anonymizované. Jednotliví pacienti budú figurovať pod všeobecným <b>označením miesta centra</b> (ZV – Zvolen, MT– Martin, BAR – Bratislava Ružinov, BAK – Bratislava Kramáre, TT – Trnava, NR – Nitra, RK – Ružomberok, BJ – Bardejov, KE – Košice, GA– Galanta) a <b>poradového čísla pacienta</b> v danom centre, <span style="color:cornflowerblue">napríklad ZV01, ZV02 a pod </span>
                         </DxFlyout>
                     </div>
                     @if (isAdminOrOffice)
@@ -167,12 +169,12 @@
         </div>
         <div class="simple-table" style=" border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
             <div style="border-bottom: 1px solid black; border-color: black; font-weight: initial; margin-bottom: 6px;">
-                Pacient č.  <span style="color:#6e7de8; font-weight: bold;">@selectedPatientCode</span>
+                Pacient č.  <span style="color:#b691bc; font-weight: bold;">@selectedPatientCode</span>
 
             </div>
             <div>
                 <EditForm Model="@selectedPatient"
-                          Context="EditFormContext">
+                Context="EditFormContext">
                     <DxFormLayout CssClass="w-100">
                         <DxFormLayoutGroup Caption="Povolenia">
                             <div style=" margin-top: 2px; margin-left: 2px;">
@@ -184,9 +186,9 @@
                                         <Template>
                                             <DxFormLayoutItem Caption="Má pacient podpísaný informovaný súhlas so štúdiou?" CaptionCssClass="item-caption-style">
                                                 <DxCheckBox @bind-Checked="selectedPatient.InfoConfirmation"
-                                                            Text="áno"
-                                                            ReadOnly="@isReadOnly"
-                                                            @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.InfoConfirmation)))" />
+                                                Text="áno"
+                                                ReadOnly="@isReadOnly"
+                                                @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.InfoConfirmation)))" />
                                             </DxFormLayoutItem>
                                         </Template>
                                     </DxStackLayoutItem>
@@ -194,8 +196,8 @@
                                         <Template>
                                             <DxFormLayoutItem Caption="Má pacient podpísaný Formulár súhlasu s nariadením GDPR?" CaptionCssClass="item-caption-style">
                                                 <DxCheckBox @bind-Checked="selectedPatient.GDPRConfirmation" Text="áno"
-                                                            ReadOnly="@isReadOnly"
-                                                            @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.GDPRConfirmation)))" /> 
+                                                ReadOnly="@isReadOnly"
+                                                @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.GDPRConfirmation)))" /> 
                                             </DxFormLayoutItem>
                                         </Template>
                                     </DxStackLayoutItem>
@@ -216,16 +218,23 @@
                         @foreach (var questionnaire in Questionnaires)
                         {
                             <div style="margin-bottom: 6px;">
-                                <DxMenu Orientation="@Orientation.Horizontal">
-                                    <Items>
-                                        <div style="display: flex; align-items: center;">
+                                <DxMenu Orientation="@Orientation.Horizontal" CollapseItemsToHamburgerMenu="false">
+                                    <Items >
                                             <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
-                                                        Text="@GetMenuText(questionnaire.Order)"
-                                                        @onclick="() => SetCurrentId(questionnaire.Id)" />
+                                            Text="@GetMenuText(questionnaire.Order)"
+                                            @onclick="() => SetCurrentId(questionnaire.Id)" />
                                             <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
-                                        </div>
                                     </Items>
-                                </DxMenu>
+                                </DxMenu Orientation="@Orientation.Horizontal">
+                                @if (questionnaire.CheckedAt.HasValue)
+                                {
+                                    <label style="color: rgb(182 145 188);">Skontrolované: @questionnaire.CheckedAt.Value.ToString("dd.MM.yyyy HH:mm:ss")  (@UserFullNameChecked(questionnaire.UserId)) </label>
+                                }
+                                else
+                                {
+                                    
+                                    <DxButton Text="Skontrolované" RenderStyle="ButtonRenderStyle.Primary" @onclick="() => MarkAsChecked(questionnaire.Id)" />                                           
+                                }
                             </div>
                         }
                     }
@@ -237,14 +246,11 @@
             </div>
 
             @code {
-
-
                 // Zachytenie aktualnej Questionnaire_id
                 private async Task SetCurrentId(string id)
                 {
                     await SessionStorage.SetAsync("currentId", id);
                 }
-
 
                 private string GetNavigateUrl(Data.Questionnaires.Questionnaire.QuestionnaireOrderEnum order, string id)
                 {
@@ -281,8 +287,13 @@
 @code {
     IGrid patientsGrid { get; set; }
     private List<ApplicationUser> Doctors;
+    private List<ApplicationUser> User;
     public List<Data.Patient> Patients { get; set; }
     public List<Data.Questionnaires.Questionnaire> Questionnaires { get; set; }
+
+    private bool isFocusedRowEnabled = false;
+
+    private Data.Patient? selectedPatient1 = null;
 
     private Data.Patient selectedPatient = new Data.Patient
         {
@@ -296,6 +307,7 @@
 
     private string? selectedDoctorId;
     private string? selectedPatientCode;
+
     private int? selectedPatientId;
     private bool hasQuestionnaires;
     private bool isRendered = false;
@@ -311,6 +323,7 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
+
         isAdminOrOffice = user.IsInRole("Admin") || user.IsInRole("Office");
 
         if (user.IsInRole("Office"))
@@ -320,6 +333,7 @@
 
         Patients = await PatientService.GetPatientsAsync();
         Doctors = await PatientService.GetDoctorsAsync();
+        User = await QuestionnaireService.GetAllUsersAsync();
 
         Logger.LogInformation("Stranka patients bola nacitana");
     }
@@ -328,13 +342,21 @@
     {
         isRendered = true;
         var selectedPatientId = await GetSelectedPatientId();
+
         if (selectedPatientId.HasValue)
         {
             var selectedPatient = Patients.FirstOrDefault(p => p.Id == selectedPatientId.Value);
             if (selectedPatient != null)
             {
+                //patientsGrid.SetFocusedRowIndex(Patients.IndexOf(selectedPatient));
                 await patientsGrid.SetFocusedDataItemAsync(selectedPatient);
             }
+        }
+
+        var selectedPatientCode = await GetSelectedPatientCode();
+        if (!string.IsNullOrEmpty(selectedPatientCode))
+        {
+            this.selectedPatientCode = selectedPatientCode;
         }
     }
 
@@ -346,12 +368,25 @@
         }
     }
 
+    private async Task SetSelectedPatientCode(string? patientCode)
+    {
+        if (isRendered && !string.IsNullOrEmpty(patientCode))
+        {
+            await SessionStorage.SetAsync("selectedPatientCode", patientCode);
+        }
+    }
+
     private async Task<int?> GetSelectedPatientId()
     {
         var result = await SessionStorage.GetAsync<int?>("selectedPatientId");
         return result.Success ? result.Value : null;
     }
 
+    private async Task<string?> GetSelectedPatientCode()
+    {
+        var result = await SessionStorage.GetAsync<string>("selectedPatientCode");
+        return result.Success ? result.Value : null;
+    }
 
     // Nacitanie Id aktualneho pouzivatela
     async Task<string> GetCurrentUserIdAsync()
@@ -416,6 +451,12 @@
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Warning,
             });
+    }
+
+    private string UserFullNameChecked(string userId)
+    {
+        var user = User.FirstOrDefault(u => u.Id == userId);
+        return user != null ? user.FullName : " ";
     }
 
     //Reload Grid
@@ -587,15 +628,16 @@
         hasQuestionnaires = questionnaires.Any(); // ak obsahuje polozky
         Questionnaires = hasQuestionnaires ? questionnaires : new List<Data.Questionnaires.Questionnaire>();
         patientsGrid.Reload();
+        StateHasChanged();
     }
 
     //Zmena focusnuteho riadku
     private async void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
     {
         var patient = e.DataItem as Data.Patient;
-        if (patient is not null)
+        if (e.DataItem is Data.Patient patient1)
         {
-            selectedPatient = patient;
+            selectedPatient = patient1;
         }
         selectedPatientCode = patient?.PatientCode;
         selectedPatientId = patient?.Id;
@@ -604,8 +646,14 @@
         {
             await LoadQuestionnairesAsync(selectedPatientId.Value);
             await SetSelectedPatientId(selectedPatientId.Value);
-            StateHasChanged(); //Aktualizacia, vykreslenie noveho obsahu
         }
+
+        if (!string.IsNullOrEmpty(selectedPatientCode))
+        {
+            await SetSelectedPatientCode(selectedPatientCode);
+        }
+
+        StateHasChanged();
     }
 
     private void ValidateGridData(ValidationMessageStoreEventArgs e)
@@ -634,12 +682,32 @@
             var patient = Patients[e.VisibleIndex];
             if (patient.Valid == Data.Patient.ValidEnum.Predčasne_vylúčený)
             {
-                e.Style = "background-color: #f0f0f0; color: #a0a0a0;";
+                e.Style = "background-color: #f0f0f0; color: black;";
             }
         }
         if (e.ElementType == GridElementType.HeaderCell)
         {
             e.Style = "background-color: rgba(0, 0, 0, 0.08); font-weight: bold;";
+        }
+    }
+
+    private async Task MarkAsChecked(string questionnaireId)
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var currentUser = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        var questionnaire = await QuestionnaireService.GetQuestionnairesByIdAsync(questionnaireId);
+        if (questionnaire != null)
+        {
+            questionnaire.CheckedAt = DateTime.Now;
+            questionnaire.UserId = currentUser;
+            await QuestionnaireService.UpdateQuestionnaireAsync(questionnaire);
+            AddToast();
+        }
+        else
+        {
+            AddToast();
         }
     }
 }

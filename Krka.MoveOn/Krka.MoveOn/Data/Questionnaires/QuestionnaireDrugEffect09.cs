@@ -34,8 +34,8 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// <summary>
         /// nežiaduci účinok - DialDrugEffect - ciselnik
         /// </summary>
-        [Column("de_4")]
-        public int? De_4 { get; set; }
+        [Column("de_4", TypeName = "varchar"), StringLength(150)]
+        public string? De_4 { get; set; }
 
         /// <summary>
         /// indikácia - DialDrugEffect - ciselnik

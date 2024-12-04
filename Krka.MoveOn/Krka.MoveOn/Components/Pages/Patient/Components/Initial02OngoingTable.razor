@@ -17,23 +17,9 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Liečba Parkinsonovej choroby" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style=" margin-top: 4px; margin-left: 2px;">
-                    <DxButton CssClass="info-icon-btn" Click="() => IsInfoOpen = !IsInfoOpen" IconCssClass="grid-toolbar-info" RenderStyle="ButtonRenderStyle.None" />
-                </div>
-                <DxFlyout @bind-IsOpen="@IsInfoOpen"
-                          PositionTarget=".info-icon-btn"
-                          Position="FlyoutPosition.Bottom"
-                          PreventCloseOnPositionTargetClick="true"
-                          Width="240">
-                    Nezabudnite dotazník uložiť, kliknutím na tlačídlo <b>“Uložiť”</b>
-                </DxFlyout>
-            </DxFormLayoutItem>
-
-
             <DxFormLayoutItem Caption="Dátum" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
 
-                <DxDateEdit @bind-Date="@questionnaire.Date" ShowValidationIcon="true" required ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
+                <DxDateEdit Date="@questionnaire.Date" DateChanged="@((DateTime newValue) => DateChangeValue(newValue))" DateExpression="@(() => questionnaire.Date)" ShowValidationIcon="true" required ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
 
             </DxFormLayoutItem>
 
@@ -137,17 +123,6 @@
                 </DxGrid>
 
             </div>
-            <DxFormLayoutItem ColSpanMd="12">
-                <div style="margin-top: 5px">
-                    @if (!isReadOnly)
-                    {
-                        <DxButton SubmitFormOnClick="true"
-                                  Text="Uložiť"
-                                  RenderStyle="ButtonRenderStyle.Primary"
-                                  IconCssClass="grid-toolbar-save1" />
-                    }
-                </div>
-            </DxFormLayoutItem>
         </DxFormLayoutGroup>
     </DxFormLayout>
 </EditForm>
@@ -156,6 +131,11 @@
 @code {
     [Parameter]
     public string questionnaireId { get; set; }
+
+    [Parameter]
+    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+
+    private int ProgressPercentage = 0;
 
     IGrid initGrid { get; set; }
 
@@ -312,6 +292,13 @@
                     break;
             }
         }
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((ProgressPercentage, Inits.Count > 0 ? 100 : 0));
+        }
+        ProgressPercentage = Inits.Count > 0 ? 100 : 0;
+
         await ClearUnsavedChangesAsync();
     }
 
@@ -320,6 +307,13 @@
         var init = (Data.Questionnaires.QuestionnaireInitial02)e.DataItem;
         await InitialService.DeleteInitAsync(init.Id);
         await UpdateDataAsync();
+
+        if (OnSave.HasDelegate)
+        {
+            await OnSave.InvokeAsync((ProgressPercentage, Inits.Count > 0 ? 100 : 0));
+        }
+        ProgressPercentage = Inits.Count > 0 ? 100 : 0;
+
         DeleteToast();
     }
 
@@ -361,5 +355,11 @@
 
             return changedFields;
         }
+    }
+
+    async Task DateChangeValue(DateTime date)
+    {
+        questionnaire.Date = date;
+        await HandleValidSubmit();
     }
 }

@@ -25,9 +25,14 @@
 
 <div class="cw-880 mo-main-layout">
     <_OngoingBtn />
-    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
-
-    <Motor06Table questionnaireId="@QuestionnaireIdAsString" />
+    <div class="mo-nav-submenu-bar1">
+        <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
+    </div>
+    <div class="grid-container">
+        <div class="grid-item">
+            <Motor06Table questionnaireId="@QuestionnaireIdAsString" />
+        </div>
+    </div>
 </div>
 
 

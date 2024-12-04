@@ -1,6 +1,7 @@
 ﻿@using Krka.MoveOn.Services.Questionnaires
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using Krka.MoveOn.Components.Pages.Components
+@using Krka.MoveOn
 
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
@@ -8,44 +9,43 @@
 @inject General01Service Q01Service
 @inject ProtectedSessionStorage SessionStorage
 @inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContextAccessor
 
 <div class="mo-nav-submenu-bar">
-    <h1>Vstupný klinický dotazník</h1>
+    <h1> <span style="color:#b691bc; font-weight: bold;">@SelectedPatientCode</span> - Vstupný klinický dotazník</h1>
     <DxFormLayout>
         <DxFormLayoutItem>
-            <div class="mo-buttons-group mb-2">
-                <div class="d-flex flex-row w-100">
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Detekcia príznakov"
-                              CssClass="@GetButtonCssClass("/entryQ/gen")"
-                              NavigateUrl="@GetNavigateUrl("/entryQ/gen")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Začiatočná liečba"
-                              CssClass="@GetButtonCssClass("/entryQ/init")"
-                              NavigateUrl="@GetNavigateUrl("/entryQ/init")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Liečba pridružených problémov"
-                              CssClass="@GetButtonCssClass("/entryQ/treat")"
-                              NavigateUrl="@GetNavigateUrl("/entryQ/treat")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="MDS-UPDRS škála"
-                              CssClass="@GetButtonCssClass("/entryQ/motor")"
-                              NavigateUrl="@GetNavigateUrl("/entryQ/motor")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Moca"
-                              CssClass="@GetButtonCssClass("/entryQ/moca")"
-                              NavigateUrl="@GetNavigateUrl("/entryQ/moca")" />
-                    <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
-                              RenderStyleMode="@ButtonRenderStyleMode.Outline"
-                              Text="Predčasné vylúčenie"
-                              CssClass="@GetButtonCssClass("/entryQ/exc")"
-                              NavigateUrl="@GetNavigateUrl("/entryQ/exc")" />
-                </div>
+            <div class="mo-buttons-group">
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Detekcia príznakov"
+                          CssClass="@GetButtonCssClass("/entryQ/gen")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/gen")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Začiatočná liečba"
+                          CssClass="@GetButtonCssClass("/entryQ/init")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/init")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Liečba pridružených problémov"
+                          CssClass="@GetButtonCssClass("/entryQ/treat")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/treat")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="MDS-UPDRS škála"
+                          CssClass="@GetButtonCssClass("/entryQ/motor")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/motor")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Škála podľa Hoehenovej a Yahra - Moca"
+                          CssClass="@GetButtonCssClass("/entryQ/moca")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/moca")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Predčasné vylúčenie"
+                          CssClass="@GetButtonCssClass("/entryQ/exc")"
+                          NavigateUrl="@GetNavigateUrl("/entryQ/exc")" />
             </div>
         </DxFormLayoutItem>
     </DxFormLayout>
@@ -53,20 +53,34 @@
 </div>
 
 <ReturnLinkManager ReturnLink="/patients" />
-
 @code
 {
     private string currentId;
     private string currentUrl;
+    private string? SelectedPatientCode;
+
+    private bool isHamburgerMenuVisible = false;
+
+    private void ToggleHamburgerMenu()
+    {
+        isHamburgerMenuVisible = !isHamburgerMenuVisible;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            var result = await SessionStorage.GetAsync<string>("currentId");
-            if (result.Success && NavigationManager != null)
+            // Načítanie hodnoty zo Session Storage
+            var result = await SessionStorage.GetAsync<string>("selectedPatientCode");
+            if (result.Success)
             {
-                currentId = result.Value;
+                SelectedPatientCode = result.Value;
+            }
+
+            var idResult = await SessionStorage.GetAsync<string>("currentId");
+            if (idResult.Success && NavigationManager != null)
+            {
+                currentId = idResult.Value;
                 currentUrl = NavigationManager.Uri; // Získaj aktuálnu URL
                 StateHasChanged();
             }

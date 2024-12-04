@@ -25,65 +25,74 @@ public class QuestionnaireProgressService(ApplicationDbContext context, General0
 
     public async Task UpdateProgressAsync(string questionnaireId)
     {
+        var existingQuestionnaire = await _context.Questionnaires.FirstOrDefaultAsync(q => q.Id == questionnaireId) ?? throw new InvalidOperationException($"Questionnaire with ID {questionnaireId} not found.");
+        var patient = await _patientService.GetPatientByIdAsync(existingQuestionnaire.PatientId) ?? throw new InvalidOperationException($"Patient with ID {existingQuestionnaire.PatientId} not found.");
 
-        var existingQuestionnaire = await _context.Questionnaires
-                                                  .FirstOrDefaultAsync(q => q.Id == questionnaireId);
-
-        if (existingQuestionnaire == null)
-        {
-            throw new InvalidOperationException($"Questionnaire with ID {questionnaireId} not found.");
-        }
-
-
-        var patient = await _patientService.GetPatientByIdAsync(existingQuestionnaire.PatientId);
-
-        var generalQ = await _general01Service.GetQuestionnaireGeneral01ByQuestionnaireIdAsync(questionnaireId);
         var initialQ = await _initial02Service.GetQuestionnaireInitial02(questionnaireId);
         var treatmentQ = await _treatment03Service.GetQuestionnaireTreatment03(questionnaireId);
-        var nonmotorQ = await _motor04Service.GetQuestionnaireNonMotor04(questionnaireId);
-        var motorQ = await _motor05Service.GetQuestionnaireMotor05(questionnaireId);
         var motorSkillQ = await _motor06Service.GetQuestionnaireMotorSkill06(questionnaireId);
-        var mocaQ = await _moca07Service.GetQuestionnaireMoca07ByQuestionnaireIdAsync(questionnaireId);
         var exclusionQ = await _exclusion08Service.GetQuestionnaireExclusion08ByQuestionnaireIdAsync(questionnaireId);
-        var drugEffectQ = await _drugEffect09Service.GetQuestionnaireDrugEffect09(questionnaireId);
-        var satisfactionQ = await _satisfaction10Service.GetQuestionnaireSatisfaction10(questionnaireId);
 
-        var entryProgress =
-        ((generalQ?.ProgressPercentage ?? 0) +
-        (initialQ.Count > 0 ? 100 : 0) +
-        (treatmentQ.Count > 0 ? 100 : 0) +
-        ((nonmotorQ != null ? 100 : 0) + (motorQ != null ? 100 : 0) + (motorSkillQ != null ? 100 : 0)) / 3 +
-        (mocaQ?.ProgressPercentage ?? 0) +
-        (exclusionQ != null ? 100 : 0)) / 6;
-
-        var ongoingProgress =
-        ((initialQ.Count > 0 ? 100 : 0) +
-        (treatmentQ.Count > 0 ? 100 : 0) +
-        (drugEffectQ.Count > 0 ? 100 : 0) +
-        (motorSkillQ != null ? 100 : 0) +
-        (satisfactionQ?.ProgressPercentage ?? 0) +
-        (exclusionQ != null ? 100 : 0)) / 6;
-
-        var resultProgress =
-        ((initialQ.Count > 0 ? 100 : 0) +
-        (treatmentQ.Count > 0 ? 100 : 0) +
-        (drugEffectQ.Count > 0 ? 100 : 0) +
-        ((nonmotorQ != null ? 100 : 0) + (motorQ != null ? 100 : 0) + (motorSkillQ != null ? 100 : 0)) / 3 +
-        (satisfactionQ?.ProgressPercentage ?? 0) +
-        (mocaQ?.ProgressPercentage ?? 0) +
-        (exclusionQ != null ? 100 : 0)) / 7;
 
         switch (existingQuestionnaire.Order)
         {
             case Questionnaire.QuestionnaireOrderEnum.entry:
+                // load relevent data
+                var generalQ = await _general01Service.GetQuestionnaireGeneral01ByQuestionnaireIdAsync(questionnaireId);
+                var nonmotorQ1 = await _motor04Service.GetQuestionnaireNonMotor04(questionnaireId);
+                var motorQ1 = await _motor05Service.GetQuestionnaireMotor05(questionnaireId);
+                var mocaQ1 = await _moca07Service.GetQuestionnaireMoca07ByQuestionnaireIdAsync(questionnaireId);
+
+                // calculate progress
+                var entryProgress =
+                ((generalQ?.ProgressPercentage ?? 0) +
+                (initialQ.Count > 0 ? 100 : 0) +
+                (treatmentQ.Count > 0 ? 100 : 0) +
+                ((nonmotorQ1 != null ? 100 : 0) + (motorQ1 != null ? 100 : 0) + (motorSkillQ != null ? 100 : 0)) / 3 +
+                (mocaQ1?.ProgressPercentage ?? 0) +
+                (exclusionQ != null ? 100 : 0)) / 6;
+
+                // update data models
                 existingQuestionnaire.ProgressPercentage = entryProgress;
                 patient.EntryProgressPercentage = entryProgress;
                 break;
             case Questionnaire.QuestionnaireOrderEnum.ongoing:
+                // load relevent data
+                var drugEffectQ2 = await _drugEffect09Service.GetQuestionnaireDrugEffect09(questionnaireId);
+                var satisfactionQ2 = await _satisfaction10Service.GetQuestionnaireSatisfaction10(questionnaireId);
+
+                // calculate progress
+                var ongoingProgress =
+                ((initialQ.Count > 0 ? 100 : 0) +
+                (treatmentQ.Count > 0 ? 100 : 0) +
+                (drugEffectQ2.Count > 0 ? 100 : 0) +
+                (motorSkillQ != null ? 100 : 0) +
+                (satisfactionQ2?.ProgressPercentage ?? 0) +
+                (exclusionQ != null ? 100 : 0)) / 6;
+
+                // update data models
                 existingQuestionnaire.ProgressPercentage = ongoingProgress;
                 patient.OngoingProgressPercentage = ongoingProgress;
                 break;
             case Questionnaire.QuestionnaireOrderEnum.result:
+                // load relevent data
+                var drugEffectQ3 = await _drugEffect09Service.GetQuestionnaireDrugEffect09(questionnaireId);
+                var nonmotorQ3 = await _motor04Service.GetQuestionnaireNonMotor04(questionnaireId);
+                var motorQ3 = await _motor05Service.GetQuestionnaireMotor05(questionnaireId);
+                var mocaQ3 = await _moca07Service.GetQuestionnaireMoca07ByQuestionnaireIdAsync(questionnaireId);
+                var satisfactionQ3 = await _satisfaction10Service.GetQuestionnaireSatisfaction10(questionnaireId);
+
+                // calculate progress
+                var resultProgress =
+                ((initialQ.Count > 0 ? 100 : 0) +
+                (treatmentQ.Count > 0 ? 100 : 0) +
+                (drugEffectQ3.Count > 0 ? 100 : 0) +
+                ((nonmotorQ3 != null ? 100 : 0) + (motorQ3 != null ? 100 : 0) + (motorSkillQ != null ? 100 : 0)) / 3 +
+                (satisfactionQ3?.ProgressPercentage ?? 0) +
+                (mocaQ3?.ProgressPercentage ?? 0) +
+                (exclusionQ != null ? 100 : 0)) / 7;
+
+                // update data models
                 existingQuestionnaire.ProgressPercentage = resultProgress;
                 patient.ResultProgressPercentage = resultProgress;
                 break;

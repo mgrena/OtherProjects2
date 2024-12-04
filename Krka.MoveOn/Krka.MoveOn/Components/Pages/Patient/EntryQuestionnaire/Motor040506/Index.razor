@@ -24,15 +24,15 @@
 
 <div class="cw-880 mo-main-layout">
     <_EntryBtn />
-    <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
-
+    <div class="mo-nav-submenu-bar1">
+        <QuestionnaireProgressBar questionnaireId="@QuestionnaireIdAsString" @ref="QuestionnaireProgressBarRef" />
+    </div>
     <div class="grid-container" style="display: flex;">
         <div class="grid-item" style="flex: 1;">
             <Motor04Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
-            <br>
             <Motor05Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
         </div>
-        <div class="grid-item" style="flex: 1; margin-left: 20px;">
+        <div class="grid-motor06">
             <Motor06Table questionnaireId="@QuestionnaireIdAsString" OnSave="HandleTableSaved" />
         </div>
     </div>
