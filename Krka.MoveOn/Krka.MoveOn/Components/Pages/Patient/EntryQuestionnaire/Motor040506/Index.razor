@@ -53,7 +53,10 @@
         if (QuestionnaireProgressBarRef != null)
         {
             await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
-            await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress / 3, progressData.CurrentProgress / 3);
+            await QuestionnaireProgressBarRef.RefreshDataAsync(
+                progressData.PreviousProgress / 3.0,
+            progressData.CurrentProgress / 3.0
+            );
         }
     }
 

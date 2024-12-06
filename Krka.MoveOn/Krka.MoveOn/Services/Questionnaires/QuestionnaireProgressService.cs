@@ -43,15 +43,17 @@ public class QuestionnaireProgressService(ApplicationDbContext context, General0
                 var motorQ1 = await _motor05Service.GetQuestionnaireMotor05(questionnaireId);
                 var mocaQ1 = await _moca07Service.GetQuestionnaireMoca07ByQuestionnaireIdAsync(questionnaireId);
 
-                // calculate progress
                 var entryProgress =
-                ((generalQ?.ProgressPercentage ?? 0) +
-                (initialQ.Count > 0 ? 100 : 0) +
-                (treatmentQ.Count > 0 ? 100 : 0) +
-                ((nonmotorQ1 != null ? 100 : 0) + (motorQ1 != null ? 100 : 0) + (motorSkillQ != null ? 100 : 0)) / 3 +
-                (mocaQ1?.ProgressPercentage ?? 0) +
-                (exclusionQ != null ? 100 : 0)) / 6;
+                    (int)Math.Ceiling((generalQ?.ProgressPercentage ?? 0) / 6.0) +
+                    (int)Math.Ceiling((initialQ.Count > 0 ? 100 : 0) / 6.0) +
+                    (int)Math.Ceiling((treatmentQ.Count > 0 ? 100 : 0) / 6.0) +
+                    (int)Math.Ceiling(((int)Math.Ceiling((nonmotorQ1 != null ? 100 : 0) / 3.0) + (int)Math.Ceiling((motorQ1 != null ? 100 : 0) / 3.0) + (int)Math.Ceiling((motorSkillQ != null ? 100 : 0) / 3.0)) / 6.0) +
+                    (int)Math.Ceiling((mocaQ1?.ProgressPercentage ?? 0) / 6.0) +
+                    (int)Math.Ceiling((exclusionQ != null ? 100 : 0) / 6.0);
 
+                entryProgress = entryProgress > 94
+                ? 100
+                : Math.Clamp(entryProgress, 0, 100);
                 // update data models
                 existingQuestionnaire.ProgressPercentage = entryProgress;
                 patient.EntryProgressPercentage = entryProgress;
@@ -63,12 +65,17 @@ public class QuestionnaireProgressService(ApplicationDbContext context, General0
 
                 // calculate progress
                 var ongoingProgress =
-                ((initialQ.Count > 0 ? 100 : 0) +
-                (treatmentQ.Count > 0 ? 100 : 0) +
-                (drugEffectQ2.Count > 0 ? 100 : 0) +
-                (motorSkillQ != null ? 100 : 0) +
-                (satisfactionQ2?.ProgressPercentage ?? 0) +
-                (exclusionQ != null ? 100 : 0)) / 6;
+                        (int)Math.Ceiling((initialQ.Count > 0 ? 100 : 0) / 6.0) +
+                        (int)Math.Ceiling((treatmentQ.Count > 0 ? 100 : 0) / 6.0) +
+                        (int)Math.Ceiling((drugEffectQ2.Count > 0 ? 100 : 0) / 6.0) +
+                        (int)Math.Ceiling((motorSkillQ != null ? 100 : 0) / 6.0) +
+                        (int)Math.Ceiling((satisfactionQ2?.ProgressPercentage ?? 0) / 6.0) +
+                        (int)Math.Ceiling((exclusionQ != null ? 100 : 0) / 6.0)
+                    ;
+
+                ongoingProgress = ongoingProgress > 94
+                ? 100
+                : Math.Clamp(ongoingProgress, 0, 100);
 
                 // update data models
                 existingQuestionnaire.ProgressPercentage = ongoingProgress;
@@ -84,13 +91,18 @@ public class QuestionnaireProgressService(ApplicationDbContext context, General0
 
                 // calculate progress
                 var resultProgress =
-                ((initialQ.Count > 0 ? 100 : 0) +
-                (treatmentQ.Count > 0 ? 100 : 0) +
-                (drugEffectQ3.Count > 0 ? 100 : 0) +
-                ((nonmotorQ3 != null ? 100 : 0) + (motorQ3 != null ? 100 : 0) + (motorSkillQ != null ? 100 : 0)) / 3 +
-                (satisfactionQ3?.ProgressPercentage ?? 0) +
-                (mocaQ3?.ProgressPercentage ?? 0) +
-                (exclusionQ != null ? 100 : 0)) / 7;
+
+                        (int)Math.Ceiling((initialQ.Count > 0 ? 100 : 0) / 7.0) +
+                        (int)Math.Ceiling((treatmentQ.Count > 0 ? 100 : 0) / 7.0) +
+                        (int)Math.Ceiling((drugEffectQ3.Count > 0 ? 100 : 0) / 7.0) +
+                        (int)Math.Ceiling(((int)Math.Ceiling((nonmotorQ3 != null ? 100 : 0) / 3.0) + (int)Math.Ceiling((motorQ3 != null ? 100 : 0) / 3.0) + (int)Math.Ceiling((motorSkillQ != null ? 100 : 0) / 3.0)) / 7.0) +
+                        (int)Math.Ceiling((satisfactionQ3?.ProgressPercentage ?? 0) / 7.0) +
+                        (int)Math.Ceiling((mocaQ3?.ProgressPercentage ?? 0) / 7.0) +
+                        (int)Math.Ceiling((exclusionQ != null ? 100 : 0) / 7.0)
+                    ;
+                resultProgress = resultProgress > 94
+                    ? 100
+                    : Math.Clamp(resultProgress, 0, 100);
 
                 // update data models
                 existingQuestionnaire.ProgressPercentage = resultProgress;

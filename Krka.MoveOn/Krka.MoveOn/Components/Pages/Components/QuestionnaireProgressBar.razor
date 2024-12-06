@@ -43,6 +43,7 @@
             if (result.Success && result.Value != null && result.Value.QuestionnaireId == questionnaireId)
             {
                 questionnaire.ProgressPercentage = result.Value.ProgressPercentage;
+                questionnaire.Order = result.Value.Order;
             }
             else
             {
@@ -51,7 +52,8 @@
                 var data = new QuestionnaireData
                     {
                         QuestionnaireId = questionnaireId,
-                        ProgressPercentage = questionnaire.ProgressPercentage
+                        ProgressPercentage = questionnaire.ProgressPercentage,
+                            Order = questionnaire.Order
                     };
                 await SessionStorage.SetAsync("questionnaireData", data);
             }
@@ -60,7 +62,7 @@
         }
     }
 
-    public async Task RefreshDataAsync(int previousProgress, int currentProgress)
+    public async Task RefreshDataAsync(double previousProgress, double currentProgress)
     {
 
         int divisor = questionnaire.Order switch
@@ -71,7 +73,8 @@
             _ => throw new InvalidOperationException($"Unknown questionnaire order: {questionnaire.Order}")
         };
 
-        questionnaire.ProgressPercentage += (currentProgress - previousProgress) / divisor;
+        questionnaire.ProgressPercentage += (int)Math.Ceiling(Math.Ceiling(currentProgress - previousProgress) / (double)divisor);
+
 
         questionnaire.ProgressPercentage = questionnaire.ProgressPercentage > 94
             ? 100
@@ -80,7 +83,8 @@
         var data = new QuestionnaireData
             {
                 QuestionnaireId = questionnaireId,
-                ProgressPercentage = questionnaire.ProgressPercentage
+                ProgressPercentage = questionnaire.ProgressPercentage,
+                Order = questionnaire.Order
             };
         await SessionStorage.SetAsync("questionnaireData", data);
 
@@ -91,5 +95,6 @@
     {
         public string QuestionnaireId { get; set; } = string.Empty;
         public int ProgressPercentage { get; set; }
+        public Questionnaire.QuestionnaireOrderEnum Order { get; set; }
     }
 }
