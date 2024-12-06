@@ -375,13 +375,16 @@
         {
             isModified = false;
 
+
+
+            await ExclusionService.SaveQuestionnaireExlusion08Async(exc!);
+
             if (OnSave.HasDelegate)
             {
                 await OnSave.InvokeAsync((previousProgress, 100));
             }
             previousProgress = 100;
 
-            await ExclusionService.SaveQuestionnaireExlusion08Async(exc!);
             AddToast();
         }
     }
