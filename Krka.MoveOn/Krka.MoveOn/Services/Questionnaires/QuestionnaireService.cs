@@ -29,10 +29,8 @@ public class QuestionnaireService(ApplicationDbContext context)
                            .Where(q => q.PatientId == patientId)
                            .OrderBy(q => q.CreatedAt)
                            .ToListAsync();
-        List<Task> tasks = [];
         foreach (var q in questionnaires)
-            tasks.Add(_context.Entry(q).ReloadAsync());
-        await Task.WhenAll(tasks);
+            await _context.Entry(q).ReloadAsync();
 
         return questionnaires;
     }
