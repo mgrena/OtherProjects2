@@ -278,7 +278,6 @@
         if (OnSave.HasDelegate)
         {
             await OnSave.InvokeAsync((previousProgress, 100));
-            previousProgress = 100;
         }
         previousProgress = DrugEffects.Count > 0 ? 100 : 0;
 

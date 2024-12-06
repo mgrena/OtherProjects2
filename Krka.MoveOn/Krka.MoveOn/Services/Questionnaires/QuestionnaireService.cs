@@ -12,10 +12,7 @@ public class QuestionnaireService(ApplicationDbContext context)
 
     public async Task SaveQuestionnaireAsync(Questionnaire questionnaire)
     {
-        if (questionnaire == null)
-        {
-            throw new ArgumentNullException(nameof(questionnaire));
-        }
+        ArgumentNullException.ThrowIfNull(questionnaire);
 
         _context.Questionnaires.Add(questionnaire);
         await _context.SaveChangesAsync();
@@ -28,10 +25,16 @@ public class QuestionnaireService(ApplicationDbContext context)
     /// <returns></returns>
     public async Task<List<Questionnaire>> GetQuestionnairesByPatientIdAsync(int patientId)
     {
-        return await _context.Questionnaires
+        var questionnaires = await _context.Questionnaires
                            .Where(q => q.PatientId == patientId)
                            .OrderBy(q => q.CreatedAt)
                            .ToListAsync();
+        List<Task> tasks = [];
+        foreach (var q in questionnaires)
+            tasks.Add(_context.Entry(q).ReloadAsync());
+        await Task.WhenAll(tasks);
+
+        return questionnaires;
     }
 
     /// <summary>
@@ -41,18 +44,16 @@ public class QuestionnaireService(ApplicationDbContext context)
     /// <returns></returns>
     public async Task<Questionnaire?> GetQuestionnairesByIdAsync(string id)
     {
-
-        return await context.Questionnaires
+        var questionnaire = await context.Questionnaires
                             .FirstOrDefaultAsync(q => q.Id == id);
-        
+        if (questionnaire != null)
+            await _context.Entry(questionnaire).ReloadAsync();
+        return questionnaire;
     }
 
     public async Task UpdateQuestionnaireAsync(Questionnaire questionnaire)
     {
-        if (questionnaire == null)
-        {
-            throw new ArgumentNullException(nameof(questionnaire));
-        }
+        ArgumentNullException.ThrowIfNull(questionnaire);
 
         var existingQuestionnaire = await _context.Questionnaires
                                                   .FirstOrDefaultAsync(q => q.Id == questionnaire.Id);

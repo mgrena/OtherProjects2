@@ -243,12 +243,6 @@
         var dataItem = (Data.Questionnaires.QuestionnaireInitial02)e.DataItem;
         init.Questionnaire_id = questionnaireId;
 
-        if (OnSave.HasDelegate)
-        {
-            await OnSave.InvokeAsync((ProgressPercentage, Inits.Count > 0 ? 100 : 0));
-            ProgressPercentage = Inits.Count > 0 ? 100 : 0;
-        }
-
         if (init?.Init_1 == null)
         {
             return;
@@ -315,12 +309,6 @@
 
     private async Task HandleValidSubmit()
     {
-        if (OnSave.HasDelegate)
-        {
-            await OnSave.InvokeAsync((ProgressPercentage, Inits.Count > 0 ? 100 : 0));
-            ProgressPercentage = Inits.Count > 0 ? 100 : 0;
-        }
-
         await QuestionnaireService.UpdateQuestionnaireAsync(questionnaire);
         Add1Toast();
     }

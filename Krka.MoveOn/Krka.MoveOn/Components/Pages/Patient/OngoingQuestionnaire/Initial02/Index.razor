@@ -60,25 +60,12 @@
 
     private QuestionnaireProgressBar QuestionnaireProgressBarRef;
 
-    private bool isProgressComplete = false;
     private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
     {
-        // if (progressData.CurrentProgress == 100 && isProgressComplete)
-        // {
-        //     return;
-        // }
-
         if (QuestionnaireProgressBarRef != null)
         {
             await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
             await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
-
-            if (progressData.CurrentProgress == 100)
-            {
-                isProgressComplete = true;
-            }
         }
     }
-
-
 }

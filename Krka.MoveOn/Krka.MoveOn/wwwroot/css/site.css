@@ -445,6 +445,7 @@ html, body {
 
 .mo-buttons-group {
     display: flex;
+    white-space: normal;
     justify-content: space-between;
     width: 100%;
     gap: 10px;

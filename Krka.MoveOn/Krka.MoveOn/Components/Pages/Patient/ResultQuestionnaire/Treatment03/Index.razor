@@ -13,8 +13,6 @@
 @rendermode InteractiveServer
 @inject QuestionnaireProgressService QuestionnaireProgressService
 
-
-
 <PageTitle>MoveOn - Liečba pridružených problémov </PageTitle>
 
 <div class="d-flex align-items-center custom-toast-background">
@@ -35,9 +33,6 @@
 
 </div>
 
-
-
-
 @code {
     [Parameter]
     public Guid questionnaireId { get; set; }
@@ -45,20 +40,12 @@
     public string QuestionnaireIdAsString => questionnaireId.ToString();
     private QuestionnaireProgressBar QuestionnaireProgressBarRef;
 
-    private bool isProgressComplete = false;
     private async Task HandleTableSaved((int PreviousProgress, int CurrentProgress) progressData)
     {
-
         if (QuestionnaireProgressBarRef != null)
         {
             await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
             await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
-
-            if (progressData.CurrentProgress == 100)
-            {
-                isProgressComplete = true;
-            }
         }
     }
-
 }

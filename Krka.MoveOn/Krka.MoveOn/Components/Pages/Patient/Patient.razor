@@ -326,7 +326,6 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-
         isAdminOrOffice = user.IsInRole("Admin") || user.IsInRole("Office");
 
         if (user.IsInRole("Office"))
