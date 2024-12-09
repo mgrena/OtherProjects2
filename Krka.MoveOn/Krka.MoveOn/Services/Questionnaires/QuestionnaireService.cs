@@ -25,14 +25,11 @@ public class QuestionnaireService(ApplicationDbContext context)
     /// <returns></returns>
     public async Task<List<Questionnaire>> GetQuestionnairesByPatientIdAsync(int patientId)
     {
-        var questionnaires = await _context.Questionnaires
+        return await _context.Questionnaires
+                           .AsNoTracking()
                            .Where(q => q.PatientId == patientId)
                            .OrderBy(q => q.CreatedAt)
                            .ToListAsync();
-        foreach (var q in questionnaires)
-            await _context.Entry(q).ReloadAsync();
-
-        return questionnaires;
     }
 
     /// <summary>
@@ -42,11 +39,9 @@ public class QuestionnaireService(ApplicationDbContext context)
     /// <returns></returns>
     public async Task<Questionnaire?> GetQuestionnairesByIdAsync(string id)
     {
-        var questionnaire = await context.Questionnaires
+        return await context.Questionnaires
+                            .AsNoTracking()
                             .FirstOrDefaultAsync(q => q.Id == id);
-        if (questionnaire != null)
-            await _context.Entry(questionnaire).ReloadAsync();
-        return questionnaire;
     }
 
     public async Task UpdateQuestionnaireAsync(Questionnaire questionnaire)

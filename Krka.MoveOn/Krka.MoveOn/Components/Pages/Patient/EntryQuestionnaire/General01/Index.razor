@@ -114,34 +114,34 @@
                             {
                                 <div class="align-self-start p-2">
                                     <DxButton RenderStyle="ButtonRenderStyle.Primary"
-                                              IconCssClass="grid-icon-column-chooser"
-                                              CssClass="fab"
-                                              aria-label="Výber stĺpcov"
-                                              Click="@ShowColumnChooser" />
+                                    IconCssClass="grid-icon-column-chooser"
+                                    CssClass="fab"
+                                    aria-label="Výber stĺpcov"
+                                    Click="@ShowColumnChooser" />
                                 </div>
                             }
 
                             <DxGrid @ref="Gen7YesGrid"
-                                    Data="Gen7YesTable"
-                                    PageSize="10"
-                                    PagerPosition="GridPagerPosition.Bottom"
-                                    PageSizeSelectorVisible="true"
-                                    PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-                                    PageSizeSelectorAllRowsItemVisible="true"
-                                    PagerSwitchToInputBoxButtonCount="10"
-                                    PagerVisibleNumericButtonCount="10"
-                                    KeyFieldName="Id"
-                                    ValidationEnabled="false"
-                                    EditMode="GridEditMode.PopupEditForm"
-                                    PopupEditFormHeaderText="Ak áno, ktoré lieky (názov, denná dávka)?"
-                                    FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-                                    ColumnResizeMode="GridColumnResizeMode.NextColumn"
-                                    TextWrapEnabled="true"
-                                    HighlightRowOnHover="true"
-                                    FocusedRowEnabled="true"
-                                    CustomizeEditModel="OnCustomizeEditModel"
-                                    EditModelSaving="Grid_EditModelSaving"
-                                    DataItemDeleting="Grid_DataItemDeleting">
+                            Data="Gen7YesTable"
+                            PageSize="10"
+                            PagerPosition="GridPagerPosition.Bottom"
+                            PageSizeSelectorVisible="true"
+                            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+                            PageSizeSelectorAllRowsItemVisible="true"
+                            PagerSwitchToInputBoxButtonCount="10"
+                            PagerVisibleNumericButtonCount="10"
+                            KeyFieldName="Id"
+                            ValidationEnabled="false"
+                            EditMode="GridEditMode.PopupEditForm"
+                            PopupEditFormHeaderText="Ak áno, ktoré lieky (názov, denná dávka)?"
+                            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+                            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+                            TextWrapEnabled="true"
+                            HighlightRowOnHover="true"
+                            FocusedRowEnabled="true"
+                            CustomizeEditModel="OnCustomizeEditModel"
+                            EditModelSaving="Grid_EditModelSaving"
+                            DataItemDeleting="Grid_DataItemDeleting">
 
                                 <ToolbarTemplate Context="toolbarContext">
                                     @if (!isReadOnly)
@@ -210,14 +210,14 @@
 
                                                 <div class="grid-cell-align-center">
                                                     <DxButton IconCssClass="grid-icon grid-icon-edit"
-                                                              RenderStyle="ButtonRenderStyle.Link"
-                                                              title="Upraviť"
-                                                              Click="@(() => OnEditButtonClick((Data.RelationalTables.Gen7YesRelational)gridContext123.DataItem))" />
+                                                    RenderStyle="ButtonRenderStyle.Link"
+                                                    title="Upraviť"
+                                                    Click="@(() => OnEditButtonClick((Data.RelationalTables.Gen7YesRelational)gridContext123.DataItem))" />
 
                                                     <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                                              RenderStyle="ButtonRenderStyle.Link"
-                                                              title="Vymazať"
-                                                              Click="@(() => Gen7YesGrid!.ShowRowDeleteConfirmation(gridContext123.VisibleIndex))" />
+                                                    RenderStyle="ButtonRenderStyle.Link"
+                                                    title="Vymazať"
+                                                    Click="@(() => Gen7YesGrid!.ShowRowDeleteConfirmation(gridContext123.VisibleIndex))" />
                                                 </div>
                                             </CellDisplayTemplate>
                                         </DxGridCommandColumn>
@@ -232,9 +232,9 @@
                                         <DxFormLayout>
                                             <DxFormLayoutItem Caption="Názov lieku:" ColSpanMd="12">
                                                 <DxComboBox Value="@gen7Yes.Gen_7_1_DM"
-                                                            Data="@gen_7_1_DMAnswer"
-                                                            ValueFieldName="Id"
-                                                            TextFieldName="Name">
+                                                Data="@gen_7_1_DMAnswer"
+                                                ValueFieldName="Id"
+                                                TextFieldName="Name">
                                                     <ItemTemplate Context="item">
                                                         <text>
                                                             <div @onclick="() => OnComboBoxItemClicked(item.Id)">
@@ -276,11 +276,11 @@
                             </DxGrid>
 
                             <DxPopup @bind-Visible="@PopupVisible"
-                                     HeaderText="@PopupHeaderText"
-                                     HorizontalAlignment="HorizontalAlignment.Center"
-                                     VerticalAlignment="VerticalAlignment.Center"
-                                     CloseOnEscape="true"
-                                     CloseOnOutsideClick="true">
+                            HeaderText="@PopupHeaderText"
+                            HorizontalAlignment="HorizontalAlignment.Center"
+                            VerticalAlignment="VerticalAlignment.Center"
+                            CloseOnEscape="true"
+                            CloseOnOutsideClick="true">
                                 <div style="padding: 0px;">
                                     <p><strong>Iný názov lieku:</strong> @PopupOtherGen711</p>
                                     <p><strong>Iná dávka (v mg):</strong> @PopupOtherGen712</p>
@@ -299,13 +299,13 @@
                 <div class="new-row" style="margin-top: 4%; margin-bottom: 7%;">
                     <DxFormLayoutItem Caption="Prvý príznak Parkinsonovej choroby " ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                         <DxListBox Data="@gen_9_DSAnswer"
-                                   TextFieldName="Name"
-                                   ValueFieldName="Id"
-                                   SelectionMode="ListBoxSelectionMode.Multiple"
-                                   ShowCheckboxes="@ShowCheckboxes"
-                                   style="flex-basis: 240px"
-                                   @bind-Values="@Gen_9_DSList"
-                                   ReadOnly="@isReadOnly">
+                        TextFieldName="Name"
+                        ValueFieldName="Id"
+                        SelectionMode="ListBoxSelectionMode.Multiple"
+                        ShowCheckboxes="@ShowCheckboxes"
+                        style="flex-basis: 240px"
+                        @bind-Values="@Gen_9_DSList"
+                        ReadOnly="@isReadOnly">
                         </DxListBox>
                     </DxFormLayoutItem>
 
@@ -314,11 +314,11 @@
                             @if (!isReadOnly)
                             {
                                 <DxButton SubmitFormOnClick="true"
-                                          Text="Uložiť"
-                                          RenderStyle="ButtonRenderStyle.Primary"
-                                          Enabled="true"
-                                          CssClass="grid-toolbar-save1-button"
-                                          IconCssClass="grid-toolbar-save1" />
+                                Text="Uložiť"
+                                RenderStyle="ButtonRenderStyle.Primary"
+                                Enabled="true"
+                                CssClass="grid-toolbar-save1-button"
+                                IconCssClass="grid-toolbar-save1" />
                             }
                         </div>
                     </DxFormLayoutItem>
@@ -339,12 +339,12 @@
                     <DxFormLayoutGroup Caption="Ak áno, ktorá špecializácia?" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical">
                         <DxFormLayoutItem Caption="Špecializácia">
                             <DxComboBox NullText="Vyberte špecializáciu..."
-                                        Data="@gen_10_1_Answer"
-                                        TextFieldName="Name"
-                                        ValueFieldName="Id"
-                                        ReadOnly="@isReadOnly"
-                                        @bind-Value="@gen!.Gen_10_1"
-                                        ShowValidationIcon="true">
+                            Data="@gen_10_1_Answer"
+                            TextFieldName="Name"
+                            ValueFieldName="Id"
+                            ReadOnly="@isReadOnly"
+                            @bind-Value="@gen!.Gen_10_1"
+                            ShowValidationIcon="true">
                                 <ItemTemplate Context="item">
                                     <text>
                                         <div @onclick="async() => await OnComboBoxItemClickedGen101(item.Id)">
@@ -436,6 +436,7 @@
     bool showErrorIcon = false;
     bool PopupVisible { get; set; } = false;
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || Gen7YesGrid!.IsEditing();
+    private bool preventDoubleSave = false;
 
     private QuestionnaireProgressBar QuestionnaireProgressBarRef;
 
@@ -523,13 +524,22 @@
     #region "Settings EditForm"
     private async Task HandleValidSubmit()
     {
+        if (preventDoubleSave)
+            return;
+
         if (!isReadOnly)
         {
-            await QuestionnaireProgressBarRef.RefreshDataAsync(gen!.ProgressPercentage, 100);
+            preventDoubleSave = true;
+            int previousPercentage = gen!.ProgressPercentage;
             await Q01Service.SaveQuestionnaireGeneral01Async(gen);
             await Q01Service.SaveGen9DSRelationAsync(gen.Id, Gen_9_DSList.Cast<int?>());
-            await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+            if (QuestionnaireProgressBarRef != null)
+            {
+                await QuestionnaireProgressService.UpdateProgressAsync(QuestionnaireIdAsString);
+                await QuestionnaireProgressBarRef.RefreshDataAsync(previousPercentage, 100);
+            }
             AddToast();
+            preventDoubleSave = false;
         }
     }
 

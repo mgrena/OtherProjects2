@@ -9,8 +9,8 @@
 @inject IToastNotificationService ToastService
 
 <EditForm Model="@moca"
-          Context="EditFormContext"
-          OnValidSubmit="@HandleValidSubmit">
+Context="EditFormContext"
+OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Modifikovaná škála podľa Hoehenovej a Yahra" ColSpanMd="12" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide" CssClass="custom-min-width">
@@ -37,9 +37,9 @@
                             <DxSpinEdit CssClass="spin-moca" Value="@moca!.Moca_1" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 1)))" ValueExpression="@(() => moca!.Moca_1)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen"
-                                  PositionTarget=".info-icon-btn"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 1.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -52,10 +52,10 @@
                             <DxSpinEdit Value="@moca!.Moca_2" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 2)))" ValueExpression="@(() => moca!.Moca_2)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen1"
-                                  PositionTarget=".info-icon-btn1"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn1"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 1.
                         </DxFlyout>
 
@@ -68,10 +68,10 @@
                             <DxSpinEdit Value="@moca!.Moca_3" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 3)))" ValueExpression="@(() => moca!.Moca_3)" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen2"
-                                  PositionTarget=".info-icon-btn2"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn2"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 3.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -90,10 +90,10 @@
                             <DxSpinEdit Value="@moca!.Moca_4" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 4)))" ValueExpression="@(() => moca!.Moca_4)" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen3"
-                                  PositionTarget=".info-icon-btn3"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn3"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 3.
                         </DxFlyout>
 
@@ -113,10 +113,10 @@
                             <DxSpinEdit Value="@moca!.Moca_5" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 5)))" ValueExpression="@(() => moca!.Moca_5)" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen4"
-                                  PositionTarget=".info-icon-btn4"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn4"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 2.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -128,10 +128,10 @@
                             <DxSpinEdit Value="@moca!.Moca_6" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 6)))" ValueExpression="@(() => moca!.Moca_6)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen5"
-                                  PositionTarget=".info-icon-btn5"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn5"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 1.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -143,10 +143,10 @@
                             <DxSpinEdit Value="@moca!.Moca_7" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 7)))" ValueExpression="@(() => moca!.Moca_7)" MinValue="0" MaxValue="3" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen6"
-                                  PositionTarget=".info-icon-btn6"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn6"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 3.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -166,10 +166,10 @@
                             <DxSpinEdit Value="@moca!.Moca_8" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 8)))" ValueExpression="@(() => moca!.Moca_8)" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen7"
-                                  PositionTarget=".info-icon-btn7"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn7"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 2.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -181,10 +181,10 @@
                             <DxSpinEdit Value="@moca!.Moca_9" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 9)))" ValueExpression="@(() => moca!.Moca_9)" MinValue="0" MaxValue="1" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen8"
-                                  PositionTarget=".info-icon-btn8"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn8"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 1.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -204,10 +204,10 @@
                             <DxSpinEdit Value="@moca!.Moca_10" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 10)))" ValueExpression="@(() => moca!.Moca_10)" MinValue="0" MaxValue="2" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen9"
-                                  PositionTarget=".info-icon-btn9"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn9"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 2.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -225,10 +225,10 @@
                             <DxSpinEdit Value="@moca!.Moca_11" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 11)))" ValueExpression="@(() => moca!.Moca_11)" MinValue="0" MaxValue="5" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen10"
-                                  PositionTarget=".info-icon-btn10"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn10"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 5.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -247,10 +247,10 @@
                             <DxSpinEdit Value="@moca!.Moca_12" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SpinChangeValue(newValue, 12)))" ValueExpression="@(() => moca!.Moca_11)" MinValue="0" MaxValue="6" ReadOnly="@isReadOnly" />
                         </div>
                         <DxFlyout @bind-IsOpen="@IsInfoOpen11"
-                                  PositionTarget=".info-icon-btn11"
-                                  Position="FlyoutPosition.Bottom"
-                                  PreventCloseOnPositionTargetClick="true"
-                                  Width="240">
+                        PositionTarget=".info-icon-btn11"
+                        Position="FlyoutPosition.Bottom"
+                        PreventCloseOnPositionTargetClick="true"
+                        Width="240">
                             Min = 0 / Max = 6.
                         </DxFlyout>
                     </DxFormLayoutItem>
@@ -272,27 +272,28 @@
 </EditForm>
 
 @code {
-    [Parameter]
-    public string? questionnaireId { get; set; }
+        [Parameter]
+        public string? questionnaireId { get; set; }
 
-    [Parameter]
-    public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
+        [Parameter]
+        public EventCallback<(int PreviousProgress, int CurrentProgress)> OnSave { get; set; }
 
-    bool isReadOnly = false;
-    bool IsInfoOpen { get; set; } = false;
-    bool IsInfoOpen1 { get; set; } = false;
-    bool IsInfoOpen2 { get; set; } = false;
-    bool IsInfoOpen3 { get; set; } = false;
-    bool IsInfoOpen4 { get; set; } = false;
-    bool IsInfoOpen5 { get; set; } = false;
-    bool IsInfoOpen6 { get; set; } = false;
-    bool IsInfoOpen7 { get; set; } = false;
-    bool IsInfoOpen8 { get; set; } = false;
-    bool IsInfoOpen9 { get; set; } = false;
-    bool IsInfoOpen10 { get; set; } = false;
-    bool IsInfoOpen11 { get; set; } = false;
+        bool isReadOnly = false;
+        bool IsInfoOpen { get; set; } = false;
+        bool IsInfoOpen1 { get; set; } = false;
+        bool IsInfoOpen2 { get; set; } = false;
+        bool IsInfoOpen3 { get; set; } = false;
+        bool IsInfoOpen4 { get; set; } = false;
+        bool IsInfoOpen5 { get; set; } = false;
+        bool IsInfoOpen6 { get; set; } = false;
+        bool IsInfoOpen7 { get; set; } = false;
+        bool IsInfoOpen8 { get; set; } = false;
+        bool IsInfoOpen9 { get; set; } = false;
+        bool IsInfoOpen10 { get; set; } = false;
+        bool IsInfoOpen11 { get; set; } = false;
 
     private int lastChangedMocaIndex = 0;
+    private bool preventDoubleSave = false;
 
     Data.Questionnaires.QuestionnaireMoca07? moca;
 
@@ -358,17 +359,22 @@
 
     private async Task HandleValidSubmit()
     {
+        if (preventDoubleSave)
+            return;
+
         if (!isReadOnly)
         {
+            preventDoubleSave = true;
+            int previousPercentage = moca!.ProgressPercentage;
+            await MocaService.SaveQuestionnaireMoca07Async(moca!);
             if (OnSave.HasDelegate)
             {
-                await OnSave.InvokeAsync((moca!.ProgressPercentage, 100));
+                await OnSave.InvokeAsync((previousPercentage, 100));
             }
-            await MocaService.SaveQuestionnaireMoca07Async(moca!);
 
             AddToast();
+            preventDoubleSave = false;
         }
-
     }
 
     private async Task SpinChangeValue(int newValue, int mocaIndex)

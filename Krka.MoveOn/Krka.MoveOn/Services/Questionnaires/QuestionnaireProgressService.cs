@@ -1,16 +1,17 @@
-﻿using Krka.MoveOn.Data;
+﻿using DevExpress.XtraPrinting.Shape.Native;
+using Krka.MoveOn.Data;
 using Krka.MoveOn.Data.Questionnaires;
 using Krka.MoveOn.Services.Pages;
 using Microsoft.EntityFrameworkCore;
 
 namespace Krka.MoveOn.Services.Questionnaires;
 
-public class QuestionnaireProgressService(ApplicationDbContext context, General01Service general01Service, Initial02Service initial02Service,
+public class QuestionnaireProgressService(IServiceScopeFactory scopeFactory, General01Service general01Service, Initial02Service initial02Service,
                                     Treatment03Service treatment03Service, Motor04Service motor04Service, Motor05Service motor05Service,
                                     Motor06Service motor06Service, Moca07Service moca07Service, Exclusion08Service exclusion08Service,
                                     DrugEffect09Service drugEffect09Service, Satisfaction10Service satisfaction10Service, PatientService patientService)
 {
-    private readonly ApplicationDbContext _context = context;
+    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
     private readonly General01Service _general01Service = general01Service;
     private readonly Initial02Service _initial02Service = initial02Service;
     private readonly Treatment03Service _treatment03Service = treatment03Service;
@@ -25,7 +26,9 @@ public class QuestionnaireProgressService(ApplicationDbContext context, General0
 
     public async Task UpdateProgressAsync(string questionnaireId)
     {
-        var existingQuestionnaire = await _context.Questionnaires.FirstOrDefaultAsync(q => q.Id == questionnaireId) ?? throw new InvalidOperationException($"Questionnaire with ID {questionnaireId} not found.");
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existingQuestionnaire = await aContext.Questionnaires.FirstOrDefaultAsync(q => q.Id == questionnaireId) ?? throw new InvalidOperationException($"Questionnaire with ID {questionnaireId} not found.");
         var patient = await _patientService.GetPatientByIdAsync(existingQuestionnaire.PatientId) ?? throw new InvalidOperationException($"Patient with ID {existingQuestionnaire.PatientId} not found.");
 
         var initialQ = await _initial02Service.GetQuestionnaireInitial02(questionnaireId);
@@ -116,8 +119,10 @@ public class QuestionnaireProgressService(ApplicationDbContext context, General0
 
     private async Task SaveQuestionnaireAsync(Questionnaire questionnaire)
     {
-        _context.Questionnaires.Update(questionnaire);
-        await _context.SaveChangesAsync();
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        aContext.Questionnaires.Update(questionnaire);
+        await aContext.SaveChangesAsync();
     }
 
     private async Task SavePatientAsync(Patient patient)
