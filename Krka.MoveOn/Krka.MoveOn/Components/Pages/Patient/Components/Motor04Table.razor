@@ -2,7 +2,7 @@
 @using Krka.MoveOn.Services.Questionnaires
 
 @attribute [StreamRendering(true)]
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(false))
 
 @inject Motor04Service Motor04Service
 @inject Motor05Service Motor05Service
@@ -58,6 +58,8 @@
 </div>
 
 @code {
+    IGrid nonmotGrid { get; set; }
+
     [Parameter]
     [EditorRequired]
     public string questionnaireId { get; set; }
@@ -68,7 +70,6 @@
     bool IsInfoOpen1 { get; set; } = false;
     bool IsInfoOpen { get; set; } = true;
 
-    IGrid nonmotGrid { get; set; }
 
     public List<MDSItem>? Nonmot { get; set; }
 
@@ -114,7 +115,7 @@
         Nonmot.Add(new MDSItem() { Fieldname = "Nonmot_13", Number = "1.13", Name = "Únava", Value = (nonmot != null) ? nonmot.Nonmot_13 : 0 });
         #endregion
 
-        nonmotGrid.Reload();
+        nonmotGrid?.Reload();
     }
 
     private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)

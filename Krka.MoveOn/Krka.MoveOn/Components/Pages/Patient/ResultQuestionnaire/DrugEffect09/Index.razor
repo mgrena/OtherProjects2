@@ -8,26 +8,12 @@
 @using Microsoft.AspNetCore.Authorization
 @using Krka.MoveOn.Components.Pages.Components
 
-@attribute [Authorize]
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
-@inject DrugEffect09Service DrugEffectService
-@inject IToastNotificationService ToastService
 @inject QuestionnaireProgressService QuestionnaireProgressService
 
-
-
 <PageTitle>MoveOn - Liečba pridružených problémov </PageTitle>
-
-<div class="d-flex align-items-center custom-toast-background">
-    <DxToastProvider Name="Overview"
-                     MaxToastCount="3"
-                     AnimationType="ToastAnimationType.Slide"
-                     HorizontalAlignment="HorizontalAlignment.Right"
-                     VerticalAlignment="VerticalEdge.Top"
-                     Width="320px" />
-</div>
 
 <div class="cw-880 mo-main-layout">
     <_ResultBtn />
@@ -39,22 +25,11 @@
 </div>
 
 
-
-
 @code {
     [Parameter]
     public Guid questionnaireId { get; set; }
 
     public string QuestionnaireIdAsString => questionnaireId.ToString();
-
-    IGrid drugEffectGrid { get; set; }
-    public List<Data.Questionnaires.QuestionnaireDrugEffect09> DrugEffects { get; set; }
-
-    List<Data.Dials.DialActiveIngredient> dialActiveIngredient = new();
-    List<Data.Dials.DialActiveIngredient> treat_1_Answer = new();
-
-    // List<Data.Dials.DialIndication> dialIndication = new();
-    // List<Data.Dials.DialIndication> treat_3_Answer = new();
 
     private QuestionnaireProgressBar QuestionnaireProgressBarRef;
 
@@ -66,119 +41,4 @@
             await QuestionnaireProgressBarRef.RefreshDataAsync(progressData.PreviousProgress, progressData.CurrentProgress);
         }
     }
-
-
-    Dictionary<QuestionnaireDrugEffect09, DataChange> UnsavedChanges { get; } = new();
-    bool BatchItemsEnabled => UnsavedChanges.Count > 0 || drugEffectGrid.IsEditing();
-
-    protected override async Task OnInitializedAsync()
-    {
-        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(QuestionnaireIdAsString);
-
-        dialActiveIngredient = await DrugEffectService.GetDialActiveIngredientAsync();
-        treat_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).ToList();
-
-        // dialIndication = await TreatmentService.GetDialIndicationAsync();
-        // treat_3_Answer = dialIndication.Where(d => d.Type_q == 1).ToList();
-
-    }
-
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
-    private void AddToast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Učinná látka bola pridaná",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
-    }
-
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
-    private void ModifyToast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Učinná látka bola zmenená",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
-    }
-
-
-    /// <summary>
-    /// Notifikacia
-    /// </summary>
-    private void DeleteToast()
-    {
-        ToastService.ShowToast(new ToastOptions
-            {
-                ProviderName = "Overview",
-                Title = "Učinná látka bola odstránená",
-                ThemeMode = ToastThemeMode.Saturated,
-                RenderStyle = ToastRenderStyle.Success,
-            });
-    }
-
-    async Task UpdateDataAsync()
-    {
-        DrugEffects = await DrugEffectService.GetQuestionnaireDrugEffect09(QuestionnaireIdAsString);
-        drugEffectGrid.Reload();
-    }
-
-    async Task New_Click() => await drugEffectGrid.StartEditNewRowAsync();
-
-    async Task Cancel_Click() => await ClearUnsavedChangesAsync();
-
-    async Task Save_Click()
-    {
-        foreach (var unsavedChange in UnsavedChanges)
-        {
-            var changedItem = unsavedChange.Key;
-            var changeType = unsavedChange.Value.Type;
-            switch (changeType)
-            {
-                case DataChangeType.Addition:
-                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
-                    AddToast();
-                    break;
-                case DataChangeType.Modification:
-                    await DrugEffectService.SaveDrugEffectAsync(changedItem);
-                    ModifyToast();
-                    break;
-            }
-        }
-        await ClearUnsavedChangesAsync();
-    }
-
-    async Task ClearUnsavedChangesAsync()
-    {
-        UnsavedChanges.Clear();
-        await UpdateDataAsync();
-    }
-
-    void Grid_EditModelSaving(GridEditModelSavingEventArgs e)
-    {
-        var drugEffect = (Data.Questionnaires.QuestionnaireDrugEffect09)e.EditModel;
-        var dataItem = (Data.Questionnaires.QuestionnaireDrugEffect09)e.DataItem;
-        drugEffect.Questionnaire_id = QuestionnaireIdAsString;
-        if (e.IsNew)
-        {
-            DrugEffects.Add(drugEffect);
-            UnsavedChanges[drugEffect] = new(DataChangeType.Addition, new());
-        }
-        else
-        {
-            UnsavedChanges[drugEffect] = new(DataChangeType.Modification, new());
-        }
-    }
-
-    record DataChange(DataChangeType Type, HashSet<string> ChangedFields);
-    enum DataChangeType { Modification, Addition, Delete }
 }

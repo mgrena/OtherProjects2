@@ -8,7 +8,7 @@
 
 @attribute [Authorize]
 @attribute [StreamRendering(true)]
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(false))
 @inject QuestionnaireProgressService QuestionnaireProgressService
 
 <PageTitle>MoveOn - MDS-UPDRS škála </PageTitle>

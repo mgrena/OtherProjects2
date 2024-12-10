@@ -340,6 +340,8 @@
         else
             SelectedDataItem = Patients.FirstOrDefault();
         await LoadQuestionnairesAsync(((Data.Patient)SelectedDataItem)?.Id);
+        if (!string.IsNullOrEmpty(((Data.Patient)SelectedDataItem)?.PatientCode))
+            await SetSelectedPatientCode(((Data.Patient)SelectedDataItem)?.PatientCode);
 
         Logger.LogInformation("Stranka patients bola nacitana");
     }
@@ -621,8 +623,8 @@
         {
             if (patient.Id > 0)
                 await SetSelectedPatientId(patient.Id);
-            if (!string.IsNullOrEmpty(selectedPatientCode))
-                await SetSelectedPatientCode(selectedPatientCode);
+            if (!string.IsNullOrEmpty(patient.PatientCode))
+                await SetSelectedPatientCode(patient.PatientCode);
         }
 
         StateHasChanged();

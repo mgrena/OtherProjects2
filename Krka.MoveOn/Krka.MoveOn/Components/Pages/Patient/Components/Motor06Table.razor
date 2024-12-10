@@ -1,7 +1,7 @@
 ﻿@using Krka.MoveOn.Services.Questionnaires
 
 @attribute [StreamRendering(true)]
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(false))
 
 @inject Motor06Service MotorService
 @inject NavigationManager Navigation

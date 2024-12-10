@@ -5,25 +5,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Krka.MoveOn.Services.Questionnaires;
 
-public class Motor04Service(ApplicationDbContext context)
+public class Motor04Service(IServiceScopeFactory scopeFactory)
 {
-    private readonly ApplicationDbContext _context = context;
+    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
 
     public async Task<QuestionnaireNonMotor04?> GetQuestionnaireNonMotor04(string questionnaireId)
     {
-        return await _context.QuestionnaireNonMotor04s
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.QuestionnaireNonMotor04s
         .FirstOrDefaultAsync(q => q.Questionnaire_id == questionnaireId);
     }
 
 
     public async Task SaveOrUpdateQuestionnaireNonMotor04(QuestionnaireNonMotor04 questionnaire)
     {
-        var existing = await _context.QuestionnaireNonMotor04s
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existing = await aContext.QuestionnaireNonMotor04s
             .FirstOrDefaultAsync(q => q.Questionnaire_id == questionnaire.Questionnaire_id);
 
         if (existing == null)
         {
-            _context.QuestionnaireNonMotor04s.Add(questionnaire);
+            aContext.QuestionnaireNonMotor04s.Add(questionnaire);
         }
         else
         {
@@ -43,7 +47,7 @@ public class Motor04Service(ApplicationDbContext context)
             existing.ModifiedAt = DateTime.Now;
         }
 
-        await _context.SaveChangesAsync();
+        await aContext.SaveChangesAsync();
     }
 
 }

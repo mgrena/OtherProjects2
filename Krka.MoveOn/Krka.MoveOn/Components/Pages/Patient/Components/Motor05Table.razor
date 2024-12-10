@@ -1,7 +1,7 @@
 ﻿@using Krka.MoveOn.Services.Questionnaires
 
 @attribute [StreamRendering(true)]
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(false))
 
 @inject Motor04Service Motor04Service
 @inject Motor05Service Motor05Service
@@ -63,6 +63,7 @@
     bool BatchItemsEnabled => UnsavedChanges.Count > 0 || motGrid.IsEditing();
 
     bool isReadOnly = false;
+    private bool preventDoubleInit = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -79,6 +80,10 @@
 
     async Task UpdateDataAsync()
     {
+        if (preventDoubleInit)
+            return;
+
+        preventDoubleInit = true;
         var mot = await Motor05Service.GetQuestionnaireMotor05(questionnaireId);
         Mot = new List<MDSItem>();
 
@@ -100,7 +105,8 @@
         Mot.Add(new MDSItem() { Fieldname = "Mot_13", Number = "2.13", Name = "Stuhnutie pohybu počas chôdze (freezing)", Value = (mot != null) ? mot.Mot_13 : 0 });
         #endregion
 
-        motGrid.Reload();
+        motGrid?.Reload();
+        preventDoubleInit = false;
     }
 
     private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
