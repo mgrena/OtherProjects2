@@ -29,6 +29,8 @@
 @inject ILogger<Patient> Logger
 @inject IHttpContextAccessor HttpContextAccessor
 
+@implements IDisposable
+
 <div class="d-flex align-items-center custom-toast-background">
     <DxToastProvider Name="Overview"
                      MaxToastCount="3"
@@ -77,8 +79,10 @@
         CustomizeEditModel="Grid_CustomizeEditModel_New"
         DataItemDeleting="Grid_DataItemDeleting"
         CustomizeElement="Grid_CustomizeElement"
-        FocusedRowEnabled="true"
-        FocusedRowChanged="OnFocusedRowChanged">
+        SelectionMode="GridSelectionMode.Single"
+        SelectedDataItem="@SelectedDataItem"
+        SelectedDataItemChanged="Grid_SelectedDataItemChanged"
+        AllowSelectRowByClick="true">
 
             <ToolbarTemplate Context="toolbarContext">
                 <DxToolbar ItemRenderStyleMode="ToolbarRenderStyleMode.Plain">
@@ -173,7 +177,7 @@
 
             </div>
             <div>
-                <EditForm Model="@selectedPatient"
+                <EditForm Model="@SelectedDataItem"
                 Context="EditFormContext">
                     <DxFormLayout CssClass="w-100">
                         <DxFormLayoutGroup Caption="Povolenia">
@@ -185,19 +189,19 @@
                                     <DxStackLayoutItem>
                                         <Template>
                                             <DxFormLayoutItem Caption="Má pacient podpísaný informovaný súhlas so štúdiou?" CaptionCssClass="item-caption-style">
-                                                <DxCheckBox @bind-Checked="selectedPatient.InfoConfirmation"
+                                                <DxCheckBox @bind-Checked="((Data.Patient)SelectedDataItem).InfoConfirmation"
                                                 Text="áno"
                                                 ReadOnly="@isReadOnly"
-                                                @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.InfoConfirmation)))" />
+                                                @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(Data.Patient.InfoConfirmation)))" />
                                             </DxFormLayoutItem>
                                         </Template>
                                     </DxStackLayoutItem>
                                     <DxStackLayoutItem>
                                         <Template>
                                             <DxFormLayoutItem Caption="Má pacient podpísaný Formulár súhlasu s nariadením GDPR?" CaptionCssClass="item-caption-style">
-                                                <DxCheckBox @bind-Checked="selectedPatient.GDPRConfirmation" Text="áno"
+                                                <DxCheckBox @bind-Checked="((Data.Patient)SelectedDataItem).GDPRConfirmation" Text="áno"
                                                 ReadOnly="@isReadOnly"
-                                                @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(selectedPatient.GDPRConfirmation)))" /> 
+                                                @onchange="@(async (args) => await OnCheckBoxChanged(args, nameof(Data.Patient.GDPRConfirmation)))" /> 
                                             </DxFormLayoutItem>
                                         </Template>
                                     </DxStackLayoutItem>
@@ -211,7 +215,7 @@
                 Udalosti
             </div>
             <div class="simple-table" style="border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
-                @if (selectedPatient.GDPRConfirmation && selectedPatient.InfoConfirmation)
+                @if (((Data.Patient)SelectedDataItem).GDPRConfirmation && ((Data.Patient)SelectedDataItem).InfoConfirmation)
                 {
                     @if (hasQuestionnaires)
                     {
@@ -234,7 +238,7 @@
                                     }
                                     else
                                     {
-                                    
+
                                         <DxButton Text="Skontrolované" RenderStyle="ButtonRenderStyle.Primary" @onclick="() => MarkAsChecked(questionnaire.Id)" />                                           
                                     }
                                 }
@@ -277,15 +281,9 @@
                     };
                 }
             }
-
-
         </div>
     </div>
-
-
 </div>
-
-
 
 @code {
     IGrid patientsGrid { get; set; }
@@ -294,12 +292,9 @@
     public List<Data.Patient> Patients { get; set; }
     public List<Data.Questionnaires.Questionnaire> Questionnaires { get; set; }
 
-    private bool isFocusedRowEnabled = false;
-
-    private Data.Patient? selectedPatient1 = null;
-
-    private Data.Patient selectedPatient = new Data.Patient
+    private object SelectedDataItem { get; set; } = new Data.Patient
         {
+            Id = 0,
             UserId = "default",
             PatientCode = "default",
             InfoConfirmation = false,
@@ -307,13 +302,10 @@
             ModifiedAt = DateTime.Now,
             CreatedAt = DateTime.Now
         };
-
+    private string selectedPatientCode { get { return ((Data.Patient)SelectedDataItem).PatientCode; } }
     private string? selectedDoctorId;
-    private string? selectedPatientCode;
 
-    private int? selectedPatientId;
     private bool hasQuestionnaires;
-    private bool isRendered = false;
     private bool IsInfoOpen = true;
     private bool IsInfoOpen1 = true;
     private bool isAdminOrOffice;
@@ -337,42 +329,28 @@
         Doctors = await PatientService.GetDoctorsAsync();
         User = await QuestionnaireService.GetAllUsersAsync();
 
-        Logger.LogInformation("Stranka patients bola nacitana");
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        isRendered = true;
+        // try load stored patient
         var selectedPatientId = await GetSelectedPatientId();
-
         if (selectedPatientId.HasValue)
         {
             var selectedPatient = Patients.FirstOrDefault(p => p.Id == selectedPatientId.Value);
             if (selectedPatient != null)
-            {
-                //patientsGrid.SetFocusedRowIndex(Patients.IndexOf(selectedPatient));
-                await patientsGrid.SetFocusedDataItemAsync(selectedPatient);
-            }
+                SelectedDataItem = selectedPatient;
         }
+        else
+            SelectedDataItem = Patients.FirstOrDefault();
+        await LoadQuestionnairesAsync(((Data.Patient)SelectedDataItem)?.Id);
 
-        var selectedPatientCode = await GetSelectedPatientCode();
-        if (!string.IsNullOrEmpty(selectedPatientCode))
-        {
-            this.selectedPatientCode = selectedPatientCode;
-        }
+        Logger.LogInformation("Stranka patients bola nacitana");
     }
 
     private async Task SetSelectedPatientId(int PatientId)
     {
-        if (isRendered)
-        {
-            await SessionStorage.SetAsync("selectedPatientId", PatientId);
-        }
+        await SessionStorage.SetAsync("selectedPatientId", PatientId);
     }
-
     private async Task SetSelectedPatientCode(string? patientCode)
     {
-        if (isRendered && !string.IsNullOrEmpty(patientCode))
+        if (!string.IsNullOrEmpty(patientCode))
         {
             await SessionStorage.SetAsync("selectedPatientCode", patientCode);
         }
@@ -381,12 +359,6 @@
     private async Task<int?> GetSelectedPatientId()
     {
         var result = await SessionStorage.GetAsync<int?>("selectedPatientId");
-        return result.Success ? result.Value : null;
-    }
-
-    private async Task<string?> GetSelectedPatientCode()
-    {
-        var result = await SessionStorage.GetAsync<string>("selectedPatientCode");
         return result.Success ? result.Value : null;
     }
 
@@ -588,13 +560,13 @@
     {
         bool isChecked = (bool)args.Value;
 
-        if (propertyName == nameof(selectedPatient.InfoConfirmation))
+        if (propertyName == nameof(Data.Patient.InfoConfirmation))
         {
-            selectedPatient.InfoConfirmation = isChecked;
+            ((Data.Patient)SelectedDataItem).InfoConfirmation = isChecked;
         }
-        else if (propertyName == nameof(selectedPatient.GDPRConfirmation))
+        else if (propertyName == nameof(Data.Patient.GDPRConfirmation))
         {
-            selectedPatient.GDPRConfirmation = isChecked;
+            ((Data.Patient)SelectedDataItem).GDPRConfirmation = isChecked;
         }
 
         await SaveData(isChecked, propertyName);
@@ -616,43 +588,41 @@
 
     async Task HandleConfirmationSubmit()
     {
-        if (selectedPatient.UserId != "default")
+        if (((Data.Patient)SelectedDataItem).UserId != "default")
         {
-            await PatientService.SavePatientAsync(selectedPatient);
+            await PatientService.SavePatientAsync(((Data.Patient)SelectedDataItem));
             await UpdateDataAsync();
         }
     }
 
     // Nacitanie dotaznikov podla daneho pacienta
-    private async Task LoadQuestionnairesAsync(int patientId)
+    private async Task LoadQuestionnairesAsync(int? patientId)
     {
-        var questionnaires = await QuestionnaireService.GetQuestionnairesByPatientIdAsync(patientId);
-        hasQuestionnaires = questionnaires.Any(); // ak obsahuje polozky
-        Questionnaires = hasQuestionnaires ? questionnaires : new List<Data.Questionnaires.Questionnaire>();
+        if (patientId.HasValue)
+        {
+            var questionnaires = await QuestionnaireService.GetQuestionnairesByPatientIdAsync(patientId.Value);
+            hasQuestionnaires = questionnaires.Any(); // ak obsahuje polozky
+            Questionnaires = hasQuestionnaires ? questionnaires : [];
+        }
+        else
+        {
+            hasQuestionnaires = false;
+            Questionnaires = [];
+        }
         patientsGrid.Reload();
         StateHasChanged();
     }
 
-    //Zmena focusnuteho riadku
-    private async void OnFocusedRowChanged(GridFocusedRowChangedEventArgs e)
+    private async void Grid_SelectedDataItemChanged(object newSelection)
     {
-        var patient = e.DataItem as Data.Patient;
-        if (e.DataItem is Data.Patient patient1)
+        SelectedDataItem = newSelection;
+        await LoadQuestionnairesAsync(((Data.Patient)SelectedDataItem)?.Id);
+        if (newSelection is Data.Patient patient)
         {
-            selectedPatient = patient1;
-        }
-        selectedPatientCode = patient?.PatientCode;
-        selectedPatientId = patient?.Id;
-
-        if (selectedPatientId.HasValue)
-        {
-            await LoadQuestionnairesAsync(selectedPatientId.Value);
-            await SetSelectedPatientId(selectedPatientId.Value);
-        }
-
-        if (!string.IsNullOrEmpty(selectedPatientCode))
-        {
-            await SetSelectedPatientCode(selectedPatientCode);
+            if (patient.Id > 0)
+                await SetSelectedPatientId(patient.Id);
+            if (!string.IsNullOrEmpty(selectedPatientCode))
+                await SetSelectedPatientCode(selectedPatientCode);
         }
 
         StateHasChanged();
@@ -711,5 +681,14 @@
         {
             AddToast();
         }
+    }
+
+    public void Dispose() 
+    {
+        Doctors = null;
+        User = null;
+        Patients = null;
+        Questionnaires = null;
+        SelectedDataItem = null;
     }
 }
