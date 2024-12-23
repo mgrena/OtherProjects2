@@ -337,7 +337,7 @@
             if (selectedPatient != null)
                 SelectedDataItem = selectedPatient;
         }
-        else
+        else if (Patients.Count > 0)
             SelectedDataItem = Patients.FirstOrDefault();
         await LoadQuestionnairesAsync(((Data.Patient)SelectedDataItem)?.Id);
         if (!string.IsNullOrEmpty(((Data.Patient)SelectedDataItem)?.PatientCode))
