@@ -302,7 +302,7 @@
             ModifiedAt = DateTime.Now,
             CreatedAt = DateTime.Now
         };
-    private string selectedPatientCode { get { return ((Data.Patient)SelectedDataItem).PatientCode; } }
+    private string selectedPatientCode { get { return (SelectedDataItem != null && SelectedDataItem is Data.Patient) ? ((Data.Patient)SelectedDataItem).PatientCode : string.Empty; } }
     private string? selectedDoctorId;
 
     private bool hasQuestionnaires;
