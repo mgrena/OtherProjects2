@@ -211,29 +211,28 @@
                 Udalosti
             </div>
             <div class="simple-table" style="border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
-                @if (selectedPatient.GDPRConfirmation && selectedPatient.InfoConfirmation)
+                @if (selectedPatient != null && selectedPatient.GDPRConfirmation && selectedPatient.InfoConfirmation)
                 {
-                    @if (hasQuestionnaires)
+                    if (Questionnaires != null && Questionnaires.Any())
                     {
-                        @foreach (var questionnaire in Questionnaires)
+                        foreach (var questionnaire in Questionnaires)
                         {
                             <div style="margin-bottom: 6px;">
                                 <DxMenu Orientation="@Orientation.Horizontal" CollapseItemsToHamburgerMenu="false">
-                                    <Items >
-                                            <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
-                                            Text="@GetMenuText(questionnaire.Order)"
-                                            @onclick="() => SetCurrentId(questionnaire.Id)" />
-                                            <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
+                                    <Items>
+                                        <DxMenuItem NavigateUrl="@GetNavigateUrl(questionnaire.Order, questionnaire.Id)"
+                                                    Text="@GetMenuText(questionnaire.Order)"
+                                                    @onclick="() => SetCurrentId(questionnaire.Id)" />
+                                        <Krka.MoveOn.Components.Pages.Components.ProgressBar ProgressPercentage="@(((Data.Questionnaires.Questionnaire)(questionnaire))?.ProgressPercentage ?? 0)" />
                                     </Items>
-                                </DxMenu Orientation="@Orientation.Horizontal">
+                                </DxMenu>
                                 @if (questionnaire.CheckedAt.HasValue)
                                 {
-                                    <label style="color: rgb(182 145 188);">Skontrolované: @questionnaire.CheckedAt.Value.ToString("dd.MM.yyyy HH:mm:ss")  (@UserFullNameChecked(questionnaire.UserId)) </label>
+                                    <label style="color: rgb(182 145 188);">Skontrolované: @questionnaire.CheckedAt.Value.ToString("dd.MM.yyyy HH:mm:ss") (@UserFullNameChecked(questionnaire.UserId))</label>
                                 }
                                 else
                                 {
-                                    
-                                    <DxButton Text="Skontrolované" RenderStyle="ButtonRenderStyle.Primary" @onclick="() => MarkAsChecked(questionnaire.Id)" />                                           
+                                    <DxButton Text="Skontrolované" RenderStyle="ButtonRenderStyle.Primary" @onclick="() => MarkAsChecked(questionnaire.Id)" />
                                 }
                             </div>
                         }
