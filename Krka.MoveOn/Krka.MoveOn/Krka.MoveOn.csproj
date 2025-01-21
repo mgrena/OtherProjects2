@@ -80,6 +80,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
     <Content Update="Components\Pages\Components\ManagementToolbarWithoutSave.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

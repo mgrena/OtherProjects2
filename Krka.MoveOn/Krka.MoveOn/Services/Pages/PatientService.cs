@@ -88,11 +88,18 @@ namespace Krka.MoveOn.Services.Pages
         {
             var doctorPatientCount = await _context.Patients
                     .CountAsync(p => p.UserId == patient.UserId && p.DeletedAt == null);
+            var codecheck = await _context.Patients
+                    .CountAsync(p => p.PatientCode == patient.PatientCode && p.DeletedAt == null);
 
             if (doctorPatientCount > 20)
             {
                 _logger.LogInformation("The patient limit has been reached for user {UserName}.", patient.UserId);
                 return OperationResult.FailureResult("Lekár môže pridať maximálne 20 pacientov.");
+            }
+            if (codecheck > 0)
+            {
+                _logger.LogInformation("Cannot insert duplicate key row in patients. Duplicate value is {patient.PatientCode}.", patient.UserId);
+                return OperationResult.FailureResult($"Pacient so zadaným kódom {patient.PatientCode} už v databáze existuje. Záznam nie je možné uložiť.");
             }
 
             if (patient.Id == 0)
@@ -110,11 +117,6 @@ namespace Krka.MoveOn.Services.Pages
             {
                 await _context.SaveChangesAsync();
                 return OperationResult.SuccessResult();
-            }
-            catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed") == true)
-            {
-                _logger.LogError(ex, ex.Message);
-                return OperationResult.FailureResult("Kód pacienta musí byť jedinečný.", ex.InnerException?.Message);
             }
             catch (Exception ex)
             {
