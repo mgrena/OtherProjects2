@@ -159,6 +159,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 51, Type_q = 10, Name = "Psychiater", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
         modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 52, Type_q = 10, Name = "Fyzioterapeut", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
         modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 53, Type_q = 10, Name = "Internista", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
+        modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 58, Type_q = 10, Name = "Gastroenterológ", CreatedAt = new(2025, 01, 28), ModifiedAt = new(2025, 01, 28) });
+        modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 59, Type_q = 10, Name = "Urológ", CreatedAt = new(2025, 01, 28), ModifiedAt = new(2025, 01, 28) });
         modelBuilder.Entity<DialQGeneral>().HasData(new DialQGeneral() { Id = 57, Type_q = 10, Name = "Iná...", CreatedAt = new(2024, 10, 9), ModifiedAt = new(2024, 10, 9) });
 
         //gen_13

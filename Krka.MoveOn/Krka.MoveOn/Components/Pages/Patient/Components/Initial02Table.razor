@@ -53,22 +53,10 @@
             </EditSettings>
         </DxGridDataColumn>
 
-        <DxGridDataColumn Caption="Denná dávka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-            <CellDisplayTemplate Context="gridContext">
-                @{
-                    if (gridContext.DataItem is Data.Questionnaires.QuestionnaireInitial02 dataItem)
-                    {
-                        decimal init2 = dataItem.Init_2 != null ? dataItem.Init_2 : 0m;
-                        int init3 = dataItem.Init_3 ?? 0;
-                        var calculatedValue = init2 * init3;
-                        @calculatedValue
-                    }
-                    else
-                    {
-                        @:0
-                    }
-                }
-            </CellDisplayTemplate>
+        <DxGridDataColumn FieldName="Init_4" Caption="Denná dávka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+            <EditSettings>
+                <DxSpinEditSettings MinValue="@(0m)" />
+            </EditSettings>
         </DxGridDataColumn>
 
         @if (!isReadOnly)

@@ -17,7 +17,7 @@
     <DataAnnotationsValidator />
     <DxFormLayout>
         <DxFormLayoutGroup Caption="Liečba Parkinsonovej choroby" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-            <DxFormLayoutItem Caption="Dátum" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+            <DxFormLayoutItem Caption="Dátum vyšetrenia" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
 
                 <DxDateEdit Date="@questionnaire.Date" DateChanged="@((DateTime newValue) => DateChangeValue(newValue))" DateExpression="@(() => questionnaire.Date)" ShowValidationIcon="true" required ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)" />
 
@@ -69,22 +69,10 @@
                             </EditSettings>
                         </DxGridDataColumn>
 
-                        <DxGridDataColumn Caption="Denná dávka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
-                            <CellDisplayTemplate Context="gridContext">
-                                @{
-                                    if (gridContext.DataItem is Data.Questionnaires.QuestionnaireInitial02 dataItem)
-                                    {
-                                        decimal init2 = dataItem.Init_2 != null ? dataItem.Init_2 : 0m;
-                                        int init3 = dataItem.Init_3 ?? 0;
-                                        var calculatedValue = init2 * init3;
-                                        @calculatedValue
-                                    }
-                                    else
-                                    {
-                                        @:0
-                                    }
-                                }
-                            </CellDisplayTemplate>
+                        <DxGridDataColumn FieldName="Init_4" Caption="Denná dávka" ReadOnly="@isReadOnly" DataRowEditorVisible="@(!isReadOnly)">
+                            <EditSettings>
+                                <DxSpinEditSettings MinValue="@(0m)" />
+                            </EditSettings>
                         </DxGridDataColumn>
 
                         @if (!isReadOnly)

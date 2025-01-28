@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250128150840_Initial02AddInit4")]
+    partial class Initial02AddInit4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2584,8 +2587,8 @@ namespace Krka.MoveOn.Migrations
                         .HasColumnType("int")
                         .HasColumnName("init_3");
 
-                    b.Property<decimal?>("Init_4")
-                        .HasColumnType("decimal(5,2)")
+                    b.Property<int?>("Init_4")
+                        .HasColumnType("int")
                         .HasColumnName("init_4");
 
                     b.Property<DateTime>("ModifiedAt")

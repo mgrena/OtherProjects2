@@ -4,6 +4,7 @@ using Krka.MoveOn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Krka.MoveOn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250128080027_GeneralBirthYear")]
+    partial class GeneralBirthYear
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2064,22 +2067,6 @@ namespace Krka.MoveOn.Migrations
                         },
                         new
                         {
-                            Id = 58,
-                            CreatedAt = new DateTime(2025, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2025, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Gastroenterológ",
-                            Type_q = 10
-                        },
-                        new
-                        {
-                            Id = 59,
-                            CreatedAt = new DateTime(2025, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedAt = new DateTime(2025, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Urológ",
-                            Type_q = 10
-                        },
-                        new
-                        {
                             Id = 57,
                             CreatedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ModifiedAt = new DateTime(2024, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -2583,10 +2570,6 @@ namespace Krka.MoveOn.Migrations
                     b.Property<int?>("Init_3")
                         .HasColumnType("int")
                         .HasColumnName("init_3");
-
-                    b.Property<decimal?>("Init_4")
-                        .HasColumnType("decimal(5,2)")
-                        .HasColumnName("init_4");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2")

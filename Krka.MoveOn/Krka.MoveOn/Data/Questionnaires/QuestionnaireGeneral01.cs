@@ -20,6 +20,12 @@ namespace Krka.MoveOn.Data.Questionnaires
         public DateTime Gen_1 { get; set; } = DateTime.Now;
 
         /// <summary>
+        /// rok narodenia
+        /// </summary>
+        [Column("birth_yar")]
+        public int BirthYear { get; set; } = 1950;
+
+        /// <summary>
         /// Pohlavie
         /// </summary>
         [Column("gen_2_dg")]

@@ -37,6 +37,12 @@ namespace Krka.MoveOn.Data.Questionnaires
         [Column("init_3")]
         public int? Init_3 { get; set; }
 
+        /// <summary>
+        /// denná dávka
+        /// </summary>
+        [Column("init_4", TypeName = "decimal(5,2)")]
+        public decimal? Init_4 { get; set; }
+
 
         [Column("modified_at")]
         public required DateTime ModifiedAt { get; set; } = DateTime.Now;

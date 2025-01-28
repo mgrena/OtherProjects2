@@ -43,9 +43,14 @@
         <DxFormLayout>
             <DxFormLayoutGroup Caption="MoveOn - Detekcia pacientov s príznakmi Parkinsonovej choroby a jej ďalší manažment" ColSpanMd="6" CaptionCssClass="caption-styleH0" ExpandButtonDisplayMode="GroupExpandButtonDisplayMode.Start" AnimationType="LayoutAnimationType.Slide" CssClass="custom-min-width">
 
-                <DxFormLayoutItem Caption="Dátum" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="Dátum vyšetrenia" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <DxDateEdit Date="gen!.Gen_1" DateChanged="@((DateTime newValue) => DateChangeValue(newValue))" DateExpression="@(() => gen!.Gen_1)" ShowValidationIcon="true" ClearButtonDisplayMode="DataEditorClearButtonDisplayMode.Auto" ReadOnly="@isReadOnly" />
                 </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Rok narodenia" ColSpanMd="6" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
+                    <DxSpinEdit Value="@gen!.BirthYear" ValueChanged="@(EventCallback.Factory.Create<int>(this, (newValue) => SaveInbox(newValue, 13)))" ValueExpression="@(() => gen.BirthYear)" ShowValidationIcon="true" CssClass="form-item-full-width" ReadOnly="@isReadOnly" MinValue="1920" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="6"><br>@AgeValue</DxFormLayoutItem>
 
                 <DxFormLayoutItem Caption="Pohlavie" ColSpanMd="12" CaptionPosition="CaptionPosition.Vertical" CaptionCssClass="caption-styleH1">
                     <InputRadioGroup @bind-Value="@gen!.Gen_2_DG" class="d-flex flex-wrap">
@@ -474,6 +479,7 @@
     List<Data.RelationalTables.Gen7YesRelational> Gen7YesTable { get; set; }
 
     IEnumerable<int> Gen_9_DSList = new List<int>();
+    string AgeValue = "pokus";
 
 
     protected override async Task OnInitializedAsync()
@@ -557,6 +563,7 @@
 
             Gen_9_DSList = await Q01Service.LoadSelectedGen9DSAsync(gen.Id);
             Gen7YesTable = await Q01Service.LoadGen7YesTableAsync(gen.Id);
+            AgeValue = string.Format("(vek {0})", gen.Gen_1.Year - gen.BirthYear);
         }
     }
 
@@ -660,6 +667,10 @@
                 break;
             case 12:
                 gen!.Gen_13 = value;
+                break;
+            case 13:
+                gen!.BirthYear = value;
+                AgeValue = string.Format("(vek {0})", gen.Gen_1.Year - gen.BirthYear);
                 break;
             default:
                 throw new ArgumentException("Neznámy index gen");
