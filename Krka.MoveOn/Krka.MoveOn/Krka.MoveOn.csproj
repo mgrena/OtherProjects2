@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-Krka.MoveOn-53bc9b9d-9d6a-45d4-8429-2a2761773502</UserSecretsId>
@@ -14,17 +14,20 @@
     <None Include="compilerconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.13.1" />
+    <PackageReference Include="Azure.Identity" Version="1.13.2" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
-    <PackageReference Include="DevExpress.Blazor" Version="24.1.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*-*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.*-*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*-*" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.10" />
-    <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
+    <PackageReference Include="DevExpress.Blazor" Version="24.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.1" />
+    <PackageReference Include="System.Formats.Asn1" Version="9.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Components.Pages.Index.en-US.Designer.cs">
@@ -75,8 +78,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Utils.v24.1">
-      <HintPath>..\..\..\..\..\Program Files\DevExpress 24.1\Components\Bin\NetCore\DevExpress.Utils.v24.1.dll</HintPath>
+    <Reference Include="DevExpress.Data.v24.2">
+      
+    </Reference>
+    <Reference Include="DevExpress.Utils.v24.2">
+      <HintPath>..\..\..\..\..\Program Files\DevExpress 24.2\Components\Bin\NetCore\DevExpress.Utils.v24.2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
