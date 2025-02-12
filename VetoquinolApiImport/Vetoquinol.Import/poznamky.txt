@@ -1,0 +1,115 @@
+﻿aktualizacia service:
+- na project right click
+- Add -> Connected Service
+- preeditovať existujúci
+
+1. Pharmacopola
+        - zip heslo: 12Vq1Jr@
+        private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.VendorBasicHttpBinding))
+            {
+                System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
+                result.MaxBufferSize = int.MaxValue;
+                result.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
+                result.MaxReceivedMessageSize = int.MaxValue;
+                result.AllowCookies = true;
+                result.Security.Mode = System.ServiceModel.BasicHttpSecurityMode.Transport;
+                result.Security.Transport.ClientCredentialType = System.ServiceModel.HttpClientCredentialType.Basic;
+                return result;
+            }
+            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+        }
+
+3. Samohyl
+        private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.Zoetis_Port))
+            {
+                System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
+                result.MaxBufferSize = int.MaxValue;
+                result.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
+                result.MaxReceivedMessageSize = int.MaxValue;
+                result.AllowCookies = true;
+                result.Security.Mode = System.ServiceModel.BasicHttpSecurityMode.Transport;
+                result.Security.Transport.ClientCredentialType = System.ServiceModel.HttpClientCredentialType.Basic;
+                return result;
+            }
+            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+        }
+
+4. Noviko
+        private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.HSB2BwsPort))
+            {
+                System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
+                result.MaxBufferSize = int.MaxValue;
+                result.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
+                result.MaxReceivedMessageSize = int.MaxValue;
+                result.AllowCookies = true;
+                result.Security.Mode = System.ServiceModel.BasicHttpSecurityMode.Transport;
+                result.Security.Transport.ClientCredentialType = System.ServiceModel.HttpClientCredentialType.Basic;
+                result.OpenTimeout = new TimeSpan(0, 10, 0);
+                result.CloseTimeout = new TimeSpan(0, 10, 0);
+                result.SendTimeout = new TimeSpan(0, 10, 0);
+                result.ReceiveTimeout = new TimeSpan(0, 10, 0);
+                return result;
+            }
+            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+        }
+
+5. SGVet
+        private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.HSB2BwsPort))
+            {
+                System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
+                result.MaxBufferSize = int.MaxValue;
+                result.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
+                result.MaxReceivedMessageSize = int.MaxValue;
+                result.AllowCookies = true;
+                result.Security.Mode = System.ServiceModel.BasicHttpSecurityMode.Transport;
+                result.Security.Transport.ClientCredentialType = System.ServiceModel.HttpClientCredentialType.Basic;
+                result.OpenTimeout = new TimeSpan(0, 10, 0);
+                result.CloseTimeout = new TimeSpan(0, 10, 0);
+                result.SendTimeout = new TimeSpan(0, 10, 0);
+                result.ReceiveTimeout = new TimeSpan(0, 10, 0);
+                return result;
+            }
+            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+        }
+
+6. MedArt
+        private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
+        {
+            if ((endpointConfiguration == EndpointConfiguration.ZTOSService))
+            {
+                System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
+                result.MaxBufferSize = int.MaxValue;
+                result.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
+                result.MaxReceivedMessageSize = int.MaxValue;
+                result.AllowCookies = true;
+                result.Security.Mode = System.ServiceModel.BasicHttpSecurityMode.Transport;
+                result.Security.Transport.ClientCredentialType = System.ServiceModel.HttpClientCredentialType.Basic;
+                result.OpenTimeout = new TimeSpan(0, 10, 0);
+                result.CloseTimeout = new TimeSpan(0, 10, 0);
+                result.SendTimeout = new TimeSpan(0, 10, 0);
+                result.ReceiveTimeout = new TimeSpan(0, 10, 0);
+                return result;
+            }
+            if ((endpointConfiguration == EndpointConfiguration.ZTOSService1))
+            {
+                System.ServiceModel.Channels.CustomBinding result = new System.ServiceModel.Channels.CustomBinding();
+                System.ServiceModel.Channels.TextMessageEncodingBindingElement textBindingElement = new System.ServiceModel.Channels.TextMessageEncodingBindingElement();
+                textBindingElement.MessageVersion = System.ServiceModel.Channels.MessageVersion.CreateVersion(System.ServiceModel.EnvelopeVersion.Soap12, System.ServiceModel.Channels.AddressingVersion.None);
+                result.Elements.Add(textBindingElement);
+                System.ServiceModel.Channels.HttpTransportBindingElement httpBindingElement = new System.ServiceModel.Channels.HttpTransportBindingElement();
+                httpBindingElement.AllowCookies = true;
+                httpBindingElement.MaxBufferSize = int.MaxValue;
+                httpBindingElement.MaxReceivedMessageSize = int.MaxValue;
+                result.Elements.Add(httpBindingElement);
+                return result;
+            }
+            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+        }

@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33502.453
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sales.DataAccess", "Sales.DataAccess\Sales.DataAccess.csproj", "{E84D145E-CD30-43DE-9BB3-F7D50E9260C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.API.Contracts", "Vetoquinol.API.Contracts\Vetoquinol.API.Contracts.csproj", "{B952B9E5-8B92-4386-A7DA-81559DB320A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.DataAccess", "Vetoquinol.DataAccess\Vetoquinol.DataAccess.csproj", "{B7E2FF92-6C55-4E93-B2D6-91B1CD9BD4F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.Import", "Vetoquinol.Import\Vetoquinol.Import.csproj", "{CA7FB238-06D5-40B8-9AC0-F55EF9C9A081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.Noviko.Cz.API", "Vetoquinol.Noviko.Cz.API\Vetoquinol.Noviko.Cz.API.csproj", "{0093B30C-CBAC-4904-A432-D105B00BF84E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.Pharmacopola.Sk.API", "Vetoquinol.Pharmacopola.Sk.API\Vetoquinol.Pharmacopola.Sk.API.csproj", "{6FC2D22B-B512-46BA-9C9A-2C0D8F423E85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.Sales.Importer", "Vetoquinol.Sales.Importer\Vetoquinol.Sales.Importer.csproj", "{D62E2B8D-89A0-416A-848F-A3A8BB894646}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.Samohyl.Cz.API", "Vetoquinol.Samohyl.Cz.API\Vetoquinol.Samohyl.Cz.API.csproj", "{DBA985A3-13B9-420F-90F9-ED39EEEA18D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.SGVet.Cz.API", "Vetoquinol.SGVet.Cz.API\Vetoquinol.SGVet.Cz.API.csproj", "{5C42327C-6015-49E2-8E32-A982CB33ECF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.Topvet.Sk.API", "Vetoquinol.Topvet.Sk.API\Vetoquinol.Topvet.Sk.API.csproj", "{B4B26883-E4AF-4E89-95C3-34AC76D95311}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vetoquinol.Medart.Sk.API", "Vetoquinol.Medart.Sk.API\Vetoquinol.Medart.Sk.API.csproj", "{20598E17-719A-4BBF-B1F6-791FF2799117}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E84D145E-CD30-43DE-9BB3-F7D50E9260C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84D145E-CD30-43DE-9BB3-F7D50E9260C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84D145E-CD30-43DE-9BB3-F7D50E9260C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84D145E-CD30-43DE-9BB3-F7D50E9260C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B952B9E5-8B92-4386-A7DA-81559DB320A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B952B9E5-8B92-4386-A7DA-81559DB320A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B952B9E5-8B92-4386-A7DA-81559DB320A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B952B9E5-8B92-4386-A7DA-81559DB320A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7E2FF92-6C55-4E93-B2D6-91B1CD9BD4F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7E2FF92-6C55-4E93-B2D6-91B1CD9BD4F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7E2FF92-6C55-4E93-B2D6-91B1CD9BD4F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7E2FF92-6C55-4E93-B2D6-91B1CD9BD4F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA7FB238-06D5-40B8-9AC0-F55EF9C9A081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA7FB238-06D5-40B8-9AC0-F55EF9C9A081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA7FB238-06D5-40B8-9AC0-F55EF9C9A081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA7FB238-06D5-40B8-9AC0-F55EF9C9A081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0093B30C-CBAC-4904-A432-D105B00BF84E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0093B30C-CBAC-4904-A432-D105B00BF84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0093B30C-CBAC-4904-A432-D105B00BF84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0093B30C-CBAC-4904-A432-D105B00BF84E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FC2D22B-B512-46BA-9C9A-2C0D8F423E85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FC2D22B-B512-46BA-9C9A-2C0D8F423E85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FC2D22B-B512-46BA-9C9A-2C0D8F423E85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FC2D22B-B512-46BA-9C9A-2C0D8F423E85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D62E2B8D-89A0-416A-848F-A3A8BB894646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D62E2B8D-89A0-416A-848F-A3A8BB894646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D62E2B8D-89A0-416A-848F-A3A8BB894646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D62E2B8D-89A0-416A-848F-A3A8BB894646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBA985A3-13B9-420F-90F9-ED39EEEA18D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBA985A3-13B9-420F-90F9-ED39EEEA18D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBA985A3-13B9-420F-90F9-ED39EEEA18D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA985A3-13B9-420F-90F9-ED39EEEA18D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C42327C-6015-49E2-8E32-A982CB33ECF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C42327C-6015-49E2-8E32-A982CB33ECF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C42327C-6015-49E2-8E32-A982CB33ECF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C42327C-6015-49E2-8E32-A982CB33ECF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4B26883-E4AF-4E89-95C3-34AC76D95311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B26883-E4AF-4E89-95C3-34AC76D95311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B26883-E4AF-4E89-95C3-34AC76D95311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B26883-E4AF-4E89-95C3-34AC76D95311}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20598E17-719A-4BBF-B1F6-791FF2799117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20598E17-719A-4BBF-B1F6-791FF2799117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20598E17-719A-4BBF-B1F6-791FF2799117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20598E17-719A-4BBF-B1F6-791FF2799117}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {93E4BAAB-9F4F-41BB-AC53-DD4C80D4285F}
+	EndGlobalSection
+EndGlobal
