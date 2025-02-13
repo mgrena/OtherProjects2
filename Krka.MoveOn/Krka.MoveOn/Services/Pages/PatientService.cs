@@ -1,5 +1,4 @@
 ﻿using Krka.MoveOn.Data;
-using Krka.MoveOn.Migrations;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Claims;
@@ -23,8 +22,16 @@ namespace Krka.MoveOn.Services.Pages
             if (user.IsInRole("Doctor"))
             {
                 var userId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var users = await _context.Users.ToListAsync();
+                var currUser = users.First(i => i.Id == userId);
+                List<string> userIds = [];
+                if (currUser.WorkplaceId == 1)
+                    userIds.Add(userId!);
+                else
+                    userIds = users.Where(i => i.WorkplaceId == currUser.WorkplaceId).Select(i => i.Id).ToList();
+
                 patients = await _context.Patients
-                    .Where(p => p.DeletedAt == null && p.UserId == userId)
+                    .Where(p => p.DeletedAt == null && userIds.Contains(p.UserId))
                     .OrderBy(p => p.Valid == Patient.ValidEnum.Predčasne_vylúčený)
                     .ThenByDescending(p => p.CreatedAt)
                     .ToListAsync();
@@ -39,7 +46,7 @@ namespace Krka.MoveOn.Services.Pages
             }
             else
             {
-                patients = new List<Patient>();
+                patients = [];
             }
 
             foreach (var patient in patients)
@@ -50,7 +57,6 @@ namespace Krka.MoveOn.Services.Pages
                     patient.Doctor = $"{patientUser.TitleBefore} {patientUser.FirstName} {patientUser.LastName} {patientUser.TitleAfter}";
                 }
             }
-
 
             PatientCount = patients.Count(p => p.Valid == Patient.ValidEnum.Aktivný);
 
@@ -68,7 +74,7 @@ namespace Krka.MoveOn.Services.Pages
             var doctorRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Doctor");
             if (doctorRole == null)
             {
-                return new List<ApplicationUser>();
+                return [];
             }
 
             var doctorRoleId = doctorRole.Id;

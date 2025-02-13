@@ -10,13 +10,14 @@ using System.Text.Encodings.Web;
 namespace Krka.MoveOn.Services.Pages;
 
 public class UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, NavigationManager navigationManager, IUserStore<ApplicationUser> userStore,
-    IEmailSender<ApplicationUser> emailSender, ILogger<UserService> logger)
+    IEmailSender<ApplicationUser> emailSender, ApplicationDbContext context, ILogger<UserService> logger)
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly RoleManager<IdentityRole> _roleManager = roleManager;
     private readonly NavigationManager _navigationManager = navigationManager;
     private readonly IUserStore<ApplicationUser> _userStore = userStore;
     private readonly IEmailSender<ApplicationUser> _emailSender = emailSender;
+    private readonly ApplicationDbContext _context = context;
     private readonly ILogger _logger = logger;
 
     public async Task<List<ApplicationUser>> GetUsersAsync()
@@ -25,9 +26,12 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         var users = await _userManager.Users.ToListAsync();
         // read all roles
         var roles = await _roleManager.Roles.ToListAsync();
-        // for each user read and assign role
+        // read all workplaces
+        var workplaces = await _context.WorkPlaces.ToListAsync();
+        // for each user read and assign role and workplace
         foreach (var user in users)
         {
+            // role
             var userRoles = await _userManager.GetRolesAsync(user);
             if (userRoles == null || userRoles.Count == 0)
             {
@@ -36,6 +40,15 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
                 userRoles = await _userManager.GetRolesAsync(user);
             }
             user.Role = roles.FirstOrDefault(i => i.Name == userRoles.First());
+            // workplace
+            var workplace = workplaces.FirstOrDefault(i => i.Id == user.WorkplaceId);
+            if (workplace == null)
+            {
+                user.WorkplaceId = 1;
+                user.WorkPlace = workplaces.First(i => i.Id == 1);
+            }
+            else 
+                user.WorkPlace = workplace;
         }
         return users;
     }
@@ -43,6 +56,11 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
     public async Task<List<IdentityRole>> GetRolesAsync()
     {
         return await _roleManager.Roles.ToListAsync();
+    }
+
+    public async Task<List<WorkPlace>> GetWorkplacesAsync()
+    {
+        return await _context.WorkPlaces.ToListAsync();
     }
 
     public async Task<ApplicationUser?> GetUserByIdAsync(string userId)
@@ -64,6 +82,8 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         dummyUser.TitleAfter = user.TitleAfter;
         dummyUser.PhoneNumber = user.PhoneNumber;
         dummyUser.Role = user.Role;
+        dummyUser.WorkplaceId = (user.WorkPlace == null) ? 1 : user.WorkPlace.Id;
+        dummyUser.WorkPlace = user.WorkPlace;
 
         // create user
         var result = await _userManager.CreateAsync(dummyUser, user.Password!);
@@ -163,6 +183,8 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
             userOrig.TitleAfter = user.TitleAfter;
             userOrig.LockoutEnabled = user.LockoutEnabled;
             userOrig.LockoutEnd = user.LockoutEnd;
+            userOrig.WorkplaceId = (user.WorkPlace == null) ? 1 : user.WorkPlace.Id;
+            userOrig.WorkPlace = user.WorkPlace;
 
             // update user in database
             result = await _userManager.UpdateAsync(userOrig);

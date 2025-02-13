@@ -28,35 +28,43 @@ else
 {
     <style>
         .grid-popup {
-            min-width: 800px;
+        min-width: 800px;
         }
     </style>
     <StatusMessage Message="@Message" />
     <DxGrid @ref="Grid" Data="@DataSource" CssClass="mw-1100"
-            PageSize="20"
-            PagerPosition="GridPagerPosition.Bottom"
-            PageSizeSelectorVisible="true"
-            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-            PageSizeSelectorAllRowsItemVisible="true"
-            PagerSwitchToInputBoxButtonCount="10"
-            PagerVisibleNumericButtonCount="10"
-            ValidationEnabled="true"
-            PopupEditFormHeaderText="@editFormHeaderText"
-            PopupEditFormCssClass="grid-popup"
-            EditMode="GridEditMode.PopupEditForm"
-            EditStart="@OnRowEditStart"
-            EditFormButtonsVisible="true"
-            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-            ColumnResizeMode="GridColumnResizeMode.NextColumn"
-            CustomizeDataRowEditor="OnCustomizeDataRowEditor"
-            CustomizeEditModel="Grid_CustomizeEditModel"
-            EditModelSaving="Grid_EditModelSaving"
-            DataItemDeleting="Grid_DataItemDeleting"
-            TextWrapEnabled="false"
-            HighlightRowOnHover="true"
-            KeyFieldName="Id">
+    PageSize="20"
+    PagerPosition="GridPagerPosition.Bottom"
+    PageSizeSelectorVisible="true"
+    PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+    PageSizeSelectorAllRowsItemVisible="true"
+    PagerSwitchToInputBoxButtonCount="10"
+    PagerVisibleNumericButtonCount="10"
+    ValidationEnabled="true"
+    PopupEditFormHeaderText="@editFormHeaderText"
+    PopupEditFormCssClass="grid-popup"
+    EditMode="GridEditMode.PopupEditForm"
+    EditStart="@OnRowEditStart"
+    EditFormButtonsVisible="true"
+    FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+    ColumnResizeMode="GridColumnResizeMode.NextColumn"
+    CustomizeDataRowEditor="OnCustomizeDataRowEditor"
+    CustomizeEditModel="Grid_CustomizeEditModel"
+    EditModelSaving="Grid_EditModelSaving"
+    DataItemDeleting="Grid_DataItemDeleting"
+    TextWrapEnabled="false"
+    HighlightRowOnHover="true"
+    KeyFieldName="Id">
         <Columns>
             <DxGridDataColumn Caption="Používateľ" FieldName="FullName" />
+            <DxGridDataColumn Caption="Pracovisko" FieldName="WorkPlace">
+                <EditSettings>
+                    <DxComboBoxSettings Data="@workplaces" TextFieldName="Workplace" ValueFieldName="Id" />
+                </EditSettings>
+                <CellDisplayTemplate>
+                    @((context.Value as WorkPlace)?.Workplace)
+                </CellDisplayTemplate>
+            </DxGridDataColumn>
             <DxGridDataColumn Caption="Úroveň" FieldName="Role">
                 <EditSettings>
                     <DxComboBoxSettings Data="@roles" />
@@ -68,9 +76,9 @@ else
                 <HeaderTemplate>
                     <div class="grid-header-align-center">
                         <DxButton IconCssClass="grid-icon grid-icon-add"
-                                  RenderStyle="ButtonRenderStyle.Link"
-                                  title="Pridať nového používateľa"
-                                  Click="@(() => Grid!.StartEditNewRowAsync())" />
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Pridať nového používateľa"
+                        Click="@(() => Grid!.StartEditNewRowAsync())" />
                     </div>
                 </HeaderTemplate>
                 <CellDisplayTemplate Context="gridContext">
@@ -79,26 +87,26 @@ else
                     }
                     <div class="grid-cell-align-center">
                         <DxButton IconCssClass="grid-icon grid-icon-edit"
-                                  RenderStyle="ButtonRenderStyle.Link"
-                                  title="Upraviť údaje používateľa"
-                                  Click="@(() => Grid!.StartEditDataItemAsync(gridContext.DataItem))" />
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Upraviť údaje používateľa"
+                        Click="@(() => Grid!.StartEditDataItemAsync(gridContext.DataItem))" />
                         <DxButton IconCssClass="grid-icon grid-icon-key"
-                                  RenderStyle="ButtonRenderStyle.Link"
-                                  title="Resetnúť heslo"
-                                  Click="@(async () => await OnResetPasswordClick(user))" />
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Resetnúť heslo"
+                        Click="@(async () => await OnResetPasswordClick(user))" />
                         <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                  RenderStyle="ButtonRenderStyle.Link"
-                                  title="Vymazať používateľa"
-                                  Click="@(() => Grid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Vymazať používateľa"
+                        Click="@(() => Grid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
                     </div>
                 </CellDisplayTemplate>
                 <CellEditTemplate Context="editContext">
                     <div class="grid-cell-align-center">
                         <DxButton Enabled="false"
-                                  aria-label="Delete"
-                                  CssClass="grid-disabled-button"
-                                  IconCssClass="grid-icon grid-icon-delete"
-                                  RenderStyle="ButtonRenderStyle.Link" />
+                        aria-label="Delete"
+                        CssClass="grid-disabled-button"
+                        IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link" />
                     </div>
                 </CellEditTemplate>
             </DxGridCommandColumn>
@@ -109,8 +117,11 @@ else
                 var user = (ApplicationUser)EditFormContext.EditModel;
             }
             <DxFormLayout CssClass="w-100">
-                <DxFormLayoutItem Caption="Používateľské meno / e-mail:" ColSpanMd="6">
+                <DxFormLayoutItem Caption="Používateľské meno / e-mail:" ColSpanMd="12">
                     <DxTextBox @bind-Text="user.UserName"/>
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Pracovisko:" ColSpanMd="6">
+                    @EditFormContext.GetEditor("WorkPlace")
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Úroveň:" ColSpanMd="6">
                     @EditFormContext.GetEditor("Role")
@@ -163,6 +174,7 @@ else
     private IGrid? Grid { get; set; }
     private List<ApplicationUser>? DataSource;
     private List<IdentityRole> roles = [];
+    private List<WorkPlace> workplaces = [];
     private bool isNewUser = false;
     private TaskCompletionSource<bool> DataLoadedTcs { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private string editFormHeaderText = "Nový používateľ";
@@ -173,6 +185,7 @@ else
     {
         DataSource = await UserService.GetUsersAsync();
         roles = await UserService.GetRolesAsync();
+        workplaces = await UserService.GetWorkplacesAsync();
         DataLoadedTcs.TrySetResult(true);
     }
 
@@ -184,6 +197,9 @@ else
             isNewUser = true;
             var newUser = (ApplicationUser)e.EditModel;
             newUser.Role = roles.First(i => i.Name == "Doctor");
+            var workplace = workplaces.First(i => i.Id == 1);
+            newUser.WorkplaceId = workplace.Id;
+            newUser.WorkPlace = workplace;
         }
     }
     private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
@@ -226,7 +242,8 @@ else
             if (userOrig.FirstName != userUpdated.FirstName
                 || userOrig.LastName != userUpdated.LastName
                 || userOrig.TitleBefore != userUpdated.TitleBefore
-                || userOrig.TitleAfter != userUpdated.TitleAfter)
+                || userOrig.TitleAfter != userUpdated.TitleAfter
+                || userOrig.WorkPlace?.Id != userUpdated.WorkPlace?.Id)
             {
                 var resultUser = await UserService.UpdateUserAsync(userUpdated);
                 if (!resultUser.Succeeded)
