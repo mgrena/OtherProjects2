@@ -93,7 +93,7 @@
             <Columns>
                 <DxGridDataColumn FieldName="PatientCode" Caption="Identifikačný kód pacienta" />
                 <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
-                @if (isAdminOrOffice)
+                @if (isAdminOrOffice || isMultiWorkplace)
                 {
                     <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" />
                 }
@@ -309,6 +309,7 @@
     private bool IsInfoOpen = true;
     private bool IsInfoOpen1 = true;
     private bool isAdminOrOffice;
+    private bool isMultiWorkplace = true;
     private ValidationMessageStore messageStore;
 
     bool isReadOnly = false;
@@ -328,6 +329,12 @@
         Patients = await PatientService.GetPatientsAsync();
         Doctors = await PatientService.GetDoctorsAsync();
         User = await QuestionnaireService.GetAllUsersAsync();
+
+        if (!isAdminOrOffice)
+        {
+            var docsCount = Patients.Select(i => i.UserId).Distinct().Count();
+            isMultiWorkplace = (docsCount > 1);
+        }
 
         // try load stored patient
         var selectedPatientId = await GetSelectedPatientId();

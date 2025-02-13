@@ -77,6 +77,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     /// </summary>
     public DbSet<Gen9DSRelational> Gen9DSRelationals { get; set; }
     public DbSet<Gen7YesRelational> Gen7YesRelationals { get; set; }
+    public DbSet<WorkPlace> WorkPlaces { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
@@ -354,6 +355,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 24, Type_q = 6, Name = "Prestala", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         modelBuilder.Entity<DialAdverseEffect>().HasData(new DialAdverseEffect() { Id = 25, Type_q = 6, Name = "Pokračuje", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
 
+        #endregion
+
+        #region "Workplaces"
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 1, Workplace = "nepriradené", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 2, Workplace = "Neurologické oddelenie, Nemocnica AGEL Zvolen a.s.", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 3, Workplace = "Neurologické oddelenie UNB Bratislava - Kramáre", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 4, Workplace = "Neurologické oddelenie UNB Bratislava - Ružinov", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 5, Workplace = "Neurologické oddelenie, FN Trnava", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 6, Workplace = "Neurologické oddelenie, FN Nitra", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 7, Workplace = "Neurologické oddelenie, UN Martin", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 8, Workplace = "Neurologické oddelenie ÚVN Ružomberok", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 9, Workplace = "Neurologické oddelenie, NsP Sv. Jakuba n.o., Bardejov", CreatedAt = new(2025, 02, 12) });
+        modelBuilder.Entity<WorkPlace>().HasData(new WorkPlace() { Id = 10, Workplace = "Neurologická klinika, UN Louisa Pasteura, Košice", CreatedAt = new(2025, 02, 12) });
         #endregion
 
     }

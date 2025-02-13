@@ -12,8 +12,6 @@ namespace Krka.MoveOn.Data
             Predčasne_vylúčený
         }
 
-
-
         [Key]
         [Column("id")]
         public int Id { get; set; }
