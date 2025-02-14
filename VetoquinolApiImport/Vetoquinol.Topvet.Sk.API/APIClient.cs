@@ -102,6 +102,7 @@ public class APIClient : IAPIClient
     {
         var aResult = new ResultReport();
 
+        /*
         try
         {
             IList<int> aCenters = [3, 4];
@@ -146,9 +147,9 @@ public class APIClient : IAPIClient
                         ClientAddress = i.street,
                         ClientCity = i.city,
                         ClientIco = i.ico,
-                        Quantity = Utils.StrToDecimalSafety(i.quantity),
-                        BasePrice = Utils.StrToDecimalSafety(i.priceBase),
-                        SetDiscount = Utils.StrToDecimalSafety(i.setDiscount),
+                        Quantity = (i.quantity != null) ? Utils.StrToDecimalSafety(i.quantity) : 0,
+                        BasePrice = (i.priceBase != null) ? Utils.StrToDecimalSafety(i.priceBase) : 0,
+                        SetDiscount = (i.setDiscount != null) ? Utils.StrToDecimalSafety(i.setDiscount) : 0,
                         DeliveryDate = (i.dateOfSale != null) ? DateTime.Parse(i.dateOfSale) : null,
                         Rebate = (i.rabat != null && i.rabat == "1")
                     }).ToList();
@@ -167,6 +168,7 @@ public class APIClient : IAPIClient
             processException(ex, ref aStatus);
             aResult.Statuses.Add("sales", aStatus);
         }
+        */
 
         return aResult;
     }
@@ -174,6 +176,7 @@ public class APIClient : IAPIClient
     {
         var aResult = new ResultReport();
 
+        /*
         try
         {
             IList<int> aCenters = [3, 4];
@@ -228,6 +231,7 @@ public class APIClient : IAPIClient
             processException(ex, ref aStatus);
             aResult.Statuses.Add("stocks", aStatus);
         }
+        */
 
         return aResult;
     }

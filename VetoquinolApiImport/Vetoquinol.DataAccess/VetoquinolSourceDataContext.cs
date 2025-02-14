@@ -16,25 +16,27 @@ public partial class VetoquinolSourceDataContext : DbContext
     {
     }
 
-    public virtual DbSet<Distributor> Distributors { get; set; }
+    public virtual DbSet<Distributor> Distributors { get; set; } = null!;
 
-    public virtual DbSet<Pharmacy> Pharmacies { get; set; }
+    public virtual DbSet<Pharmacy> Pharmacies { get; set; } = null!;
 
-    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<Product> Products { get; set; } = null!;
 
-    public virtual DbSet<SaleDatum> SaleData { get; set; }
+    public virtual DbSet<SaleDatum> SaleData { get; set; } = null!;
 
-    public virtual DbSet<Stock> Stocks { get; set; }
+    public virtual DbSet<Stock> Stocks { get; set; } = null!;
 
-    public virtual DbSet<VNovikoCz> VNovikoCzs { get; set; }
+    public virtual DbSet<VMedArtSk> VMedArtSks { get; set; } = null!;
 
-    public virtual DbSet<VPharmacopolaSk> VPharmacopolaSks { get; set; }
+    public virtual DbSet<VNovikoCz> VNovikoCzs { get; set; } = null!;
 
-    public virtual DbSet<VSamohylCz> VSamohylCzs { get; set; }
+    public virtual DbSet<VPharmacopolaSk> VPharmacopolaSks { get; set; } = null!;
 
-    public virtual DbSet<VSgvetCz> VSgvetCzs { get; set; }
+    public virtual DbSet<VSamohylCz> VSamohylCzs { get; set; } = null!;
 
-    public virtual DbSet<VTopvetSk> VTopvetSks { get; set; }
+    public virtual DbSet<VSgvetCz> VSgvetCzs { get; set; } = null!;
+
+    public virtual DbSet<VTopvetSk> VTopvetSks { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLazyLoadingProxies().UseSqlServer(DataAccessSettings.DBConnectionString);
 
@@ -192,6 +194,33 @@ public partial class VetoquinolSourceDataContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.ReservedQtyOnStockLevel).HasColumnType("decimal(9, 2)");
             entity.Property(e => e.StockLevel).HasColumnType("decimal(9, 2)");
+        });
+
+        modelBuilder.Entity<VMedArtSk>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("v_MedArt_sk");
+
+            entity.Property(e => e.BasePrice).HasColumnType("decimal(9, 2)");
+            entity.Property(e => e.CatalogPrice).HasColumnType("decimal(7, 2)");
+            entity.Property(e => e.ClientAddress).HasMaxLength(150);
+            entity.Property(e => e.ClientCity).HasMaxLength(50);
+            entity.Property(e => e.ClientZip).HasMaxLength(10);
+            entity.Property(e => e.ClientIco)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.ClientId)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.ClientName).HasMaxLength(150);
+            entity.Property(e => e.DeliveryDate).HasColumnType("date");
+            entity.Property(e => e.ProductName).HasMaxLength(150);
+            entity.Property(e => e.ProductId)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Quantity).HasColumnType("decimal(9, 2)");
+            entity.Property(e => e.SetDiscount).HasColumnType("decimal(9, 2)");
         });
 
         modelBuilder.Entity<VNovikoCz>(entity =>

@@ -7,8 +7,8 @@ public static class ApiSettings
 public class Credentials
 {
     public int Id { get; set; }
-    public string? Client { get; set; }
-    public string? Account { get; set; }
-    public string? Password { get; set; }
-    public string? BaseUri { get; set; }
+    public required string Client { get; set; }
+    public required string Account { get; set; }
+    public required string Password { get; set; }
+    public required string BaseUri { get; set; }
 }
