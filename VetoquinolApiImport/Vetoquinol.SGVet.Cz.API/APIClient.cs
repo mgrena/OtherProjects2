@@ -23,7 +23,7 @@ public class APIClient : IAPIClient
             aClient.ClientCredentials.UserName.Password = Password;
 
             var aTask = await aClient.getProductsAsync();
-            IList<ProductApi> aList = aTask.@return.ToList().Select(i => new ProductApi()
+            IList<ProductApi> aList = [.. aTask.@return.ToList().Select(i => new ProductApi()
             {
                 DistrId = ClientId,
                 ProductIdInt = i.productId,
@@ -34,7 +34,7 @@ public class APIClient : IAPIClient
                 VAT = (decimal)i.VAT,
                 ProducerName = i.supplierId,
                 Available = !i.finished
-            }).ToList();
+            })];
             aResult.RetunObjects.Add(aMethodName, aList);
 
             aClient.Close();
@@ -56,33 +56,43 @@ public class APIClient : IAPIClient
         var aResult = new ResultReport();
 
         /*
-        HSB2BwsClient aClient = new();
-        aClient.ClientCredentials.UserName.UserName = Account;
-        aClient.ClientCredentials.UserName.Password = Password;
+        try
+        { 
+            HSB2BwsClient aClient = new();
+            aClient.ClientCredentials.UserName.UserName = Account;
+            aClient.ClientCredentials.UserName.Password = Password;
 
-        var aTask = await aClient.getClientsAsync();
-        IList<PharmacyApi> aList = aTask.@return.Select(i => new PharmacyApi()
+            var aTask = await aClient.getClientsAsync();
+            IList<PharmacyApi> aList = [.. aTask.@return.Select(i => new PharmacyApi()
+            {
+                DistrId = ClientId,
+                ClientId = i.clientIdKey,
+                ClientIdInt = i.clientId,
+                ClientMasterId = i.clientMasterIdKey,
+                PreviousMasterId = i.clientMasterId.ToString(),
+                Email = i.email,
+                Ico = i.IC,
+                Name = i.name,
+                Address = i.street,
+                City = i.city,
+                ZipCode = i.zip,
+                Canceled = i.finished,
+                Priceless = i.priceless
+            })];
+            aResult.RetunObjects.Add(aMethodName, aList);
+
+            aClient.Close();
+
+            aResult.Statuses.Add(aMethodName, new() { Status = true });
+        }
+        catch (Exception ex)
         {
-            DistrId = ClientId,
-            ClientId = i.clientIdKey,
-            ClientIdInt = i.clientId,
-            ClientMasterId = i.clientMasterIdKey,
-            PreviousMasterId = i.clientMasterId.ToString(),
-            Email = i.email,
-            Ico = i.IC,
-            Name = i.name,
-            Address = i.street,
-            City = i.city,
-            ZipCode = i.zip,
-            Canceled = i.finished,
-            Priceless = i.priceless
-        }).ToList();
-        aResult.RetunObjects.Add("pharmacies", aList);
-
-        aClient.Close();
+            StatusReport aStatus = new() { Status = true };
+            processException(ex, ref aStatus);
+            aResult.Statuses.Add(aMethodName, aStatus);
+        }
         */
 
-        aResult.Statuses.Add("pharmacies", new() { Status = true });
         return aResult;
     }
     public async Task<ResultReport> GetSalesAsync(DateTime startingDate, DateTime endingDate)
@@ -113,7 +123,7 @@ public class APIClient : IAPIClient
                 aTasks.Remove(aFinishedTask);
                 var aTaskResult = await aFinishedTask;
 
-                IList<SaleApi> aList = aTaskResult.@return.Select(i => new SaleApi()
+                IList<SaleApi> aList = [.. aTaskResult.@return.Select(i => new SaleApi()
                 {
                     DistrId = ClientId,
                     BatchNo = i.batchNo,
@@ -130,7 +140,7 @@ public class APIClient : IAPIClient
                     DeliveryDate = i.dateOfSale,
                     OrderNo = i.orderId.ToString(),
                     Rebate = i.rabat
-                }).ToList();
+                })];
 
                 aSalesList = [.. aSalesList, .. aList];
             } // while (aTasks.Any())

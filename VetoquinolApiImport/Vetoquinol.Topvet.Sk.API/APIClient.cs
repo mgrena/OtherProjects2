@@ -31,7 +31,7 @@ public class APIClient : IAPIClient
             aResult.Statuses.Add(aTaskResult.Statuses.First());
             string aContract = (aTaskResult.RetunObjects[aMethodName] == null) ? string.Empty : aTaskResult.RetunObjects[aMethodName]!.ToString()!;
             var aProducts = JsonConvert.DeserializeObject<ProductContract[]>(aContract);
-            IList<ProductApi> aList = aProducts!.Select(i => new ProductApi()
+            IList<ProductApi> aList = [.. aProducts!.Select(i => new ProductApi()
             {
                 DistrId = ClientId,
                 Id = i.id,
@@ -48,7 +48,7 @@ public class APIClient : IAPIClient
                 RegNumber = i.regNumber,
                 PackNumber = i.packNumber,
                 Available = i.available
-            }).ToList();
+            })];
             aResult.RetunObjects.Add(aMethodName, aList);
         }
         catch (Exception ex)
@@ -102,7 +102,6 @@ public class APIClient : IAPIClient
     {
         var aResult = new ResultReport();
 
-        /*
         try
         {
             IList<int> aCenters = [3, 4];
@@ -168,7 +167,6 @@ public class APIClient : IAPIClient
             processException(ex, ref aStatus);
             aResult.Statuses.Add("sales", aStatus);
         }
-        */
 
         return aResult;
     }

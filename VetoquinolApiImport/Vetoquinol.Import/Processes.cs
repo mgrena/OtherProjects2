@@ -319,7 +319,7 @@ public class Processes
             {
                 int aFileCount = Directory.GetFiles(aLogDirectory, "*.log").Length;
                 string aNewFileName = aLogFileDefaultName.Replace(".", string.Format("_{0}.", aFileCount));
-                File.Move(aLogFileDefaultName, aNewFileName);
+                File.Move(Path.Combine(aLogDirectory, aLogFileDefaultName), Path.Combine(aLogDirectory, aNewFileName));
                 File.Create(Path.Combine(aLogDirectory, aLogFileDefaultName)).Close();
             }
         }
