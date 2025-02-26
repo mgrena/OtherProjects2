@@ -5,7 +5,7 @@ using System.IdentityModel.Claims;
 
 namespace Krka.MoveOn.Services.Pages
 {
-    public class PatientService(ApplicationDbContext context, AuthenticationStateProvider authenticationStateProvider, ILogger<UserService> logger)
+    public class PatientService(ApplicationDbContext context, AuthenticationStateProvider authenticationStateProvider, ILogger<PatientService> logger)
     {
         private readonly ApplicationDbContext _context = context;
         private readonly AuthenticationStateProvider _authenticationStateProvider = authenticationStateProvider;

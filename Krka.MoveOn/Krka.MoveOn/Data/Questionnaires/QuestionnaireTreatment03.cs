@@ -29,7 +29,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// <summary>
         /// Dávka (mg)
         /// </summary>
-        [Column("treat_2", TypeName = "decimal(5,2)")]
+        [Column("treat_2", TypeName = "decimal(7,2)")]
         public decimal? Treat_2 { get; set; }
 
         /// <summary>

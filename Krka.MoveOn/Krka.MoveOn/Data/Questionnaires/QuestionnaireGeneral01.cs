@@ -107,7 +107,7 @@ namespace Krka.MoveOn.Data.Questionnaires
         /// <summary>
         /// Pacientovi je diagnostikované/je podozrenie na (Ak zada "Iný parkinsonský syndróm ")
         /// </summary>
-        [Column("gen_13_1", TypeName = "nvarchar"), StringLength(30)]
+        [Column("gen_13_1", TypeName = "nvarchar"), StringLength(100)]
         public string? Gen_13_1 { get; set; }
 
 
