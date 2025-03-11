@@ -99,12 +99,12 @@ namespace Krka.MoveOn.Services.Pages
 
             if (doctorPatientCount > 20)
             {
-                _logger.LogInformation("The patient limit has been reached for user {UserName}.", patient.UserId);
+                _logger.LogError("The patient limit has been reached for user {UserName}.", patient.UserId);
                 return OperationResult.FailureResult("Lekár môže pridať maximálne 20 pacientov.");
             }
-            if (codecheck > 0)
+            if (patient.Id == 0 && codecheck > 0)
             {
-                _logger.LogInformation("Cannot insert duplicate key row in patients. Duplicate value is {patient.PatientCode}.", patient.UserId);
+                _logger.LogError("Cannot insert duplicate key row in patients. Duplicate value is {patient.PatientCode}.", patient.PatientCode);
                 return OperationResult.FailureResult($"Pacient so zadaným kódom {patient.PatientCode} už v databáze existuje. Záznam nie je možné uložiť.");
             }
 
