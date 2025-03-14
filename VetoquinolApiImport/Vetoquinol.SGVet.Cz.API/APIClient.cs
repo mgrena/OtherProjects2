@@ -123,24 +123,28 @@ public class APIClient : IAPIClient
                 aTasks.Remove(aFinishedTask);
                 var aTaskResult = await aFinishedTask;
 
-                IList<SaleApi> aList = [.. aTaskResult.@return.Select(i => new SaleApi()
+                IList<SaleApi> aList = [];
+                if (aTaskResult.@return != null)
                 {
-                    DistrId = ClientId,
-                    BatchNo = i.batchNo,
-                    ProductId = i.productId.ToString(),
-                    ClientMasterId = i.clientId.ToString(),
-                    ClientId = i.clientKey,
-                    ClientName = i.clientName,
-                    ClientAddress = i.clientStreet,
-                    ClientCity = i.clientCity,
-                    ClientZIP = i.clientZip,
-                    ClientIco = i.clientIC,
-                    Quantity = (decimal)i.quantity,
-                    BasePrice = (decimal)i.priceBase,
-                    DeliveryDate = i.dateOfSale,
-                    OrderNo = i.orderId.ToString(),
-                    Rebate = i.rabat
-                })];
+                    aList = [.. aTaskResult.@return.Select(i => new SaleApi()
+                    {
+                        DistrId = ClientId,
+                        BatchNo = i.batchNo,
+                        ProductId = i.productId.ToString(),
+                        ClientMasterId = i.clientId.ToString(),
+                        ClientId = i.clientKey,
+                        ClientName = i.clientName,
+                        ClientAddress = i.clientStreet,
+                        ClientCity = i.clientCity,
+                        ClientZIP = i.clientZip,
+                        ClientIco = i.clientIC,
+                        Quantity = (decimal)i.quantity,
+                        BasePrice = (decimal)i.priceBase,
+                        DeliveryDate = i.dateOfSale,
+                        OrderNo = i.orderId.ToString(),
+                        Rebate = i.rabat
+                    })];
+                }
 
                 aSalesList = [.. aSalesList, .. aList];
             } // while (aTasks.Any())

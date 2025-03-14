@@ -118,17 +118,21 @@ public class APIClient : IAPIClient
                 aTasks.Remove(aFinishedTask);
                 var aTaskResult = await aFinishedTask;
 
-                IList<SaleApi> aList = aTaskResult.GetSalesResult.Sales.ToList().Select(i => new SaleApi()
+                IList<SaleApi> aList = [];
+                if (aTaskResult.GetSalesResult.Sales != null)
                 {
-                    DistrId = ClientId,
-                    ProductId = i.ProductID.ToString(),
-                    ClientId = i.ClientID.ToString(),
-                    ClientName = i.ClientID.ToString(),
-                    Quantity = i.Quantity,
-                    BasePrice = i.FinalSalePrice,
-                    DeliveryDate = DateTime.TryParseExact(i.DateOfSale, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parseDate) ? parseDate :DateTime.MinValue,
-                    Rebate = i.Rabat
-                }).ToList();
+                    aList = [.. aTaskResult.GetSalesResult.Sales.ToList().Select(i => new SaleApi()
+                    {
+                        DistrId = ClientId,
+                        ProductId = i.ProductID.ToString(),
+                        ClientId = i.ClientID.ToString(),
+                        ClientName = i.ClientID.ToString(),
+                        Quantity = i.Quantity,
+                        BasePrice = i.FinalSalePrice,
+                        DeliveryDate = DateTime.TryParseExact(i.DateOfSale, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parseDate) ? parseDate : DateTime.MinValue,
+                        Rebate = i.Rabat
+                    })];
+                }
 
                 aSalesList = [.. aSalesList, .. aList];
             } // while (aTasks.Any())

@@ -44,9 +44,8 @@ DateTime aStartTime = DateTime.Now;
 DateTime aStartInterval = aStartTime.AddDays(-1 * (7 + (aStartTime.DayOfWeek - DayOfWeek.Monday))).Date;
 DateTime anEndInterval = aStartInterval.AddDays(6);
 
-//var aResult = Processes.ProcessBatchAsync(anAppSettings, aStartInterval, anEndInterval).Result;
-//var aResult = Processes.ProcessBatchAsync(anAppSettings, new DateTime(2024, 11, 1), new DateTime(2024, 11, 30)).Result;
-var aResult = Processes.ProcessBatchAsync(anAppSettings, new DateTime(2025, 2, 10), new DateTime(2025, 2, 16)).Result;
+var aResult = Processes.ProcessBatchAsync(anAppSettings, aStartInterval, anEndInterval).Result;
+//var aResult = Processes.ProcessBatchAsync(anAppSettings, new DateTime(2025, 1, 1), new DateTime(2025, 1, 31)).Result;
 if (aResult.Status)
     Processes.WriteMessage(String.Format("Completed, duration = {0}", new TimeSpan(DateTime.Now.Subtract(aStartTime).Ticks).ToString()));
 else
