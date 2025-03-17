@@ -5,20 +5,20 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 <DxTabs @bind-ActiveTabIndex="ActiveTabIndex">
-    <DxTab TabIconCssClass="tab-icon icon-profile" Text="Profile" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage", ToggledSidebar)))">
+    <DxTab TabIconCssClass="tab-icon icon-profile" Text="Profil" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage", ToggledSidebar)))">
     </DxTab>
-    <DxTab TabIconCssClass="tab-icon icon-email" Text="Email" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/Email", ToggledSidebar)))">
+    <DxTab TabIconCssClass="tab-icon icon-email" Text="E-mail" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/Email", ToggledSidebar)))">
     </DxTab>
-    <DxTab TabIconCssClass="tab-icon icon-password" Text="Password" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/ChangePassword", ToggledSidebar)))">
+    <DxTab TabIconCssClass="tab-icon icon-password" Text="Heslo" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/ChangePassword", ToggledSidebar)))">
     </DxTab>
     @if(hasExternalLogins) {
     <DxTab TabIconCssClass="tab-icon icon-external" Text="External logins" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/ExternalLogins", ToggledSidebar)))">
     </DxTab>
     }
-    <DxTab TabIconCssClass="tab-icon icon-two-factor" Text="Two-factor authentication" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/TwoFactorAuthentication", ToggledSidebar)))">
+    <DxTab TabIconCssClass="tab-icon icon-two-factor" Text="Dvojfaktorové prihlasovanie" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/TwoFactorAuthentication", ToggledSidebar)))">
     </DxTab>
-    <DxTab TabIconCssClass="tab-icon icon-personal" Text="Personal Data" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/PersonalData", ToggledSidebar)))">
-    </DxTab>
+    @* <DxTab TabIconCssClass="tab-icon icon-personal" Text="Osobné dáta" Click="@(() => NavigationManager.NavigateTo(@UrlGenerator.GetUrl("Account/Manage/PersonalData", ToggledSidebar)))">
+    </DxTab> *@
 </DxTabs>
 
 @code {

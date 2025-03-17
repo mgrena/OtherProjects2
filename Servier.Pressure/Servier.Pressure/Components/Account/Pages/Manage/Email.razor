@@ -12,14 +12,14 @@
 @inject IdentityUserAccessor UserAccessor
 @inject NavigationManager NavigationManager
 
-<PageTitle>Manage email</PageTitle>
+<PageTitle>Zmena e-mail adresy</PageTitle>
 <div class="block-content">
     <StatusMessage Message="@message" />
     <EditForm Model="Input" FormName="change-email" OnValidSubmit="OnValidSubmitAsync" method="post" Context="changeemail">
         <DataAnnotationsValidator />
         <ValidationSummary class="text-danger" role="alert" />
         <DxFormLayout CaptionPosition=@CaptionPosition.Vertical>
-            <DxFormLayoutItem Caption="Email" ColSpanMd="12" BeginRow="true">
+            <DxFormLayoutItem Caption="E-mail" ColSpanMd="12" BeginRow="true">
                 <InteractiveServerTextBox Name="email" Value="@email" Enabled="false" />
             </DxFormLayoutItem>
             @if(!isEmailConfirmed) {
@@ -27,14 +27,14 @@
                     <form @onsubmit="OnSendEmailVerificationAsync" @formname="send-verification" id="send-verification-form" method="post">
                         <AntiforgeryToken />
                     </form>
-                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Send verification email" form="send-verification-form"></DxButton>
+                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Odoslať verifikačný e-mail" form="send-verification-form"></DxButton>
                 </DxFormLayoutItem>
             }
-            <DxFormLayoutItem Caption="New email" ColSpanMd="12" BeginRow="true">
+            <DxFormLayoutItem Caption="Nový e-mail" ColSpanMd="12" BeginRow="true">
                 <InteractiveServerTextBox Name="Input.NewEmail" Value="@Input.NewEmail" />
             </DxFormLayoutItem>
             <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Change email"></DxButton>
+                <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Zmeniť e-mail"></DxButton>
             </DxFormLayoutItem>
         </DxFormLayout>
     </EditForm>
@@ -62,7 +62,7 @@
 
     private async Task OnValidSubmitAsync() {
         if(Input.NewEmail is null || Input.NewEmail == email) {
-            message = "Your email is unchanged.";
+            message = "Váš e-mail nebol zmenený.";
             return;
         }
 
@@ -75,7 +75,7 @@
 
         await EmailSender.SendConfirmationLinkAsync(user, Input.NewEmail, HtmlEncoder.Default.Encode(callbackUrl));
 
-        message = "Confirmation link to change email sent. Please check your email.";
+        message = "Potvrdzovací odkaz na zmenu emailu bol odoslaný. Prosím, skontrolujte mailbox.";
     }
 
     private async Task OnSendEmailVerificationAsync() {
@@ -92,13 +92,13 @@
 
         await EmailSender.SendConfirmationLinkAsync(user, email, HtmlEncoder.Default.Encode(callbackUrl));
 
-        message = "Verification email sent. Please check your email.";
+        message = "Overovací e-mail bol odoslaný. Prosím, skontrolujte mailbox.";
     }
 
     private sealed class InputModel {
         [Required]
         [EmailAddress]
-        [Display(Name = "New email")]
+        [Display(Name = "Nový e-mail")]
         public string? NewEmail { get; set; }
     }
 }

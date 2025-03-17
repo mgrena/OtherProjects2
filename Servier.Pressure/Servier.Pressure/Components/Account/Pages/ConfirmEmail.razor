@@ -8,12 +8,12 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Confirm email</PageTitle>
+<PageTitle>Potvrdenie e-mail adresy</PageTitle>
 
 <div class="main-content">
     <div class="block-content">
         <div class="title">
-            <div class="title-header-text">Confirm email</div>
+            <div class="title-header-text">Potvrdenie e-mail adresy</div>
             <div class="title-content-text">@statusMessage</div>
         </div>
     </div>
@@ -39,11 +39,11 @@
         var user = await UserManager.FindByIdAsync(UserId);
         if(user is null) {
             HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            statusMessage = $"Error loading user with ID {UserId}";
+            statusMessage = $"Chyba pri načítavaní používateľa s ID {UserId}";
         } else {
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
             var result = await UserManager.ConfirmEmailAsync(user, code);
-            statusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            statusMessage = result.Succeeded ? "Ďakujeme za potvrdenie vášho e-mailu." : "Chyba pri potvrdení vášho e-mailu.";
         }
     }
 }

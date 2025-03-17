@@ -9,21 +9,21 @@
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<ResetAuthenticator> Logger
 
-<PageTitle>Reset authenticator key</PageTitle>
+<PageTitle>Resetovať autentifikačný kľúč</PageTitle>
 
 <StatusMessage />
 <div class="title title-secondary">
-    <div class="title-content-text-secondary">Reset authenticator key</div>
+    <div class="title-content-text-secondary">Resetovať autentifikačný kľúč</div>
 </div>
-<span>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</span>
+<span>Ak obnovíte svoj overovací kľúč, vaša overovacia aplikácia nebude fungovať, kým ju znova nenakonfigurujete.</span>
 <span>
-    This process disables 2FA until you verify your authenticator app.
-    If you do not complete your authenticator app configuration you may lose access to your account.
+    Tento proces vypne 2FA, kým neoveríte svoju autentifikačnú aplikáciu.
+    Ak nedokončíte konfiguráciu aplikácie autentifikátora, môžete stratiť prístup k svojmu účtu.
 </span>
 <div class="block-content">
     <form @formname="reset-authenticator" @onsubmit="OnSubmitAsync" method="post">
         <AntiforgeryToken />
-        <DxButton CssClass="w-100" Text="Reset authenticator key" RenderStyle="ButtonRenderStyle.Danger" SubmitFormOnClick="true"></DxButton>
+        <DxButton CssClass="w-100" Text="Resetovať autentifikačný kľúč" RenderStyle="ButtonRenderStyle.Danger" SubmitFormOnClick="true"></DxButton>
     </form>
 </div>
 
@@ -43,7 +43,7 @@
 
         RedirectManager.RedirectToWithStatus(
             "Account/Manage/EnableAuthenticator",
-            "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
+            "Váš kľúč autentifikačnej aplikácie bol resetovaný, budete musieť nakonfigurovať aplikáciu autentifikácie pomocou nového kľúča.",
             HttpContext);
     }
 }

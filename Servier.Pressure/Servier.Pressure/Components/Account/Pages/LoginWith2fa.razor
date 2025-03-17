@@ -8,12 +8,12 @@
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<LoginWith2fa> Logger
 
-<PageTitle>Two-factor authentication</PageTitle>
+<PageTitle>Dvojfaktorové prihlasovanie</PageTitle>
 <div class="main-content">
     <div class="block-content">
         <div class="title">
-            <div class="title-header-text">Two-factor authentication</div>
-            <div class="title-content-text-secondary">Your login is protected with an authenticator app. Enter your authenticator code below.</div>
+            <div class="title-header-text">Dvojfaktorové prihlasovanie</div>
+            <div class="title-content-text-secondary">Vaše prihlásenie je chránené pomocou autentifikačnej aplikácie. Nižšie zadajte svoj overovací kód.</div>
         </div>
         <StatusMessage Message="@message" />
         <EditForm Model="Input" FormName="login-with-2fa" OnValidSubmit="OnValidSubmitAsync" method="post" Context="LoginWithFA">
@@ -22,19 +22,19 @@
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
             <DxFormLayout CaptionPosition=@CaptionPosition.Vertical>
-                <DxFormLayoutItem Caption="Authenticator code" ColSpanMd="12" BeginRow="true">
+                <DxFormLayoutItem Caption="Overovací kód" ColSpanMd="12" BeginRow="true">
                     <InteractiveServerMaskedInput Name="Input.TwoFactorCode" CssClass="large-input" Value="@Input.TwoFactorCode" Mask="000 000" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                    <InteractiveServerCheckbox Name="Input.RememberMachine" InputId="rememberme" Value="@Input.RememberMachine" LabelText="Remember this machine"></InteractiveServerCheckbox>
+                    <InteractiveServerCheckbox Name="Input.RememberMachine" InputId="rememberme" Value="@Input.RememberMachine" LabelText="Zapamätať pre toto zariadenie"></InteractiveServerCheckbox>
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Log in"></DxButton>
+                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Prihlásiť"></DxButton>
                 </DxFormLayoutItem>
             </DxFormLayout>
         </EditForm>
         <div class="links-container">
-            <span>Having problems?</span><span>You can <a href="Account/LoginWithRecoveryCode?ReturnUrl=@ReturnUrl">log in with a recovery code</a></span>.
+            <span>Having problems?</span><span>Môžete sa <a href="Account/LoginWithRecoveryCode?ReturnUrl=@ReturnUrl">prihlásiť pomocou kódu na obnovenie</a></span>.
         </div>
     </div>
 </div>
@@ -56,7 +56,7 @@
     protected override async Task OnInitializedAsync() {
         // Ensure the user has gone through the username & password screen first
         user = await SignInManager.GetTwoFactorAuthenticationUserAsync() ??
-            throw new InvalidOperationException("Unable to load two-factor authentication user.");
+            throw new InvalidOperationException("Nie je možné načítať používateľa s dvojfaktorovou autentifikáciou.");
     }
 
     private async Task OnValidSubmitAsync() {
@@ -72,18 +72,18 @@
             RedirectManager.RedirectTo("Account/Lockout");
         } else {
             Logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", userId);
-            message = "Error: Invalid authenticator code.";
+            message = "Chyba: Neplatný overovací kód.";
         }
     }
 
     private sealed class InputModel {
         [Required]
-        [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(7, ErrorMessage = "Pole {0} musí byť aspoň {2} a maximálne {1} znakov dlhé.", MinimumLength = 6)]
         [DataType(DataType.Text)]
-        [Display(Name = "Authenticator code")]
+        [Display(Name = "Overovací kód")]
         public string? TwoFactorCode { get; set; }
 
-        [Display(Name = "Remember this machine")]
+        [Display(Name = "Zapamätať pre toto zariadenie")]
         public bool RememberMachine { get; set; }
     }
 }

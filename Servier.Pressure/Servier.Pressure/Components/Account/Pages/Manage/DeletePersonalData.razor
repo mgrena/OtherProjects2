@@ -10,21 +10,21 @@
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<DeletePersonalData> Logger
 
-<PageTitle>Delete Personal Data</PageTitle>
+<PageTitle>Vymazať osobné údaje</PageTitle>
 
 <StatusMessage Message="@message" />
 <div class="block-content">
     <div class="title title-secondary">
-        <div class="title-content-text-secondary">Delete Personal Data</div>
+        <div class="title-content-text-secondary">Vymazať osobné údaje</div>
     </div>
-    <div>Deleting this data will permanently remove your account, and this cannot be recovered.</div>
+    <div>Odstránením týchto údajov sa natrvalo odstráni váš účet, ktorý nie je možné obnoviť.</div>
 
     <EditForm Model="Input" FormName="delete-user" OnValidSubmit="OnValidSubmitAsync" method="post" Context="DeleteUser">
         <DataAnnotationsValidator />
         <ValidationSummary class="text-danger" role="alert" />
         <DxFormLayout CaptionPosition=@CaptionPosition.Vertical>
             @if(requirePassword) {
-                <DxFormLayoutItem Caption="Password" BeginRow="true" ColSpanMd="12">
+                <DxFormLayoutItem Caption="Heslo" BeginRow="true" ColSpanMd="12">
                     <InteractiveServerTextBox Name="Input.Password" Value="@Input.Password" Password="true"></InteractiveServerTextBox>
                 </DxFormLayoutItem>
             }

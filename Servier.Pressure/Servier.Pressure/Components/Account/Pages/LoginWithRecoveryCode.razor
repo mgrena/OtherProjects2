@@ -9,14 +9,14 @@
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<LoginWithRecoveryCode> Logger
 
-<PageTitle>Recovery code verification</PageTitle>
+<PageTitle>Overenie kódu na obnovenie</PageTitle>
 <div class="main-content">
     <div class="block-content">
         <div class="title">
-            <div class="title-header-text">Recovery code verification</div>
+            <div class="title-header-text">Overenie kódu na obnovenie</div>
             <div class="title-content-text-secondary">
-                You have requested to log in with a recovery code. This login will not be remembered until you provide
-                an authenticator app code at log in or disable 2FA and log in again.
+                Požiadali ste o prihlásenie pomocou kódu na obnovenie. Toto prihlásenie sa nezapamätá, kým nezadáte
+                kód autentifikačnej aplikácie pri prihlásení alebo deaktivujte 2FA a znova sa prihlásite.
             </div>
         </div>
         <StatusMessage Message="@message" />
@@ -24,11 +24,11 @@
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
             <DxFormLayout CaptionPosition=@CaptionPosition.Vertical>
-                <DxFormLayoutItem Caption="Authenticator code" ColSpanMd="12" BeginRow="true">
+                <DxFormLayoutItem Caption="Overovací kód" ColSpanMd="12" BeginRow="true">
                     <InteractiveServerTextBox Name="Input.RecoveryCode" CssClass="large-input" Value="@Input.RecoveryCode" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Log in"></DxButton>
+                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Prihlásiť"></DxButton>
                 </DxFormLayoutItem>
             </DxFormLayout>
         </EditForm>
@@ -49,7 +49,7 @@
     {
         // Ensure the user has gone through the username & password screen first
         user = await SignInManager.GetTwoFactorAuthenticationUserAsync() ??
-            throw new InvalidOperationException("Unable to load two-factor authentication user.");
+            throw new InvalidOperationException("Nie je možné načítať používateľa s dvojfaktorovou autentifikáciou.");
     }
 
     private async Task OnValidSubmitAsync()
@@ -73,14 +73,14 @@
         else
         {
             Logger.LogWarning("Invalid recovery code entered for user with ID '{UserId}' ", userId);
-            message = "Error: Invalid recovery code entered.";
+            message = "Chyba: Bol zadaný neplatný kód na obnovenie.";
         }
     }
 
     private sealed class InputModel {
         [Required]
         [DataType(DataType.Text)]
-        [Display(Name = "Recovery Code")]
+        [Display(Name = "Obnovovací kód")]
         public string RecoveryCode { get; set; } = "";
     }
 }
