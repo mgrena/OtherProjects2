@@ -16,7 +16,7 @@
                 </NavLink>
                 @if (new Uri(NavigationManager.Uri).LocalPath != "/") {
                     <NavLink href="@UrlGenerator.GetUrl("/", ToggledSidebar)" class="button-link hidden">
-                                <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="Domov" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button-nav" IconCssClass="icon icon-back"></DxButton>
+                                <DxButton RenderStyle="@ButtonRenderStyle.Dark" Text="Späť" RenderStyleMode="@ButtonRenderStyleMode.Text" CssClass="menu-button-nav" IconCssClass="icon icon-back"></DxButton>
                     </NavLink>
                 }
                 <AuthorizeView>

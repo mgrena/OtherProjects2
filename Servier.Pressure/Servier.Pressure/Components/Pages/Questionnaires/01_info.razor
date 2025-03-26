@@ -1,0 +1,39 @@
+﻿@page "/questionnaire/1info/{patientId:guid}"
+
+@using Microsoft.AspNetCore.Authorization
+@using Servier.Pressure.Components.Pages.Components
+@using Servier.Pressure.Services.Pages
+
+@attribute [Authorize]
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+
+<PageTitle>Electronic case report</PageTitle>
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<div class="cw-880 mo-main-layout">
+    <QuestHeader patientId="@patientId" />
+</div>
+
+
+
+
+
+@code {
+    [Parameter]
+    public Guid patientId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    { 
+    }
+}

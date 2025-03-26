@@ -33,6 +33,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuth
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<WorkplaceService>();
+builder.Services.AddScoped<QuestionnaireService>();
 
 // add authentication
 builder.Services.AddAuthentication(options => {

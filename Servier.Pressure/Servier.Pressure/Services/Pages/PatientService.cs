@@ -58,6 +58,10 @@ public class PatientService(ApplicationDbContext context, AuthenticationStatePro
 
         return patients;
     }
+    public async Task<Patient?> GetPatientByIdAsync(string id)
+    {
+        return await _context.Patients.FirstOrDefaultAsync(i => i.Id == id);
+    }
     public async Task DeletePatientAsync(int patientId)
     {
         var patient = await _context.Patients.FindAsync(patientId);

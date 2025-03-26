@@ -6,6 +6,7 @@
 @using Servier.Pressure.Services.Pages
 
 @inject WorkplaceService WorkplaceService
+@inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <EditForm Model="@DoctorWorkplace" Context="EditFormContext">
@@ -91,7 +92,10 @@
         debounceTimer.Elapsed += async (s, e) =>
         {
             var result = await WorkplaceService.SaveWorkplaceAsync(DoctorWorkplace!, UserId!);
-            Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            if (!result.Success)
+                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
         };
         debounceTimer.Start();
 
@@ -180,4 +184,16 @@
             }
         }
     }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
 }

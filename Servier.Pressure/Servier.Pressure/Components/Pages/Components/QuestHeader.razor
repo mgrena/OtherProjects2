@@ -1,0 +1,85 @@
+﻿@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject PatientService PatientService
+@inject NavigationManager NavigationManager
+
+<div class="mo-nav-submenu-bar">
+    <h1> <span style="color:#b691bc; font-weight: bold;">@selectedPatientCode</span> - Electronic case report</h1>
+    <DxFormLayout>
+        <DxFormLayoutItem>
+            <div class="mo-buttons-group">
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Informovaný súhlas a spôsobilosť subjektu"
+                          CssClass="@GetButtonCssClass("/questionnaire/1info")"
+                          NavigateUrl="@GetNavigateUrl("/questionnaire/1info")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Manažment dyslipidémie a artériovej hypertenzie pred Návštevou 1"
+                          CssClass="@GetButtonCssClass("/questionnaire/2before")"
+                          NavigateUrl="@GetNavigateUrl("/questionnaire/2before")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Demografia a anamnéza"
+                          CssClass="@GetButtonCssClass("/questionnaire/3demogr")"
+                          NavigateUrl="@GetNavigateUrl("/questionnaire/3demogr")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Zmena antihypertenzívnej liečny počas Návštevy 1"
+                          CssClass="@GetButtonCssClass("/questionnaire/4visit1")"
+                          NavigateUrl="@GetNavigateUrl("/questionnaire/4visit1")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Návšteva 2"
+                          CssClass="@GetButtonCssClass("/questionnaire/5visit2")"
+                          NavigateUrl="@GetNavigateUrl("/questionnaire/5visit2")" />
+                <DxButton RenderStyle="@ButtonRenderStyle.Secondary"
+                          RenderStyleMode="@ButtonRenderStyleMode.Outline"
+                          Text="Záznamník domáceho monitorovania tlaku"
+                          CssClass="@GetButtonCssClass("/questionnaire/6measure")"
+                          NavigateUrl="@GetNavigateUrl("/questionnaire/6measure")" />
+            </div>
+        </DxFormLayoutItem>
+    </DxFormLayout>
+
+</div>
+
+@code {
+    [Parameter]
+    public Guid patientId { get; set; }
+    private string? selectedPatientCode { get; set; }
+    private string? currentUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var patient = await PatientService.GetPatientByIdAsync(patientId.ToString());
+        if (patient != null)
+            selectedPatientCode = patient.PatientCode;
+
+        currentUrl = NavigationManager.Uri; // Získaj aktuálnu URL
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+        }
+    }
+
+    private string GetNavigateUrl(string baseUrl)
+    {
+        return $"{baseUrl}/{patientId}";
+    }
+
+    private string GetButtonCssClass(string url)
+    {
+        if (currentUrl != null && currentUrl.Contains(url))
+            return "flex-fill me-2 rectangular-button active-button";
+        else
+            return "flex-fill me-2 rectangular-button";
+        //return currentUrl != null && currentUrl.Contains(url) ? "flex-fill me-2 rectangular-button active-button" : "flex-fill me-2 rectangular-button";
+    }
+}
