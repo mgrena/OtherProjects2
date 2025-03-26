@@ -147,9 +147,10 @@ public class Processes
                     }
                     if (!aData.TryGetValue("pharmacies", out object? phValue) || phValue == null || !((IList<PharmacyApi>)phValue!).Any())
                     {
-                        // Noviko (id = 4) a SGVet (id = 5) nemá lekarne
-                        if (client.Value.Id != 4 && client.Value.Id != 5)
-                        { 
+                        // Samohyl (id = 3), Noviko (id = 4) a SGVet (id = 5) nemá lekarne
+                        List<int> distrIds = [3, 4, 5];
+                        if (!distrIds.Contains(client.Value.Id))
+                        {
                             if (!aMissData.ContainsKey(client.Value.Client!))
                                 aMissData.Add(client.Value.Client!, []);
                             aMissData[client.Value.Client!].Add("pharmacies");
@@ -216,9 +217,14 @@ public class Processes
                     }
                     if (!aData.TryGetValue("stocks", out object? tValue) || tValue == null || !((IList<StockApi>)tValue!).Any())    
                     {
-                        if (!aMissData.ContainsKey(client.Value.Client!))
-                            aMissData.Add(client.Value.Client!, []);
-                        aMissData[client.Value.Client!].Add("stocks");
+                        // Pharmacopola (id = 1), Topvet (id = 2) a Samohyl (id = 3) nemajú skladové zásoby, ostatných kričať
+                        List<int> distrIds = [1, 2, 3];
+                        if (!distrIds.Contains(client.Value.Id))
+                        { 
+                            if (!aMissData.ContainsKey(client.Value.Client!))
+                                aMissData.Add(client.Value.Client!, []);
+                            aMissData[client.Value.Client!].Add("stocks");
+                        }
                     }
                     else
                     {
@@ -290,6 +296,7 @@ public class Processes
         catch (Exception ex)
         {
             processException(ex);
+            sendMail(string.Format("Pri generovaní dát pre Vetoquinol došlo k chybe! {0} Skontroluj logy.", ex.Message), appSettings.ErrorEmail!);
             aResult.Status = false;
         }
 

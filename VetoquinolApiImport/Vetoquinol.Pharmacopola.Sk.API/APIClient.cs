@@ -64,7 +64,7 @@ namespace Vetoquinol.Pharmacopola.Sk.API
                 aClient.ClientCredentials.UserName.Password = Password;
 
                 var aTask = await aClient.GetClientsAsync(new GetClients());
-                IList<PharmacyApi> aList = aTask.returnClients.ClientLine.Select(i => new PharmacyApi()
+                IList<PharmacyApi> aList = [.. aTask.returnClients.ClientLine.Select(i => new PharmacyApi()
                 {
                     DistrId = ClientId,
                     ClientId = i.ClientId,
@@ -79,7 +79,7 @@ namespace Vetoquinol.Pharmacopola.Sk.API
                     RegNo = i.RegNo,
                     RegName = i.RegName,
                     Canceled = i.Canceled
-                }).ToList();
+                }).DistinctBy(i => i.ClientId)];
                 aResult.RetunObjects.Add(aMethodName, aList);
 
                 aClient.Close();
@@ -114,7 +114,7 @@ namespace Vetoquinol.Pharmacopola.Sk.API
                 IList<SaleApi> aList = [];
                 if (aTask.returnSalesList != null && aTask.returnSalesList.SalesEntry != null)
                 { 
-                    aList = aTask.returnSalesList.SalesEntry.Select(i => new SaleApi()
+                    aList = [.. aTask.returnSalesList.SalesEntry.Select(i => new SaleApi()
                     {
                         DistrId = ClientId,
                         ProductId = i.ProductID, 
@@ -132,7 +132,7 @@ namespace Vetoquinol.Pharmacopola.Sk.API
                         BasePrice = i.BasePrice,
                         DeliveryDate = i.DeliveryDate,
                         Rebate = i.Rebate
-                    }).ToList();
+                    })];
                 }
                 aResult.RetunObjects.Add(aMethodName, aList);
                 if (anErrorCode != 999 && anErrorCode != 0)

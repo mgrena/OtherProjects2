@@ -31,24 +31,28 @@ public class APIClient : IAPIClient
             aResult.Statuses.Add(aTaskResult.Statuses.First());
             string aContract = (aTaskResult.RetunObjects[aMethodName] == null) ? string.Empty : aTaskResult.RetunObjects[aMethodName]!.ToString()!;
             var aProducts = JsonConvert.DeserializeObject<ProductContract[]>(aContract);
-            IList<ProductApi> aList = [.. aProducts!.Select(i => new ProductApi()
+            List<ProductApi> aList = [];
+            if (aProducts != null)
             {
-                DistrId = ClientId,
-                Id = i.id,
-                ProductId = i.productId,
-                Code = i.code,
-                Name = i.name,
-                VAT = i.vat,
-                CatalogPrice = i.catalogPrice,
-                CenterId = i.centerId,
-                CenterCode = i.centerCode,
-                Ean = i.ean,
-                ProducerName = i.producer_name,
-                AssortmentName = i.assortment_name,
-                RegNumber = i.regNumber,
-                PackNumber = i.packNumber,
-                Available = i.available
-            })];
+                aList = [.. aProducts.Where(i => i.producer_name == "VETOQUINOL").Select(i => new ProductApi()
+                {
+                    DistrId = ClientId,
+                    Id = i.id,
+                    ProductId = i.productId,
+                    Code = i.code,
+                    Name = i.name,
+                    VAT = i.vat,
+                    CatalogPrice = i.catalogPrice,
+                    CenterId = i.centerId,
+                    CenterCode = i.centerCode,
+                    Ean = i.ean,
+                    ProducerName = i.producer_name,
+                    AssortmentName = i.assortment_name,
+                    RegNumber = i.regNumber,
+                    PackNumber = i.packNumber,
+                    Available = i.available
+                })];
+            }
             aResult.RetunObjects.Add(aMethodName, aList);
         }
         catch (Exception ex)
@@ -74,7 +78,7 @@ public class APIClient : IAPIClient
             aResult.Statuses.Add(aTaskResult.Statuses.First());
             string aContract = aTaskResult.RetunObjects[aMethodName]!.ToString() ?? "";
             var aPharmacies = JsonConvert.DeserializeObject<PharmacyContract[]>(aContract);
-            IList<PharmacyApi> aList = aPharmacies!.Select(i => new PharmacyApi()
+            IList<PharmacyApi> aList = [.. aPharmacies!.Select(i => new PharmacyApi()
             {
                 DistrId = ClientId,
                 ClientApiId = i.clientApiId,
@@ -86,7 +90,7 @@ public class APIClient : IAPIClient
                 Email = i.email,
                 CenterId = i.centerId,
                 CenterCode = i.centerCode
-            }).ToList();
+            }).DistinctBy(i => i.ClientIdInt)];
             aResult.RetunObjects.Add(aMethodName, aList);
         }
         catch (Exception ex)
@@ -134,8 +138,9 @@ public class APIClient : IAPIClient
                 {
                     string aContract = aTaskResult.RetunObjects.First().Value!.ToString() ?? "";
                     var aSalesData = JsonConvert.DeserializeObject<SaleContract[]>(aContract);
+                    var rabats = aSalesData!.Where(i => i.rabat != "").ToList();
 
-                    IList<SaleApi> aList = aSalesData!.Select(i => new SaleApi()
+                    IList<SaleApi> aList = [.. aSalesData!.Select(i => new SaleApi()
                     {
                         Id = i.id,
                         DistrId = ClientId,
@@ -151,7 +156,7 @@ public class APIClient : IAPIClient
                         SetDiscount = (i.setDiscount != null) ? Utils.StrToDecimalSafety(i.setDiscount) : 0,
                         DeliveryDate = (i.dateOfSale != null) ? DateTime.Parse(i.dateOfSale) : null,
                         Rebate = (i.rabat != null && i.rabat == "1")
-                    }).ToList();
+                    })];
 
                     aSalesList = [.. aSalesList, .. aList];
                 } // if (aTaskResult.RetunObjects.Any())
