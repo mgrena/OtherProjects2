@@ -163,3 +163,9 @@
         display: block;
     }
 }
+
+.NavMenu {
+    font-size: 19px;
+    color: white;
+    padding-top: 4px;
+}

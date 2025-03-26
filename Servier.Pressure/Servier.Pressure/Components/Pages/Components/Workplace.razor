@@ -1,0 +1,183 @@
+﻿@using System.IdentityModel.Claims
+@using System.ComponentModel.DataAnnotations
+@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Helpers
+@using Servier.Pressure.Services.Pages
+
+@inject WorkplaceService WorkplaceService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<EditForm Model="@DoctorWorkplace" Context="EditFormContext">
+    <DxFormLayout CssClass="w-100">
+        <DxFormLayoutGroup Caption="Pracovisko" ColSpanMd="12">
+            <DxFormLayoutItem Caption="Typ pracoviska" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@WorkplaceTypes" @bind-Value="@WorkplaceType" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Špecializácia skúšajúceho lekára (hlavná)" ColSpanMd="12">
+                <DxComboBox Data="@Sspecializations" @bind-Value="@Specialization" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Caption="Približný počet dispenzarizovaných pacientov" ColSpanMd="12">
+            <DxFormLayoutItem Caption="všetci pacienti:" ColSpanMd="6">
+                <DxSpinEdit @bind-Value="@PatientsCountAll" MinValue="0" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanMd="6">
+                <DxCheckBox @bind-Checked="@PatientsCountAllUnknown">neznámy</DxCheckBox>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="pacienti s artériovou hypertenziou" ColSpanMd="6">
+                <DxSpinEdit @bind-Value="@PatientsCountAH" MinValue="0" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanMd="6">
+                <DxCheckBox @bind-Checked="@PatientsCountAHUnknown">neznámy</DxCheckBox>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        @*         <DxFormLayoutGroup Caption="Pracovisko" ColSpanMd="12">
+            <DxFormLayoutItem Caption="Typ pracoviska" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@workplaceTypes" TextFieldName="DisplayText" ValueFieldName="Value"
+                              Value="@DoctorWorkplace!.WorkplaceType" ValueChanged="@((WorkplaceTypeEnum e) => OnFieldChanged(e.ToString()))" ValueExpression="@(() => DoctorWorkplace!.WorkplaceType)" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Špecializácia skúšajúceho lekára (hlavná)" ColSpanMd="12">
+                <DxComboBox Data="@specializations" TextFieldName="DisplayText" ValueFieldName="Value"
+                            Value="@DoctorWorkplace!.Specialization" ValueChanged="@((SpecializationEnum e) => OnFieldChanged(e.ToString()))" ValueExpression="@(() => DoctorWorkplace!.Specialization)" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Caption="Približný počet dispenzarizovaných pacientov" ColSpanMd="12">
+            <DxFormLayoutItem Caption="všetci pacienti:" ColSpanMd="6">
+                <DxSpinEdit MinValue="0" Value="@DoctorWorkplace!.PatientsCountAll" ValueChanged="@((int e) => OnFieldChanged(e.ToString()))" ValueExpression="@(() => DoctorWorkplace!.PatientsCountAll)" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanMd="6">
+                <DxCheckBox Checked="@DoctorWorkplace!.PatientsCountAllUnknown" CheckedChanged="@((bool e) => OnFieldChanged(e.ToString()))" CheckedExpression="@(() => DoctorWorkplace!.PatientsCountAllUnknown)">neznámy</DxCheckBox>
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="pacienti s artériovou hypertenziou" ColSpanMd="6">
+                <DxSpinEdit MinValue="0" Value="@DoctorWorkplace!.PatientsCountAH" ValueChanged="@((int e) => OnFieldChanged(e.ToString()))" ValueExpression="@(() => DoctorWorkplace!.PatientsCountAH)" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem ColSpanMd="6">
+                <DxCheckBox Checked="@DoctorWorkplace!.PatientsCountAHUnknown" CheckedChanged="@((bool e) => OnFieldChanged(e.ToString()))" CheckedExpression="@(() => DoctorWorkplace!.PatientsCountAHUnknown)">neznámy</DxCheckBox>
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+ *@    </DxFormLayout>
+</EditForm>
+<StatusMessage Message="@Message" />
+
+@code {
+    private Data.Models.WorkPlace? DoctorWorkplace { get; set; } = new() { CreatedAt = DateTime.Now, UserId = string.Empty, Workplace = string.Empty };
+    private IEnumerable<WorkplaceTypeWrapper> WorkplaceTypes { get; set; } = [];
+    private IEnumerable<SpecializationWrapper> Sspecializations { get; set; } = [];
+    private string? UserId { get; set; }
+    private string? Message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        WorkplaceTypes = Enum.GetValues<WorkplaceTypeEnum>().OfType<WorkplaceTypeEnum>().Select(i => GetWorkplaceTypeWrapper(i));
+        Sspecializations = Enum.GetValues<SpecializationEnum>().OfType<SpecializationEnum>().Select(i => GetSpecializationWrapper(i));
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        UserId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        DoctorWorkplace = await WorkplaceService.GetWorkplaceByUserIdAsync(UserId!);
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var result = await WorkplaceService.SaveWorkplaceAsync(DoctorWorkplace!, UserId!);
+            Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+
+    WorkplaceTypeWrapper GetWorkplaceTypeWrapper(WorkplaceTypeEnum item)
+    {
+        return new WorkplaceTypeWrapper() { Value = item, DisplayText = item.GetAttribute<DisplayAttribute>()?.Name ?? item.ToString() };
+    }
+    SpecializationWrapper GetSpecializationWrapper(SpecializationEnum item)
+    {
+        return new SpecializationWrapper() { Value = item, DisplayText = item.GetAttribute<DisplayAttribute>()?.Name ?? item.ToString() };
+    }
+
+    private WorkplaceTypeEnum WorkplaceType
+    {
+        get => DoctorWorkplace!.WorkplaceType;
+        set
+        {
+            if (DoctorWorkplace!.WorkplaceType != value)
+            {
+                DoctorWorkplace!.WorkplaceType = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private SpecializationEnum Specialization
+    {
+        get => DoctorWorkplace!.Specialization;
+        set
+        {
+            if (DoctorWorkplace!.Specialization != value)
+            {
+                DoctorWorkplace!.Specialization = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int PatientsCountAll
+    {
+        get => DoctorWorkplace!.PatientsCountAll;
+        set
+        {
+            if (DoctorWorkplace!.PatientsCountAll != value)
+            {
+                DoctorWorkplace!.PatientsCountAll = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool PatientsCountAllUnknown
+    {
+        get => DoctorWorkplace!.PatientsCountAllUnknown;
+        set
+        {
+            if (DoctorWorkplace!.PatientsCountAllUnknown != value)
+            {
+                DoctorWorkplace!.PatientsCountAllUnknown = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int PatientsCountAH
+    {
+        get => DoctorWorkplace!.PatientsCountAH;
+        set
+        {
+            if (DoctorWorkplace!.PatientsCountAH != value)
+            {
+                DoctorWorkplace!.PatientsCountAH = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool PatientsCountAHUnknown
+    {
+        get => DoctorWorkplace!.PatientsCountAHUnknown;
+        set
+        {
+            if (DoctorWorkplace!.PatientsCountAHUnknown != value)
+            {
+                DoctorWorkplace!.PatientsCountAHUnknown = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+}

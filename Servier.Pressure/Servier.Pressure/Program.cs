@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Builder.Extensions;
 using static System.Reflection.Metadata.BlobBuilder;
 using Servier.Pressure.Interfaces;
 using Servier.Pressure.Repositories;
+using Servier.Pressure.Services.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,9 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<PatientService>();
+builder.Services.AddScoped<WorkplaceService>();
 
 // add authentication
 builder.Services.AddAuthentication(options => {
@@ -50,6 +54,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();

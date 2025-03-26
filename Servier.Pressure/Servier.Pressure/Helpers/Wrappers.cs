@@ -1,0 +1,25 @@
+﻿using Servier.Pressure.Data.Models;
+using System.Reflection;
+
+namespace Servier.Pressure.Helpers;
+
+public class WorkplaceTypeWrapper
+{
+    public WorkplaceTypeEnum Value { get; set; }
+    public required string DisplayText { get; set; }
+}
+public class SpecializationWrapper
+{
+    public SpecializationEnum Value { get; set; }
+    public required string DisplayText { get; set; }
+}
+
+public static class EnumExtensions
+{
+    public static T? GetAttribute<T>(this Enum value) where T : Attribute
+    {
+        return value.GetType()
+            .GetField(value.ToString())?
+            .GetCustomAttribute<T>();
+    }
+}

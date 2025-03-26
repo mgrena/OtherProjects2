@@ -1,0 +1,364 @@
+﻿@page "/users"
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data
+@using Servier.Pressure.Services
+@using Servier.Pressure.Services.Pages
+@inject IToastNotificationService ToastService
+@inject UserService UserService
+
+@attribute [Authorize(Roles = "Admin")]
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@implements IDisposable
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<PageTitle>Používatelia</PageTitle>
+<h3>Používatelia</h3>
+
+@if (DataSource == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <style>
+        .grid-popup {
+        min-width: 800px;
+        }
+    </style>
+    <StatusMessage Message="@Message" />
+    <DxGrid @ref="Grid" Data="@DataSource" CssClass="mw-1100"
+    PageSize="20"
+    PagerPosition="GridPagerPosition.Bottom"
+    PageSizeSelectorVisible="true"
+    PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+    PageSizeSelectorAllRowsItemVisible="true"
+    PagerSwitchToInputBoxButtonCount="10"
+    PagerVisibleNumericButtonCount="10"
+    ValidationEnabled="true"
+    PopupEditFormHeaderText="@editFormHeaderText"
+    PopupEditFormCssClass="grid-popup"
+    EditMode="GridEditMode.PopupEditForm"
+    EditStart="@OnRowEditStart"
+    EditFormButtonsVisible="true"
+    FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+    ColumnResizeMode="GridColumnResizeMode.NextColumn"
+    CustomizeDataRowEditor="OnCustomizeDataRowEditor"
+    CustomizeEditModel="Grid_CustomizeEditModel"
+    EditModelSaving="Grid_EditModelSaving"
+    DataItemDeleting="Grid_DataItemDeleting"
+    TextWrapEnabled="false"
+    HighlightRowOnHover="true"
+    KeyFieldName="Id">
+        <Columns>
+            <DxGridDataColumn Caption="Používateľ" FieldName="FullName" />
+            <DxGridDataColumn Caption="Úroveň" FieldName="Role">
+                <EditSettings>
+                    <DxComboBoxSettings Data="@roles" />
+                </EditSettings>
+            </DxGridDataColumn>
+            <DxGridDataColumn Caption="E-mail" FieldName="Email" />
+            <DxGridDataColumn Caption="Telefón" FieldName="PhoneNumber" />
+            <DxGridCommandColumn Width="120px" NewButtonVisible="false">
+                <HeaderTemplate>
+                    <div class="grid-header-align-center">
+                        <DxButton IconCssClass="grid-icon grid-icon-add"
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Pridať nového používateľa"
+                        Click="@(() => Grid!.StartEditNewRowAsync())" />
+                    </div>
+                </HeaderTemplate>
+                <CellDisplayTemplate Context="gridContext">
+                    @{
+                        var user = (ApplicationUser)gridContext.DataItem;
+                    }
+                    <div class="grid-cell-align-center">
+                        <DxButton IconCssClass="grid-icon grid-icon-edit"
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Upraviť údaje používateľa"
+                        Click="@(() => Grid!.StartEditDataItemAsync(gridContext.DataItem))" />
+                        <DxButton IconCssClass="grid-icon grid-icon-key"
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Resetnúť heslo"
+                        Click="@(async () => await OnResetPasswordClick(user))" />
+                        <DxButton IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Vymazať používateľa"
+                        Click="@(() => Grid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
+                    </div>
+                </CellDisplayTemplate>
+                <CellEditTemplate Context="editContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton Enabled="false"
+                        aria-label="Delete"
+                        CssClass="grid-disabled-button"
+                        IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link" />
+                    </div>
+                </CellEditTemplate>
+            </DxGridCommandColumn>
+        </Columns>
+
+        <EditFormTemplate Context="EditFormContext">
+            @{
+                var user = (ApplicationUser)EditFormContext.EditModel;
+            }
+            <DxFormLayout CssClass="w-100">
+                <DxFormLayoutItem Caption="Používateľské meno / e-mail:" ColSpanMd="6">
+                    <DxTextBox @bind-Text="user.UserName"/>
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Úroveň:" ColSpanMd="6">
+                    @EditFormContext.GetEditor("Role")
+                </DxFormLayoutItem>
+                @{
+                    if (isNewUser)
+                    {
+                        <DxFormLayoutItem Caption="Heslo:" ColSpanMd="6">
+                            <DxTextBox @bind-Text="user.Password" Password="true" />
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="Potvrdenie hesla:" ColSpanMd="6">
+                            <DxTextBox @bind-Text="user.ConfirmPassword" Password="true" />
+                        </DxFormLayoutItem>
+                    }
+                }
+                <DxFormLayoutItem Caption="Titul pred menom:" ColSpanMd="6">
+                    <DxTextBox @bind-Text="user.TitleBefore" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Titul za menom:" ColSpanMd="6">
+                    <DxTextBox @bind-Text="user.TitleAfter" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Krstné meno:" ColSpanMd="6">
+                    <DxTextBox @bind-Text="user.FirstName" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Priezvisko:" ColSpanMd="6">
+                    <DxTextBox @bind-Text="user.LastName" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Phone:" ColSpanMd="6">
+                    <DxMaskedInput name="user.PhoneNumber" @rendermode="InteractiveServer" @bind-Value="user.PhoneNumber" Mask="+421 999 999 999" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="12">
+                    <ValidationSummary/>
+                </DxFormLayoutItem>
+                @* <DxFormLayoutItem ColSpanMd="12">
+                    <div class="grid-cell-align-center">
+                        <DxButton SubmitFormOnClick="true" Text="Uložiť" />
+                        <DxButton Click="@(() => Grid!.CancelEditAsync())" Text="Zrušiť zmeny" />
+                    </div>
+                </DxFormLayoutItem> *@
+            </DxFormLayout>
+        </EditFormTemplate>
+
+        <CustomValidators>
+            <MyCustomValidator DataItemValidating="ValidateGridData" />
+        </CustomValidators>
+    </DxGrid>
+}
+
+@code {
+    private IGrid? Grid { get; set; }
+    private List<ApplicationUser>? DataSource;
+    private List<IdentityRole> roles = [];
+    private bool isNewUser = false;
+    private TaskCompletionSource<bool> DataLoadedTcs { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private string editFormHeaderText = "Nový používateľ";
+    private List<IdentityError> identityErrors = [];
+    private string? Message => identityErrors.Count() == 0 ? null : $"Chyba: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        DataSource = await UserService.GetUsersAsync();
+        roles = await UserService.GetRolesAsync();
+        DataLoadedTcs.TrySetResult(true);
+    }
+
+    private void Grid_CustomizeEditModel(GridCustomizeEditModelEventArgs e)
+    {
+        isNewUser = false;
+        if (e.IsNew)
+        {
+            isNewUser = true;
+            var newUser = (ApplicationUser)e.EditModel;
+            newUser.Role = roles.First(i => i.Name == "Doctor");
+        }
+    }
+    private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var userUpdated = (ApplicationUser)e.EditModel;
+        var userOrig = (ApplicationUser)e.DataItem;
+
+        if (e.IsNew)
+        {
+            var resultUser = await UserService.CreateUserAsync(userUpdated);
+            if (!resultUser.Succeeded)
+            {
+                identityErrors = resultUser.Errors.ToList();
+                return;
+            }
+            AddToast();
+        }
+        else
+        {
+            // change phone number
+            if (userOrig.PhoneNumber != userUpdated.PhoneNumber)
+            {
+                var resultUser = await UserService.SetPhoneNumberAsync(userUpdated);
+                if (!resultUser.Succeeded)
+                    identityErrors = resultUser.Errors.ToList();
+            }
+            // change user name / email
+            if (userOrig.UserName != userUpdated.UserName)
+            {
+                await UserService.GenerateChangeEmailTokenAsync(userUpdated);
+            }
+            // change role
+            if (userOrig.Role != userUpdated.Role)
+            {
+                var result = await UserService.AddUserToRoleAsync(userUpdated);
+                if (!result.Succeeded)
+                    identityErrors.AddRange(result.Errors.ToList());
+            }
+            // chnage other user data
+            if (userOrig.FirstName != userUpdated.FirstName
+                || userOrig.LastName != userUpdated.LastName
+                || userOrig.TitleBefore != userUpdated.TitleBefore
+                || userOrig.TitleAfter != userUpdated.TitleAfter)
+            {
+                var resultUser = await UserService.UpdateUserAsync(userUpdated);
+                if (!resultUser.Succeeded)
+                    identityErrors.AddRange(resultUser.Errors.ToList());
+            }
+            UpdateToast();
+        }
+        await UpdateDataAsync();
+    }
+    private async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var user = (ApplicationUser)e.DataItem;
+
+        user.LockoutEnabled = true;
+        user.LockoutEnd = DateTimeOffset.MaxValue;
+        var resultUser = await UserService.UpdateUserAsync(user);
+        if (!resultUser.Succeeded)
+            identityErrors.AddRange(resultUser.Errors.ToList());
+
+        DeleteToast();
+        await UpdateDataAsync();
+    }
+    private async Task UpdateDataAsync()
+    {
+        DataSource = await UserService.GetUsersAsync();
+    }
+
+    private Task OnRowEditStart(GridEditStartEventArgs e)
+    {
+        if (e.IsNew)
+            editFormHeaderText = "Nový používateľ";
+        else
+        {
+            var anUser = (ApplicationUser)e.DataItem;
+            if (anUser != null)
+                editFormHeaderText = $"Používateľ {anUser.FullName}";
+        }
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private void OnCustomizeDataRowEditor(GridCustomizeDataRowEditorEventArgs e)
+    {
+        if (e.EditSettings is ITextEditSettings settings)
+            settings.ShowValidationIcon = true;
+    }
+
+    private void ValidateGridData(ValidationMessageStoreEventArgs e)
+    {
+        var user = (ApplicationUser)e.EditModel;
+
+        // EmailAddressAttribute emailAttribute = new();
+        // if (!emailAttribute.IsValid(user.UserName))
+        //     e.AddError(nameof(user.UserName), string.Format(emailAttribute.ErrorMessage, "Používateľské meno"));
+
+        if (string.IsNullOrEmpty(user.UserName))
+            e.AddError(nameof(user.UserName), "Používateľské meno / e-mail je povinný údaj.");
+        else if (!EmailValidator.IsValidEmail(user.UserName))
+            e.AddError(nameof(user.UserName), "Používateľské meno / e-mail má chybný formát.");
+        if (string.IsNullOrEmpty(user.FirstName))
+            e.AddError(nameof(user.FirstName), "Krstné meno je povinný údaj.");
+        if (string.IsNullOrEmpty(user.LastName))
+            e.AddError(nameof(user.LastName), "Priezvisko je povinný údaj.");
+
+        // check password for new user
+        if (user.Email == null)
+        {
+            if (string.IsNullOrEmpty(user.Password) || user.Password.Length < 6 || user.Password.Length > 100)
+                e.AddError(nameof(user.Password), "Pole Heslo musí byť aspoň 6 a maximálne 100 znakov dlhé.");
+            if (string.IsNullOrEmpty(user.ConfirmPassword) || !user.ConfirmPassword.Equals(user.Password))
+                e.AddError(nameof(user.Password), "Heslo a potvrdenie hesla sa nezhodujú.");
+        }
+    }
+
+    private async Task OnResetPasswordClick(ApplicationUser user)
+    {
+        if (user == null) return;
+        ResetPwdToast();
+        await UserService.GeneratePasswordResetTokenAsync(user);
+    }
+
+    // Notifikacie
+    private void AddToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Používateľ bol úspešne pridaný",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+    private void UpdateToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje o používateľovi boli úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+    private void ResetPwdToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Bol odoslaný e-mail s linkou na reset hesla",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Používateľ bol úspešne odstránený",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    public void Dispose()
+    {
+        DataLoadedTcs.TrySetCanceled();
+    }
+}

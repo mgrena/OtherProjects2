@@ -1,0 +1,165 @@
+﻿@page "/patients"
+
+@using Microsoft.AspNetCore.Authorization
+@using Servier.Pressure.Components.Pages.Components
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Services.Pages
+
+@attribute [Authorize]
+@attribute [StreamRendering(true)]
+@rendermode @(new InteractiveServerRenderMode(false))
+
+@inject PatientService PatientService
+@inject IToastNotificationService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<div class="d-flex align-items-center custom-toast-background">
+    <DxToastProvider Name="Overview"
+                     MaxToastCount="3"
+                     AnimationType="ToastAnimationType.Slide"
+                     HorizontalAlignment="HorizontalAlignment.Right"
+                     VerticalAlignment="VerticalEdge.Top"
+                     Width="320px" />
+</div>
+
+<PageTitle>Pacienti</PageTitle>
+
+<div class="flex-container" style="display: flex; justify-content: space-between; width: 100%;">
+    <div class="first-div" style="width: 52%;">
+        <div class="mo-caption-styleH3">Pacienti</div>
+        <DxGrid @ref="patientsGrid"
+        Data="Patients"
+        PageSize="20"
+        PagerPosition="GridPagerPosition.Bottom"
+        PageSizeSelectorVisible="true"
+        PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+        PageSizeSelectorAllRowsItemVisible="true"
+        PagerSwitchToInputBoxButtonCount="10"
+        PagerVisibleNumericButtonCount="10"
+        KeyFieldName="Id"
+        ValidationEnabled="true"
+        EditMode="GridEditMode.PopupEditForm"
+        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+        ColumnResizeMode="GridColumnResizeMode.NextColumn"
+        PopupEditFormHeaderText="Pridať pacienta"
+        TextWrapEnabled="false"
+        HighlightRowOnHover="true"
+        DataItemDeleting="Grid_DataItemDeleting"
+        CustomizeElement="Grid_CustomizeElement"
+        SelectionMode="GridSelectionMode.Single"
+        AllowSelectRowByClick="true">
+
+            <Columns>
+                <DxGridDataColumn FieldName="PatientCode" Caption="Identifikačný kód pacienta" />
+                <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
+                @if (isAdmin)
+                {
+                    <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" />
+                }
+                <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" />
+                <DxGridCommandColumn Width="80px" Caption="Akcie" NewButtonVisible="false">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var patient = (Data.Models.Patient)gridContext.DataItem;
+                        }
+                        <div class="grid-cell-align-center">
+                            <DxButton IconCssClass="grid-icon grid-icon-edit"
+                                RenderStyle="ButtonRenderStyle.Link"
+                                title="Zobraziť dotazník"
+                                Click="@(async () => Navigation.NavigateTo($"/questionnaire/1info/{patient.Id}"))" />
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                RenderStyle="ButtonRenderStyle.Link"
+                                title="Vymazať používateľa"
+                                Click="@(() => patientsGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
+                        </div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="editContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton Enabled="false"
+                            aria-label="Delete"
+                            CssClass="grid-disabled-button"
+                            IconCssClass="grid-toolbar-delete"
+                            RenderStyle="ButtonRenderStyle.Link" />
+                        </div>
+                    </CellEditTemplate>
+                </DxGridCommandColumn>
+            </Columns>
+
+        </DxGrid>
+    </div>
+    @if (!isAdmin)
+    {
+        <div style="width: 45%" class="accestable first-div">
+            <div class="mo-caption-styleH3">Základné informácie o pracovisku</div>
+            <Workplace />
+        </div>
+    }
+</div>
+
+@code {
+    private IGrid? patientsGrid { get; set; }
+    public List<Data.Models.Patient>? Patients { get; set; }
+    private TaskCompletionSource<bool> DataLoadedTcs { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private bool isAdmin;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        isAdmin = user.IsInRole("Admin");
+
+        Patients = await PatientService.GetPatientsAsync();
+
+        DataLoadedTcs.TrySetResult(true);
+    }
+
+    // Nastavenie objektu "DeletedAt"
+    private async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
+    {
+        var patient = (Data.Models.Patient)e.DataItem;
+        //await PatientService.DeletePatientAsync(patient.Id);
+        await UpdateDataAsync();
+        DeleteToast();
+    }
+    private void Grid_CustomizeElement(GridCustomizeElementEventArgs e)
+    {
+        if (e.ElementType == GridElementType.DataRow)
+        {
+            var patient = Patients?[e.VisibleIndex];
+            if (patient != null && patient.Valid == Data.Models.Patient.ValidEnum.Predčasne_vylúčený)
+            {
+                e.Style = "background-color: #f0f0f0; color: black;";
+            }
+        }
+        if (e.ElementType == GridElementType.HeaderCell)
+        {
+            e.Style = "background-color: rgba(0, 0, 0, 0.08); font-weight: bold;";
+        }
+    }
+
+    //Reload Grid
+    async Task UpdateDataAsync()
+    {
+        Patients = await PatientService.GetPatientsAsync();
+        patientsGrid?.Reload();
+    }
+
+    // Notifikacie
+    private void DeleteToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Pacient bol úspešne odstránený",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+    public void Dispose()
+    {
+        DataLoadedTcs.TrySetCanceled();
+    }
+}

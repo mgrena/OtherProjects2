@@ -229,3 +229,66 @@ html, body {
         display: block;
     }
 }
+
+.grid-cell-align-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -4px;
+    margin-bottom: -4px;
+}
+
+.grid-header-align-center {
+    text-align: center;
+    width: 100%;
+}
+
+.grid-disabled-button {
+    pointer-events: none;
+}
+
+.grid-icon {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    min-width: 1rem;
+    min-height: 1rem;
+    background-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    background-position: center center;
+    background-color: currentColor;
+    vertical-align: middle;
+}
+
+.grid-icon-add {
+    -webkit-mask-image: url("/images/add.svg");
+    mask-image: url("/images/add.svg");
+}
+
+.grid-icon-delete {
+    -webkit-mask-image: url("/images/trash.svg");
+    mask-image: url("/images/trash.svg");
+}
+
+.grid-icon-edit {
+    -webkit-mask-image: url("/images/pencil-square.svg");
+    mask-image: url("/images/pencil-square.svg");
+}
+
+.grid-icon-key {
+    -webkit-mask-image: url("/images/key.svg");
+    mask-image: url("/images/key.svg");
+}
+
+.mo-caption-styleH3 {
+    background-color: rgba(109, 36, 120, 0.01);
+    color: #363c41;
+    padding: 5px;
+    border-radius: 2px;
+    text-align: left;
+    font-weight: bold;
+    display: flex;
+    margin-top: 5px;
+    margin-left: 2px;
+}

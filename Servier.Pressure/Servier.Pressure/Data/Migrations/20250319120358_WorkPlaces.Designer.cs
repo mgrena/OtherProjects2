@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Servier.Pressure.Data;
 
@@ -11,9 +12,11 @@ using Servier.Pressure.Data;
 namespace Servier.Pressure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250319120358_WorkPlaces")]
+    partial class WorkPlaces
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,46 +282,6 @@ namespace Servier.Pressure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("logs");
-                });
-
-            modelBuilder.Entity("Servier.Pressure.Data.Models.Patient", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("modified_at");
-
-                    b.Property<string>("PatientCode")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar")
-                        .HasColumnName("patient_code");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("id_user");
-
-                    b.Property<int>("Valid")
-                        .HasColumnType("int")
-                        .HasColumnName("valid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("patients");
                 });
 
             modelBuilder.Entity("Servier.Pressure.Data.Models.WorkPlace", b =>

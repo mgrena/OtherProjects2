@@ -1,39 +1,14 @@
 ﻿@page "/"
-<PageTitle>Welcome</PageTitle>
+<PageTitle>Servier ECR</PageTitle>
 
 <div class="main-content">
-    <DxGridLayout CssClass="welcome-gridlayout" RowSpacing="3rem">
-        <Rows>
-            <DxGridLayoutRow Height="auto" Areas="header"></DxGridLayoutRow>
-            <DxGridLayoutRow Height="auto" Areas="cards"></DxGridLayoutRow>
-        </Rows>
-        <Items>
-            <DxGridLayoutItem Area="header" CssClass="title">
-                <Template>
-                    <div class="title-header-text">Hello World!</div>
-                    <div class="title-content-text">Welcome to your new DevExpress Blazor Application</div>
-                </Template>
-            </DxGridLayoutItem>
-            <DxGridLayoutItem Area="cards" CssClass="welcome-cards">
-                <Template>
-                    <NavLink class="welcome-card" href="@UrlGenerator.GetUrl("/counter", ToggledSidebar)">
-                        <svg class="welcome-card-img" alt="counter card">
-                            <use href="images/cards.svg#counter"></use>
-                        </svg>
-                        <div class="welcome-card-text">Counter</div>
-                        <div class="welcome-card-back"></div>
-                    </NavLink>
-                    <NavLink class="welcome-card" href="@UrlGenerator.GetUrl("/weather", ToggledSidebar)">
-                        <svg class="welcome-card-img" alt="weather card">
-                            <use href="images/cards.svg#weather"></use>
-                        </svg>
-                        <div class="welcome-card-text">Weather</div>
-                        <div class="welcome-card-back"></div>
-                    </NavLink>
-                </Template>
-            </DxGridLayoutItem>
-        </Items>
-    </DxGridLayout>
+    <div class="container-welcome">
+        <div class="welcome-text-container">
+            <div class="welcome-text">
+                <p>Trojmesačná, observačná, epidemiologická štúdia hodnotiaca kontrolu krvného tlaku u pacientov s potvrdenou a liečenou artériovou hypertenziou</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {

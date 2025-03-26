@@ -68,6 +68,14 @@
     background-image: url("images/account/user.svg");
 }
 
+::deep .users-icon {
+    background-image: url("images/users.svg");
+}
+
+::deep .patients-icon {
+    background-image: url("images/patients.svg");
+}
+
 @media (max-width: 768px) {
     #sidebar {
         min-width: inherit;

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Servier.Pressure.Data.Models;
 
 namespace Servier.Pressure.Data; 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options) 
@@ -8,6 +9,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     /// List of log entries
     /// </summary>
     public DbSet<LogEntity> Logs { get; set; } = null!;
+
+    public DbSet<Patient> Patients { get; set; }
+    public DbSet<WorkPlace> WorkPlaces { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
