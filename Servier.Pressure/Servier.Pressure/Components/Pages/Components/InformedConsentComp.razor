@@ -1,0 +1,12 @@
+﻿@using Servier.Pressure.Services.Pages
+
+@inject QuestionnaireService QuestionnaireService
+
+@code {
+    [Parameter]
+    public Guid patientId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+}
