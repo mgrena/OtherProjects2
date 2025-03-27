@@ -292,3 +292,30 @@ html, body {
     margin-top: 5px;
     margin-left: 2px;
 }
+
+.mo-main-layout {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.mo-nav-submenu-bar .rectangular-button {
+    border-radius: 16px;
+    padding: 10px 10px;
+    border: 1px solid black;
+    border-color: #dfdfdf;
+    width: 100%;
+    min-width: 31.8%;
+    min-height: 80px;
+}
+
+    .mo-nav-submenu-bar .rectangular-button:hover {
+        background-color: #dee2e6 !important;
+        color: black !important;
+        border-color: white !important;
+    }
+
+.mo-nav-submenu-bar .active-button {
+    background-color: rgba(114, 130, 241, 0.5);
+    border-color: rgba(114, 130, 241, 0.5);
+    color: white;
+}
