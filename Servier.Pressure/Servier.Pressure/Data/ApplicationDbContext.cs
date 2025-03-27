@@ -13,6 +13,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Patient> Patients { get; set; }
     public DbSet<WorkPlace> WorkPlaces { get; set; }
 
+    public DbSet<InformedConsentCompetence> InformedConsentCompetences { get; set; }
+
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
     //    base.OnConfiguring(optionsBuilder);
