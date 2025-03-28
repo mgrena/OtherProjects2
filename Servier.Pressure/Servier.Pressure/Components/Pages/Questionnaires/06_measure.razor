@@ -1,14 +1,9 @@
-﻿@page "/questionnaire/6measure/{patientId:guid}"
+﻿@page "/questionnaire/6measure/{patientId}"
 
 @using Microsoft.AspNetCore.Authorization
 @using Servier.Pressure.Components.Pages.Components
-@using Servier.Pressure.Services.Pages
 
 @attribute [Authorize]
-@attribute [StreamRendering(true)]
-@rendermode InteractiveServer
-
-@inject QuestionnaireService QuestionnaireService
 
 <PageTitle>Electronic case report</PageTitle>
 
@@ -25,15 +20,7 @@
     <QuestHeader patientId="@patientId" />
 </div>
 
-
-
-
-
 @code {
     [Parameter]
-    public Guid patientId { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    { 
-    }
+    public required string patientId { get; set; }
 }

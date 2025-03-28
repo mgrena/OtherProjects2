@@ -6,8 +6,7 @@
 @using Servier.Pressure.Services.Pages
 
 @attribute [Authorize]
-@attribute [StreamRendering(true)]
-@rendermode @(new InteractiveServerRenderMode(false))
+@rendermode InteractiveServer
 
 @inject PatientService PatientService
 @inject IToastNotificationService ToastService
@@ -29,65 +28,71 @@
 <div class="flex-container" style="display: flex; justify-content: space-between; width: 100%;">
     <div class="first-div" style="width: 52%;">
         <div class="mo-caption-styleH3">Pacienti</div>
-        <DxGrid @ref="patientsGrid"
-        Data="Patients"
-        PageSize="20"
-        PagerPosition="GridPagerPosition.Bottom"
-        PageSizeSelectorVisible="true"
-        PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
-        PageSizeSelectorAllRowsItemVisible="true"
-        PagerSwitchToInputBoxButtonCount="10"
-        PagerVisibleNumericButtonCount="10"
-        KeyFieldName="Id"
-        ValidationEnabled="true"
-        EditMode="GridEditMode.PopupEditForm"
-        FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
-        ColumnResizeMode="GridColumnResizeMode.NextColumn"
-        PopupEditFormHeaderText="Pridať pacienta"
-        TextWrapEnabled="false"
-        HighlightRowOnHover="true"
-        DataItemDeleting="Grid_DataItemDeleting"
-        CustomizeElement="Grid_CustomizeElement"
-        SelectionMode="GridSelectionMode.Single"
-        AllowSelectRowByClick="true">
+        @if (Patients == null)
+        {
+            <p><em>Načítavanie...</em></p>
+        }
+        else
+        {
+            <DxGrid @ref="patientsGrid"
+            Data="Patients"
+            PageSize="20"
+            PagerPosition="GridPagerPosition.Bottom"
+            PageSizeSelectorVisible="true"
+            PageSizeSelectorItems="@(new int[] { 10, 20, 100 })"
+            PageSizeSelectorAllRowsItemVisible="true"
+            PagerSwitchToInputBoxButtonCount="10"
+            PagerVisibleNumericButtonCount="10"
+            KeyFieldName="Id"
+            ValidationEnabled="true"
+            EditMode="GridEditMode.PopupEditForm"
+            FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
+            ColumnResizeMode="GridColumnResizeMode.NextColumn"
+            PopupEditFormHeaderText="Pridať pacienta"
+            TextWrapEnabled="false"
+            HighlightRowOnHover="true"
+            DataItemDeleting="Grid_DataItemDeleting"
+            CustomizeElement="Grid_CustomizeElement"
+            SelectionMode="GridSelectionMode.Single"
+            AllowSelectRowByClick="true">
 
-            <Columns>
-                <DxGridDataColumn FieldName="PatientCode" Caption="Identifikačný kód pacienta" />
-                <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
-                @if (isAdmin)
-                {
-                    <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" />
-                }
-                <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" />
-                <DxGridCommandColumn Width="80px" Caption="Akcie" NewButtonVisible="false">
-                    <CellDisplayTemplate Context="gridContext">
-                        @{
-                            var patient = (Data.Models.Patient)gridContext.DataItem;
-                        }
-                        <div class="grid-cell-align-center">
-                            <DxButton IconCssClass="grid-icon grid-icon-edit"
-                                RenderStyle="ButtonRenderStyle.Link"
-                                title="Zobraziť dotazník"
-                                Click="@(async () => Navigation.NavigateTo($"/questionnaire/1info/{patient.Id}"))" />
-                            <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                RenderStyle="ButtonRenderStyle.Link"
-                                title="Vymazať používateľa"
-                                Click="@(() => patientsGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
-                        </div>
-                    </CellDisplayTemplate>
-                    <CellEditTemplate Context="editContext">
-                        <div class="grid-cell-align-center">
-                            <DxButton Enabled="false"
-                            aria-label="Delete"
-                            CssClass="grid-disabled-button"
-                            IconCssClass="grid-toolbar-delete"
-                            RenderStyle="ButtonRenderStyle.Link" />
-                        </div>
-                    </CellEditTemplate>
-                </DxGridCommandColumn>
-            </Columns>
-
-        </DxGrid>
+                <Columns>
+                    <DxGridDataColumn FieldName="PatientCode" Caption="Identifikačný kód pacienta" />
+                    <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
+                    @if (isAdmin)
+                    {
+                        <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" />
+                    }
+                    <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" />
+                    <DxGridCommandColumn Width="80px" Caption="Akcie" NewButtonVisible="false">
+                        <CellDisplayTemplate Context="gridContext">
+                            @{
+                                var patient = (Data.Models.Patient)gridContext.DataItem;
+                            }
+                            <div class="grid-cell-align-center">
+                                <DxButton IconCssClass="grid-icon grid-icon-edit"
+                                    RenderStyle="ButtonRenderStyle.Link"
+                                    title="Zobraziť dotazník"
+                                    Click="@(async () => Navigation.NavigateTo($"/questionnaire/1info/{patient.Id}"))" />
+                                <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                    RenderStyle="ButtonRenderStyle.Link"
+                                    title="Vymazať používateľa"
+                                    Click="@(() => patientsGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
+                            </div>
+                        </CellDisplayTemplate>
+                        <CellEditTemplate Context="editContext">
+                            <div class="grid-cell-align-center">
+                                <DxButton Enabled="false"
+                                aria-label="Delete"
+                                CssClass="grid-disabled-button"
+                                IconCssClass="grid-toolbar-delete"
+                                RenderStyle="ButtonRenderStyle.Link" />
+                            </div>
+                        </CellEditTemplate>
+                    </DxGridCommandColumn>
+                </Columns>
+            </DxGrid>
+        }
     </div>
     @if (!isAdmin)
     {
@@ -104,16 +109,21 @@
     private TaskCompletionSource<bool> DataLoadedTcs { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private bool isAdmin;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        isAdmin = user.IsInRole("Admin");
+        if (firstRender)
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            isAdmin = user.IsInRole("Admin");
 
-        Patients = await PatientService.GetPatientsAsync();
+            Patients = await PatientService.GetPatientsAsync();
 
-        DataLoadedTcs.TrySetResult(true);
-    }
+            DataLoadedTcs.TrySetResult(true);
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }   
 
     // Nastavenie objektu "DeletedAt"
     private async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)

@@ -49,13 +49,13 @@
 
 @code {
     [Parameter]
-    public Guid patientId { get; set; }
+    public required string patientId { get; set; }
     private string? selectedPatientCode { get; set; }
     private string? currentUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var patient = await PatientService.GetPatientByIdAsync(patientId.ToString());
+        var patient = await PatientService.GetPatientByIdAsync(patientId);
         if (patient != null)
             selectedPatientCode = patient.PatientCode;
 

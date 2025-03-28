@@ -5,71 +5,63 @@
 @using Servier.Pressure.Helpers
 @using Servier.Pressure.Services.Pages
 
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject QuestionnaireService QuestionnaireService
 
-
-
-<EditForm Model="@InformedConsentCompetenceQuestionary" Context="EditFormContext">
-    <DxFormLayout CssClass="w-100">
-        <DxFormLayoutGroup Caption="Informovaný súhlas" ColSpanMd="12">
-            <DxFormLayoutItem Caption="Dátum návštevy" ColSpanMd="12">
-                <DxDateEdit @bind-Date="@InformedConsentCompetenceQuestionary.VisitDate" />
-            </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Podpis formulára informovaného súhlasu" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsConsent" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-        </DxFormLayoutGroup>
-        <DxFormLayoutGroup Caption="Zaraďovacie kritériá" ColSpanMd="12">
-            <DxFormLayoutItem Caption="Zaradení môžu byť len pacienti spĺňajúci všetky zaraďovacie kritériá." ColSpanMd="12" />
-            <DxFormLayoutItem Caption="Muž alebo žena vo veku ≥ 18 rokov" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsAdult" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Pacient s artériovou hypertenziou farmakologicky liečenou ≥ 12 mesiacov a bez zmien antihypertenzívnej liečby v priebehu 3 mesiacov" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsStableHypertension" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-        </DxFormLayoutGroup>
-        <DxFormLayoutGroup Caption="Vylučovacie kritériá" ColSpanMd="12">
-            <DxFormLayoutItem Caption="Zaradení môžu byť len pacienti, ktorí nespĺňajú nižšie uvedené vylučovacie kritériá:" ColSpanMd="12" />
-            <DxFormLayoutItem Caption="Pacient už zaradený do tejto štúdie" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsAlreadyEnrolled" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Prítomnosť rezistentnej hypertenzie" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsResistantHypertension" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Účasť v intervenčnom klinickom skúšaní (aktuálne alebo v priebehu 30 dní pred Návštevou 1)" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsClinicalTrial" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Pacientka, ktorá je tehotná, dojčí alebo plánuje otehotnieť v priebehu nasledujúcich 3 mesiacov" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsPregnant" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-        </DxFormLayoutGroup>
-    </DxFormLayout>
-</EditForm>
-<StatusMessage Message="@Message" />
-
-
+@if (InformedConsentCompetenceQuestionary == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <EditForm Model="@InformedConsentCompetenceQuestionary" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Informovaný súhlas" ColSpanMd="12">
+                <DxFormLayoutItem Caption="Dátum návštevy" ColSpanMd="12">
+                    <DxDateEdit @bind-Date="@VisitDate" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Podpis formulára informovaného súhlasu" ColSpanMd="12">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsConsent" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="Zaraďovacie kritériá" ColSpanMd="12">
+                <DxFormLayoutItem Caption="Zaradení môžu byť len pacienti spĺňajúci všetky zaraďovacie kritériá." ColSpanMd="12" />
+                <DxFormLayoutItem Caption="Muž alebo žena vo veku ≥ 18 rokov" ColSpanMd="12">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsAdult" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Pacient s artériovou hypertenziou farmakologicky liečenou ≥ 12 mesiacov a bez zmien antihypertenzívnej liečby v priebehu 3 mesiacov" ColSpanMd="12">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsStableHypertension" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="Vylučovacie kritériá" ColSpanMd="12">
+                <DxFormLayoutItem Caption="Zaradení môžu byť len pacienti, ktorí nespĺňajú nižšie uvedené vylučovacie kritériá:" ColSpanMd="12" />
+                <DxFormLayoutItem Caption="Pacient už zaradený do tejto štúdie" ColSpanMd="12">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsAlreadyEnrolled" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Prítomnosť rezistentnej hypertenzie" ColSpanMd="12">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsResistantHypertension" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Účasť v intervenčnom klinickom skúšaní (aktuálne alebo v priebehu 30 dní pred Návštevou 1)" ColSpanMd="12">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsClinicalTrial" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Pacientka, ktorá je tehotná, dojčí alebo plánuje otehotnieť v priebehu nasledujúcich 3 mesiacov" ColSpanMd="12">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsPregnant" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+}
 @code {
     [Parameter]
-    public Guid patientId { get; set; }
+    public required string patientId { get; set; }
     private string? Message;
 
-    public Data.Models.InformedConsentCompetence? InformedConsentCompetenceQuestionary { get; set; } = new()
-        {
-            Id = string.Empty,
-            IsConsent = true,
-            IsAdult = true,
-            IsStableHypertension = true,
-            IsInformedConsent = true,
-            IsAlreadyEnrolled = true,
-            IsResistantHypertension = true,
-            IsClinicalTrial = true,
-            IsPregnant = true,
-            VisitDate = DateTime.Now,
-            ModifiedAt = DateTime.Now,
-            CreatedAt = DateTime.Now,
-        };
+    public Data.Models.InformedConsentCompetence? InformedConsentCompetenceQuestionary { get; set; }
     private IEnumerable<ConsentOption> ConsentOptions { get; set; } = new List<ConsentOption>
     {
         new ConsentOption { DisplayText = "Áno", Value = true },
@@ -81,9 +73,13 @@
         public bool Value { get; set; }
     };
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        InformedConsentCompetenceQuestionary = await QuestionnaireService.GetInformedConsentCompetenceByIdAsync(patientId.ToString());
+        if (firstRender)
+        {
+            InformedConsentCompetenceQuestionary = await QuestionnaireService.GetInformedConsentCompetenceByIdAsync(patientId);
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     private System.Timers.Timer? debounceTimer;
@@ -109,7 +105,18 @@
         await Task.CompletedTask;
     }
 
-
+    private DateTime VisitDate
+    {
+        get => InformedConsentCompetenceQuestionary!.VisitDate;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.VisitDate != value)
+            {
+                InformedConsentCompetenceQuestionary!.VisitDate = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
     private bool IsConsent
     {
         get => InformedConsentCompetenceQuestionary!.IsConsent;

@@ -1,11 +1,9 @@
-﻿@page "/questionnaire/2before/{patientId:guid}"
+﻿@page "/questionnaire/2before/{patientId}"
 
 @using Microsoft.AspNetCore.Authorization
 @using Servier.Pressure.Components.Pages.Components
 
 @attribute [Authorize]
-@attribute [StreamRendering(true)]
-@rendermode InteractiveServer
 
 <PageTitle>Electronic case report</PageTitle>
 
@@ -25,5 +23,5 @@
 
 @code {
     [Parameter]
-    public Guid patientId { get; set; }
+    public required string patientId { get; set; }
 }

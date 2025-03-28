@@ -2,6 +2,9 @@
 @using Servier.Pressure.Data.Lists
 @using Servier.Pressure.Services.Pages
 
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
 @inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -18,20 +21,24 @@
 
 @code {
     [Parameter]
-    public Guid patientId { get; set; }
+    public required string patientId { get; set; }
 
     private TreatmentBefore TreatmentBefore { get; set; } = new() { Id = string.Empty, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
     private IEnumerable<DyslipidemiaDrug> DyslipidemiaDrugs { get; set; } = [];
     private string? Message;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        DyslipidemiaDrugs = await QuestionnaireService.GetDyslipidemiaDrugsAsync();
-        var entity = await QuestionnaireService.GetTreatmentBeforeAsync(patientId.ToString());
-        if (entity != null)
-            TreatmentBefore = entity;
-        else
-            TreatmentBefore.Id = patientId.ToString();
+        if (firstRender)
+        {
+            DyslipidemiaDrugs = await QuestionnaireService.GetDyslipidemiaDrugsAsync();
+            var entity = await QuestionnaireService.GetTreatmentBeforeAsync(patientId);
+            if (entity != null)
+                TreatmentBefore = entity;
+            else
+                TreatmentBefore.Id = patientId.ToString();
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     private System.Timers.Timer? debounceTimer;
