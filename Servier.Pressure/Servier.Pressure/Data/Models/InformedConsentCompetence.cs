@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Servier.Pressure.Data.Models;
 
-[Table("info")]
+[Table("infos")]
 public class InformedConsentCompetence
 {
     [Key]

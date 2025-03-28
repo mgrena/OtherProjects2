@@ -1,0 +1,83 @@
+﻿@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Services.Pages
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<EditForm Model="@TreatmentBefore" Context="EditFormContext">
+    <DxFormLayout CssClass="w-100">
+        <DxFormLayoutGroup Caption="Manažment dyslipidémie" ColSpanMd="12">
+            <DxFormLayoutItem Caption="Farmakoterapia dyslipidémie" ColSpanMd="12">
+                <DxComboBox Data="@DyslipidemiaDrugs" @bind-Value="@DiagnosisDyslipidemiaDrug" TextFieldName="Name" ValueFieldName="Id" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    </DxFormLayout>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Guid patientId { get; set; }
+
+    private TreatmentBefore TreatmentBefore { get; set; } = new() { Id = string.Empty, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+    private IEnumerable<DyslipidemiaDrug> DyslipidemiaDrugs { get; set; } = [];
+    private string? Message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DyslipidemiaDrugs = await QuestionnaireService.GetDyslipidemiaDrugsAsync();
+        var entity = await QuestionnaireService.GetTreatmentBeforeAsync(patientId.ToString());
+        if (entity != null)
+            TreatmentBefore = entity;
+        else
+            TreatmentBefore.Id = patientId.ToString();
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var result = await QuestionnaireService.SaveTreatmentBeforeAsync(TreatmentBefore);
+            if (!result.Success)
+                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+
+    private int DiagnosisDyslipidemiaDrug
+    {
+        get => TreatmentBefore!.DiagnosisDyslipidemiaDrug;
+        set
+        {
+            if (TreatmentBefore!.DiagnosisDyslipidemiaDrug != value)
+            {
+                TreatmentBefore!.DiagnosisDyslipidemiaDrug = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

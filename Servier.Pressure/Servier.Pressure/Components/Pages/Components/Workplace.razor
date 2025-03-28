@@ -16,7 +16,7 @@
                 <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@WorkplaceTypes" @bind-Value="@WorkplaceType" TextFieldName="DisplayText" ValueFieldName="Value" />
             </DxFormLayoutItem>
             <DxFormLayoutItem Caption="Špecializácia skúšajúceho lekára (hlavná)" ColSpanMd="12">
-                <DxComboBox Data="@Sspecializations" @bind-Value="@Specialization" TextFieldName="DisplayText" ValueFieldName="Value" />
+                <DxComboBox Data="@Specializations" @bind-Value="@Specialization" TextFieldName="DisplayText" ValueFieldName="Value" />
             </DxFormLayoutItem>
         </DxFormLayoutGroup>
         <DxFormLayoutGroup Caption="Približný počet dispenzarizovaných pacientov" ColSpanMd="12">
@@ -64,14 +64,14 @@
 @code {
     private Data.Models.WorkPlace? DoctorWorkplace { get; set; } = new() { CreatedAt = DateTime.Now, UserId = string.Empty, Workplace = string.Empty };
     private IEnumerable<WorkplaceTypeWrapper> WorkplaceTypes { get; set; } = [];
-    private IEnumerable<SpecializationWrapper> Sspecializations { get; set; } = [];
+    private IEnumerable<SpecializationWrapper> Specializations { get; set; } = [];
     private string? UserId { get; set; }
     private string? Message;
 
     protected override async Task OnInitializedAsync()
     {
         WorkplaceTypes = Enum.GetValues<WorkplaceTypeEnum>().OfType<WorkplaceTypeEnum>().Select(i => GetWorkplaceTypeWrapper(i));
-        Sspecializations = Enum.GetValues<SpecializationEnum>().OfType<SpecializationEnum>().Select(i => GetSpecializationWrapper(i));
+        Specializations = Enum.GetValues<SpecializationEnum>().OfType<SpecializationEnum>().Select(i => GetSpecializationWrapper(i));
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
@@ -195,5 +195,4 @@
                 RenderStyle = ToastRenderStyle.Success,
             });
     }
-
 }
