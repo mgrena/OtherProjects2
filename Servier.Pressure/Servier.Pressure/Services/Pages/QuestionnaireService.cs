@@ -12,19 +12,19 @@ public class QuestionnaireService(ApplicationDbContext context, ILogger<Question
     private readonly ApplicationDbContext _context = context;
     private readonly ILogger _logger = logger;
 
-    public async Task<InformedConsentCompetence> GetWorkplaceByUserIdAsync(string Id)
+    public async Task<InformedConsentCompetence> GetInformedConsentCompetenceByIdAsync(string Id)
     {
         InformedConsentCompetence? InformedConsentCompetenceQuestionary = await _context.InformedConsentCompetences.FirstOrDefaultAsync(p => p.Id == Id);
         InformedConsentCompetenceQuestionary ??= new() {
-            Id = string.Empty,
+            Id = Id,
             IsConsent = true,
             IsAdult = true,
             IsStableHypertension = true,
             IsInformedConsent = true,
-            IsAlreadyEnrolled = true,
-            IsResistantHypertension = true,
-            IsClinicalTrial = true,
-            IsPregnant = true,
+            IsAlreadyEnrolled = false,
+            IsResistantHypertension = false,
+            IsClinicalTrial = false,
+            IsPregnant = false,
             VisitDate = DateTime.Now,
             ModifiedAt = DateTime.Now,
             CreatedAt = DateTime.Now,
@@ -32,39 +32,6 @@ public class QuestionnaireService(ApplicationDbContext context, ILogger<Question
         return InformedConsentCompetenceQuestionary;
     }
 
-    public async Task<OperationResult> SaveInformedConsentCompetenceQuestionaryAsync(InformedConsentCompetence informedconsentcompetence)
-    {
-        var InformedConsentCompetence = await _context.InformedConsentCompetences.FirstOrDefaultAsync(i => i.Id == informedconsentcompetence.Id);
-        if (InformedConsentCompetence == null)
-        {
-            _logger.LogInformation("The informed consent competence for patient {user} has been added.", informedconsentcompetence.Id);
-            _context.InformedConsentCompetences.Add(informedconsentcompetence);
-        }
-        else
-        {
-            _logger.LogInformation("The informed consent competence with id {id} has been updated.", informedconsentcompetence.Id);
-            InformedConsentCompetence.IsConsent = informedconsentcompetence.IsConsent;
-            InformedConsentCompetence.IsAdult = informedconsentcompetence.IsAdult;
-            InformedConsentCompetence.IsStableHypertension = informedconsentcompetence.IsStableHypertension;
-            InformedConsentCompetence.IsInformedConsent = informedconsentcompetence.IsInformedConsent;
-            InformedConsentCompetence.IsAlreadyEnrolled = informedconsentcompetence.IsAlreadyEnrolled;
-            InformedConsentCompetence.IsResistantHypertension = informedconsentcompetence.IsResistantHypertension;
-            InformedConsentCompetence.IsClinicalTrial = informedconsentcompetence.IsClinicalTrial;
-            InformedConsentCompetence.IsPregnant = informedconsentcompetence.IsPregnant;
-
-        }
-
-        try
-        {
-            await _context.SaveChangesAsync();
-            return OperationResult.SuccessResult();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.Message);
-            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
-        }
-    }
     public async Task<TreatmentBefore?> GetTreatmentBeforeAsync(string patientId)
     {
         return await _context.TreatmentsBefore.FirstOrDefaultAsync(i => i.Id == patientId);
@@ -96,6 +63,39 @@ public class QuestionnaireService(ApplicationDbContext context, ILogger<Question
             existEntry.FixCombination3Unknown = entry.FixCombination3Unknown;
             existEntry.FixCombinationMixUnknown = entry.FixCombinationMixUnknown;
             existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+    public async Task<OperationResult> SaveInformedConsentCompetenceQuestionaryAsync(InformedConsentCompetence informedconsentcompetence)
+    {
+        var InformedConsentCompetence = await _context.InformedConsentCompetences.FirstOrDefaultAsync(i => i.Id == informedconsentcompetence.Id);
+        if (InformedConsentCompetence == null)
+        {
+            _logger.LogInformation("The informed consent competence for patient {user} has been added.", informedconsentcompetence.Id);
+            _context.InformedConsentCompetences.Add(informedconsentcompetence);
+        }
+        else
+        {
+            _logger.LogInformation("The informed consent competence with id {id} has been updated.", informedconsentcompetence.Id);
+            InformedConsentCompetence.IsConsent = informedconsentcompetence.IsConsent;
+            InformedConsentCompetence.IsAdult = informedconsentcompetence.IsAdult;
+            InformedConsentCompetence.IsStableHypertension = informedconsentcompetence.IsStableHypertension;
+            InformedConsentCompetence.IsInformedConsent = informedconsentcompetence.IsInformedConsent;
+            InformedConsentCompetence.IsAlreadyEnrolled = informedconsentcompetence.IsAlreadyEnrolled;
+            InformedConsentCompetence.IsResistantHypertension = informedconsentcompetence.IsResistantHypertension;
+            InformedConsentCompetence.IsClinicalTrial = informedconsentcompetence.IsClinicalTrial;
+            InformedConsentCompetence.IsPregnant = informedconsentcompetence.IsPregnant;
+
         }
 
         try

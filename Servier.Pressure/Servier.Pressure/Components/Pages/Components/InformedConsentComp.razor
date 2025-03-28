@@ -81,6 +81,11 @@
         public bool Value { get; set; }
     };
 
+    protected override async Task OnInitializedAsync()
+    {
+        InformedConsentCompetenceQuestionary = await QuestionnaireService.GetInformedConsentCompetenceByIdAsync(patientId.ToString());
+    }
+
     private System.Timers.Timer? debounceTimer;
     private async Task OnFieldChangedAsync()
     {
@@ -212,12 +217,5 @@
                 RenderStyle = ToastRenderStyle.Success,
             });
     }
-
-
-
-    protected override async Task OnInitializedAsync()
-    {
-    }
-
 
 }
