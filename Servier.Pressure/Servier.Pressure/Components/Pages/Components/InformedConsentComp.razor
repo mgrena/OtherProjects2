@@ -1,12 +1,223 @@
-﻿@using Servier.Pressure.Services.Pages
+﻿@using System.IdentityModel.Claims
+@using System.ComponentModel.DataAnnotations
+@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Helpers
+@using Servier.Pressure.Services.Pages
 
+@inject IToastNotificationService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject QuestionnaireService QuestionnaireService
+
+
+
+<EditForm Model="@InformedConsentCompetenceQuestionary" Context="EditFormContext">
+    <DxFormLayout CssClass="w-100">
+        <DxFormLayoutGroup Caption="Informovaný súhlas" ColSpanMd="12">
+            <DxFormLayoutItem Caption="Dátum návštevy" ColSpanMd="12">
+                <DxDateEdit @bind-Date="@InformedConsentCompetenceQuestionary.VisitDate" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Podpis formulára informovaného súhlasu" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsConsent" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Caption="Zaraďovacie kritériá" ColSpanMd="12">
+            <DxFormLayoutItem Caption="Zaradení môžu byť len pacienti spĺňajúci všetky zaraďovacie kritériá." ColSpanMd="12" />
+            <DxFormLayoutItem Caption="Muž alebo žena vo veku ≥ 18 rokov" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsAdult" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Pacient s artériovou hypertenziou farmakologicky liečenou ≥ 12 mesiacov a bez zmien antihypertenzívnej liečby v priebehu 3 mesiacov" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsStableHypertension" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+        <DxFormLayoutGroup Caption="Vylučovacie kritériá" ColSpanMd="12">
+            <DxFormLayoutItem Caption="Zaradení môžu byť len pacienti, ktorí nespĺňajú nižšie uvedené vylučovacie kritériá:" ColSpanMd="12" />
+            <DxFormLayoutItem Caption="Pacient už zaradený do tejto štúdie" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsAlreadyEnrolled" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Prítomnosť rezistentnej hypertenzie" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsResistantHypertension" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Účasť v intervenčnom klinickom skúšaní (aktuálne alebo v priebehu 30 dní pred Návštevou 1)" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsClinicalTrial" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+            <DxFormLayoutItem Caption="Pacientka, ktorá je tehotná, dojčí alebo plánuje otehotnieť v priebehu nasledujúcich 3 mesiacov" ColSpanMd="12">
+                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOptions" @bind-Value="@IsPregnant" TextFieldName="DisplayText" ValueFieldName="Value" />
+            </DxFormLayoutItem>
+        </DxFormLayoutGroup>
+    </DxFormLayout>
+</EditForm>
+<StatusMessage Message="@Message" />
+
 
 @code {
     [Parameter]
     public Guid patientId { get; set; }
+    private string? Message;
+
+    public Data.Models.InformedConsentCompetence? InformedConsentCompetenceQuestionary { get; set; } = new()
+        {
+            Id = string.Empty,
+            IsConsent = true,
+            IsAdult = true,
+            IsStableHypertension = true,
+            IsInformedConsent = true,
+            IsAlreadyEnrolled = true,
+            IsResistantHypertension = true,
+            IsClinicalTrial = true,
+            IsPregnant = true,
+            VisitDate = DateTime.Now,
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now,
+        };
+    private IEnumerable<ConsentOption> ConsentOptions { get; set; } = new List<ConsentOption>
+    {
+        new ConsentOption { DisplayText = "Áno", Value = true },
+        new ConsentOption { DisplayText = "Nie", Value = false }
+    };
+    public class ConsentOption
+    {
+        public string DisplayText { get; set; }
+        public bool Value { get; set; }
+    };
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var result = await QuestionnaireService.SaveInformedConsentCompetenceQuestionaryAsync(InformedConsentCompetenceQuestionary!);
+            if (!result.Success)
+                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+
+
+    private bool IsConsent
+    {
+        get => InformedConsentCompetenceQuestionary!.IsConsent;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.IsConsent != value)
+            {
+                InformedConsentCompetenceQuestionary!.IsConsent = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool IsAdult
+    {
+        get => InformedConsentCompetenceQuestionary!.IsAdult;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.IsAdult != value)
+            {
+                InformedConsentCompetenceQuestionary!.IsAdult = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool IsStableHypertension
+    {
+        get => InformedConsentCompetenceQuestionary!.IsStableHypertension;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.IsStableHypertension != value)
+            {
+                InformedConsentCompetenceQuestionary!.IsStableHypertension = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool IsInformedConsent
+    {
+        get => InformedConsentCompetenceQuestionary!.IsInformedConsent;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.IsInformedConsent != value)
+            {
+                InformedConsentCompetenceQuestionary!.IsInformedConsent = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool IsAlreadyEnrolled
+    {
+        get => InformedConsentCompetenceQuestionary!.IsAlreadyEnrolled;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.IsAlreadyEnrolled != value)
+            {
+                InformedConsentCompetenceQuestionary!.IsAlreadyEnrolled = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool IsResistantHypertension
+    {
+        get => InformedConsentCompetenceQuestionary!.IsAlreadyEnrolled;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.IsAlreadyEnrolled != value)
+            {
+                InformedConsentCompetenceQuestionary!.IsAlreadyEnrolled = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool IsClinicalTrial
+    {
+        get => InformedConsentCompetenceQuestionary!.IsClinicalTrial;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.IsClinicalTrial != value)
+            {
+                InformedConsentCompetenceQuestionary!.IsClinicalTrial = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool IsPregnant
+    {
+        get => InformedConsentCompetenceQuestionary!.IsPregnant;
+        set
+        {
+            if (InformedConsentCompetenceQuestionary!.IsPregnant != value)
+            {
+                InformedConsentCompetenceQuestionary!.IsPregnant = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+
+
 
     protected override async Task OnInitializedAsync()
     {
     }
+
+
 }
