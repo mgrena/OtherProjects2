@@ -17,25 +17,25 @@ else
 {
     <EditForm Model="@DoctorWorkplace" Context="EditFormContext">
         <DxFormLayout CssClass="w-100">
-            <DxFormLayoutGroup Caption="Pracovisko" ColSpanMd="12">
-                <DxFormLayoutItem Caption="Typ pracoviska" ColSpanMd="12">
+            <DxFormLayoutGroup Caption="Pracovisko" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Typ pracoviska" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@WorkplaceTypes" @bind-Value="@WorkplaceType" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Špecializácia skúšajúceho lekára (hlavná)" ColSpanMd="12">
+                <DxFormLayoutItem Caption="Špecializácia skúšajúceho lekára (hlavná)" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxComboBox Data="@Specializations" @bind-Value="@Specialization" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
-            <DxFormLayoutGroup Caption="Približný počet dispenzarizovaných pacientov" ColSpanMd="12">
-                <DxFormLayoutItem Caption="všetci pacienti:" ColSpanMd="6">
+            <DxFormLayoutGroup Caption="Približný počet dispenzarizovaných pacientov" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="všetci pacienti:" ColSpanMd="6" CaptionCssClass="caption-styleH1">
                     <DxSpinEdit @bind-Value="@PatientsCountAll" MinValue="0" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem ColSpanMd="6">
+                <DxFormLayoutItem ColSpanMd="6" CaptionCssClass="caption-styleH1">
                     <DxCheckBox @bind-Checked="@PatientsCountAllUnknown">neznámy</DxCheckBox>
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="pacienti s artériovou hypertenziou" ColSpanMd="6">
+                <DxFormLayoutItem Caption="pacienti s artériovou hypertenziou" ColSpanMd="6" CaptionCssClass="caption-styleH1">
                     <DxSpinEdit @bind-Value="@PatientsCountAH" MinValue="0" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem ColSpanMd="6">
+                <DxFormLayoutItem ColSpanMd="6" CaptionCssClass="caption-styleH1">
                     <DxCheckBox @bind-Checked="@PatientsCountAHUnknown">neznámy</DxCheckBox>
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>

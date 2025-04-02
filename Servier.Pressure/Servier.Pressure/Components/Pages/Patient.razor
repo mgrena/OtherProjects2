@@ -129,7 +129,7 @@
     private async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
         var patient = (Data.Models.Patient)e.DataItem;
-        //await PatientService.DeletePatientAsync(patient.Id);
+        await PatientService.DeletePatientAsync(patient.Id);
         await UpdateDataAsync();
         DeleteToast();
     }

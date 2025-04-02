@@ -7,14 +7,16 @@ using Servier.Pressure.Helpers;
 
 namespace Servier.Pressure.Services.Pages;
 
-public class QuestionnaireService(ApplicationDbContext context, ILogger<QuestionnaireService> logger)
+public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<QuestionnaireService> logger)
 {
-    private readonly ApplicationDbContext _context = context;
+    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
     private readonly ILogger _logger = logger;
 
     public async Task<InformedConsentCompetence> GetInformedConsentCompetenceByIdAsync(string Id)
     {
-        InformedConsentCompetence? InformedConsentCompetenceQuestionary = await _context.InformedConsentCompetences.FirstOrDefaultAsync(p => p.Id == Id);
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        InformedConsentCompetence? InformedConsentCompetenceQuestionary = await aContext.InformedConsentCompetences.FirstOrDefaultAsync(p => p.Id == Id);
         InformedConsentCompetenceQuestionary ??= new() {
             Id = Id,
             IsConsent = true,
@@ -31,24 +33,88 @@ public class QuestionnaireService(ApplicationDbContext context, ILogger<Question
         };
         return InformedConsentCompetenceQuestionary;
     }
-
     public async Task<TreatmentBefore?> GetTreatmentBeforeAsync(string patientId)
     {
-        return await _context.TreatmentsBefore.FirstOrDefaultAsync(i => i.Id == patientId);
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.TreatmentsBefore.FirstOrDefaultAsync(i => i.Id == patientId);
+    }
+    public async Task<List<TreatmentMonotherapy>> GetTreatmentMonotherapiesAsync(string patientId, VisitEnum visitNum)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.TreatmentMonotherapies.Where(i => i.PatientId == patientId && i.VisitNumber == visitNum).ToListAsync();
+    }
+    public async Task<List<TreatmentMultitherapy>> GetTreatmentMultitherapiesAsync(string patientId, VisitEnum visitNum)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.TreatmentMultitherapies.Where(i => i.PatientId == patientId && i.VisitNumber == visitNum).ToListAsync();
     }
 
     public async Task<List<DyslipidemiaDrug>> GetDyslipidemiaDrugsAsync()
     {
-        return await _context.DyslipidemiaDrugs.OrderBy(i => i.Id).ToListAsync();
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.DyslipidemiaDrugs.OrderBy(i => i.Id).ToListAsync();
+    }
+    public async Task<List<TreatmentMonotherapyDrug>> GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum category, bool isAldosteroneAntagonist)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.TreatmentMonotherapyDrugs.Where(i => i.Monotherapy == category && i.IsAldosteroneAntagonist == isAldosteroneAntagonist).OrderBy(i=> i.Order).ToListAsync();
+    }
+    public async Task<List<TreatmentMultitherapyDrug>> GetTreatmentMultitherapyDrugsAsync()
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.TreatmentMultitherapyDrugs.OrderBy(i => i.Order).ToListAsync();
     }
 
+    public async Task<OperationResult> SaveInformedConsentCompetenceQuestionaryAsync(InformedConsentCompetence informedconsentcompetence)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var InformedConsentCompetence = await aContext.InformedConsentCompetences.FirstOrDefaultAsync(i => i.Id == informedconsentcompetence.Id);
+        if (InformedConsentCompetence == null)
+        {
+            _logger.LogInformation("The informed consent competence for patient {user} has been added.", informedconsentcompetence.Id);
+            aContext.InformedConsentCompetences.Add(informedconsentcompetence);
+        }
+        else
+        {
+            _logger.LogInformation("The informed consent competence with id {id} has been updated.", informedconsentcompetence.Id);
+            InformedConsentCompetence.IsConsent = informedconsentcompetence.IsConsent;
+            InformedConsentCompetence.IsAdult = informedconsentcompetence.IsAdult;
+            InformedConsentCompetence.IsStableHypertension = informedconsentcompetence.IsStableHypertension;
+            InformedConsentCompetence.IsInformedConsent = informedconsentcompetence.IsInformedConsent;
+            InformedConsentCompetence.IsAlreadyEnrolled = informedconsentcompetence.IsAlreadyEnrolled;
+            InformedConsentCompetence.IsResistantHypertension = informedconsentcompetence.IsResistantHypertension;
+            InformedConsentCompetence.IsClinicalTrial = informedconsentcompetence.IsClinicalTrial;
+            InformedConsentCompetence.IsPregnant = informedconsentcompetence.IsPregnant;
+
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
     public async Task<OperationResult> SaveTreatmentBeforeAsync(TreatmentBefore entry)
     {
-        var existEntry = await _context.TreatmentsBefore.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.TreatmentsBefore.FirstOrDefaultAsync(i => i.Id == entry.Id);
         if (existEntry == null)
         {
             _logger.LogInformation("The TreatmentBefore for patient {id} has been added.", entry.Id);
-            _context.TreatmentsBefore.Add(entry);
+            aContext.TreatmentsBefore.Add(entry);
         }
         else
         {
@@ -67,7 +133,7 @@ public class QuestionnaireService(ApplicationDbContext context, ILogger<Question
 
         try
         {
-            await _context.SaveChangesAsync();
+            await aContext.SaveChangesAsync();
             return OperationResult.SuccessResult();
         }
         catch (Exception ex)
@@ -76,31 +142,112 @@ public class QuestionnaireService(ApplicationDbContext context, ILogger<Question
             return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
         }
     }
-    public async Task<OperationResult> SaveInformedConsentCompetenceQuestionaryAsync(InformedConsentCompetence informedconsentcompetence)
+    public async Task<OperationResult> SaveTreatmentMonotherapyAsync(TreatmentMonotherapy entry)
     {
-        var InformedConsentCompetence = await _context.InformedConsentCompetences.FirstOrDefaultAsync(i => i.Id == informedconsentcompetence.Id);
-        if (InformedConsentCompetence == null)
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.TreatmentMonotherapies.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry == null)
         {
-            _logger.LogInformation("The informed consent competence for patient {user} has been added.", informedconsentcompetence.Id);
-            _context.InformedConsentCompetences.Add(informedconsentcompetence);
+            _logger.LogInformation("The TreatmentMonotherapy for patient {id} and visit {visit} has been added.", entry.Id, entry.VisitNumber.ToString());
+            aContext.TreatmentMonotherapies.Add(entry);
         }
         else
         {
-            _logger.LogInformation("The informed consent competence with id {id} has been updated.", informedconsentcompetence.Id);
-            InformedConsentCompetence.IsConsent = informedconsentcompetence.IsConsent;
-            InformedConsentCompetence.IsAdult = informedconsentcompetence.IsAdult;
-            InformedConsentCompetence.IsStableHypertension = informedconsentcompetence.IsStableHypertension;
-            InformedConsentCompetence.IsInformedConsent = informedconsentcompetence.IsInformedConsent;
-            InformedConsentCompetence.IsAlreadyEnrolled = informedconsentcompetence.IsAlreadyEnrolled;
-            InformedConsentCompetence.IsResistantHypertension = informedconsentcompetence.IsResistantHypertension;
-            InformedConsentCompetence.IsClinicalTrial = informedconsentcompetence.IsClinicalTrial;
-            InformedConsentCompetence.IsPregnant = informedconsentcompetence.IsPregnant;
-
+            _logger.LogInformation("The TreatmentMonotherapy for patient {id} and visit {visit} has been updated.", entry.Id, entry.VisitNumber.ToString());
+            existEntry.DrugId = entry.DrugId;
+            existEntry.IsAldosteroneAntagonist = entry.IsAldosteroneAntagonist;
+            existEntry.Dose = entry.Dose;
+            existEntry.NumberMorning = entry.NumberMorning;
+            existEntry.NumberNoon = entry.NumberNoon;
+            existEntry.NumberEvening = entry.NumberEvening;
+            existEntry.IsUnknown = entry.IsUnknown;
+            existEntry.ModifiedAt = DateTime.Now;
         }
 
         try
         {
-            await _context.SaveChangesAsync();
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+    public async Task<OperationResult> SaveTreatmentMultitherapyAsync(TreatmentMultitherapy entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.TreatmentMultitherapies.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry == null)
+        {
+            _logger.LogInformation("The TreatmentMultitherapy for patient {id} and visit {visit} has been added.", entry.Id, entry.VisitNumber.ToString());
+            aContext.TreatmentMultitherapies.Add(entry);
+        }
+        else
+        {
+            _logger.LogInformation("The TreatmentMultitherapy for patient {id} and visit {visit} has been updated.", entry.Id, entry.VisitNumber.ToString());
+            existEntry.DrugId = entry.DrugId;
+            existEntry.Dose1 = entry.Dose1;
+            existEntry.Dose2 = entry.Dose2;
+            existEntry.Dose3 = entry.Dose3;
+            existEntry.NumberMorning = entry.NumberMorning;
+            existEntry.NumberNoon = entry.NumberNoon;
+            existEntry.NumberEvening = entry.NumberEvening;
+            existEntry.IsUnknown = entry.IsUnknown;
+            existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+
+    public async Task<OperationResult> DeleteTreatmentMonotherapyAsync(TreatmentMonotherapy entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.TreatmentMonotherapies.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry != null)
+        {
+            _logger.LogInformation("The TreatmentMonotherapy for patient {id} and visit {visit} has been deleted.", entry.Id, entry.VisitNumber.ToString());
+            aContext.TreatmentMonotherapies.Remove(entry);
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+    public async Task<OperationResult> DeleteTreatmentMultitherapyAsync(TreatmentMultitherapy entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.TreatmentMultitherapies.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry != null)
+        {
+            _logger.LogInformation("The TreatmentMultitherapy for patient {id} and visit {visit} has been deleted.", entry.Id, entry.VisitNumber.ToString());
+            aContext.TreatmentMultitherapies.Remove(entry);
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
             return OperationResult.SuccessResult();
         }
         catch (Exception ex)

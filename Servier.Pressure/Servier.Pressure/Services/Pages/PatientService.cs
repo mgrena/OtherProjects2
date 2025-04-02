@@ -62,7 +62,7 @@ public class PatientService(ApplicationDbContext context, AuthenticationStatePro
     {
         return await _context.Patients.FirstOrDefaultAsync(i => i.Id == id);
     }
-    public async Task DeletePatientAsync(int patientId)
+    public async Task DeletePatientAsync(string patientId)
     {
         var patient = await _context.Patients.FindAsync(patientId);
         if (patient != null)

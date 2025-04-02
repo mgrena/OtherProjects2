@@ -319,3 +319,14 @@ html, body {
     border-color: rgba(114, 130, 241, 0.5);
     color: white;
 }
+
+.caption-styleH0 {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.caption-styleH1 {
+    font-size: 14px;
+    color: #6e7de8;
+}

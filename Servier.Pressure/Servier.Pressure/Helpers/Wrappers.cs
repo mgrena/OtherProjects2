@@ -1,4 +1,5 @@
-﻿using Servier.Pressure.Data.Models;
+﻿using Servier.Pressure.Data.Lists;
+using Servier.Pressure.Data.Models;
 using System.Reflection;
 
 namespace Servier.Pressure.Helpers;
@@ -11,6 +12,11 @@ public class WorkplaceTypeWrapper
 public class SpecializationWrapper
 {
     public SpecializationEnum Value { get; set; }
+    public required string DisplayText { get; set; }
+}
+public class MonotherapyWrapper
+{
+    public MonotherapyEnum Value { get; set; }
     public required string DisplayText { get; set; }
 }
 
