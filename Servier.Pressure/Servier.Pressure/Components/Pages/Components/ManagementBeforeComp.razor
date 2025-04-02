@@ -1,4 +1,5 @@
-﻿@using Servier.Pressure.Data.Models
+﻿@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
 @using Servier.Pressure.Services.Pages
 
@@ -7,23 +8,42 @@
 
 @inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<EditForm Model="@TreatmentBefore" Context="EditFormContext">
-    <DxFormLayout CssClass="w-100">
-        <DxFormLayoutGroup Caption="Manažment dyslipidémie" ColSpanMd="12">
-            <DxFormLayoutItem Caption="Farmakoterapia dyslipidémie" ColSpanMd="12">
-                <DxComboBox Data="@DyslipidemiaDrugs" @bind-Value="@DiagnosisDyslipidemiaDrug" TextFieldName="Name" ValueFieldName="Id" />
-            </DxFormLayoutItem>
-        </DxFormLayoutGroup>
-    </DxFormLayout>
-</EditForm>
+@if (TreatmentBefore == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <EditForm Model="@TreatmentBefore" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Manažment dyslipidémie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Farmakoterapia dyslipidémie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxComboBox Data="@DyslipidemiaDrugs" @bind-Value="@DiagnosisDyslipidemiaDrug" TextFieldName="Name" ValueFieldName="Id" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="Manažment artériovej hypertenzie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Prosím, uveďte všetkých lekárov zapojených do manažmentu hypertenzie subjektu (možnosť výberu viacerých možností)" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <Template>
+                        <DxCheckBox @bind-Checked="@GeneralPractitioner">všeobecný lekár</DxCheckBox>
+                        <DxCheckBox @bind-Checked="@Diabetologist">diabetológ</DxCheckBox>
+                        <DxCheckBox @bind-Checked="@Geriatrician">geriater</DxCheckBox>
+                        <DxCheckBox @bind-Checked="@Internist">internista</DxCheckBox>
+                        <DxCheckBox @bind-Checked="@Cardiologist">kardiológ</DxCheckBox>
+                        <DxTextBox @bind-Text="@Other" NullText="iný" />
+                    </Template>
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+}
 
 @code {
     [Parameter]
     public required string patientId { get; set; }
 
-    private TreatmentBefore TreatmentBefore { get; set; } = new() { Id = string.Empty, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+    private TreatmentBefore? TreatmentBefore { get; set; }
     private IEnumerable<DyslipidemiaDrug> DyslipidemiaDrugs { get; set; } = [];
     private string? Message;
 
@@ -36,7 +56,7 @@
             if (entity != null)
                 TreatmentBefore = entity;
             else
-                TreatmentBefore.Id = patientId.ToString();
+                TreatmentBefore = new() { Id = patientId, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
             await InvokeAsync(StateHasChanged);
         }
     }
@@ -72,6 +92,78 @@
             if (TreatmentBefore!.DiagnosisDyslipidemiaDrug != value)
             {
                 TreatmentBefore!.DiagnosisDyslipidemiaDrug = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool GeneralPractitioner
+    {
+        get => TreatmentBefore!.GeneralPractitioner;
+        set
+        {
+            if (TreatmentBefore!.GeneralPractitioner != value)
+            {
+                TreatmentBefore!.GeneralPractitioner = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool Diabetologist
+    {
+        get => TreatmentBefore!.Diabetologist;
+        set
+        {
+            if (TreatmentBefore!.Diabetologist != value)
+            {
+                TreatmentBefore!.Diabetologist = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool Geriatrician
+    {
+        get => TreatmentBefore!.Geriatrician;
+        set
+        {
+            if (TreatmentBefore!.Geriatrician != value)
+            {
+                TreatmentBefore!.Geriatrician = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool Internist
+    {
+        get => TreatmentBefore!.Internist;
+        set
+        {
+            if (TreatmentBefore!.Internist != value)
+            {
+                TreatmentBefore!.Internist = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool Cardiologist
+    {
+        get => TreatmentBefore!.Cardiologist;
+        set
+        {
+            if (TreatmentBefore!.Cardiologist != value)
+            {
+                TreatmentBefore!.Cardiologist = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private string? Other
+    {
+        get => TreatmentBefore!.Other;
+        set
+        {
+            if (TreatmentBefore!.Other != value)
+            {
+                TreatmentBefore!.Other = value;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
