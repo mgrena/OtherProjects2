@@ -19,6 +19,11 @@ public class MonotherapyWrapper
     public MonotherapyEnum Value { get; set; }
     public required string DisplayText { get; set; }
 }
+public class AnswerWrapper
+{
+    public AnswerEnum Value { get; set; }
+    public required string DisplayText { get; set; }
+}
 
 public static class EnumExtensions
 {

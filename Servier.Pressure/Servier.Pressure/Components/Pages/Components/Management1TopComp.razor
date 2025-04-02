@@ -62,7 +62,10 @@ else
         debounceTimer.AutoReset = false;
         debounceTimer.Elapsed += async (s, e) =>
         {
-            var result = await QuestionnaireService.SaveTreatment1VisitAsync(Treatment1Visit!);
+            var entity = await QuestionnaireService.GetTreatment1VisitAsync(patientId);
+            if (entity != null)
+                entity.IsChanged = Treatment1Visit!.IsChanged;
+            var result = await QuestionnaireService.SaveTreatment1VisitAsync(entity!);
             if (!result.Success)
                 Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else
@@ -80,9 +83,9 @@ else
         set
         {
             bool isChanged = value == "áno, prosím špecifikujte liečbu";
-            if (Treatment1Visit!.IsChanged != !isChanged)
+            if (Treatment1Visit!.IsChanged != isChanged)
             {
-                Treatment1Visit!.IsChanged = !isChanged;
+                Treatment1Visit!.IsChanged = isChanged;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }

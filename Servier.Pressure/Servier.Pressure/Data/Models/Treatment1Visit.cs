@@ -5,9 +5,12 @@ namespace Servier.Pressure.Data.Models;
 
 public enum AnswerEnum
 {
-    yes = 0,
-    no = 1,
-    notapplicable = 2
+    [Display(Name = "áno")]
+    yes = 1,
+    [Display(Name = "nie")]
+    no = 2,
+    [Display(Name = "nie je aplikovateľné")]
+    notapplicable = 3
 }
 
 [Table("treatments_1_visit")]

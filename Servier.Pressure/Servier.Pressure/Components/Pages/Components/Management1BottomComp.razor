@@ -1,6 +1,8 @@
-﻿@using Servier.Pressure.Components.Account.Shared
+﻿@using System.ComponentModel.DataAnnotations
+@using Servier.Pressure.Components.Account.Shared
 @using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Helpers
 @using Servier.Pressure.Services.Pages
 
 @attribute [StreamRendering(true)]
@@ -15,17 +17,24 @@
 }
 else
 {
-@*     <EditForm Model="@Treatment1Visit" Context="EditFormContext">
+    <br />
+    <EditForm Model="@Treatment1Visit" Context="EditFormContext">
         <DxFormLayout CssClass="w-100">
             <DxFormLayoutGroup Caption="Pokračuje subjekt v účasti?" ColSpanMd="12" CaptionCssClass="caption-styleH0">
                 <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
-                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Changes" @bind-Value="@CurrentChange" />
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@YesNo" @bind-Value="@IsOngoing" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Vydanie záznamníku domáceho monitorovania tlaku subjektu?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Answers" @bind-Value="@IsIssuingRecorder" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Poskytnutie tlakomeru subjektu?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Answers" @bind-Value="@IsPressureGauge" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
         </DxFormLayout>
     </EditForm>
     <StatusMessage Message="@Message" />
- *@}
+}
 
 @code {
     [Parameter]
@@ -33,19 +42,93 @@ else
 
     private Treatment1Visit? Treatment1Visit { get; set; }
     private IEnumerable<string> YesNo = new[] { "áno", "nie" };
-    private IEnumerable<string> YesNoNot = new[] { "áno", "nie", "nie je aplikovateľné" };
+    private IEnumerable<AnswerWrapper> Answers { get; set; } = [];
     private string? Message;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            Answers = Enum.GetValues<AnswerEnum>().OfType<AnswerEnum>().Select(i => GetAnswerWrapper(i));
+
             var entity = await QuestionnaireService.GetTreatment1VisitAsync(patientId);
             if (entity != null)
                 Treatment1Visit = entity;
             else
                 Treatment1Visit = new() { Id = patientId, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
             await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var entity = await QuestionnaireService.GetTreatment1VisitAsync(patientId);
+            if (entity != null)
+            {
+                entity.IsOngoing = Treatment1Visit!.IsOngoing;
+                entity.IsIssuingRecorder = Treatment1Visit!.IsIssuingRecorder;
+                entity.IsPressureGauge = Treatment1Visit!.IsPressureGauge;
+            }
+            var result = await QuestionnaireService.SaveTreatment1VisitAsync(entity!);
+            if (!result.Success)
+                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+    private AnswerWrapper GetAnswerWrapper(AnswerEnum item)
+    {
+        return new AnswerWrapper() { Value = item, DisplayText = item.GetAttribute<DisplayAttribute>()?.Name ?? item.ToString() };
+    }
+
+    private string IsOngoing
+    {
+        get => (Treatment1Visit!.IsOngoing) ? "áno" : "nie";
+        set
+        {
+            bool isOngoing = value == "áno";
+            if (Treatment1Visit!.IsOngoing != isOngoing)
+            {
+                Treatment1Visit!.IsOngoing = isOngoing;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private AnswerEnum IsIssuingRecorder
+    {
+        get => Treatment1Visit!.IsIssuingRecorder;
+        set
+        {
+            if (Treatment1Visit!.IsIssuingRecorder != value)
+            {
+                Treatment1Visit!.IsIssuingRecorder = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private AnswerEnum IsPressureGauge
+    {
+        get => Treatment1Visit!.IsPressureGauge;
+        set
+        {
+            if (Treatment1Visit!.IsPressureGauge != value)
+            {
+                Treatment1Visit!.IsPressureGauge = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
         }
     }
 

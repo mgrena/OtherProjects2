@@ -86,11 +86,11 @@ else
         await Task.CompletedTask;
     }
 
-    WorkplaceTypeWrapper GetWorkplaceTypeWrapper(WorkplaceTypeEnum item)
+    private WorkplaceTypeWrapper GetWorkplaceTypeWrapper(WorkplaceTypeEnum item)
     {
         return new WorkplaceTypeWrapper() { Value = item, DisplayText = item.GetAttribute<DisplayAttribute>()?.Name ?? item.ToString() };
     }
-    SpecializationWrapper GetSpecializationWrapper(SpecializationEnum item)
+    private SpecializationWrapper GetSpecializationWrapper(SpecializationEnum item)
     {
         return new SpecializationWrapper() { Value = item, DisplayText = item.GetAttribute<DisplayAttribute>()?.Name ?? item.ToString() };
     }
