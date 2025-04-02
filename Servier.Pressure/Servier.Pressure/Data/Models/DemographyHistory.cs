@@ -71,9 +71,9 @@ public class DemographyHistory
     [Column("age")]
     public required int Age { get; set; }
     [Column("smoker")]
-    public SmokerEnum Smoker { get; set; }
+    public SmokerEnum Smoker { get; set; } = 0;
     [Column("education")]
-    public EducationEnum Education { get; set; }
+    public EducationEnum Education { get; set; } = 0;
 
     [Column("diagnosis_year")]
     public int DiagnosisYear { get; set; } = 0;
@@ -103,11 +103,11 @@ public class DemographyHistory
     [Column("diag_ICHS_angiography")]
     public bool DiagnosisICHSAngiography { get; set; } = false;
     [Column("diag_ICHS_angiography_type")]
-    public AngiographyEnum DiagnosisICHSAngiographyType { get; set; }
+    public AngiographyEnum DiagnosisICHSAngiographyType { get; set; } = 0;
     [Column("diag_ICHS_revascularization")]
     public bool DiagnosisICHSRevascularization { get; set; } = false;
     [Column("diag_ICHS_revascularization_type")]
-    public RevascularizationEnum DiagnosisICHSRevascularizationType { get; set; }
+    public RevascularizationEnum DiagnosisICHSRevascularizationType { get; set; } = 0;
     [Column("diag_failure")]
     public bool DiagnosisHeartFailure { get; set; } = false;
     [Column("diag_fibrillation")]
@@ -121,7 +121,7 @@ public class DemographyHistory
     [Column("diag_kidneyd")]
     public bool DiagnosisKidneyD { get; set; } = false;
     [Column("diag_kidneyd_type")]
-    public KidneyDiseaseEnum DiagnosisKidneyDType { get; set; }
+    public KidneyDiseaseEnum DiagnosisKidneyDType { get; set; } = 0;
 
     [Column("modified_at")]
     public required DateTime ModifiedAt { get; set; } = DateTime.Now;

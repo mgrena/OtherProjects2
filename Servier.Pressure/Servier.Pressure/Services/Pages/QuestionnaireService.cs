@@ -109,5 +109,71 @@ public class QuestionnaireService(ApplicationDbContext context, ILogger<Question
             return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
         }
     }
+    public async Task<DemographyHistory> GetDemographyHistoryByIdAsync(string Id)
+    {
+        DemographyHistory? DemographyHistoryQuestionary = await _context.DemographyHistories.FirstOrDefaultAsync(p => p.Id == Id);
+        DemographyHistoryQuestionary ??= new()
+        {
+            Id = Id,
+            IsMan = true,
+            Age = 50,
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now,
+
+        };
+        return DemographyHistoryQuestionary;
+    }
+    public async Task<OperationResult> SaveDemographyHistoryQuestionaryAsync(DemographyHistory demographyhistory)
+    {
+        var DemographyHistory = await _context.DemographyHistories.FirstOrDefaultAsync(i => i.Id == demographyhistory.Id);
+        if (DemographyHistory == null)
+        {
+            _logger.LogInformation("The informed consent competence for patient {user} has been added.", demographyhistory.Id);
+            _context.DemographyHistories.Add(demographyhistory);
+        }
+        else
+        {
+            _logger.LogInformation("The informed consent competence with id {id} has been updated.", demographyhistory.Id);
+            DemographyHistory.IsMan = demographyhistory.IsMan;
+            DemographyHistory.Age = demographyhistory.Age;
+            DemographyHistory.Smoker = demographyhistory.Smoker;
+            DemographyHistory.Education = demographyhistory.Education;
+            DemographyHistory.DiagnosisYear = demographyhistory.DiagnosisYear;
+            DemographyHistory.DiagnosisYearUnknown = demographyhistory.DiagnosisYearUnknown;
+            DemographyHistory.TreatmentYear = demographyhistory.TreatmentYear;
+            DemographyHistory.TreatmentYearUnknown = demographyhistory.TreatmentYearUnknown;
+            DemographyHistory.DiagnosisNone = demographyhistory.DiagnosisNone;
+            DemographyHistory.DiagnosisDiabetes = demographyhistory.DiagnosisDiabetes;
+            DemographyHistory.DiagnosisDyslipidemia = demographyhistory.DiagnosisDyslipidemia;
+            DemographyHistory.DiagnosisICHS = demographyhistory.DiagnosisICHS;
+            DemographyHistory.DiagnosisICHSInfarction = demographyhistory.DiagnosisICHSInfarction;
+            DemographyHistory.DiagnosisICHSAngina = demographyhistory.DiagnosisICHSAngina;
+            DemographyHistory.DiagnosisICHSAngiography = demographyhistory.DiagnosisICHSAngiography;
+            DemographyHistory.DiagnosisICHSAngiographyType = demographyhistory.DiagnosisICHSAngiographyType;
+            DemographyHistory.DiagnosisICHSRevascularization = demographyhistory.DiagnosisICHSRevascularization;
+            DemographyHistory.DiagnosisICHSRevascularizationType = demographyhistory.DiagnosisICHSRevascularizationType;
+            DemographyHistory.DiagnosisHeartFailure = demographyhistory.DiagnosisHeartFailure;
+            DemographyHistory.DiagnosisFibrillation = demographyhistory.DiagnosisFibrillation;
+            DemographyHistory.DiagnosisStroke = demographyhistory.DiagnosisStroke;
+            DemographyHistory.DiagnosisArterialD = demographyhistory.DiagnosisArterialD;
+            DemographyHistory.DiagnosisInsufficiency = demographyhistory.DiagnosisInsufficiency;
+            DemographyHistory.DiagnosisKidneyD = demographyhistory.DiagnosisKidneyD;
+            DemographyHistory.DiagnosisKidneyDType = demographyhistory.DiagnosisKidneyDType;
+
+
+        }
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+
 
 }
