@@ -1,0 +1,101 @@
+﻿@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+@if (Treatment1Visit == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <EditForm Model="@Treatment1Visit" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Manažment artériovej hypertenzie od návštevy 1" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <Template>
+                        <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Changes" @bind-Value="@CurrentChange" />
+                        <p><i><strong>Poznámka:</strong> V nižšie uvedenom zozname prosím upravte informácie o liečbe.</i></p>
+                    </Template>
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+}
+
+@code {
+    [Parameter]
+    public required string patientId { get; set; }
+
+    private Treatment1Visit? Treatment1Visit { get; set; }
+    private IEnumerable<string> Changes = new[] { "nie", "áno, prosím špecifikujte liečbu" };
+    private string? Message;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var entity = await QuestionnaireService.GetTreatment1VisitAsync(patientId);
+            if (entity != null)
+                Treatment1Visit = entity;
+            else
+                Treatment1Visit = new() { Id = patientId, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var result = await QuestionnaireService.SaveTreatment1VisitAsync(Treatment1Visit!);
+            if (!result.Success)
+                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+
+    private string CurrentChange
+    {
+        get => (Treatment1Visit!.IsChanged) ? "áno, prosím špecifikujte liečbu" : "nie";
+        set
+        {
+            bool isChanged = value == "áno, prosím špecifikujte liečbu";
+            if (Treatment1Visit!.IsChanged != !isChanged)
+            {
+                Treatment1Visit!.IsChanged = !isChanged;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

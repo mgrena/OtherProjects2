@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Servier.Pressure.Data;
 
@@ -11,9 +12,11 @@ using Servier.Pressure.Data;
 namespace Servier.Pressure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250402105725_Questionnaires3")]
+    partial class Questionnaires3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1624,18 +1627,6 @@ namespace Servier.Pressure.Migrations
                     b.Property<bool>("IsChanged")
                         .HasColumnType("bit")
                         .HasColumnName("is_changed");
-
-                    b.Property<int>("IsIssuingRecorder")
-                        .HasColumnType("int")
-                        .HasColumnName("is_issuing_recorder");
-
-                    b.Property<bool>("IsOngoing")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_ongoing");
-
-                    b.Property<int>("IsPressureGauge")
-                        .HasColumnType("int")
-                        .HasColumnName("is_pressure_gauge");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2")

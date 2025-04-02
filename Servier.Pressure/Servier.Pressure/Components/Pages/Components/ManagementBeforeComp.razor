@@ -72,7 +72,7 @@ else
         debounceTimer.AutoReset = false;
         debounceTimer.Elapsed += async (s, e) =>
         {
-            var result = await QuestionnaireService.SaveTreatmentBeforeAsync(TreatmentBefore);
+            var result = await QuestionnaireService.SaveTreatmentBeforeAsync(TreatmentBefore!);
             if (!result.Success)
                 Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else

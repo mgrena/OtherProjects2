@@ -1,0 +1,669 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Helpers
+@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+<StatusMessage Message="@Message" />
+<p>Monoterapia a/alebo voľné kombinácie (možnosť výberu viacerých možností)</p>
+@if (!IsMonotherapyDataReady)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <DxGrid @ref="MonotherapyGrid" Data="@TreatmentMonotherapies" CssClass="mw-1100"
+    EditMode="GridEditMode.EditCell"
+    EditModelSaving="MonotherapyGrid_EditModelSaving">
+        <Columns>
+            <DxGridDataColumn Caption="Terapia">
+                <CellDisplayTemplate Context="gridContext">
+                    @GetMonotherapyText(((TreatmentMonotherapy)gridContext.DataItem).Monotherapy)
+                </CellDisplayTemplate>
+            </DxGridDataColumn>
+            <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
+                <CellDisplayTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
+                        if (rowItem.DrugId > 0)
+                        {
+                            string drug = string.Empty;
+                            if (rowItem.Monotherapy == MonotherapyEnum.Diuretic && rowItem.IsAldosteroneAntagonist)
+                            {
+                                var items = GetTreatmentMonotherapyDrugs(MonotherapyEnum.Diuretic);
+                                drug = items.FirstOrDefault(i => i.Id == 36)?.Name ?? string.Empty;
+                            }
+                            else
+                            {
+                                var items = GetTreatmentMonotherapyDrugs(rowItem.Monotherapy);
+                                drug = items.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                            }
+                            @drug
+                        }
+                    }
+                </CellDisplayTemplate>
+                <CellEditTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMonotherapy)gridContext.EditModel;
+                    }
+                    <DxComboBox Data="@GetTreatmentMonotherapyDrugs(rowItem.Monotherapy)" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMonotherapyDrug drug) => OnMonotherapyDrugChanged(drug, rowItem))" />
+                </CellEditTemplate>
+            </DxGridDataColumn>
+            <DxGridDataColumn FieldName="DrugId" Width="@AldosteroneAntagonistWidth" MinWidth="0">
+                <CellDisplayTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
+                        if (rowItem.DrugId > 0 && rowItem.Monotherapy == MonotherapyEnum.Diuretic && rowItem.IsAldosteroneAntagonist)
+                        {
+                            string drug = DiureticAldosteroneDrugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                            @drug
+                        }
+                    }
+                </CellDisplayTemplate>
+                <CellEditTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMonotherapy)gridContext.EditModel;
+                        if (rowItem.Monotherapy == MonotherapyEnum.Diuretic)
+                        {
+                            <DxComboBox Data="@DiureticAldosteroneDrugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" />
+                        }
+                    }
+                </CellEditTemplate>
+            </DxGridDataColumn>
+            <DxGridDataColumn Caption="Dávka / tbl (mg)" FieldName="Dose" />
+            <DxGridBandColumn Caption="Počet užitých tabliet">
+                <Columns>
+                    <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px">
+                        <CellEditTemplate Context="editContext">
+                            <DxSpinEdit @bind-Value="@(((TreatmentMonotherapy)editContext.EditModel).NumberMorning)" MinValue="0" />
+                        </CellEditTemplate>
+                    </DxGridDataColumn>
+                    <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px" />
+                    <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px" />
+                </Columns>
+            </DxGridBandColumn>
+            <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
+            <DxGridCommandColumn Width="60px" NewButtonVisible="false">
+                <CellDisplayTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
+                    }
+                    <div class="grid-cell-align-center">
+                        <DxButton IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Vymazať dáta riadku"
+                        Click="@(async () => await OnMonotherapyRowResetClick(rowItem))" />
+                    </div>
+                </CellDisplayTemplate>
+                <CellEditTemplate Context="editContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton Enabled="false"
+                        aria-label="Delete"
+                        CssClass="grid-disabled-button"
+                        IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link" />
+                    </div>
+                </CellEditTemplate>
+            </DxGridCommandColumn>
+        </Columns>
+    </DxGrid>
+}
+<p><br />Fixné kombinácie 2 antihypertenzív (možnosť výberu viacerých možností)</p>
+@if (!IsMultitherapyDataReady)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <DxGrid @ref="Antihypertensive2Grid" Data="@TreatmentAntihypertensives2" CssClass="mw-1100"
+    PageSize="25"
+    EditMode="GridEditMode.EditCell"
+    EditModelSaving="MultitherapyGrid_EditModelSaving">
+        <Columns>
+            <DxGridDataColumn Caption="Terapia">
+                <CellDisplayTemplate Context="gridContext">
+                    @GetAntihypertensive2Text(((TreatmentMultitherapy)gridContext.DataItem).DrugId)
+                </CellDisplayTemplate>
+            </DxGridDataColumn>
+            <DxGridBandColumn Caption="Dávka / tbl (mg)">
+                <Columns>
+                    <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50" />
+                    <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50" />
+                </Columns>
+            </DxGridBandColumn>
+            <DxGridBandColumn Caption="Počet užitých tabliet">
+                <Columns>
+                    <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px" />
+                    <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px" />
+                    <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px" />
+                </Columns>
+            </DxGridBandColumn>
+            <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
+            <DxGridCommandColumn Width="60px" NewButtonVisible="false">
+                <CellDisplayTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                    }
+                    <div class="grid-cell-align-center">
+                        <DxButton IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Vymazať dáta riadku"
+                        Click="@(async () => await OnAntihypertensive2RowResetClick(rowItem))" />
+                    </div>
+                </CellDisplayTemplate>
+                <CellEditTemplate Context="editContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton Enabled="false"
+                        aria-label="Delete"
+                        CssClass="grid-disabled-button"
+                        IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link" />
+                    </div>
+                </CellEditTemplate>
+            </DxGridCommandColumn>
+        </Columns>
+    </DxGrid>
+}
+<p><br />Fixné kombinácie 3 antihypertenzív (možnosť výberu viacerých možností)</p>
+@if (!IsMultitherapyDataReady)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <DxGrid @ref="Antihypertensive3Grid" Data="@TreatmentAntihypertensives3" CssClass="mw-1100"
+    PageSize="25"
+    EditMode="GridEditMode.EditCell"
+    EditModelSaving="MultitherapyGrid_EditModelSaving">
+        <Columns>
+            <DxGridDataColumn Caption="Terapia">
+                <CellDisplayTemplate Context="gridContext">
+                    @GetAntihypertensive3Text(((TreatmentMultitherapy)gridContext.DataItem).DrugId)
+                </CellDisplayTemplate>
+            </DxGridDataColumn>
+            <DxGridBandColumn Caption="Dávka / tbl (mg)">
+                <Columns>
+                    <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50" />
+                    <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50" />
+                    <DxGridDataColumn Caption="Látka 3" FieldName="Dose3" Width="8%" MinWidth="50" />
+                </Columns>
+            </DxGridBandColumn>
+            <DxGridBandColumn Caption="Počet užitých tabliet">
+                <Columns>
+                    <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px" />
+                    <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px" />
+                    <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px" />
+                </Columns>
+            </DxGridBandColumn>
+            <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
+            <DxGridCommandColumn Width="60px" NewButtonVisible="false">
+                <CellDisplayTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                    }
+                    <div class="grid-cell-align-center">
+                        <DxButton IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Vymazať dáta riadku"
+                        Click="@(async () => await OnAntihypertensive3RowResetClick(rowItem))" />
+                    </div>
+                </CellDisplayTemplate>
+                <CellEditTemplate Context="editContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton Enabled="false"
+                        aria-label="Delete"
+                        CssClass="grid-disabled-button"
+                        IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link" />
+                    </div>
+                </CellEditTemplate>
+            </DxGridCommandColumn>
+        </Columns>
+    </DxGrid>
+    <EditForm Model="@TreatmentUnknowns" Context="Edit3FormContext">
+        <DxCheckBox @bind-Checked="@IsAntihypertensive3Unknown">neznáme</DxCheckBox>
+    </EditForm>
+
+}
+<p><br />Fixné kombinácie antihypertenzív a hypolipidemík (možnosť výberu viacerých možností)</p>
+@if (!IsMultitherapyDataReady)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <DxGrid @ref="WithHypolypedidemicGrid" Data="@TreatmentWithHypolypedidemic" CssClass="mw-1100"
+    PageSize="25"
+    EditMode="GridEditMode.EditCell"
+    EditModelSaving="MultitherapyGrid_EditModelSaving">
+        <Columns>
+            <DxGridDataColumn Caption="Terapia">
+                <CellDisplayTemplate Context="gridContext">
+                    @GetWithHypolypedidemicText(((TreatmentMultitherapy)gridContext.DataItem).DrugId)
+                </CellDisplayTemplate>
+            </DxGridDataColumn>
+            <DxGridBandColumn Caption="Dávka / tbl (mg)">
+                <Columns>
+                    <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50" />
+                    <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50" />
+                    <DxGridDataColumn Caption="Látka 3" FieldName="Dose3" Width="8%" MinWidth="50" />
+                </Columns>
+            </DxGridBandColumn>
+            <DxGridBandColumn Caption="Počet užitých tabliet">
+                <Columns>
+                    <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px" />
+                    <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px" />
+                    <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px" />
+                </Columns>
+            </DxGridBandColumn>
+            <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
+            <DxGridCommandColumn Width="60px" NewButtonVisible="false">
+                <CellDisplayTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                    }
+                    <div class="grid-cell-align-center">
+                        <DxButton IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link"
+                        title="Vymazať dáta riadku"
+                        Click="@(async () => await OnWithHypolypedidemicRowResetClick(rowItem))" />
+                    </div>
+                </CellDisplayTemplate>
+                <CellEditTemplate Context="editContext">
+                    <div class="grid-cell-align-center">
+                        <DxButton Enabled="false"
+                        aria-label="Delete"
+                        CssClass="grid-disabled-button"
+                        IconCssClass="grid-icon grid-icon-delete"
+                        RenderStyle="ButtonRenderStyle.Link" />
+                    </div>
+                </CellEditTemplate>
+            </DxGridCommandColumn>
+        </Columns>
+    </DxGrid>
+    <EditForm Model="@TreatmentUnknowns" Context="Edit3FormContext">
+        <DxCheckBox @bind-Checked="@IsWithHypolypedidemicUnknown">neznáme</DxCheckBox>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public required string patientId { get; set; }
+    [Parameter]
+    public required VisitEnum visitNum { get; set; }
+
+    private IGrid? MonotherapyGrid { get; set; }
+    private IGrid? Antihypertensive2Grid { get; set; }
+    private IGrid? Antihypertensive3Grid { get; set; }
+    private IGrid? WithHypolypedidemicGrid { get; set; }
+
+    private TreatmentUnknowns TreatmentUnknowns { get; set; } = new();
+    private List<TreatmentMonotherapy> TreatmentMonotherapies { get; set; } = [];
+    private List<TreatmentMultitherapy> TreatmentAntihypertensives2 { get; set; } = [];
+    private List<TreatmentMultitherapy> TreatmentAntihypertensives3 { get; set; } = [];
+    private List<TreatmentMultitherapy> TreatmentWithHypolypedidemic { get; set; } = [];
+
+    private bool IsMonotherapyDataReady { get; set; } = false;
+    private bool IsMultitherapyDataReady { get; set; } = false;
+    private IEnumerable<TreatmentMonotherapyDrug> ACEInhibitorDrugs { get; set; } = [];
+    private IEnumerable<TreatmentMonotherapyDrug> AngiotensinIIReceptorBlockerDrugs { get; set; } = [];
+    private IEnumerable<TreatmentMonotherapyDrug> CalciumChannelBlockerDrugs { get; set; } = [];
+    private IEnumerable<TreatmentMonotherapyDrug> BetaBlockerDrugs { get; set; } = [];
+    private IEnumerable<TreatmentMonotherapyDrug> DiureticDrugs { get; set; } = [];
+    private IEnumerable<TreatmentMonotherapyDrug> DiureticAldosteroneDrugs { get; set; } = [];
+    private IEnumerable<TreatmentMonotherapyDrug> OtherDrugs { get; set; } = [];
+    private IEnumerable<TreatmentMultitherapyDrug> Antihypertensive2Drugs { get; set; } = [];
+    private IEnumerable<TreatmentMultitherapyDrug> Antihypertensive3Drugs { get; set; } = [];
+    private IEnumerable<TreatmentMultitherapyDrug> WithHypolypedidemicDrugs { get; set; } = [];
+    private string AldosteroneAntagonistWidth { get; set; } = "0";
+    private string? Message;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // get monotherapies primary data
+            var treatmentTask = QuestionnaireService.GetTreatmentUnknownsAsync(patientId, visitNum);
+            var monotherapiesTask = LoadMonotherapyData();
+            var aCEInhibitorTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.ACEInhibitor, false);
+            var angiotensinIIReceptorBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.AngiotensinIIReceptorBlocker, false);
+            var calciumChannelBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.CalciumChannelBlocker, false);
+            var betaBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.BetaBlocker, false);
+            var diureticTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Diuretic, false);
+            var diureticAldosteroneTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Diuretic, true);
+            var otherTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Other, false);
+            var multitherapyDrugsTask = QuestionnaireService.GetTreatmentMultitherapyDrugsAsync();
+            await Task.WhenAll(treatmentTask, monotherapiesTask, aCEInhibitorTask, angiotensinIIReceptorBlockerTask, calciumChannelBlockerTask, betaBlockerTask, diureticTask,
+                diureticAldosteroneTask, otherTask, multitherapyDrugsTask);
+            TreatmentUnknowns = treatmentTask.Result;
+            ACEInhibitorDrugs = aCEInhibitorTask.Result;
+            AngiotensinIIReceptorBlockerDrugs = angiotensinIIReceptorBlockerTask.Result;
+            CalciumChannelBlockerDrugs = calciumChannelBlockerTask.Result;
+            BetaBlockerDrugs = betaBlockerTask.Result;
+            DiureticDrugs = diureticTask.Result;
+            DiureticAldosteroneDrugs = diureticAldosteroneTask.Result;
+            OtherDrugs = otherTask.Result;
+            var multitherapyDrugs = multitherapyDrugsTask.Result;
+
+            Antihypertensive2Drugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.Antihypertensive2);
+            Antihypertensive3Drugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.Antihypertensive3);
+            WithHypolypedidemicDrugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.WithHypolypedidemic);
+
+            var antihypertensives2Task = LoadMultitherapyData();
+            await Task.WhenAll(antihypertensives2Task);
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+    private async Task SaveTreatment()
+    {
+        var result = await QuestionnaireService.SaveTreatmentUnknownsAsync(patientId, visitNum, TreatmentUnknowns);
+        if (!result.Success)
+            Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+        else
+            ModifyToast();
+    }
+
+    private async Task MonotherapyGrid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var therapyUpdated = (TreatmentMonotherapy)e.EditModel;
+        var therapyOrig = (TreatmentMonotherapy)e.DataItem;
+
+        // for diuretic check if is aldosterone antagonist and show/hide column
+        if (therapyUpdated.Monotherapy == MonotherapyEnum.Diuretic && therapyUpdated.DrugId == 36)
+        {
+            AldosteroneAntagonistWidth = "20%";
+            therapyOrig.IsAldosteroneAntagonist = true;
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+        else if (therapyOrig.Monotherapy == MonotherapyEnum.Diuretic && therapyOrig.DrugId == 36)
+        {
+            AldosteroneAntagonistWidth = "0";
+            therapyOrig.IsAldosteroneAntagonist = false;
+            await InvokeAsync(StateHasChanged);
+        }
+
+        await UpdateMonotherapyData(therapyUpdated);
+        await LoadMonotherapyData();
+    }
+    private async Task OnMonotherapyRowResetClick(TreatmentMonotherapy monotherapy)
+    {
+        if (monotherapy == null) return;
+
+        var therapyOrig = TreatmentMonotherapies.First(i => i.Monotherapy == monotherapy.Monotherapy);
+        if (therapyOrig.Id > 0)
+        {
+            await QuestionnaireService.DeleteTreatmentMonotherapyAsync(therapyOrig);
+            await LoadMonotherapyData();
+        }
+        else
+        {
+            therapyOrig.DrugId = 0;
+            therapyOrig.IsAldosteroneAntagonist = false;
+            therapyOrig.Dose = 0;
+            therapyOrig.NumberMorning = 0;
+            therapyOrig.NumberNoon = 0;
+            therapyOrig.NumberEvening = 0;
+            therapyOrig.IsUnknown = false;
+        }
+    }
+    private async Task OnMonotherapyDrugChanged(TreatmentMonotherapyDrug drug, TreatmentMonotherapy monotherapy)
+    {
+        if (drug == null || monotherapy == null) return;
+
+        var therapyOrig = TreatmentMonotherapies.First(i => i.Monotherapy == monotherapy.Monotherapy);
+        therapyOrig.DrugId = drug.Id;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task MultitherapyGrid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var therapyUpdated = (TreatmentMultitherapy)e.EditModel;
+
+        var result = await QuestionnaireService.SaveTreatmentMultitherapyAsync(therapyUpdated);
+        if (!result.Success)
+            Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+        else
+            ModifyToast();
+        await LoadMultitherapyData();
+    }
+    private async Task OnAntihypertensive2RowResetClick(TreatmentMultitherapy therapy)
+    {
+        if (therapy == null) return;
+
+        var therapyOrig = TreatmentAntihypertensives2.First(i => i.Multitherapy == therapy.Multitherapy);
+        if (therapyOrig.Id > 0)
+        {
+            await QuestionnaireService.DeleteTreatmentMultitherapyAsync(therapyOrig);
+            await LoadMultitherapyData();
+        }
+        else
+        {
+            therapyOrig.DrugId = 0;
+            therapyOrig.Dose1 = 0;
+            therapyOrig.Dose2 = 0;
+            therapyOrig.Dose3 = 0;
+            therapyOrig.NumberMorning = 0;
+            therapyOrig.NumberNoon = 0;
+            therapyOrig.NumberEvening = 0;
+            therapyOrig.IsUnknown = false;
+        }
+    }
+    private async Task OnAntihypertensive3RowResetClick(TreatmentMultitherapy therapy)
+    {
+        if (therapy == null) return;
+
+        var therapyOrig = TreatmentAntihypertensives3.First(i => i.Multitherapy == therapy.Multitherapy);
+        if (therapyOrig.Id > 0)
+        {
+            await QuestionnaireService.DeleteTreatmentMultitherapyAsync(therapyOrig);
+            await LoadMultitherapyData();
+        }
+        else
+        {
+            therapyOrig.DrugId = 0;
+            therapyOrig.Dose1 = 0;
+            therapyOrig.Dose2 = 0;
+            therapyOrig.Dose3 = 0;
+            therapyOrig.NumberMorning = 0;
+            therapyOrig.NumberNoon = 0;
+            therapyOrig.NumberEvening = 0;
+            therapyOrig.IsUnknown = false;
+        }
+    }
+    private async Task OnWithHypolypedidemicRowResetClick(TreatmentMultitherapy therapy)
+    {
+        if (therapy == null) return;
+
+        var therapyOrig = TreatmentWithHypolypedidemic.First(i => i.Multitherapy == therapy.Multitherapy);
+        if (therapyOrig.Id > 0)
+        {
+            await QuestionnaireService.DeleteTreatmentMultitherapyAsync(therapyOrig);
+            await LoadMultitherapyData();
+        }
+        else
+        {
+            therapyOrig.DrugId = 0;
+            therapyOrig.Dose1 = 0;
+            therapyOrig.Dose2 = 0;
+            therapyOrig.Dose3 = 0;
+            therapyOrig.NumberMorning = 0;
+            therapyOrig.NumberNoon = 0;
+            therapyOrig.NumberEvening = 0;
+            therapyOrig.IsUnknown = false;
+        }
+    }
+
+    private async Task LoadMonotherapyData()
+    {
+        TreatmentMonotherapies.Clear();
+        var monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, visitNum);
+
+        // for new visit get previous visit data
+        if (!monotherapies.Any() && visitNum != VisitEnum.before)
+        {
+            VisitEnum aPreviousNum = (VisitEnum)((int)visitNum - 1);
+            monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, aPreviousNum);
+            // save this data set to current visit
+            foreach (var item in monotherapies)
+            {
+                item.Id = 0;
+                item.VisitNumber = visitNum;
+                await QuestionnaireService.SaveTreatmentMonotherapyAsync(item);
+            }
+        }
+
+        // prepare datasource
+        bool isAldosteroneAntagonist = false;
+        foreach (MonotherapyEnum item in Enum.GetValues(typeof(MonotherapyEnum)))
+        {
+            var monotherapy = monotherapies.FirstOrDefault(i => i.Monotherapy == item);
+            if (monotherapy == null)
+                monotherapy = new TreatmentMonotherapy { PatientId = patientId, VisitNumber = visitNum, Monotherapy = item, IsAldosteroneAntagonist = false, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+            else if (monotherapy.IsAldosteroneAntagonist)
+                isAldosteroneAntagonist = true;
+
+            TreatmentMonotherapies.Add(monotherapy);
+        }
+        if (isAldosteroneAntagonist)
+            AldosteroneAntagonistWidth = "20%";
+
+        IsMonotherapyDataReady = true;
+    }
+    private async Task UpdateMonotherapyData(TreatmentMonotherapy monotherapy)
+    {
+        var result = await QuestionnaireService.SaveTreatmentMonotherapyAsync(monotherapy);
+        if (!result.Success)
+            Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+        else
+            ModifyToast();
+    }
+    private string GetMonotherapyText(MonotherapyEnum item)
+    {
+        return item.GetAttribute<DisplayAttribute>()?.Name ?? item.ToString();
+    }
+    private IEnumerable<TreatmentMonotherapyDrug> GetTreatmentMonotherapyDrugs(MonotherapyEnum monotherapy)
+    {
+        return monotherapy switch
+        {
+            MonotherapyEnum.ACEInhibitor => ACEInhibitorDrugs,
+            MonotherapyEnum.AngiotensinIIReceptorBlocker => AngiotensinIIReceptorBlockerDrugs,
+            MonotherapyEnum.CalciumChannelBlocker => CalciumChannelBlockerDrugs,
+            MonotherapyEnum.BetaBlocker => BetaBlockerDrugs,
+            MonotherapyEnum.Diuretic => DiureticDrugs,
+            MonotherapyEnum.Other => OtherDrugs,
+            _ => new List<TreatmentMonotherapyDrug>(),
+        };
+    }
+
+    private async Task LoadMultitherapyData()
+    {
+        TreatmentAntihypertensives2.Clear();
+        TreatmentAntihypertensives3.Clear();
+        TreatmentWithHypolypedidemic.Clear();
+
+        var therapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, visitNum);
+
+        // for new visit get previous visit data
+        if (!therapies.Any() && visitNum != VisitEnum.before)
+        {
+            VisitEnum aPreviousNum = (VisitEnum)((int)visitNum - 1);
+            therapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, aPreviousNum);
+            // save this data set to current visit
+            foreach (var item in therapies)
+            {
+                item.Id = 0;
+                item.VisitNumber = visitNum;
+                await QuestionnaireService.SaveTreatmentMultitherapyAsync(item);
+            }
+        }
+
+        // prepare Antihypertensive2 datasource
+        foreach (TreatmentMultitherapyDrug drug in Antihypertensive2Drugs)
+        {
+            var therapy = therapies.FirstOrDefault(i => i.DrugId == drug.Id);
+            if (therapy == null)
+                therapy = new TreatmentMultitherapy { PatientId = patientId, DrugId = drug.Id, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.Antihypertensive2, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+
+            TreatmentAntihypertensives2.Add(therapy);
+        }
+
+        // prepare Antihypertensive3 datasource
+        foreach (TreatmentMultitherapyDrug drug in Antihypertensive3Drugs)
+        {
+            var therapy = therapies.FirstOrDefault(i => i.DrugId == drug.Id);
+            if (therapy == null)
+                therapy = new TreatmentMultitherapy { PatientId = patientId, DrugId = drug.Id, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.Antihypertensive3, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+
+            TreatmentAntihypertensives3.Add(therapy);
+        }
+
+        // prepare WithHypolypedidemic datasource
+        foreach (TreatmentMultitherapyDrug drug in WithHypolypedidemicDrugs)
+        {
+            var therapy = therapies.FirstOrDefault(i => i.DrugId == drug.Id);
+            if (therapy == null)
+                therapy = new TreatmentMultitherapy { PatientId = patientId, DrugId = drug.Id, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.WithHypolypedidemic, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+
+            TreatmentWithHypolypedidemic.Add(therapy);
+        }
+
+        IsMultitherapyDataReady = true;
+    }
+    private string GetAntihypertensive2Text(int drugId)
+    {
+        return Antihypertensive2Drugs.FirstOrDefault(i => i.Id == drugId)?.Name ?? string.Empty;
+    }
+    private string GetAntihypertensive3Text(int drugId)
+    {
+        return Antihypertensive3Drugs.FirstOrDefault(i => i.Id == drugId)?.Name ?? string.Empty;
+    }
+    private string GetWithHypolypedidemicText(int drugId)
+    {
+        return WithHypolypedidemicDrugs.FirstOrDefault(i => i.Id == drugId)?.Name ?? string.Empty;
+    }
+
+    private bool IsAntihypertensive3Unknown
+    {
+        get => TreatmentUnknowns.FixCombination3Unknown;
+        set
+        {
+            if (TreatmentUnknowns.FixCombination3Unknown != value)
+            {
+                TreatmentUnknowns.FixCombination3Unknown = value;
+                InvokeAsync(SaveTreatment);
+            }
+        }
+    }
+    private bool IsWithHypolypedidemicUnknown
+    {
+        get => TreatmentUnknowns.FixCombinationMixUnknown;
+        set
+        {
+            if (TreatmentUnknowns.FixCombinationMixUnknown != value)
+            {
+                TreatmentUnknowns.FixCombinationMixUnknown = value;
+                InvokeAsync(SaveTreatment);
+            }
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

@@ -39,31 +39,7 @@ else
                     <DxCheckBox @bind-Checked="@PatientsCountAHUnknown">neznámy</DxCheckBox>
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
-            @*         <DxFormLayoutGroup Caption="Pracovisko" ColSpanMd="12">
-                <DxFormLayoutItem Caption="Typ pracoviska" ColSpanMd="12">
-                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@workplaceTypes" TextFieldName="DisplayText" ValueFieldName="Value"
-                                  Value="@DoctorWorkplace!.WorkplaceType" ValueChanged="@((WorkplaceTypeEnum e) => OnFieldChanged(e.ToString()))" ValueExpression="@(() => DoctorWorkplace!.WorkplaceType)" />
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Špecializácia skúšajúceho lekára (hlavná)" ColSpanMd="12">
-                    <DxComboBox Data="@specializations" TextFieldName="DisplayText" ValueFieldName="Value"
-                                Value="@DoctorWorkplace!.Specialization" ValueChanged="@((SpecializationEnum e) => OnFieldChanged(e.ToString()))" ValueExpression="@(() => DoctorWorkplace!.Specialization)" />
-                </DxFormLayoutItem>
-            </DxFormLayoutGroup>
-            <DxFormLayoutGroup Caption="Približný počet dispenzarizovaných pacientov" ColSpanMd="12">
-                <DxFormLayoutItem Caption="všetci pacienti:" ColSpanMd="6">
-                    <DxSpinEdit MinValue="0" Value="@DoctorWorkplace!.PatientsCountAll" ValueChanged="@((int e) => OnFieldChanged(e.ToString()))" ValueExpression="@(() => DoctorWorkplace!.PatientsCountAll)" />
-                </DxFormLayoutItem>
-                <DxFormLayoutItem ColSpanMd="6">
-                    <DxCheckBox Checked="@DoctorWorkplace!.PatientsCountAllUnknown" CheckedChanged="@((bool e) => OnFieldChanged(e.ToString()))" CheckedExpression="@(() => DoctorWorkplace!.PatientsCountAllUnknown)">neznámy</DxCheckBox>
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="pacienti s artériovou hypertenziou" ColSpanMd="6">
-                    <DxSpinEdit MinValue="0" Value="@DoctorWorkplace!.PatientsCountAH" ValueChanged="@((int e) => OnFieldChanged(e.ToString()))" ValueExpression="@(() => DoctorWorkplace!.PatientsCountAH)" />
-                </DxFormLayoutItem>
-                <DxFormLayoutItem ColSpanMd="6">
-                    <DxCheckBox Checked="@DoctorWorkplace!.PatientsCountAHUnknown" CheckedChanged="@((bool e) => OnFieldChanged(e.ToString()))" CheckedExpression="@(() => DoctorWorkplace!.PatientsCountAHUnknown)">neznámy</DxCheckBox>
-                </DxFormLayoutItem>
-            </DxFormLayoutGroup>
-     *@    </DxFormLayout>
+        </DxFormLayout>
     </EditForm>
     <StatusMessage Message="@Message" />
 }

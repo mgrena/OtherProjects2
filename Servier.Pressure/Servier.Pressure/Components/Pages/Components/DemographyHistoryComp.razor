@@ -1,4 +1,5 @@
-﻿@using Servier.Pressure.Data.Models
+﻿@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
 @using Servier.Pressure.Services.Pages
 
@@ -8,25 +9,32 @@
 @inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
 
-<EditForm Model="@DemographyHistoryQuestionaire" Context="EditFormContext">
-    <DxFormLayout CssClass="w-100">
-        <DxFormLayoutGroup Caption="Demografia" ColSpanMd="12">
-            <DxFormLayoutItem Caption="Pohlavie" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Gender" @bind-Value="@IsMan" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Rok narodenia" ColSpanMd="12">
-                <DxSpinEdit @bind-Value="@Age" Min="1900" Max="@DateTime.Now.Year" />
-            </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Fajčenie" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@SmokerOptions" @bind-Value="@Smoker" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-            <DxFormLayoutItem Caption="Najvyššie dosiahnuté vzdelanie" ColSpanMd="12">
-                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@EducationOptions" @bind-Value="@Education" TextFieldName="DisplayText" ValueFieldName="Value" />
-            </DxFormLayoutItem>
-        </DxFormLayoutGroup>
-    </DxFormLayout>
-</EditForm>
-
+@if (DemographyHistoryQuestionaire == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <StatusMessage Message="@Message" />
+    <EditForm Model="@DemographyHistoryQuestionaire" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Demografia" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Pohlavie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Gender" @bind-Value="@IsMan" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Rok narodenia" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxSpinEdit @bind-Value="@Age" Min="1900" Max="@DateTime.Now.Year" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Fajčenie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@SmokerOptions" @bind-Value="@Smoker" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Najvyššie dosiahnuté vzdelanie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@EducationOptions" @bind-Value="@Education" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+}
 
 @code {
     [Parameter]

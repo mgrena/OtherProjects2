@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Servier.Pressure.Data;
 using Servier.Pressure.Data.Lists;
 using Servier.Pressure.Data.Models;
@@ -39,6 +38,35 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         return await aContext.TreatmentsBefore.FirstOrDefaultAsync(i => i.Id == patientId);
     }
+    public async Task<DemographyHistory> GetDemographyHistoryByIdAsync(string Id)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        DemographyHistory? DemographyHistoryQuestionary = await aContext.DemographyHistories.FirstOrDefaultAsync(p => p.Id == Id);
+        DemographyHistoryQuestionary ??= new()
+        {
+            Id = Id,
+            IsMan = true,
+            Age = 50,
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now,
+
+        };
+        return DemographyHistoryQuestionary;
+    }
+    public async Task<Treatment1Visit?> GetTreatment1VisitAsync(string patientId)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.Treatments1Visit.FirstOrDefaultAsync(i => i.Id == patientId);
+    }
+    public async Task<Treatment2Visit?> GetTreatment2VisitAsync(string patientId)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.Treatments2Visit.FirstOrDefaultAsync(i => i.Id == patientId);
+    }
+
     public async Task<List<TreatmentMonotherapy>> GetTreatmentMonotherapiesAsync(string patientId, VisitEnum visitNum)
     {
         using var scope = _scopeFactory.CreateScope();
@@ -50,6 +78,42 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         using var scope = _scopeFactory.CreateScope();
         var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         return await aContext.TreatmentMultitherapies.Where(i => i.PatientId == patientId && i.VisitNumber == visitNum).ToListAsync();
+    }
+    public async Task<TreatmentUnknowns> GetTreatmentUnknownsAsync(string patientId, VisitEnum visitNum)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        TreatmentUnknowns result = new();
+        switch (visitNum)
+        {
+            case VisitEnum.before:
+                var before = await GetTreatmentBeforeAsync(patientId);
+                if (before != null) 
+                {
+                    result.FixCombination3Unknown = before.FixCombination3Unknown;
+                    result.FixCombinationMixUnknown = before.FixCombinationMixUnknown;
+                }
+                break;
+            case VisitEnum.first:
+                var visit1 = await GetTreatment1VisitAsync(patientId);
+                if (visit1 != null) 
+                {
+                    result.FixCombination3Unknown = visit1.FixCombination3Unknown;
+                    result.FixCombinationMixUnknown = visit1.FixCombinationMixUnknown;
+                }
+                break;
+            case VisitEnum.second:
+                var visit2 = await GetTreatment2VisitAsync(patientId);
+                if (visit2 != null) 
+                {
+                    result.FixCombination3Unknown = visit2.FixCombination3Unknown;
+                    result.FixCombinationMixUnknown = visit2.FixCombinationMixUnknown;
+                }
+                break;
+        }
+
+        return result;
     }
 
     public async Task<List<DyslipidemiaDrug>> GetDyslipidemiaDrugsAsync()
@@ -92,7 +156,6 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             InformedConsentCompetence.IsResistantHypertension = informedconsentcompetence.IsResistantHypertension;
             InformedConsentCompetence.IsClinicalTrial = informedconsentcompetence.IsClinicalTrial;
             InformedConsentCompetence.IsPregnant = informedconsentcompetence.IsPregnant;
-
         }
 
         try
@@ -142,6 +205,118 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
         }
     }
+    public async Task<OperationResult> SaveDemographyHistoryQuestionaryAsync(DemographyHistory demographyhistory)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var DemographyHistory = await aContext.DemographyHistories.FirstOrDefaultAsync(i => i.Id == demographyhistory.Id);
+        if (DemographyHistory == null)
+        {
+            _logger.LogInformation("The informed consent competence for patient {user} has been added.", demographyhistory.Id);
+            aContext.DemographyHistories.Add(demographyhistory);
+        }
+        else
+        {
+            _logger.LogInformation("The informed consent competence with id {id} has been updated.", demographyhistory.Id);
+            DemographyHistory.IsMan = demographyhistory.IsMan;
+            DemographyHistory.Age = demographyhistory.Age;
+            DemographyHistory.Smoker = demographyhistory.Smoker;
+            DemographyHistory.Education = demographyhistory.Education;
+            DemographyHistory.DiagnosisYear = demographyhistory.DiagnosisYear;
+            DemographyHistory.DiagnosisYearUnknown = demographyhistory.DiagnosisYearUnknown;
+            DemographyHistory.TreatmentYear = demographyhistory.TreatmentYear;
+            DemographyHistory.TreatmentYearUnknown = demographyhistory.TreatmentYearUnknown;
+            DemographyHistory.DiagnosisNone = demographyhistory.DiagnosisNone;
+            DemographyHistory.DiagnosisDiabetes = demographyhistory.DiagnosisDiabetes;
+            DemographyHistory.DiagnosisDyslipidemia = demographyhistory.DiagnosisDyslipidemia;
+            DemographyHistory.DiagnosisICHS = demographyhistory.DiagnosisICHS;
+            DemographyHistory.DiagnosisICHSInfarction = demographyhistory.DiagnosisICHSInfarction;
+            DemographyHistory.DiagnosisICHSAngina = demographyhistory.DiagnosisICHSAngina;
+            DemographyHistory.DiagnosisICHSAngiography = demographyhistory.DiagnosisICHSAngiography;
+            DemographyHistory.DiagnosisICHSAngiographyType = demographyhistory.DiagnosisICHSAngiographyType;
+            DemographyHistory.DiagnosisICHSRevascularization = demographyhistory.DiagnosisICHSRevascularization;
+            DemographyHistory.DiagnosisICHSRevascularizationType = demographyhistory.DiagnosisICHSRevascularizationType;
+            DemographyHistory.DiagnosisHeartFailure = demographyhistory.DiagnosisHeartFailure;
+            DemographyHistory.DiagnosisFibrillation = demographyhistory.DiagnosisFibrillation;
+            DemographyHistory.DiagnosisStroke = demographyhistory.DiagnosisStroke;
+            DemographyHistory.DiagnosisArterialD = demographyhistory.DiagnosisArterialD;
+            DemographyHistory.DiagnosisInsufficiency = demographyhistory.DiagnosisInsufficiency;
+            DemographyHistory.DiagnosisKidneyD = demographyhistory.DiagnosisKidneyD;
+            DemographyHistory.DiagnosisKidneyDType = demographyhistory.DiagnosisKidneyDType;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+    public async Task<OperationResult> SaveTreatment1VisitAsync(Treatment1Visit entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.Treatments1Visit.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry == null)
+        {
+            _logger.LogInformation("The Treatment1Visit for patient {id} has been added.", entry.Id);
+            aContext.Treatments1Visit.Add(entry);
+        }
+        else
+        {
+            _logger.LogInformation("The Treatment1Visit for patient {id} has been updated.", entry.Id);
+            existEntry.IsChanged = entry.IsChanged;
+            existEntry.FixCombination3Unknown = entry.FixCombination3Unknown;
+            existEntry.FixCombinationMixUnknown = entry.FixCombinationMixUnknown;
+            existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+    public async Task<OperationResult> SaveTreatment2VisitAsync(Treatment2Visit entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.Treatments2Visit.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry == null)
+        {
+            _logger.LogInformation("The Treatment2Visit for patient {id} has been added.", entry.Id);
+            aContext.Treatments2Visit.Add(entry);
+        }
+        else
+        {
+            _logger.LogInformation("The Treatment2Visit for patient {id} has been updated.", entry.Id);
+            existEntry.IsChanged = entry.IsChanged;
+            existEntry.FixCombination3Unknown = entry.FixCombination3Unknown;
+            existEntry.FixCombinationMixUnknown = entry.FixCombinationMixUnknown;
+            existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+
     public async Task<OperationResult> SaveTreatmentMonotherapyAsync(TreatmentMonotherapy entry)
     {
         using var scope = _scopeFactory.CreateScope();
@@ -211,6 +386,53 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
         }
     }
+    public async Task<OperationResult> SaveTreatmentUnknownsAsync(string patientId, VisitEnum visitNum, TreatmentUnknowns unknowns)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        switch (visitNum)
+        {
+            case VisitEnum.before:
+                var before = await GetTreatmentBeforeAsync(patientId);
+                if (before != null)
+                {
+                    before.FixCombination3Unknown = unknowns.FixCombination3Unknown;
+                    before.FixCombinationMixUnknown = unknowns.FixCombinationMixUnknown;
+                    _logger.LogInformation("The TreatmentBefore for patient {id} has been updated.", patientId);
+                }
+                break;
+            case VisitEnum.first:
+                var visit1 = await GetTreatmentBeforeAsync(patientId);
+                if (visit1 != null)
+                {
+                    visit1.FixCombination3Unknown = unknowns.FixCombination3Unknown;
+                    visit1.FixCombinationMixUnknown = unknowns.FixCombinationMixUnknown;
+                    _logger.LogInformation("The Treatment1Visit for patient {id} has been updated.", patientId);
+                }
+                break;
+            case VisitEnum.second:
+                var visit2 = await GetTreatmentBeforeAsync(patientId);
+                if (visit2 != null)
+                {
+                    visit2.FixCombination3Unknown = unknowns.FixCombination3Unknown;
+                    visit2.FixCombinationMixUnknown = unknowns.FixCombinationMixUnknown;
+                    _logger.LogInformation("The Treatment2Visit for patient {id} has been updated.", patientId);
+                }
+                break;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
 
     public async Task<OperationResult> DeleteTreatmentMonotherapyAsync(TreatmentMonotherapy entry)
     {
@@ -256,71 +478,5 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
         }
     }
-    public async Task<DemographyHistory> GetDemographyHistoryByIdAsync(string Id)
-    {
-        DemographyHistory? DemographyHistoryQuestionary = await _context.DemographyHistories.FirstOrDefaultAsync(p => p.Id == Id);
-        DemographyHistoryQuestionary ??= new()
-        {
-            Id = Id,
-            IsMan = true,
-            Age = 50,
-            ModifiedAt = DateTime.Now,
-            CreatedAt = DateTime.Now,
-
-        };
-        return DemographyHistoryQuestionary;
-    }
-    public async Task<OperationResult> SaveDemographyHistoryQuestionaryAsync(DemographyHistory demographyhistory)
-    {
-        var DemographyHistory = await _context.DemographyHistories.FirstOrDefaultAsync(i => i.Id == demographyhistory.Id);
-        if (DemographyHistory == null)
-        {
-            _logger.LogInformation("The informed consent competence for patient {user} has been added.", demographyhistory.Id);
-            _context.DemographyHistories.Add(demographyhistory);
-        }
-        else
-        {
-            _logger.LogInformation("The informed consent competence with id {id} has been updated.", demographyhistory.Id);
-            DemographyHistory.IsMan = demographyhistory.IsMan;
-            DemographyHistory.Age = demographyhistory.Age;
-            DemographyHistory.Smoker = demographyhistory.Smoker;
-            DemographyHistory.Education = demographyhistory.Education;
-            DemographyHistory.DiagnosisYear = demographyhistory.DiagnosisYear;
-            DemographyHistory.DiagnosisYearUnknown = demographyhistory.DiagnosisYearUnknown;
-            DemographyHistory.TreatmentYear = demographyhistory.TreatmentYear;
-            DemographyHistory.TreatmentYearUnknown = demographyhistory.TreatmentYearUnknown;
-            DemographyHistory.DiagnosisNone = demographyhistory.DiagnosisNone;
-            DemographyHistory.DiagnosisDiabetes = demographyhistory.DiagnosisDiabetes;
-            DemographyHistory.DiagnosisDyslipidemia = demographyhistory.DiagnosisDyslipidemia;
-            DemographyHistory.DiagnosisICHS = demographyhistory.DiagnosisICHS;
-            DemographyHistory.DiagnosisICHSInfarction = demographyhistory.DiagnosisICHSInfarction;
-            DemographyHistory.DiagnosisICHSAngina = demographyhistory.DiagnosisICHSAngina;
-            DemographyHistory.DiagnosisICHSAngiography = demographyhistory.DiagnosisICHSAngiography;
-            DemographyHistory.DiagnosisICHSAngiographyType = demographyhistory.DiagnosisICHSAngiographyType;
-            DemographyHistory.DiagnosisICHSRevascularization = demographyhistory.DiagnosisICHSRevascularization;
-            DemographyHistory.DiagnosisICHSRevascularizationType = demographyhistory.DiagnosisICHSRevascularizationType;
-            DemographyHistory.DiagnosisHeartFailure = demographyhistory.DiagnosisHeartFailure;
-            DemographyHistory.DiagnosisFibrillation = demographyhistory.DiagnosisFibrillation;
-            DemographyHistory.DiagnosisStroke = demographyhistory.DiagnosisStroke;
-            DemographyHistory.DiagnosisArterialD = demographyhistory.DiagnosisArterialD;
-            DemographyHistory.DiagnosisInsufficiency = demographyhistory.DiagnosisInsufficiency;
-            DemographyHistory.DiagnosisKidneyD = demographyhistory.DiagnosisKidneyD;
-            DemographyHistory.DiagnosisKidneyDType = demographyhistory.DiagnosisKidneyDType;
-
-
-        }
-
-        try
-        {
-            await _context.SaveChangesAsync();
-            return OperationResult.SuccessResult();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.Message);
-            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
-        }
-    }
-
 
 }

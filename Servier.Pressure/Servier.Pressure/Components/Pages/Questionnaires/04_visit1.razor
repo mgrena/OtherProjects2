@@ -2,6 +2,7 @@
 
 @using Microsoft.AspNetCore.Authorization
 @using Servier.Pressure.Components.Pages.Components
+@using Servier.Pressure.Data.Models
 
 @attribute [Authorize]
 @rendermode InteractiveServer
@@ -19,9 +20,13 @@
 
 <div class="cw-880 mo-main-layout">
     <QuestHeader patientId="@patientId" />
+    <Management1TopComp patientId="@patientId" />
+    <TreatmentComp patientId="@patientId" visitNum="@visitNum" />
+    <Management1BottomComp patientId="@patientId" />
 </div>
 
 @code {
     [Parameter]
     public required string patientId { get; set; }
+    private VisitEnum visitNum { get; set; } = VisitEnum.first;
 }

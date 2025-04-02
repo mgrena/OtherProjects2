@@ -1,0 +1,62 @@
+﻿@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+@if (Treatment1Visit == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+@*     <EditForm Model="@Treatment1Visit" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Pokračuje subjekt v účasti?" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Changes" @bind-Value="@CurrentChange" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+ *@}
+
+@code {
+    [Parameter]
+    public required string patientId { get; set; }
+
+    private Treatment1Visit? Treatment1Visit { get; set; }
+    private IEnumerable<string> YesNo = new[] { "áno", "nie" };
+    private IEnumerable<string> YesNoNot = new[] { "áno", "nie", "nie je aplikovateľné" };
+    private string? Message;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var entity = await QuestionnaireService.GetTreatment1VisitAsync(patientId);
+            if (entity != null)
+                Treatment1Visit = entity;
+            else
+                Treatment1Visit = new() { Id = patientId, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}
