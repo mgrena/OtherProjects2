@@ -54,6 +54,20 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         };
         return DemographyHistoryQuestionary;
     }
+    public async Task<PhysicalExamination1> GetPhysicalExamination1ByIdAsync(string Id)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var result = await aContext.PhysicalExaminations1.FirstOrDefaultAsync(p => p.Id == Id);
+        result ??= new()
+        {
+            Id = Id,
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now,
+
+        };
+        return result;
+    }
     public async Task<Treatment1Visit?> GetTreatment1VisitAsync(string patientId)
     {
         using var scope = _scopeFactory.CreateScope();
@@ -243,6 +257,52 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             DemographyHistory.DiagnosisInsufficiency = demographyhistory.DiagnosisInsufficiency;
             DemographyHistory.DiagnosisKidneyD = demographyhistory.DiagnosisKidneyD;
             DemographyHistory.DiagnosisKidneyDType = demographyhistory.DiagnosisKidneyDType;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+    public async Task<OperationResult> SavePhysicalExamination1Async(PhysicalExamination1 entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.PhysicalExaminations1.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry == null)
+        {
+            _logger.LogInformation("The PhysicalExamination1 for patient {user} has been added.", entry.Id);
+            aContext.PhysicalExaminations1.Add(entry);
+        }
+        else
+        {
+            _logger.LogInformation("The PhysicalExamination1 for patient with id {id} has been updated.", entry.Id);
+            existEntry.Height = entry.Height;
+            existEntry.HeightUnknown = entry.HeightUnknown;
+            existEntry.Weight = entry.Weight;
+            existEntry.WeightUnknown = entry.WeightUnknown;
+            existEntry.Waist = entry.Waist;
+            existEntry.WaistUnknown = entry.WaistUnknown;
+            existEntry.Hand = entry.Hand;
+            existEntry.Measurement1 = entry.Measurement1;
+            existEntry.Measurement1Stk = entry.Measurement1Stk;
+            existEntry.Measurement1Dtk = entry.Measurement1Dtk;
+            existEntry.Measurement1Sf = entry.Measurement1Sf;
+            existEntry.Measurement2 = entry.Measurement2;
+            existEntry.Measurement2Stk = entry.Measurement2Stk;
+            existEntry.Measurement2Dtk = entry.Measurement2Dtk;
+            existEntry.Measurement2Sf = entry.Measurement2Sf;
+            existEntry.Measurement3 = entry.Measurement3;
+            existEntry.Measurement3Stk = entry.Measurement3Stk;
+            existEntry.Measurement3Dtk = entry.Measurement3Dtk;
+            existEntry.Measurement3Sf = entry.Measurement3Sf;
+            existEntry.ModifiedAt = DateTime.Now;
         }
 
         try

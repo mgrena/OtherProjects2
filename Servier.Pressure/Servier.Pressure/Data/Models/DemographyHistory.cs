@@ -60,6 +60,9 @@ public enum KidneyDiseaseEnum
 [Table("demographies")]
 public class DemographyHistory
 {
+    /// <summary>
+    /// Relevant Patient Id used as key
+    /// </summary>
     [Key]
     [Column("id", TypeName = "nvarchar"), StringLength(450)]
     public required string Id { get; set; }

@@ -31,6 +31,9 @@ public class Patient
     [Column("patient_code", TypeName = "varchar"), StringLength(10)]
     public required string PatientCode { get; set; }
 
+    [Column("patient", TypeName = "nvarchar"), StringLength(255)]
+    public string? PatientName { get; set; }
+
     [Column("modified_at")]
     public required DateTime ModifiedAt { get; set; } = DateTime.Now;
 

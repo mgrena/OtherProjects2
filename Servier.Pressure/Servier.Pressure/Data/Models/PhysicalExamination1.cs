@@ -14,6 +14,9 @@ public enum HandEnum
 [Table("physical_examinations_1")]
 public class PhysicalExamination1
 {
+    /// <summary>
+    /// Relevant Patient Id used as key
+    /// </summary>
     [Key]
     [Column("id", TypeName = "nvarchar"), StringLength(450)]
     public required string Id { get; set; }

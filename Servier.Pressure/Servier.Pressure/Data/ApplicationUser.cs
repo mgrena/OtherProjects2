@@ -15,6 +15,8 @@ public class ApplicationUser : IdentityUser
     public string? TitleBefore { get; set; }
     [Column("title_after", TypeName = "nvarchar"), StringLength(50)]
     public string? TitleAfter { get; set; }
+    [Column("code", TypeName = "char"), StringLength(3)]
+    public string? Code { get; set; }
     [NotMapped]
     public string? Password { get; set; }
     [NotMapped]

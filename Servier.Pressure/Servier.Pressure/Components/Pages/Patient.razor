@@ -45,25 +45,26 @@
             PagerVisibleNumericButtonCount="10"
             KeyFieldName="Id"
             ValidationEnabled="true"
-            EditMode="GridEditMode.PopupEditForm"
+            EditMode="GridEditMode.EditCell"
             FilterMenuButtonDisplayMode="GridFilterMenuButtonDisplayMode.Always"
             ColumnResizeMode="GridColumnResizeMode.NextColumn"
             PopupEditFormHeaderText="Pridať pacienta"
             TextWrapEnabled="false"
             HighlightRowOnHover="true"
+            EditModelSaving="Grid_EditModelSaving"
             DataItemDeleting="Grid_DataItemDeleting"
             CustomizeElement="Grid_CustomizeElement"
             SelectionMode="GridSelectionMode.Single"
             AllowSelectRowByClick="true">
-
                 <Columns>
-                    <DxGridDataColumn FieldName="PatientCode" Caption="Identifikačný kód pacienta" />
-                    <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
+                    <DxGridDataColumn FieldName="PatientCode" Caption="Pacient ID" ReadOnly />
+                    <DxGridDataColumn FieldName="PatientName" Caption="Pacient" />
+                    <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" ReadOnly />
                     @if (isAdmin)
                     {
                         <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" />
                     }
-                    <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" />
+                    <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" ReadOnly />
                     <DxGridCommandColumn Width="80px" Caption="Akcie" NewButtonVisible="false">
                         <CellDisplayTemplate Context="gridContext">
                             @{
@@ -71,13 +72,13 @@
                             }
                             <div class="grid-cell-align-center">
                                 <DxButton IconCssClass="grid-icon grid-icon-edit"
-                                    RenderStyle="ButtonRenderStyle.Link"
-                                    title="Zobraziť dotazník"
-                                    Click="@(async () => Navigation.NavigateTo($"/questionnaire/1info/{patient.Id}"))" />
+                                RenderStyle="ButtonRenderStyle.Link"
+                                title="Zobraziť dotazník"
+                                Click="@(async () => Navigation.NavigateTo($"/questionnaire/1info/{patient.Id}"))" />
                                 <DxButton IconCssClass="grid-icon grid-icon-delete"
-                                    RenderStyle="ButtonRenderStyle.Link"
-                                    title="Vymazať používateľa"
-                                    Click="@(() => patientsGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
+                                RenderStyle="ButtonRenderStyle.Link"
+                                title="Vymazať používateľa"
+                                Click="@(() => patientsGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
                             </div>
                         </CellDisplayTemplate>
                         <CellEditTemplate Context="editContext">
@@ -117,14 +118,17 @@
             var user = authState.User;
             isAdmin = user.IsInRole("Admin");
 
-            Patients = await PatientService.GetPatientsAsync();
-
-            DataLoadedTcs.TrySetResult(true);
-
-            await InvokeAsync(StateHasChanged);
+            await UpdateDataAsync();
         }
     }   
 
+    private async Task Grid_EditModelSaving(GridEditModelSavingEventArgs e)
+    {
+        var patient = (Data.Models.Patient)e.EditModel;
+        await PatientService.SavePatientAsync(patient);
+        await UpdateDataAsync();
+        ModifyToast();
+    }
     // Nastavenie objektu "DeletedAt"
     private async Task Grid_DataItemDeleting(GridDataItemDeletingEventArgs e)
     {
@@ -153,10 +157,22 @@
     async Task UpdateDataAsync()
     {
         Patients = await PatientService.GetPatientsAsync();
+        DataLoadedTcs.TrySetResult(true);
         patientsGrid?.Reload();
+        await InvokeAsync(StateHasChanged);
     }
 
     // Notifikacie
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
     private void DeleteToast()
     {
         ToastService.ShowToast(new ToastOptions

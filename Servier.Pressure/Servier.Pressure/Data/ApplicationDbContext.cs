@@ -139,7 +139,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<TreatmentMultitherapyDrug>().HasData(new TreatmentMultitherapyDrug() { Id = 26, Multitherapy = MultitherapyEnum.Antihypertensive3, Order = 3, Name = "valsartan / amlodipín / HCTZ", CreatedAt = new(2025, 03, 27), ModifiedAt = new(2025, 03, 27) });
         modelBuilder.Entity<TreatmentMultitherapyDrug>().HasData(new TreatmentMultitherapyDrug() { Id = 27, Multitherapy = MultitherapyEnum.WithHypolypedidemic, Order = 1, Name = "atorvastatín / amlodipín", CreatedAt = new(2025, 03, 27), ModifiedAt = new(2025, 03, 27) });
         modelBuilder.Entity<TreatmentMultitherapyDrug>().HasData(new TreatmentMultitherapyDrug() { Id = 28, Multitherapy = MultitherapyEnum.WithHypolypedidemic, Order = 2, Name = "atorvastatín / perindopril / amlodipín", CreatedAt = new(2025, 03, 27), ModifiedAt = new(2025, 03, 27) });
-        modelBuilder.Entity<TreatmentMultitherapyDrug>().HasData(new TreatmentMultitherapyDrug() { Id = 29, Multitherapy = MultitherapyEnum.WithHypolypedidemic, Order = 3, Name = "rosuvastatín / perindopril / HCTZ", CreatedAt = new(2025, 03, 27), ModifiedAt = new(2025, 03, 27) });
+        modelBuilder.Entity<TreatmentMultitherapyDrug>().HasData(new TreatmentMultitherapyDrug() { Id = 29, Multitherapy = MultitherapyEnum.WithHypolypedidemic, Order = 3, Name = "rosuvastatín / perindopril / indapamid", CreatedAt = new(2025, 03, 27), ModifiedAt = new(2025, 03, 27) });
         #endregion
     }
 }

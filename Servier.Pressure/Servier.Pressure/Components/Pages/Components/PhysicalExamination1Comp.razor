@@ -1,0 +1,190 @@
+﻿@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+@if (PhysicalExamination == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <EditForm Model="@PhysicalExamination" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Fyzikálne vyšetrenie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutGroup Caption="Výška, hmotnosť, bmi a obvod pása" ColSpanMd="12">
+                    <DxFormLayoutItem Caption="výška" ColSpanMd="8" CaptionCssClass="caption-styleH1">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Height" MinValue="140" />
+                                <span style="margin-left: 5px;">cm</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="neznáma" ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@HeightUnknown" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="hmotnosť" ColSpanMd="8" CaptionCssClass="caption-styleH1">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Weight" MinValue="50" />
+                                <span style="margin-left: 5px;">kg</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="neznáma" ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@WeightUnknown" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="BMI" ColSpanMd="8" CaptionCssClass="caption-styleH1"><Template>@BMI</Template></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="automaticky počítané" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="obvod pása" ColSpanMd="8" CaptionCssClass="caption-styleH1">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Waist" MinValue="50" />
+                                <span style="margin-left: 5px;">cm</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="neznámy" ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@WaistUnknown" />
+                    </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+}
+
+@code {
+    [Parameter]
+    public required string patientId { get; set; }
+
+    private PhysicalExamination1? PhysicalExamination { get; set; }
+    private string? Message;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            PhysicalExamination = await QuestionnaireService.GetPhysicalExamination1ByIdAsync(patientId);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var result = await QuestionnaireService.SavePhysicalExamination1Async(PhysicalExamination!);
+            if (!result.Success)
+                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+
+    private decimal Height
+    {
+        get => PhysicalExamination!.Height;
+        set
+        {
+            if (PhysicalExamination!.Height != value)
+            {
+                PhysicalExamination!.Height = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool HeightUnknown
+    {
+        get => PhysicalExamination!.HeightUnknown;
+        set
+        {
+            if (PhysicalExamination!.HeightUnknown != value)
+            {
+                PhysicalExamination!.HeightUnknown = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private decimal Weight
+    {
+        get => PhysicalExamination!.Weight;
+        set
+        {
+            if (PhysicalExamination!.Weight != value)
+            {
+                PhysicalExamination!.Weight = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool WeightUnknown
+    {
+        get => PhysicalExamination!.WeightUnknown;
+        set
+        {
+            if (PhysicalExamination!.WeightUnknown != value)
+            {
+                PhysicalExamination!.WeightUnknown = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private string BMI
+    {
+        get => (PhysicalExamination!.Weight / ((PhysicalExamination!.Height / 100) * (PhysicalExamination!.Height / 100))).ToString("F2") + " kg/m2";
+    }
+    private decimal Waist
+    {
+        get => PhysicalExamination!.Waist;
+        set
+        {
+            if (PhysicalExamination!.Waist != value)
+            {
+                PhysicalExamination!.Waist = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool WaistUnknown
+    {
+        get => PhysicalExamination!.WaistUnknown;
+        set
+        {
+            if (PhysicalExamination!.WaistUnknown != value)
+            {
+                PhysicalExamination!.WaistUnknown = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

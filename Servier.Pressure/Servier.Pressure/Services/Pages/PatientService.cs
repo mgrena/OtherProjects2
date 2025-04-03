@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Servier.Pressure.Data;
 using Servier.Pressure.Data.Models;
+using Servier.Pressure.Helpers;
 using System.IdentityModel.Claims;
 
 namespace Servier.Pressure.Services.Pages;
@@ -61,6 +62,27 @@ public class PatientService(ApplicationDbContext context, AuthenticationStatePro
     public async Task<Patient?> GetPatientByIdAsync(string id)
     {
         return await _context.Patients.FirstOrDefaultAsync(i => i.Id == id);
+    }
+    public async Task<OperationResult> SavePatientAsync(Patient patient)
+    {
+        var existEntry = await _context.Patients.FirstOrDefaultAsync(i => i.Id == patient.Id);
+        if (existEntry != null)
+        {
+            _logger.LogInformation("The patient with code {code} has been updated.", patient.PatientCode);
+            existEntry.PatientName = patient.PatientName;
+            existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
     }
     public async Task DeletePatientAsync(string patientId)
     {

@@ -64,6 +64,7 @@ else
     KeyFieldName="Id">
         <Columns>
             <DxGridDataColumn Caption="Používateľ" FieldName="FullName" />
+            <DxGridDataColumn Caption="Kód" FieldName="Code" />
             <DxGridDataColumn Caption="Úroveň" FieldName="Role">
                 <EditSettings>
                     <DxComboBoxSettings Data="@roles" />
@@ -144,6 +145,9 @@ else
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Priezvisko:" ColSpanMd="6">
                     <DxTextBox @bind-Text="user.LastName" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Kód:" ColSpanMd="6">
+                    <DxMaskedInput name="user.Code" @rendermode="InteractiveServer" @bind-Value="user.Code" Mask=">l99" NullText="A01" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Phone:" ColSpanMd="6">
                     <DxMaskedInput name="user.PhoneNumber" @rendermode="InteractiveServer" @bind-Value="user.PhoneNumber" Mask="+421 999 999 999" />
@@ -233,7 +237,8 @@ else
             if (userOrig.FirstName != userUpdated.FirstName
                 || userOrig.LastName != userUpdated.LastName
                 || userOrig.TitleBefore != userUpdated.TitleBefore
-                || userOrig.TitleAfter != userUpdated.TitleAfter)
+                || userOrig.TitleAfter != userUpdated.TitleAfter
+                || userOrig.Code != userUpdated.Code)
             {
                 var resultUser = await UserService.UpdateUserAsync(userUpdated);
                 if (!resultUser.Succeeded)

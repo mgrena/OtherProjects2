@@ -65,6 +65,7 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         dummyUser.LastName = user.LastName;
         dummyUser.TitleBefore = user.TitleBefore;
         dummyUser.TitleAfter = user.TitleAfter;
+        dummyUser.Code = user.Code;
         dummyUser.PhoneNumber = user.PhoneNumber;
         dummyUser.Role = user.Role;
 
@@ -165,6 +166,7 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
             userOrig.LastName = user.LastName;
             userOrig.TitleBefore = user.TitleBefore;
             userOrig.TitleAfter = user.TitleAfter;
+            userOrig.Code = user.Code;
             userOrig.LockoutEnabled = user.LockoutEnabled;
             userOrig.LockoutEnd = user.LockoutEnd;
 
