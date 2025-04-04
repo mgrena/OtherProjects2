@@ -67,7 +67,7 @@ else
                 entity.IsChanged = Treatment1Visit!.IsChanged;
             var result = await QuestionnaireService.SaveTreatment1VisitAsync(entity!);
             if (!result.Success)
-                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else
                 ModifyToast();
         };

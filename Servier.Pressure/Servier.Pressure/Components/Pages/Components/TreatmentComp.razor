@@ -45,7 +45,7 @@ else
                                 var items = GetTreatmentMonotherapyDrugs(rowItem.Monotherapy);
                                 drug = items.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
                             }
-                            @drug
+                            <div class="text-start">@drug</div>
                         }
                     }
                 </CellDisplayTemplate>
@@ -63,7 +63,7 @@ else
                         if (rowItem.DrugId > 0 && rowItem.Monotherapy == MonotherapyEnum.Diuretic && rowItem.IsAldosteroneAntagonist)
                         {
                             string drug = DiureticAldosteroneDrugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
-                            @drug
+                            <div class="text-start">@drug</div>
                         }
                     }
                 </CellDisplayTemplate>
@@ -127,10 +127,23 @@ else
     EditMode="GridEditMode.EditCell"
     EditModelSaving="MultitherapyGrid_EditModelSaving">
         <Columns>
-            <DxGridDataColumn Caption="Terapia">
+            <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
                 <CellDisplayTemplate Context="gridContext">
-                    @GetAntihypertensive2Text(((TreatmentMultitherapy)gridContext.DataItem).DrugId)
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                        if (rowItem.DrugId > 0)
+                        {
+                            string drug = Antihypertensive2Drugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                            <div class="text-start">@drug</div>
+                        }
+                    }
                 </CellDisplayTemplate>
+                <CellEditTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
+                    }
+                    <DxComboBox Data="@Antihypertensive2Drugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive2))" />
+                </CellEditTemplate>
             </DxGridDataColumn>
             <DxGridBandColumn Caption="Dávka / tbl (mg)">
                 <Columns>
@@ -183,10 +196,23 @@ else
     EditMode="GridEditMode.EditCell"
     EditModelSaving="MultitherapyGrid_EditModelSaving">
         <Columns>
-            <DxGridDataColumn Caption="Terapia">
+            <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
                 <CellDisplayTemplate Context="gridContext">
-                    @GetAntihypertensive3Text(((TreatmentMultitherapy)gridContext.DataItem).DrugId)
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                        if (rowItem.DrugId > 0)
+                        {
+                            string drug = Antihypertensive3Drugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                            <div class="text-start">@drug</div>
+                        }
+                    }
                 </CellDisplayTemplate>
+                <CellEditTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
+                    }
+                    <DxComboBox Data="@Antihypertensive3Drugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive3))" />
+                </CellEditTemplate>
             </DxGridDataColumn>
             <DxGridBandColumn Caption="Dávka / tbl (mg)">
                 <Columns>
@@ -244,10 +270,23 @@ else
     EditMode="GridEditMode.EditCell"
     EditModelSaving="MultitherapyGrid_EditModelSaving">
         <Columns>
-            <DxGridDataColumn Caption="Terapia">
+            <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
                 <CellDisplayTemplate Context="gridContext">
-                    @GetWithHypolypedidemicText(((TreatmentMultitherapy)gridContext.DataItem).DrugId)
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                        if (rowItem.DrugId > 0)
+                        {
+                            string drug = WithHypolypedidemicDrugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                            <div class="text-start">@drug</div>
+                        }
+                    }
                 </CellDisplayTemplate>
+                <CellEditTemplate Context="gridContext">
+                    @{
+                        var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
+                    }
+                    <DxComboBox Data="@WithHypolypedidemicDrugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive3))" />
+                </CellEditTemplate>
             </DxGridDataColumn>
             <DxGridBandColumn Caption="Dávka / tbl (mg)">
                 <Columns>
@@ -366,7 +405,7 @@ else
     {
         var result = await QuestionnaireService.SaveTreatmentUnknownsAsync(patientId, visitNum, TreatmentUnknowns);
         if (!result.Success)
-            Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
         else
             ModifyToast();
     }
@@ -430,7 +469,7 @@ else
 
         var result = await QuestionnaireService.SaveTreatmentMultitherapyAsync(therapyUpdated);
         if (!result.Success)
-            Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
         else
             ModifyToast();
         await LoadMultitherapyData();
@@ -501,6 +540,14 @@ else
             therapyOrig.IsUnknown = false;
         }
     }
+    private async Task OnMultitherapyDrugChanged(TreatmentMultitherapyDrug drug, TreatmentMultitherapy multitherapy, MultitherapyEnum type)
+    {
+        if (drug == null || multitherapy == null) return;
+
+        // var therapyOrig = TreatmentMonotherapies.First(i => i.Monotherapy == monotherapy.Monotherapy);
+        // therapyOrig.DrugId = drug.Id;
+        await InvokeAsync(StateHasChanged);
+    }
 
     private async Task LoadMonotherapyData()
     {
@@ -542,7 +589,7 @@ else
     {
         var result = await QuestionnaireService.SaveTreatmentMonotherapyAsync(monotherapy);
         if (!result.Success)
-            Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
         else
             ModifyToast();
     }
@@ -587,48 +634,24 @@ else
         }
 
         // prepare Antihypertensive2 datasource
-        foreach (TreatmentMultitherapyDrug drug in Antihypertensive2Drugs)
-        {
-            var therapy = therapies.FirstOrDefault(i => i.DrugId == drug.Id);
-            if (therapy == null)
-                therapy = new TreatmentMultitherapy { PatientId = patientId, DrugId = drug.Id, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.Antihypertensive2, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
-
-            TreatmentAntihypertensives2.Add(therapy);
-        }
+        var therapy = therapies.FirstOrDefault(i => i.Multitherapy == MultitherapyEnum.Antihypertensive2);
+        if (therapy == null)
+            therapy = new TreatmentMultitherapy { PatientId = patientId, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.Antihypertensive2, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+        TreatmentAntihypertensives2.Add(therapy);
 
         // prepare Antihypertensive3 datasource
-        foreach (TreatmentMultitherapyDrug drug in Antihypertensive3Drugs)
-        {
-            var therapy = therapies.FirstOrDefault(i => i.DrugId == drug.Id);
-            if (therapy == null)
-                therapy = new TreatmentMultitherapy { PatientId = patientId, DrugId = drug.Id, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.Antihypertensive3, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
-
-            TreatmentAntihypertensives3.Add(therapy);
-        }
+        therapy = therapies.FirstOrDefault(i => i.Multitherapy == MultitherapyEnum.Antihypertensive3);
+        if (therapy == null)
+            therapy = new TreatmentMultitherapy { PatientId = patientId, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.Antihypertensive3, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+        TreatmentAntihypertensives3.Add(therapy);
 
         // prepare WithHypolypedidemic datasource
-        foreach (TreatmentMultitherapyDrug drug in WithHypolypedidemicDrugs)
-        {
-            var therapy = therapies.FirstOrDefault(i => i.DrugId == drug.Id);
-            if (therapy == null)
-                therapy = new TreatmentMultitherapy { PatientId = patientId, DrugId = drug.Id, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.WithHypolypedidemic, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
-
-            TreatmentWithHypolypedidemic.Add(therapy);
-        }
+        therapy = therapies.FirstOrDefault(i => i.Multitherapy == MultitherapyEnum.WithHypolypedidemic);
+        if (therapy == null)
+            therapy = new TreatmentMultitherapy { PatientId = patientId, VisitNumber = visitNum, Multitherapy = MultitherapyEnum.WithHypolypedidemic, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+        TreatmentWithHypolypedidemic.Add(therapy);
 
         IsMultitherapyDataReady = true;
-    }
-    private string GetAntihypertensive2Text(int drugId)
-    {
-        return Antihypertensive2Drugs.FirstOrDefault(i => i.Id == drugId)?.Name ?? string.Empty;
-    }
-    private string GetAntihypertensive3Text(int drugId)
-    {
-        return Antihypertensive3Drugs.FirstOrDefault(i => i.Id == drugId)?.Name ?? string.Empty;
-    }
-    private string GetWithHypolypedidemicText(int drugId)
-    {
-        return WithHypolypedidemicDrugs.FirstOrDefault(i => i.Id == drugId)?.Name ?? string.Empty;
     }
 
     private bool IsAntihypertensive3Unknown

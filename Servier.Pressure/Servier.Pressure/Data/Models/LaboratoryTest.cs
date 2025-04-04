@@ -22,10 +22,6 @@ public class LaboratoryTest
     public decimal HDL { get; set; } = 0;
     [Column("hdl_unknown")]
     public bool HDLUnknown { get; set; } = false;
-    [Column("non_hdl", TypeName = "decimal(4,1)")]
-    public decimal NonHDL { get; set; } = 0;
-    [Column("non_hdl_unknown")]
-    public bool NonHDLUnknown { get; set; } = false;
 
     [Column("triglycerides", TypeName = "decimal(4,1)")]
     public decimal Triglycerides { get; set; } = 0;

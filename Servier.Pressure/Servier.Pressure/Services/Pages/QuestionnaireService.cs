@@ -68,6 +68,20 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         };
         return result;
     }
+    public async Task<LaboratoryTest> GetLaboratoryTestByIdAsync(string Id)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var result = await aContext.LaboratoryTests.FirstOrDefaultAsync(p => p.Id == Id);
+        result ??= new()
+        {
+            Id = Id,
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now,
+
+        };
+        return result;
+    }
     public async Task<Treatment1Visit?> GetTreatment1VisitAsync(string patientId)
     {
         using var scope = _scopeFactory.CreateScope();
@@ -302,6 +316,47 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.Measurement3Stk = entry.Measurement3Stk;
             existEntry.Measurement3Dtk = entry.Measurement3Dtk;
             existEntry.Measurement3Sf = entry.Measurement3Sf;
+            existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+    public async Task<OperationResult> SaveLaboratoryTestAsync(LaboratoryTest entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.LaboratoryTests.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry == null)
+        {
+            _logger.LogInformation("The LaboratoryTest for patient {user} has been added.", entry.Id);
+            aContext.LaboratoryTests.Add(entry);
+        }
+        else
+        {
+            _logger.LogInformation("The LaboratoryTest for patient with id {id} has been updated.", entry.Id);
+            existEntry.Cholesterol = entry.Cholesterol;
+            existEntry.CholesterolUnknown = entry.CholesterolUnknown;
+            existEntry.LDL = entry.LDL;
+            existEntry.LDLUnknown = entry.LDLUnknown;
+            existEntry.HDL = entry.HDL;
+            existEntry.HDLUnknown = entry.HDLUnknown;
+            existEntry.Triglycerides = entry.Triglycerides;
+            existEntry.TriglyceridesUnknown = entry.TriglyceridesUnknown;
+            existEntry.Albumin = entry.Albumin;
+            existEntry.AlbuminUnknown = entry.AlbuminUnknown;
+            existEntry.Creatinine = entry.Creatinine;
+            existEntry.CreatinineUnknown = entry.CreatinineUnknown;
+            existEntry.Glycemia = entry.Glycemia;
+            existEntry.GlycemiaUnknown = entry.GlycemiaUnknown;
             existEntry.ModifiedAt = DateTime.Now;
         }
 

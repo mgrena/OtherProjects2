@@ -163,7 +163,7 @@ else
         {
             var result = await QuestionnaireService.SaveDemographyHistoryQuestionaryAsync(DemographyHistoryQuestionaire!);
             if (!result.Success)
-                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else
                 ModifyToast();
         };

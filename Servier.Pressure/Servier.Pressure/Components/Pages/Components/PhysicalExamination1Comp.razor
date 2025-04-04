@@ -41,8 +41,8 @@ else
                     <DxFormLayoutItem Caption="neznáma" ColSpanMd="4" CaptionCssClass="caption-styleH1">
                         <DxCheckBox @bind-Checked="@WeightUnknown" />
                     </DxFormLayoutItem>
-                    <DxFormLayoutItem Caption="BMI" ColSpanMd="8" CaptionCssClass="caption-styleH1"><Template>@BMI</Template></DxFormLayoutItem>
-                    <DxFormLayoutItem Caption="automaticky počítané" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="BMI" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">@BMI</span></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="automaticky počítané" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="obvod pása" ColSpanMd="8" CaptionCssClass="caption-styleH1">
                         <Template>
                             <div style="display: flex; align-items: center;">
@@ -55,10 +55,194 @@ else
                         <DxCheckBox @bind-Checked="@WaistUnknown" />
                     </DxFormLayoutItem>
                 </DxFormLayoutGroup>
+                <DxFormLayoutGroup Caption="Tlak krvi a pulz (merané na návšteve 1)" ColSpanMd="12">
+                    <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <Template>
+                            <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Hands" @bind-Value="@Hand" />
+                            <p><i><strong>Poznámka:</strong> Prosím, uvádzajte hodnoty namerané na ruke s vyšším krvným tlakom.</i></p>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="1. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                        <DxCheckBox @bind-Checked="@Measurement1" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div class="d-flex align-items-center gap-2">
+                                <DxSpinEdit @bind-Value="@Measurement1Stk" MinValue="0" Increment="5" />
+                                <span>/</span>
+                                <DxSpinEdit @bind-Value="@Measurement1Dtk" MinValue="0" Increment="5" />
+                                <span> mmHg</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div class="d-flex align-items-center gap-2">
+                                <DxSpinEdit @bind-Value="@Measurement1Sf" MinValue="0" />
+                                <span> úderov za minútu</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="2. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                        <DxCheckBox @bind-Checked="@Measurement2" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div class="d-flex align-items-center gap-2">
+                                <DxSpinEdit @bind-Value="@Measurement2Stk" MinValue="0" Increment="5" />
+                                <span>/</span>
+                                <DxSpinEdit @bind-Value="@Measurement2Dtk" MinValue="0" Increment="5" />
+                                <span> mmHg</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div class="d-flex align-items-center gap-2">
+                                <DxSpinEdit @bind-Value="@Measurement2Sf" MinValue="0" />
+                                <span> úderov za minútu</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="3. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                        <DxCheckBox @bind-Checked="@Measurement3" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div class="d-flex align-items-center gap-2">
+                                <DxSpinEdit @bind-Value="@Measurement3Stk" MinValue="0" Increment="5" />
+                                <span>/</span>
+                                <DxSpinEdit @bind-Value="@Measurement3Dtk" MinValue="0" Increment="5" />
+                                <span> mmHg</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div class="d-flex align-items-center gap-2">
+                                <DxSpinEdit @bind-Value="@Measurement3Sf" MinValue="0" />
+                                <span> úderov za minútu</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Priemerný tlak krvi" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@MeasurementStk / @MeasurementDtk mmHg</span></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">autom. počítaný</span></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="Priemerný pulz" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@MeasurementSf úderov za minútu</span></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">z meraní č. 2 a 3</span></DxFormLayoutItem>
+                </DxFormLayoutGroup>
             </DxFormLayoutGroup>
         </DxFormLayout>
     </EditForm>
     <StatusMessage Message="@Message" />
+}
+@if (LaboratoryTest == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <EditForm Model="@LaboratoryTest" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Výsledky laboratórnych vyšetrení" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutGroup Caption="Výsledky posledných biochemických vyšetrení (nie starších ako 3 mesiace)" ColSpanMd="12">
+                    <DxFormLayoutItem Caption="celk. cholesterol" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Cholesterol" MinValue="0" />
+                                <span style="margin-left: 5px;">mmol/l</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené alebo neznáme " ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@CholesterolUnknown" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="LDL" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@LDL" MinValue="0" />
+                                <span style="margin-left: 5px;">mmol/l</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené alebo neznáme " ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@CholesterolUnknown" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="HDL" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@HDL" MinValue="0" />
+                                <span style="margin-left: 5px;">mmol/l</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené alebo neznáme " ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@HDLUnknown" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="non-HDL" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@NonHDL</span></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="autom. počítaný (vzorec: celk. cholesterol – HDL)" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"></DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="triglyceridy" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Triglycerides" MinValue="0" />
+                                <span style="margin-left: 5px;">mmol/l</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené alebo neznáme " ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@TriglyceridesUnknown" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="albumín" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Albumin" MinValue="0" />
+                                <span style="margin-left: 5px;">mmol/l</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené alebo neznáme " ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@AlbuminUnknown" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="kreatinín" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Creatinine" MinValue="0" />
+                                <span style="margin-left: 5px;">mmol/l</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené alebo neznáme " ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@CreatinineUnknown" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="glykémia (nalačno)" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
+                        <Template>
+                            <div style="display: flex; align-items: center;">
+                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Glycemia" MinValue="0" />
+                                <span style="margin-left: 5px;">mmol/l</span>
+                            </div>
+                        </Template>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="nevyšetrené alebo neznáme " ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@GlycemiaUnknown" />
+                    </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
 }
 
 @code {
@@ -66,6 +250,8 @@ else
     public required string patientId { get; set; }
 
     private PhysicalExamination1? PhysicalExamination { get; set; }
+    private LaboratoryTest? LaboratoryTest { get; set; }
+    private IEnumerable<string> Hands = new[] { "pravá ruka", "ľavá ruka" };
     private string? Message;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -73,28 +259,51 @@ else
         if (firstRender)
         {
             PhysicalExamination = await QuestionnaireService.GetPhysicalExamination1ByIdAsync(patientId);
+            LaboratoryTest = await QuestionnaireService.GetLaboratoryTestByIdAsync(patientId);
             await InvokeAsync(StateHasChanged);
         }
     }
 
-    private System.Timers.Timer? debounceTimer;
-    private async Task OnFieldChangedAsync()
+    private System.Timers.Timer? debouncePETimer;
+    private async Task OnPEFieldChangedAsync()
     {
         // Ak existuje starý timer, zastaviť ho
-        debounceTimer?.Stop();
+        debouncePETimer?.Stop();
 
         // Nový timer na 1 sekundu
-        debounceTimer = new System.Timers.Timer(1000);
-        debounceTimer.AutoReset = false;
-        debounceTimer.Elapsed += async (s, e) =>
+        debouncePETimer = new System.Timers.Timer(1000);
+        debouncePETimer.AutoReset = false;
+        debouncePETimer.Elapsed += async (s, e) =>
         {
             var result = await QuestionnaireService.SavePhysicalExamination1Async(PhysicalExamination!);
             if (!result.Success)
-                Message = string.Format("{0} {1}", result.ErrorMessage, result.AdditionalInfo);
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else
                 ModifyToast();
         };
-        debounceTimer.Start();
+        debouncePETimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+    private System.Timers.Timer? debounceLTTimer;
+    private async Task OnLTFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceLTTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceLTTimer = new System.Timers.Timer(1000);
+        debounceLTTimer.AutoReset = false;
+        debounceLTTimer.Elapsed += async (s, e) =>
+        {
+            var result = await QuestionnaireService.SaveLaboratoryTestAsync(LaboratoryTest!);
+            if (!result.Success)
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceLTTimer.Start();
 
         // Await the timer to avoid CS1998 warning
         await Task.CompletedTask;
@@ -108,7 +317,7 @@ else
             if (PhysicalExamination!.Height != value)
             {
                 PhysicalExamination!.Height = value;
-                InvokeAsync(OnFieldChangedAsync);
+                InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
@@ -120,7 +329,7 @@ else
             if (PhysicalExamination!.HeightUnknown != value)
             {
                 PhysicalExamination!.HeightUnknown = value;
-                InvokeAsync(OnFieldChangedAsync);
+                InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
@@ -132,7 +341,7 @@ else
             if (PhysicalExamination!.Weight != value)
             {
                 PhysicalExamination!.Weight = value;
-                InvokeAsync(OnFieldChangedAsync);
+                InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
@@ -144,14 +353,11 @@ else
             if (PhysicalExamination!.WeightUnknown != value)
             {
                 PhysicalExamination!.WeightUnknown = value;
-                InvokeAsync(OnFieldChangedAsync);
+                InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
-    private string BMI
-    {
-        get => (PhysicalExamination!.Weight / ((PhysicalExamination!.Height / 100) * (PhysicalExamination!.Height / 100))).ToString("F2") + " kg/m2";
-    }
+    private string BMI { get => (PhysicalExamination!.Weight / ((PhysicalExamination!.Height / 100) * (PhysicalExamination!.Height / 100))).ToString("F2") + " kg/m2"; }
     private decimal Waist
     {
         get => PhysicalExamination!.Waist;
@@ -160,7 +366,7 @@ else
             if (PhysicalExamination!.Waist != value)
             {
                 PhysicalExamination!.Waist = value;
-                InvokeAsync(OnFieldChangedAsync);
+                InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
@@ -172,7 +378,337 @@ else
             if (PhysicalExamination!.WaistUnknown != value)
             {
                 PhysicalExamination!.WaistUnknown = value;
-                InvokeAsync(OnFieldChangedAsync);
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private string Hand
+    {
+        get => (PhysicalExamination!.Hand == HandEnum.right) ? "pravá ruka" : "ľavá ruka";
+        set
+        {
+            HandEnum hand = (value == "pravá ruka") ? HandEnum.right : HandEnum.left;
+            if (PhysicalExamination!.Hand != hand)
+            {
+                PhysicalExamination!.Hand = hand;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private bool Measurement1
+    {
+        get => PhysicalExamination!.Measurement1;
+        set
+        {
+            if (PhysicalExamination!.Measurement1 != value)
+            {
+                PhysicalExamination!.Measurement1 = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement1Stk
+    {
+        get => PhysicalExamination!.Measurement1Stk;
+        set
+        {
+            if (PhysicalExamination!.Measurement1Stk != value)
+            {
+                PhysicalExamination!.Measurement1Stk = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement1Dtk
+    {
+        get => PhysicalExamination!.Measurement1Dtk;
+        set
+        {
+            if (PhysicalExamination!.Measurement1Dtk != value)
+            {
+                PhysicalExamination!.Measurement1Dtk = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement1Sf
+    {
+        get => PhysicalExamination!.Measurement1Sf;
+        set
+        {
+            if (PhysicalExamination!.Measurement1Sf != value)
+            {
+                PhysicalExamination!.Measurement1Sf = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private bool Measurement2
+    {
+        get => PhysicalExamination!.Measurement2;
+        set
+        {
+            if (PhysicalExamination!.Measurement2 != value)
+            {
+                PhysicalExamination!.Measurement2 = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement2Stk
+    {
+        get => PhysicalExamination!.Measurement2Stk;
+        set
+        {
+            if (PhysicalExamination!.Measurement2Stk != value)
+            {
+                PhysicalExamination!.Measurement2Stk = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement2Dtk
+    {
+        get => PhysicalExamination!.Measurement2Dtk;
+        set
+        {
+            if (PhysicalExamination!.Measurement2Dtk != value)
+            {
+                PhysicalExamination!.Measurement2Dtk = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement2Sf
+    {
+        get => PhysicalExamination!.Measurement2Sf;
+        set
+        {
+            if (PhysicalExamination!.Measurement2Sf != value)
+            {
+                PhysicalExamination!.Measurement2Sf = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private bool Measurement3
+    {
+        get => PhysicalExamination!.Measurement3;
+        set
+        {
+            if (PhysicalExamination!.Measurement3 != value)
+            {
+                PhysicalExamination!.Measurement3 = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement3Stk
+    {
+        get => PhysicalExamination!.Measurement3Stk;
+        set
+        {
+            if (PhysicalExamination!.Measurement3Stk != value)
+            {
+                PhysicalExamination!.Measurement3Stk = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement3Dtk
+    {
+        get => PhysicalExamination!.Measurement3Dtk;
+        set
+        {
+            if (PhysicalExamination!.Measurement3Dtk != value)
+            {
+                PhysicalExamination!.Measurement3Dtk = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private int Measurement3Sf
+    {
+        get => PhysicalExamination!.Measurement3Sf;
+        set
+        {
+            if (PhysicalExamination!.Measurement3Sf != value)
+            {
+                PhysicalExamination!.Measurement3Sf = value;
+                InvokeAsync(OnPEFieldChangedAsync);
+            }
+        }
+    }
+    private string MeasurementStk { get => ((PhysicalExamination!.Measurement1Stk + PhysicalExamination!.Measurement2Stk + PhysicalExamination!.Measurement3Stk) / 3m).ToString("F2"); }
+    private string MeasurementDtk { get => ((PhysicalExamination!.Measurement1Dtk + PhysicalExamination!.Measurement2Dtk + PhysicalExamination!.Measurement3Dtk) / 3m).ToString("F2"); }
+    private string MeasurementSf { get => ((PhysicalExamination!.Measurement2Sf + PhysicalExamination!.Measurement3Sf) / 2m).ToString("F2"); }
+
+    private decimal Cholesterol
+    {
+        get => LaboratoryTest!.Cholesterol;
+        set
+        {
+            if (LaboratoryTest!.Cholesterol != value)
+            {
+                LaboratoryTest!.Cholesterol = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private bool CholesterolUnknown
+    {
+        get => LaboratoryTest!.CholesterolUnknown;
+        set
+        {
+            if (LaboratoryTest!.CholesterolUnknown != value)
+            {
+                LaboratoryTest!.CholesterolUnknown = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private decimal LDL
+    {
+        get => LaboratoryTest!.LDL;
+        set
+        {
+            if (LaboratoryTest!.LDL != value)
+            {
+                LaboratoryTest!.LDL = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private bool LDLUnknown
+    {
+        get => LaboratoryTest!.LDLUnknown;
+        set
+        {
+            if (LaboratoryTest!.LDLUnknown != value)
+            {
+                LaboratoryTest!.LDLUnknown = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private decimal HDL
+    {
+        get => LaboratoryTest!.HDL;
+        set
+        {
+            if (LaboratoryTest!.HDL != value)
+            {
+                LaboratoryTest!.HDL = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private bool HDLUnknown
+    {
+        get => LaboratoryTest!.HDLUnknown;
+        set
+        {
+            if (LaboratoryTest!.HDLUnknown != value)
+            {
+                LaboratoryTest!.HDLUnknown = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private string NonHDL { get => (LaboratoryTest!.Cholesterol - LaboratoryTest!.HDL).ToString("F2") + " mmol/l"; }
+    private decimal Triglycerides
+    {
+        get => LaboratoryTest!.Triglycerides;
+        set
+        {
+            if (LaboratoryTest!.Triglycerides != value)
+            {
+                LaboratoryTest!.Triglycerides = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private bool TriglyceridesUnknown
+    {
+        get => LaboratoryTest!.TriglyceridesUnknown;
+        set
+        {
+            if (LaboratoryTest!.TriglyceridesUnknown != value)
+            {
+                LaboratoryTest!.TriglyceridesUnknown = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private decimal Albumin
+    {
+        get => LaboratoryTest!.Albumin;
+        set
+        {
+            if (LaboratoryTest!.Albumin != value)
+            {
+                LaboratoryTest!.Albumin = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private bool AlbuminUnknown
+    {
+        get => LaboratoryTest!.AlbuminUnknown;
+        set
+        {
+            if (LaboratoryTest!.AlbuminUnknown != value)
+            {
+                LaboratoryTest!.AlbuminUnknown = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private decimal Creatinine
+    {
+        get => LaboratoryTest!.Creatinine;
+        set
+        {
+            if (LaboratoryTest!.Creatinine != value)
+            {
+                LaboratoryTest!.Creatinine = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private bool CreatinineUnknown
+    {
+        get => LaboratoryTest!.CreatinineUnknown;
+        set
+        {
+            if (LaboratoryTest!.CreatinineUnknown != value)
+            {
+                LaboratoryTest!.CreatinineUnknown = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private decimal Glycemia
+    {
+        get => LaboratoryTest!.Glycemia;
+        set
+        {
+            if (LaboratoryTest!.Glycemia != value)
+            {
+                LaboratoryTest!.Glycemia = value;
+                InvokeAsync(OnLTFieldChangedAsync);
+            }
+        }
+    }
+    private bool GlycemiaUnknown
+    {
+        get => LaboratoryTest!.GlycemiaUnknown;
+        set
+        {
+            if (LaboratoryTest!.GlycemiaUnknown != value)
+            {
+                LaboratoryTest!.GlycemiaUnknown = value;
+                InvokeAsync(OnLTFieldChangedAsync);
             }
         }
     }

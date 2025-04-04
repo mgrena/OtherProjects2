@@ -328,5 +328,17 @@ html, body {
 
 .caption-styleH1 {
     font-size: 14px;
-    color: #6e7de8;
+    white-space: normal !important;
+    word-break: break-word;
+}
+
+.caption-styleH1-blue {
+    font-size: 14px;
+    white-space: normal !important;
+    word-break: break-word;
+    color: #6e7de8 !important;
+}
+
+.long-caption {
+    max-width: 150px;
 }
