@@ -32,6 +32,39 @@ else
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@EducationOptions" @bind-Value="@Education" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
+            <DxFormLayoutGroup Caption="Anamnéza" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Artériová hypertenzia - rok stanovenia diagnózy" ColSpanMd="6" CaptionCssClass="caption-styleH1">
+                    <DxDateEdit @bind-Date="@DiagnosisYear" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="6">
+                    <DxCheckBox @bind-Checked="@DiagnosisYearUnknown">neznámy</DxCheckBox>
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Rok zahájenia liečby" ColSpanMd="6" CaptionCssClass="caption-styleH1">
+                    <DxDateEdit @bind-Date="@TreatmentYear" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="6">
+                    <DxCheckBox @bind-Checked="@TreatmentYearUnknown">neznámy</DxCheckBox>
+                </DxFormLayoutItem>
+
+                <DxFormLayoutItem Caption="Iné relevantné diagnózy a stavy" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxCheckBox @bind-Checked="@DiagnosisNone">žiadne</DxCheckBox>
+                    <DxCheckBox @bind-Checked="@DiagnosisDiabetes">Diabetes mellitus</DxCheckBox>
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH2" Visible="@DiagnosisDiabetes">
+                        <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" @bind-Value="@DiagnosisDiabetesType" TextFieldName="DisplayText" ValueFieldName="Value" />
+                    </DxFormLayoutItem>
+                    <DxCheckBox @bind-Checked="@DiagnosisDyslipidemia">Dyslipidémia</DxCheckBox>
+                    <DxCheckBox @bind-Checked="@DiagnosisICHS">Ischemická choroba srdca</DxCheckBox>
+                    <DxCheckBox @bind-Checked="@DiagnosisHeartFailure">Srdcové zlyhanie</DxCheckBox>
+                    <DxCheckBox @bind-Checked="@DiagnosisFibrillation">Fibrilácia predsiení</DxCheckBox>
+                    <DxCheckBox @bind-Checked="@DiagnosisStroke">Cievna mozgová príhoda</DxCheckBox>
+                    <DxCheckBox @bind-Checked="@DiagnosisArterialD">Periférne artériové ochorenie</DxCheckBox>
+                    <DxCheckBox @bind-Checked="@DiagnosisInsufficiency">Chronická venózna insuficiencia</DxCheckBox>
+                    <DxCheckBox @bind-Checked="@DiagnosisKidneyD">Chronické ochorenie obličiek</DxCheckBox>
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH2" Visible="@DiagnosisKidneyD">
+                        <DxComboBox Data="@KidneyDiseaseOptions" @bind-Value="@DiagnosisKidneyDType" TextFieldName="DisplayText" ValueFieldName="Value" />
+                    </DxFormLayoutItem>
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
         </DxFormLayout>
     </EditForm>
 }
@@ -140,7 +173,282 @@ else
             }
         }
     }
-
+    private int DiagnosisYear
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisYear;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisYear != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisYear = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisYearUnknown
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisYearUnknown;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisYearUnknown != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisYearUnknown = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int TreatmentYear
+    {
+        get => DemographyHistoryQuestionaire!.TreatmentYear;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.TreatmentYear != value)
+            {
+                DemographyHistoryQuestionaire!.TreatmentYear = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool TreatmentYearUnknown
+    {
+        get => DemographyHistoryQuestionaire!.TreatmentYearUnknown;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.TreatmentYearUnknown != value)
+            {
+                DemographyHistoryQuestionaire!.TreatmentYearUnknown = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisNone
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisNone;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisNone != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisNone = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisDiabetes
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisDiabetes;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisDiabetes != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisDiabetes = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int DiagnosisDiabetesType
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisDiabetesType;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisDiabetesType != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisDiabetesType = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisDyslipidemia
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisDyslipidemia;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisDyslipidemia != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisDyslipidemia = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int DiagnosisDyslipidemiaDrug
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisDyslipidemiaDrug;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisDyslipidemiaDrug != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisDyslipidemiaDrug = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisICHS
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHS;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHS != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHS = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisICHSInfarction
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSInfarction;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSInfarction != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHSInfarction = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisICHSAngina
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSAngina;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSAngina != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHSAngina = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisICHSAngiography
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSAngiography;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSAngiography != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHSAngiography = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private AngiographyEnum DiagnosisICHSAngiographyType
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyType;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyType != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyType = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisICHSRevascularization
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSRevascularization;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSRevascularization != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHSRevascularization = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private RevascularizationEnum DiagnosisICHSRevascularizationType
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationType;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationType != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationType = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisHeartFailure
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisHeartFailure;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisHeartFailure != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisHeartFailure = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisFibrillation
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisFibrillation;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisFibrillation != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisFibrillation = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisStroke
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisStroke;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisStroke != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisStroke = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisArterialD
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisArterialD;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisArterialD != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisArterialD = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisInsufficiency
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisInsufficiency;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisInsufficiency != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisInsufficiency = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisKidneyD
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisKidneyD;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisKidneyD != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisKidneyD = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private KidneyDiseaseEnum DiagnosisKidneyDType
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisKidneyDType;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisKidneyDType != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisKidneyDType = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
     private List<Option<SmokerEnum>> SmokerOptions => Enum.GetValues(typeof(SmokerEnum))
         .Cast<SmokerEnum>()
         .Select(e => new Option<SmokerEnum> { Value = e, DisplayText = e.ToString() })
@@ -150,6 +458,19 @@ else
         .Cast<EducationEnum>()
         .Select(e => new Option<EducationEnum> { Value = e, DisplayText = e.ToString() })
         .ToList();
+    private List<Option<AngiographyEnum>> AngiographyOptions => Enum.GetValues(typeof(AngiographyEnum))
+    .Cast<AngiographyEnum>()
+    .Select(e => new Option<AngiographyEnum> { Value = e, DisplayText = e.ToString() })
+    .ToList();
+    private List<Option<RevascularizationEnum>> Revascularization => Enum.GetValues(typeof(RevascularizationEnum))
+    .Cast<RevascularizationEnum>()
+    .Select(e => new Option<RevascularizationEnum> { Value = e, DisplayText = e.ToString() })
+    .ToList();
+    private List<Option<KidneyDiseaseEnum>> KidneyDiseaseOptions => Enum.GetValues(typeof(KidneyDiseaseEnum))
+    .Cast<KidneyDiseaseEnum>()
+    .Select(e => new Option<KidneyDiseaseEnum> { Value = e, DisplayText = e.ToString() })
+    .ToList();
+
     private System.Timers.Timer? debounceTimer;
     private async Task OnFieldChangedAsync()
     {
