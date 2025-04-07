@@ -92,10 +92,11 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
         if (_emailSender is EmailSender eSender)
         {
             string body = string.Format("<!DOCTYPE html><html><body><p>Vážená pani doktorka/Vážený pán doktor,</p>" +
-                "<p>pozývame Vás k účasti na projekte zameranom na zlepšenie starostlivosti o pacientov s Parkinsonovou chorobou.</p>" +
+                "<p>pozývame Vás k účasti na projekte spoločnosti Servier Slovensko spol s.r.o., ktorý zahŕňa trojmesačnú, observačnú, epidemiologickú štúdiu zameranú " +
+                "na hodnotenie kontroly krvného tlaku u pacientov s potvrdenou a liečenou artériovou hypertenziou.</p>" +
                 "<p>Aby ste mohli začať využívať systém určený na zber a spracovanie údajov o pacientoch, postupujte podľa týchto krokov:</p>" +
                 "<ol type='1'>" +
-                    "<li>Overte svoju emailovú adresu kliknutím na nasledujúci <a href='{0}' style='color: blue; text-decoration: underline;'>link</a>.</li>" +
+                    "<li>Overte svoju emailovú adresu kliknutím na nasledujúci <a href='{0}' style='color: blue; text-decoration: underline;'>odkaz</a>.</li>" +
                     "<p>Ak odkaz nefunguje, skopírujte a vložte nasledujúcu adresu do vášho webového prehliadača:</p>" +
                     "<p>{0}</p>" +
                     "<p>Odkaz je platný po obmedzený čas.</p>" +

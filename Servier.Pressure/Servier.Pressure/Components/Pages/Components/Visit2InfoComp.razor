@@ -1,0 +1,147 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Helpers
+@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+@if (Treatment2Visit == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <EditForm Model="@Treatment2Visit" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Všeobecné informácie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Dátum návštevy" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxDateEdit @bind-Date="@VisitDate" MinDate="@MinDate" ShowClearButton="true" ShowTodayButton="true" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@YesNo" @bind-Value="@IsReturnedRecorder" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Vydanie záznamníku domáceho monitorovania tlaku subjektu?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Evaluations" @bind-Value="@SubjectEvaluation" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+}
+
+@code {
+    [Parameter]
+    public required string patientId { get; set; }
+
+    private Treatment2Visit? Treatment2Visit { get; set; }
+    private DateTime MinDate { get; set; } = new DateTime(2025, 3, 1);
+    private IEnumerable<string> YesNo = new[] { "áno", "nie" };
+    private IEnumerable<EvaluationWrapper> Evaluations { get; set; } = [];
+    private string? Message;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Evaluations = Enum.GetValues<EvaluationEnum>().OfType<EvaluationEnum>().Select(i => GetEvaluationWrapper(i));
+
+            var entity = await QuestionnaireService.GetTreatment2VisitAsync(patientId);
+            if (entity != null)
+                Treatment2Visit = entity;
+            else
+                Treatment2Visit = new() { Id = patientId, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var entity = await QuestionnaireService.GetTreatment2VisitAsync(patientId);
+            if (entity != null)
+            {
+                entity.VisitDate = Treatment2Visit!.VisitDate;
+                entity.IsReturnedRecorder = Treatment2Visit!.IsReturnedRecorder;
+                entity.SubjectEvaluation = Treatment2Visit!.SubjectEvaluation;
+            }
+            else
+                entity = Treatment2Visit;
+            var result = await QuestionnaireService.SaveTreatment2VisitAsync(entity!);
+            if (!result.Success)
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+    private EvaluationWrapper GetEvaluationWrapper(EvaluationEnum item)
+    {
+        return new EvaluationWrapper() { Value = item, DisplayText = item.GetAttribute<DisplayAttribute>()?.Name ?? item.ToString() };
+    }
+
+    private DateTime? VisitDate
+    {
+        get => Treatment2Visit!.VisitDate;
+        set
+        {
+            if (Treatment2Visit!.VisitDate != value)
+            {
+                Treatment2Visit!.VisitDate = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private string IsReturnedRecorder
+    {
+        get => (Treatment2Visit!.IsReturnedRecorder) ? "áno" : "nie";
+        set
+        {
+            bool isOngoing = value == "áno";
+            if (Treatment2Visit!.IsReturnedRecorder != isOngoing)
+            {
+                Treatment2Visit!.IsReturnedRecorder = isOngoing;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private EvaluationEnum SubjectEvaluation
+    {
+        get => Treatment2Visit!.SubjectEvaluation;
+        set
+        {
+            if (Treatment2Visit!.SubjectEvaluation != value)
+            {
+                Treatment2Visit!.SubjectEvaluation = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

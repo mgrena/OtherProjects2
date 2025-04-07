@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Servier.Pressure.Data;
 
@@ -11,9 +12,11 @@ using Servier.Pressure.Data;
 namespace Servier.Pressure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250404143911_Treatment2VisitUpdate")]
+    partial class Treatment2VisitUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1604,138 +1607,6 @@ namespace Servier.Pressure.Migrations
                     b.ToTable("physical_examinations_1");
                 });
 
-            modelBuilder.Entity("Servier.Pressure.Data.Models.PhysicalExamination2", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("id");
-
-                    b.Property<int>("AmbulatoryHand")
-                        .HasColumnType("int")
-                        .HasColumnName("a_hand");
-
-                    b.Property<bool>("AmbulatoryMeasurement1")
-                        .HasColumnType("bit")
-                        .HasColumnName("a_measurement_1");
-
-                    b.Property<int>("AmbulatoryMeasurement1Dtk")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_1_dtk");
-
-                    b.Property<int>("AmbulatoryMeasurement1Sf")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_1_sf");
-
-                    b.Property<int>("AmbulatoryMeasurement1Stk")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_1_stk");
-
-                    b.Property<bool>("AmbulatoryMeasurement2")
-                        .HasColumnType("bit")
-                        .HasColumnName("a_measurement_2");
-
-                    b.Property<int>("AmbulatoryMeasurement2Dtk")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_2_dtk");
-
-                    b.Property<int>("AmbulatoryMeasurement2Sf")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_2_sf");
-
-                    b.Property<int>("AmbulatoryMeasurement2Stk")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_2_stk");
-
-                    b.Property<bool>("AmbulatoryMeasurement3")
-                        .HasColumnType("bit")
-                        .HasColumnName("a_measurement_3");
-
-                    b.Property<int>("AmbulatoryMeasurement3Dtk")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_3_dtk");
-
-                    b.Property<int>("AmbulatoryMeasurement3Sf")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_3_sf");
-
-                    b.Property<int>("AmbulatoryMeasurement3Stk")
-                        .HasColumnType("int")
-                        .HasColumnName("a_measurement_3_stk");
-
-                    b.Property<bool>("AmbulatoryMonitor")
-                        .HasColumnType("bit")
-                        .HasColumnName("ambulatory_monitor");
-
-                    b.Property<int>("BorrowedHand")
-                        .HasColumnType("int")
-                        .HasColumnName("b_hand");
-
-                    b.Property<bool>("BorrowedMeasurement1")
-                        .HasColumnType("bit")
-                        .HasColumnName("b_measurement_1");
-
-                    b.Property<int>("BorrowedMeasurement1Dtk")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_1_dtk");
-
-                    b.Property<int>("BorrowedMeasurement1Sf")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_1_sf");
-
-                    b.Property<int>("BorrowedMeasurement1Stk")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_1_stk");
-
-                    b.Property<bool>("BorrowedMeasurement2")
-                        .HasColumnType("bit")
-                        .HasColumnName("b_measurement_2");
-
-                    b.Property<int>("BorrowedMeasurement2Dtk")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_2_dtk");
-
-                    b.Property<int>("BorrowedMeasurement2Sf")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_2_sf");
-
-                    b.Property<int>("BorrowedMeasurement2Stk")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_2_stk");
-
-                    b.Property<bool>("BorrowedMeasurement3")
-                        .HasColumnType("bit")
-                        .HasColumnName("b_measurement_3");
-
-                    b.Property<int>("BorrowedMeasurement3Dtk")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_3_dtk");
-
-                    b.Property<int>("BorrowedMeasurement3Sf")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_3_sf");
-
-                    b.Property<int>("BorrowedMeasurement3Stk")
-                        .HasColumnType("int")
-                        .HasColumnName("b_measurement_3_stk");
-
-                    b.Property<bool>("BorrowedMonitor")
-                        .HasColumnType("bit")
-                        .HasColumnName("borrowed_monitor");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("modified_at");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("physical_examinations_2");
-                });
-
             modelBuilder.Entity("Servier.Pressure.Data.Models.Treatment1Visit", b =>
                 {
                     b.Property<string>("Id")
@@ -1787,10 +1658,6 @@ namespace Servier.Pressure.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("id");
 
-                    b.Property<DateTime?>("ChangeDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("change_date");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
@@ -1803,21 +1670,17 @@ namespace Servier.Pressure.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("fix_combination_mix_unknown");
 
-                    b.Property<bool>("IsChangeDateUnknown")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_change_date_unknown");
-
                     b.Property<bool>("IsChanged")
                         .HasColumnType("bit")
                         .HasColumnName("is_changed");
 
+                    b.Property<bool>("IsIssuingRecorder")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_returned_recorder");
+
                     b.Property<bool>("IsProperlyTerminated")
                         .HasColumnType("bit")
                         .HasColumnName("is_properly_terminated");
-
-                    b.Property<bool>("IsReturnedRecorder")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_returned_recorder");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2")

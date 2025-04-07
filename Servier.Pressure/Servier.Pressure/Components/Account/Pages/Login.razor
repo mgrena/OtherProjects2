@@ -36,9 +36,9 @@
                 </DxFormLayoutItem>
             </DxFormLayout>
         </EditForm>
-        <div class="links-container">
+        @* <div class="links-container">
             <span>Do not have a Account?</span><a href="@(UrlGenerator.GetUrl(ToggledSidebar, NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl })))">Create an account</a>
-        </div>
+        </div> *@
         <div class="links-container">
             <a href="@UrlGenerator.GetUrl("Account/ResendEmailConfirmation", ToggledSidebar)">Znova odoslať potvrdenie e-mailom</a>
             <div class="dot"></div>

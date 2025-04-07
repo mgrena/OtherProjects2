@@ -62,7 +62,8 @@ else
                             <p><i><strong>Poznámka:</strong> Prosím, uvádzajte hodnoty namerané na ruke s vyšším krvným tlakom.</i></p>
                         </Template>
                     </DxFormLayoutItem>
-                    <DxFormLayoutItem Caption="1. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="1. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
                         <DxCheckBox @bind-Checked="@Measurement1" />
                     </DxFormLayoutItem>
@@ -88,6 +89,7 @@ else
                         </Template>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="2. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
                         <DxCheckBox @bind-Checked="@Measurement2" />
@@ -114,6 +116,7 @@ else
                         </Template>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="3. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
                         <DxCheckBox @bind-Checked="@Measurement3" />
@@ -140,7 +143,8 @@ else
                         </Template>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
-                    <DxFormLayoutItem Caption="Priemerný tlak krvi" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@MeasurementStk / @MeasurementDtk mmHg</span></DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="Priemerný tlak krvi" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@MeasurementStk / @MeasurementDtk mmHg</span></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">autom. počítaný</span></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="Priemerný pulz" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@MeasurementSf úderov za minútu</span></DxFormLayoutItem>
                     <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">z meraní č. 2 a 3</span></DxFormLayoutItem>

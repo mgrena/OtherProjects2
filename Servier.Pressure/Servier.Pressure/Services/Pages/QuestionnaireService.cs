@@ -68,6 +68,20 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         };
         return result;
     }
+    public async Task<PhysicalExamination2> GetPhysicalExamination2ByIdAsync(string Id)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var result = await aContext.PhysicalExaminations2.FirstOrDefaultAsync(p => p.Id == Id);
+        result ??= new()
+        {
+            Id = Id,
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now,
+
+        };
+        return result;
+    }
     public async Task<LaboratoryTest> GetLaboratoryTestByIdAsync(string Id)
     {
         using var scope = _scopeFactory.CreateScope();
@@ -330,6 +344,61 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
         }
     }
+    public async Task<OperationResult> SavePhysicalExamination2Async(PhysicalExamination2 entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.PhysicalExaminations2.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry == null)
+        {
+            _logger.LogInformation("The PhysicalExamination2 for patient {user} has been added.", entry.Id);
+            aContext.PhysicalExaminations2.Add(entry);
+        }
+        else
+        {
+            _logger.LogInformation("The PhysicalExamination2 for patient with id {id} has been updated.", entry.Id);
+            existEntry.AmbulatoryMonitor = entry.AmbulatoryMonitor;
+            existEntry.BorrowedMonitor = entry.BorrowedMonitor;
+            existEntry.AmbulatoryHand = entry.AmbulatoryHand;
+            existEntry.AmbulatoryMeasurement1 = entry.AmbulatoryMeasurement1;
+            existEntry.AmbulatoryMeasurement1Stk = entry.AmbulatoryMeasurement1Stk;
+            existEntry.AmbulatoryMeasurement1Dtk = entry.AmbulatoryMeasurement1Dtk;
+            existEntry.AmbulatoryMeasurement1Sf = entry.AmbulatoryMeasurement1Sf;
+            existEntry.AmbulatoryMeasurement2 = entry.AmbulatoryMeasurement2;
+            existEntry.AmbulatoryMeasurement2Stk = entry.AmbulatoryMeasurement2Stk;
+            existEntry.AmbulatoryMeasurement2Dtk = entry.AmbulatoryMeasurement2Dtk;
+            existEntry.AmbulatoryMeasurement2Sf = entry.AmbulatoryMeasurement2Sf;
+            existEntry.AmbulatoryMeasurement3 = entry.AmbulatoryMeasurement3;
+            existEntry.AmbulatoryMeasurement3Stk = entry.AmbulatoryMeasurement3Stk;
+            existEntry.AmbulatoryMeasurement3Dtk = entry.AmbulatoryMeasurement3Dtk;
+            existEntry.AmbulatoryMeasurement3Sf = entry.AmbulatoryMeasurement3Sf;
+            existEntry.BorrowedHand = entry.BorrowedHand;
+            existEntry.BorrowedMeasurement1 = entry.BorrowedMeasurement1;
+            existEntry.BorrowedMeasurement1Stk = entry.BorrowedMeasurement1Stk;
+            existEntry.BorrowedMeasurement1Dtk = entry.BorrowedMeasurement1Dtk;
+            existEntry.BorrowedMeasurement1Sf = entry.BorrowedMeasurement1Sf;
+            existEntry.BorrowedMeasurement2 = entry.BorrowedMeasurement2;
+            existEntry.BorrowedMeasurement2Stk = entry.BorrowedMeasurement2Stk;
+            existEntry.BorrowedMeasurement2Dtk = entry.BorrowedMeasurement2Dtk;
+            existEntry.BorrowedMeasurement2Sf = entry.BorrowedMeasurement2Sf;
+            existEntry.BorrowedMeasurement3 = entry.BorrowedMeasurement3;
+            existEntry.BorrowedMeasurement3Stk = entry.BorrowedMeasurement3Stk;
+            existEntry.BorrowedMeasurement3Dtk = entry.BorrowedMeasurement3Dtk;
+            existEntry.BorrowedMeasurement3Sf = entry.BorrowedMeasurement3Sf;
+            existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
     public async Task<OperationResult> SaveLaboratoryTestAsync(LaboratoryTest entry)
     {
         using var scope = _scopeFactory.CreateScope();
@@ -387,6 +456,9 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.IsChanged = entry.IsChanged;
             existEntry.FixCombination3Unknown = entry.FixCombination3Unknown;
             existEntry.FixCombinationMixUnknown = entry.FixCombinationMixUnknown;
+            existEntry.IsOngoing = entry.IsOngoing;
+            existEntry.IsIssuingRecorder = entry.IsIssuingRecorder;
+            existEntry.IsPressureGauge = entry.IsPressureGauge;
             existEntry.ModifiedAt = DateTime.Now;
         }
 
@@ -414,7 +486,14 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         else
         {
             _logger.LogInformation("The Treatment2Visit for patient {id} has been updated.", entry.Id);
+            existEntry.VisitDate = entry.VisitDate;
+            existEntry.IsReturnedRecorder = entry.IsReturnedRecorder;
+            existEntry.SubjectEvaluation = entry.SubjectEvaluation;
+            existEntry.IsProperlyTerminated = entry.IsProperlyTerminated;
+            existEntry.TerminationReason = entry.TerminationReason;
             existEntry.IsChanged = entry.IsChanged;
+            existEntry.ChangeDate = entry.ChangeDate;
+            existEntry.IsChangeDateUnknown = entry.IsChangeDateUnknown;
             existEntry.FixCombination3Unknown = entry.FixCombination3Unknown;
             existEntry.FixCombinationMixUnknown = entry.FixCombinationMixUnknown;
             existEntry.ModifiedAt = DateTime.Now;

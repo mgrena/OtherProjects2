@@ -24,6 +24,16 @@ public class AnswerWrapper
     public AnswerEnum Value { get; set; }
     public required string DisplayText { get; set; }
 }
+public class EvaluationWrapper
+{
+    public EvaluationEnum Value { get; set; }
+    public required string DisplayText { get; set; }
+}
+public class TerminationReasonWrapper
+{
+    public TerminationReasonEnum Value { get; set; }
+    public required string DisplayText { get; set; }
+}
 
 public static class EnumExtensions
 {

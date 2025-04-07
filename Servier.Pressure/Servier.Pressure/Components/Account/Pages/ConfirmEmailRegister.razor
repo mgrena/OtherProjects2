@@ -1,5 +1,6 @@
-﻿@page "/Account/ResetPassword"
+﻿@page "/Account/ConfirmEmailRegister"
 @rendermode InteractiveServer
+
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using Microsoft.AspNetCore.Identity
@@ -8,14 +9,16 @@
 
 @inject NavigationManager NavigationManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Obnoviť heslo</PageTitle>
+<PageTitle>Potvrdenie e-mail adresy</PageTitle>
 
 <div class="main-content">
     <div class="block-content">
         <div class="title">
-            <div class="title-header-text">Obnoviť heslo</div>
-            <div class="title-content-text">Obnovte svoje heslo.</div>
+            <div class="title-header-text">Vitajte v projekte MoveOn</div>
+            <div class="title-content-text">@statusMessage</div>
+            <div class="title-content-text">Prosím, zadajte svoje heslo (heslo musí byť minimálne 3 znaky dlhé)</div>
         </div>
         <StatusMessage Message="@Message" />
         <EditForm Model="Input" FormName="resend-email-confirmation" OnValidSubmit="OnValidSubmitAsync" method="post" Context="resend">
@@ -24,7 +27,7 @@
             <input type="hidden" name="Input.Code" value="@Input.Code" />
             <DxFormLayout CaptionPosition=@CaptionPosition.Vertical>
                 <DxFormLayoutItem Caption="E-mail" ColSpanMd="12" BeginRow="true">
-                    <DxTextBox ShowValidationIcon="true" @bind-Text="Input.Email" />
+                    <DxTextBox @bind-Text="Input.Email" ReadOnly="true" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Heslo" ColSpanMd="12" BeginRow="true">
                     <DxTextBox ShowValidationIcon="true" @bind-Text="Input.Password" Password="true" />
@@ -33,53 +36,79 @@
                     <DxTextBox ShowValidationIcon="true" @bind-Text="Input.ConfirmPassword" Password="true" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem ColSpanMd="12" BeginRow="true">
-                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Obnoviť"></DxButton>
+                    <DxButton CssClass="w-100" SubmitFormOnClick="true" Text="Nastaviť"></DxButton>
                 </DxFormLayoutItem>
             </DxFormLayout>
         </EditForm>
         <div class="links-container">
-            <span>Späť na <a href="Account/Login">stránku prihlásenia</a>?</span>
+            <span>Vrátiť sa na <a href="Account/Login">Prihlasovaciu stránku</a>?</span>
         </div>
     </div>
 </div>
 
 @code {
+    private string? statusMessage;
     private IEnumerable<IdentityError>? identityErrors;
 
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
 
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery]
+    private string? UserId { get; set; }
+
     [SupplyParameterFromQuery]
     private string? Code { get; set; }
 
-    private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+    private string? Message => identityErrors is null ? null : $"Chyba: {string.Join(", ", identityErrors.Select(error => error.Description))}";
 
-    protected override void OnInitialized() {
-        if(Code is null) {
-            NavigationManager.NavigateTo("Account/InvalidPasswordReset");
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserId is null || Code is null)
+        {
+            RedirectManager.RedirectTo("");
         }
 
-        Input.Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode("test"));
+        var user = await UserManager.FindByIdAsync(UserId);
+        if (user is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            statusMessage = $"Chyba pri načítavaní používateľa s ID {UserId}";
+        }
+        else
+        {
+            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
+            var result = await UserManager.ConfirmEmailAsync(user, code);
+            statusMessage = result.Succeeded ? "Ďakujeme za potvrdenie vášho e-mailu." : "Chyba pri potvrdení vášho e-mailu.";
+
+            Input.Code = code;
+            Input.Email = user!.Email!;
+        }
     }
 
-    private async Task OnValidSubmitAsync() {
+    private async Task OnValidSubmitAsync()
+    {
         var user = await UserManager.FindByEmailAsync(Input.Email);
-        if(user is null) {
+        if (user is null)
+        {
             // Don't reveal that the user does not exist
             NavigationManager.NavigateTo("Account/ResetPasswordConfirmation");
         }
 
-        var result = await UserManager.ResetPasswordAsync(user, Input.Code, Input.Password);
-        if(result.Succeeded) {
+        var code = await UserManager.GeneratePasswordResetTokenAsync(user);
+        var result = await UserManager.ResetPasswordAsync(user!, code, Input.Password);
+        if (result.Succeeded)
+        {
             NavigationManager.NavigateTo("Account/ResetPasswordConfirmation");
         }
 
         identityErrors = result.Errors;
     }
 
-    private sealed class InputModel {
-        [Required]
-        [EmailAddress]
+    private sealed class InputModel
+    {
         public string Email { get; set; } = "";
 
         [Required]

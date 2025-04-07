@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Servier.Pressure.Data;
 
@@ -11,9 +12,11 @@ using Servier.Pressure.Data;
 namespace Servier.Pressure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250407072719_PhysicalExamination2")]
+    partial class PhysicalExamination2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1787,10 +1790,6 @@ namespace Servier.Pressure.Migrations
                         .HasColumnType("nvarchar")
                         .HasColumnName("id");
 
-                    b.Property<DateTime?>("ChangeDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("change_date");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_at");
@@ -1802,10 +1801,6 @@ namespace Servier.Pressure.Migrations
                     b.Property<bool>("FixCombinationMixUnknown")
                         .HasColumnType("bit")
                         .HasColumnName("fix_combination_mix_unknown");
-
-                    b.Property<bool>("IsChangeDateUnknown")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_change_date_unknown");
 
                     b.Property<bool>("IsChanged")
                         .HasColumnType("bit")

@@ -65,6 +65,8 @@ else
             var entity = await QuestionnaireService.GetTreatment1VisitAsync(patientId);
             if (entity != null)
                 entity.IsChanged = Treatment1Visit!.IsChanged;
+            else
+                entity = Treatment1Visit;
             var result = await QuestionnaireService.SaveTreatment1VisitAsync(entity!);
             if (!result.Success)
                 Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);

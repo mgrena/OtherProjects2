@@ -1,0 +1,625 @@
+﻿@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+@if (PhysicalExamination == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <EditForm Model="@PhysicalExamination" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Fyzikálne vyšetrenie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutGroup Caption="Použitý tlakomer (možnosť zadať merania na oboch zariadeniach)" ColSpanMd="12">
+                    <DxFormLayoutItem Caption="lekára / ambulantný (na oddelení/klinike)" ColSpanMd="6" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@AmbulatoryMonitor" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="zapožičaný subjektu" ColSpanMd="6" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@BorrowedMonitor" />
+                    </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+                @if (AmbulatoryMonitor)
+                {
+                    <DxFormLayoutGroup Caption="Tlak krvi a pulz - ambulantný tlakomer (merané na návšteve 2)" ColSpanMd="12">
+                        <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                            <Template>
+                                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Hands" @bind-Value="@AmbulatoryHand" />
+                                <p><i><strong>Poznámka:</strong> Prosím, uvádzajte hodnoty namerané na ruke s vyšším krvným tlakom.</i></p>
+                            </Template>
+                        </DxFormLayoutItem>
+                            <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                            <DxFormLayoutItem Caption="1. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                            <DxCheckBox @bind-Checked="@AmbulatoryMeasurement1" />
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement1Stk" MinValue="0" Increment="5" />
+                                    <span>/</span>
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement1Dtk" MinValue="0" Increment="5" />
+                                    <span> mmHg</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement1Sf" MinValue="0" />
+                                    <span> úderov za minútu</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="2. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                            <DxCheckBox @bind-Checked="@AmbulatoryMeasurement2" />
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement2Stk" MinValue="0" Increment="5" />
+                                    <span>/</span>
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement2Dtk" MinValue="0" Increment="5" />
+                                    <span> mmHg</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement2Sf" MinValue="0" />
+                                    <span> úderov za minútu</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="3. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                            <DxCheckBox @bind-Checked="@AmbulatoryMeasurement3" />
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement3Stk" MinValue="0" Increment="5" />
+                                    <span>/</span>
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement3Dtk" MinValue="0" Increment="5" />
+                                    <span> mmHg</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement3Sf" MinValue="0" />
+                                    <span> úderov za minútu</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="Priemerný tlak krvi" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@AmbulatoryMeasurementStk / @AmbulatoryMeasurementDtk mmHg</span></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">autom. počítaný</span></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="Priemerný pulz" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@AmbulatoryMeasurementSf úderov za minútu</span></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">z meraní č. 2 a 3</span></DxFormLayoutItem>
+                    </DxFormLayoutGroup>
+                }
+                @if (BorrowedMonitor)
+                {
+                    <DxFormLayoutGroup Caption="Tlak krvi a pulz - tlakomer zapožičaný subjektu (merané na návšteve 2)" ColSpanMd="12">
+                        <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                            <Template>
+                                <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Hands" @bind-Value="@BorrowedHand" />
+                                <p><i><strong>Poznámka:</strong> Prosím, uvádzajte hodnoty namerané na ruke s vyšším krvným tlakom.</i></p>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="1. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                            <DxCheckBox @bind-Checked="@BorrowedMeasurement1" />
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement1Stk" MinValue="0" Increment="5" />
+                                    <span>/</span>
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement1Dtk" MinValue="0" Increment="5" />
+                                    <span> mmHg</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement1Sf" MinValue="0" />
+                                    <span> úderov za minútu</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="2. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                            <DxCheckBox @bind-Checked="@BorrowedMeasurement2" />
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement2Stk" MinValue="0" Increment="5" />
+                                    <span>/</span>
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement2Dtk" MinValue="0" Increment="5" />
+                                    <span> mmHg</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement2Sf" MinValue="0" />
+                                    <span> úderov za minútu</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="3. meranie" ColSpanMd="8" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
+                            <DxCheckBox @bind-Checked="@BorrowedMeasurement3" />
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement3Stk" MinValue="0" Increment="5" />
+                                    <span>/</span>
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement3Dtk" MinValue="0" Increment="5" />
+                                    <span> mmHg</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <Template>
+                                <div class="d-flex align-items-center gap-2">
+                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement3Sf" MinValue="0" />
+                                    <span> úderov za minútu</span>
+                                </div>
+                            </Template>
+                        </DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
+                        <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="Priemerný tlak krvi" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@BorrowedMeasurementStk / @BorrowedMeasurementDtk mmHg</span></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">autom. počítaný</span></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="Priemerný pulz" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@BorrowedMeasurementSf úderov za minútu</span></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">z meraní č. 2 a 3</span></DxFormLayoutItem>
+                    </DxFormLayoutGroup>
+                }
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+}
+
+@code {
+    [Parameter]
+    public required string patientId { get; set; }
+
+    private PhysicalExamination2? PhysicalExamination { get; set; }
+    private IEnumerable<string> Hands = new[] { "pravá ruka", "ľavá ruka" };
+    private string? Message;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            PhysicalExamination = await QuestionnaireService.GetPhysicalExamination2ByIdAsync(patientId);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private System.Timers.Timer? debouncePETimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debouncePETimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debouncePETimer = new System.Timers.Timer(1000);
+        debouncePETimer.AutoReset = false;
+        debouncePETimer.Elapsed += async (s, e) =>
+        {
+            var result = await QuestionnaireService.SavePhysicalExamination2Async(PhysicalExamination!);
+            if (!result.Success)
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debouncePETimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+
+    private bool AmbulatoryMonitor
+    {
+        get => PhysicalExamination!.AmbulatoryMonitor;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMonitor != value)
+            {
+                PhysicalExamination!.AmbulatoryMonitor = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private string AmbulatoryHand
+    {
+        get => (PhysicalExamination!.AmbulatoryHand == HandEnum.right) ? "pravá ruka" : "ľavá ruka";
+        set
+        {
+            HandEnum hand = (value == "pravá ruka") ? HandEnum.right : HandEnum.left;
+            if (PhysicalExamination!.AmbulatoryHand != hand)
+            {
+                PhysicalExamination!.AmbulatoryHand = hand;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool AmbulatoryMeasurement1
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement1;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement1 != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement1 = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement1Stk
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement1Stk;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement1Stk != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement1Stk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement1Dtk
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement1Dtk;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement1Dtk != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement1Dtk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement1Sf
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement1Sf;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement1Sf != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement1Sf = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool AmbulatoryMeasurement2
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement2;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement2 != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement2 = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement2Stk
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement2Stk;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement2Stk != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement2Stk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement2Dtk
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement2Dtk;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement2Dtk != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement2Dtk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement2Sf
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement2Sf;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement2Sf != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement2Sf = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool AmbulatoryMeasurement3
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement3;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement3 != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement3 = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement3Stk
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement3Stk;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement3Stk != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement3Stk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement3Dtk
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement3Dtk;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement3Dtk != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement3Dtk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int AmbulatoryMeasurement3Sf
+    {
+        get => PhysicalExamination!.AmbulatoryMeasurement3Sf;
+        set
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement3Sf != value)
+            {
+                PhysicalExamination!.AmbulatoryMeasurement3Sf = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private string AmbulatoryMeasurementStk { get => ((PhysicalExamination!.AmbulatoryMeasurement1Stk + PhysicalExamination!.AmbulatoryMeasurement2Stk + PhysicalExamination!.AmbulatoryMeasurement3Stk) / 3m).ToString("F2"); }
+    private string AmbulatoryMeasurementDtk { get => ((PhysicalExamination!.AmbulatoryMeasurement1Dtk + PhysicalExamination!.AmbulatoryMeasurement2Dtk + PhysicalExamination!.AmbulatoryMeasurement3Dtk) / 3m).ToString("F2"); }
+    private string AmbulatoryMeasurementSf { get => ((PhysicalExamination!.AmbulatoryMeasurement2Sf + PhysicalExamination!.AmbulatoryMeasurement3Sf) / 2m).ToString("F2"); }
+
+    private bool BorrowedMonitor
+    {
+        get => PhysicalExamination!.BorrowedMonitor;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMonitor != value)
+            {
+                PhysicalExamination!.BorrowedMonitor = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private string BorrowedHand
+    {
+        get => (PhysicalExamination!.BorrowedHand == HandEnum.right) ? "pravá ruka" : "ľavá ruka";
+        set
+        {
+            HandEnum hand = (value == "pravá ruka") ? HandEnum.right : HandEnum.left;
+            if (PhysicalExamination!.BorrowedHand != hand)
+            {
+                PhysicalExamination!.BorrowedHand = hand;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool BorrowedMeasurement1
+    {
+        get => PhysicalExamination!.BorrowedMeasurement1;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement1 != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement1 = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement1Stk
+    {
+        get => PhysicalExamination!.BorrowedMeasurement1Stk;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement1Stk != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement1Stk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement1Dtk
+    {
+        get => PhysicalExamination!.BorrowedMeasurement1Dtk;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement1Dtk != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement1Dtk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement1Sf
+    {
+        get => PhysicalExamination!.BorrowedMeasurement1Sf;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement1Sf != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement1Sf = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool BorrowedMeasurement2
+    {
+        get => PhysicalExamination!.BorrowedMeasurement2;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement2 != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement2 = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement2Stk
+    {
+        get => PhysicalExamination!.BorrowedMeasurement2Stk;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement2Stk != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement2Stk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement2Dtk
+    {
+        get => PhysicalExamination!.BorrowedMeasurement2Dtk;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement2Dtk != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement2Dtk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement2Sf
+    {
+        get => PhysicalExamination!.BorrowedMeasurement2Sf;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement2Sf != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement2Sf = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool BorrowedMeasurement3
+    {
+        get => PhysicalExamination!.BorrowedMeasurement3;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement3 != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement3 = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement3Stk
+    {
+        get => PhysicalExamination!.BorrowedMeasurement3Stk;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement3Stk != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement3Stk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement3Dtk
+    {
+        get => PhysicalExamination!.BorrowedMeasurement3Dtk;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement3Dtk != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement3Dtk = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private int BorrowedMeasurement3Sf
+    {
+        get => PhysicalExamination!.BorrowedMeasurement3Sf;
+        set
+        {
+            if (PhysicalExamination!.BorrowedMeasurement3Sf != value)
+            {
+                PhysicalExamination!.BorrowedMeasurement3Sf = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private string BorrowedMeasurementStk { get => ((PhysicalExamination!.BorrowedMeasurement1Stk + PhysicalExamination!.BorrowedMeasurement2Stk + PhysicalExamination!.BorrowedMeasurement3Stk) / 3m).ToString("F2"); }
+    private string BorrowedMeasurementDtk { get => ((PhysicalExamination!.BorrowedMeasurement1Dtk + PhysicalExamination!.BorrowedMeasurement2Dtk + PhysicalExamination!.BorrowedMeasurement3Dtk) / 3m).ToString("F2"); }
+    private string BorrowedMeasurementSf { get => ((PhysicalExamination!.BorrowedMeasurement2Sf + PhysicalExamination!.BorrowedMeasurement3Sf) / 2m).ToString("F2"); }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

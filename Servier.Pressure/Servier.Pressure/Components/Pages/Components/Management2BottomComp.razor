@@ -1,0 +1,134 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Helpers
+@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+@if (Treatment2Visit == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <br />
+    <EditForm Model="@Treatment2Visit" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Koniec návštevy" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Subjekt riadne ukončil účasť?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@YesNo" @bind-Value="@IsProperlyTerminated" />
+                </DxFormLayoutItem>
+                @if (!Treatment2Visit!.IsProperlyTerminated)
+                {
+                    <DxFormLayoutItem Caption="Vydanie záznamníku domáceho monitorovania tlaku subjektu?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxRadioGroup Layout="@RadioGroupLayout.Vertical" Items="@Reasons" @bind-Value="@TerminationReason" TextFieldName="DisplayText" ValueFieldName="Value" />
+                    </DxFormLayoutItem>
+                }
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+}
+
+@code {
+    [Parameter]
+    public required string patientId { get; set; }
+
+    private Treatment2Visit? Treatment2Visit { get; set; }
+    private IEnumerable<string> YesNo = new[] { "áno", "nie" };
+    private IEnumerable<TerminationReasonWrapper> Reasons { get; set; } = [];
+    private string? Message;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Reasons = Enum.GetValues<TerminationReasonEnum>().OfType<TerminationReasonEnum>().Select(i => GetTerminationReasonWrapper(i));
+
+            var entity = await QuestionnaireService.GetTreatment2VisitAsync(patientId);
+            if (entity != null)
+                Treatment2Visit = entity;
+            else
+                Treatment2Visit = new() { Id = patientId, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var entity = await QuestionnaireService.GetTreatment2VisitAsync(patientId);
+            if (entity != null)
+            {
+                entity.IsProperlyTerminated = Treatment2Visit!.IsProperlyTerminated;
+                entity.TerminationReason = Treatment2Visit!.TerminationReason;
+            }
+            else
+                entity = Treatment2Visit;
+            var result = await QuestionnaireService.SaveTreatment2VisitAsync(entity!);
+            if (!result.Success)
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+    private TerminationReasonWrapper GetTerminationReasonWrapper(TerminationReasonEnum item)
+    {
+        return new TerminationReasonWrapper() { Value = item, DisplayText = item.GetAttribute<DisplayAttribute>()?.Name ?? item.ToString() };
+    }
+
+    private string IsProperlyTerminated
+    {
+        get => (Treatment2Visit!.IsProperlyTerminated) ? "áno" : "nie";
+        set
+        {
+            bool isOngoing = value == "áno";
+            if (Treatment2Visit!.IsProperlyTerminated != isOngoing)
+            {
+                Treatment2Visit!.IsProperlyTerminated = isOngoing;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private TerminationReasonEnum TerminationReason
+    {
+        get => Treatment2Visit!.TerminationReason;
+        set
+        {
+            if (Treatment2Visit!.TerminationReason != value)
+            {
+                Treatment2Visit!.TerminationReason = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

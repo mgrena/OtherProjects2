@@ -1,0 +1,141 @@
+﻿@using Servier.Pressure.Components.Account.Shared
+@using Servier.Pressure.Data.Models
+@using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Services.Pages
+
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject QuestionnaireService QuestionnaireService
+@inject IToastNotificationService ToastService
+
+@if (Treatment2Visit == null)
+{
+    <p><em>Načítavanie...</em></p>
+}
+else
+{
+    <EditForm Model="@Treatment2Visit" Context="EditFormContext">
+        <DxFormLayout CssClass="w-100">
+            <DxFormLayoutGroup Caption="Zmena antihypertenzívnej liečby od návštevy 1" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Zmena liečby" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Changes" @bind-Value="@CurrentChange" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Dátum návštevy" ColSpanMd="8" CaptionCssClass="caption-styleH1">
+                    <DxDateEdit @bind-Date="@ChangeDate" MinDate="@MinDate" ShowClearButton="true" ShowTodayButton="true" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="neznámy" ColSpanMd="4" CaptionCssClass="caption-styleH1">
+                    <DxCheckBox @bind-Checked="@IsChangeDateUnknown" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <p><i><strong>Poznámka:</strong> V nižšie uvedenom zozname prosím upravte informácie o liečbe.</i></p>
+                </DxFormLayoutItem>
+            </DxFormLayoutGroup>
+        </DxFormLayout>
+    </EditForm>
+    <StatusMessage Message="@Message" />
+}
+
+@code {
+    [Parameter]
+    public required string patientId { get; set; }
+
+    private Treatment2Visit? Treatment2Visit { get; set; }
+    private DateTime MinDate { get; set; } = new DateTime(2025, 3, 1);
+    private IEnumerable<string> Changes = new[] { "nie", "áno, prosím špecifikujte dátum zmeny a užívanú liečbu" };
+    private string? Message;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var entity = await QuestionnaireService.GetTreatment2VisitAsync(patientId);
+            if (entity != null)
+                Treatment2Visit = entity;
+            else
+                Treatment2Visit = new() { Id = patientId, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var entity = await QuestionnaireService.GetTreatment2VisitAsync(patientId);
+            if (entity != null)
+            {
+                entity.IsChanged = Treatment2Visit!.IsChanged;
+                entity.ChangeDate = Treatment2Visit!.ChangeDate;
+                entity.IsChangeDateUnknown = Treatment2Visit!.IsChangeDateUnknown;
+            }
+            else
+                entity = Treatment2Visit;
+            var result = await QuestionnaireService.SaveTreatment2VisitAsync(entity!);
+            if (!result.Success)
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
+
+    private string CurrentChange
+    {
+        get => (Treatment2Visit!.IsChanged) ? "áno, prosím špecifikujte dátum zmeny a užívanú liečbu" : "nie";
+        set
+        {
+            bool isChanged = value == "áno, prosím špecifikujte dátum zmeny a užívanú liečbu";
+            if (Treatment2Visit!.IsChanged != isChanged)
+            {
+                Treatment2Visit!.IsChanged = isChanged;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private DateTime? ChangeDate
+    {
+        get => Treatment2Visit!.ChangeDate;
+        set
+        {
+            if (Treatment2Visit!.ChangeDate != value)
+            {
+                Treatment2Visit!.ChangeDate = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool IsChangeDateUnknown
+    {
+        get => Treatment2Visit!.IsChangeDateUnknown;
+        set
+        {
+            if (Treatment2Visit!.IsChangeDateUnknown != value)
+            {
+                Treatment2Visit!.IsChangeDateUnknown = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+
+    private void ModifyToast()
+    {
+        ToastService.ShowToast(new ToastOptions
+            {
+                ProviderName = "Overview",
+                Title = "Údaje úspešne aktualizované",
+                ThemeMode = ToastThemeMode.Saturated,
+                RenderStyle = ToastRenderStyle.Success,
+            });
+    }
+}

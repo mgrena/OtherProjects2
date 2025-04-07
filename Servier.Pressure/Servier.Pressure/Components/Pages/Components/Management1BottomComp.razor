@@ -20,8 +20,8 @@ else
     <br />
     <EditForm Model="@Treatment1Visit" Context="EditFormContext">
         <DxFormLayout CssClass="w-100">
-            <DxFormLayoutGroup Caption="Pokračuje subjekt v účasti?" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-                <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+            <DxFormLayoutGroup Caption="Koniec návštevy" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutItem Caption="Pokračuje subjekt v účasti?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@YesNo" @bind-Value="@IsOngoing" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Vydanie záznamníku domáceho monitorovania tlaku subjektu?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
@@ -78,6 +78,8 @@ else
                 entity.IsIssuingRecorder = Treatment1Visit!.IsIssuingRecorder;
                 entity.IsPressureGauge = Treatment1Visit!.IsPressureGauge;
             }
+            else
+                entity = Treatment1Visit;
             var result = await QuestionnaireService.SaveTreatment1VisitAsync(entity!);
             if (!result.Success)
                 Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);

@@ -23,14 +23,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     // introduction
     public DbSet<InformedConsentCompetence> InformedConsentCompetences { get; set; }
-    public DbSet<DemographyHistory> DemographyHistories { get; set; }
-    public DbSet<PhysicalExamination1> PhysicalExaminations1 { get; set; }
-    public DbSet<LaboratoryTest> LaboratoryTests { get; set; }
     public DbSet<TreatmentBefore> TreatmentsBefore { get; set; }
     // first visit
     public DbSet<Treatment1Visit> Treatments1Visit { get; set; }
+    public DbSet<DemographyHistory> DemographyHistories { get; set; }
+    public DbSet<PhysicalExamination1> PhysicalExaminations1 { get; set; }
+    public DbSet<LaboratoryTest> LaboratoryTests { get; set; }
     // second visit
     public DbSet<Treatment2Visit> Treatments2Visit { get; set; }
+    public DbSet<PhysicalExamination2> PhysicalExaminations2 { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
