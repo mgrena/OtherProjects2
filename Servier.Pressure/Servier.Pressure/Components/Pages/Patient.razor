@@ -57,14 +57,14 @@
             SelectionMode="GridSelectionMode.Single"
             AllowSelectRowByClick="true">
                 <Columns>
-                    <DxGridDataColumn FieldName="PatientCode" Caption="Pacient ID" ReadOnly />
+                    <DxGridDataColumn FieldName="PatientCode" Caption="Pacient ID" DataRowEditorVisible = "false" />
                     <DxGridDataColumn FieldName="PatientName" Caption="Pacient" />
-                    <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" ReadOnly />
+                    <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" DataRowEditorVisible="false" />
                     @if (isAdmin)
                     {
-                        <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" />
+                        <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" DataRowEditorVisible="false" />
                     }
-                    <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" ReadOnly />
+                    <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" DataRowEditorVisible="false" />
                     <DxGridCommandColumn Width="80px" Caption="Akcie" NewButtonVisible="false">
                         <CellDisplayTemplate Context="gridContext">
                             @{
