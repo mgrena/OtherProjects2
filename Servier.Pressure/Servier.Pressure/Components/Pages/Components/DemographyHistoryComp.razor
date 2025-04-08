@@ -1,6 +1,8 @@
-﻿@using Servier.Pressure.Components.Account.Shared
+﻿@using System.ComponentModel.DataAnnotations
+@using Servier.Pressure.Components.Account.Shared
 @using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Helpers
 @using Servier.Pressure.Services.Pages
 
 @attribute [StreamRendering(true)]
@@ -23,7 +25,7 @@ else
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Gender" @bind-Value="@IsMan" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Rok narodenia" ColSpanMd="12" CaptionCssClass="caption-styleH1">
-                    <DxSpinEdit @bind-Value="@Age" Min="1900" Max="@DateTime.Now.Year" />
+                    <DxSpinEdit @bind-Value="@Age" MinValue="1900" MaxValue="@DateTime.Now.Year" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Fajčenie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@SmokerOptions" @bind-Value="@Smoker" TextFieldName="DisplayText" ValueFieldName="Value" />
@@ -33,37 +35,88 @@ else
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
             <DxFormLayoutGroup Caption="Anamnéza" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-                <DxFormLayoutItem Caption="Artériová hypertenzia - rok stanovenia diagnózy" ColSpanMd="6" CaptionCssClass="caption-styleH1">
-                    <DxDateEdit @bind-Date="@DiagnosisYear" />
-                </DxFormLayoutItem>
-                <DxFormLayoutItem ColSpanMd="6">
-                    <DxCheckBox @bind-Checked="@DiagnosisYearUnknown">neznámy</DxCheckBox>
-                </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Rok zahájenia liečby" ColSpanMd="6" CaptionCssClass="caption-styleH1">
-                    <DxDateEdit @bind-Date="@TreatmentYear" />
-                </DxFormLayoutItem>
-                <DxFormLayoutItem ColSpanMd="6">
-                    <DxCheckBox @bind-Checked="@TreatmentYearUnknown">neznámy</DxCheckBox>
-                </DxFormLayoutItem>
-
-                <DxFormLayoutItem Caption="Iné relevantné diagnózy a stavy" ColSpanMd="12" CaptionCssClass="caption-styleH1">
-                    <DxCheckBox @bind-Checked="@DiagnosisNone">žiadne</DxCheckBox>
-                    <DxCheckBox @bind-Checked="@DiagnosisDiabetes">Diabetes mellitus</DxCheckBox>
-                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH2" Visible="@DiagnosisDiabetes">
-                        <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" @bind-Value="@DiagnosisDiabetesType" TextFieldName="DisplayText" ValueFieldName="Value" />
+                <DxFormLayoutGroup Caption="Artériová hypertenzia" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                    <DxFormLayoutItem Caption="rok stanovenia diagnózy" ColSpanMd="6" CaptionCssClass="caption-styleH1">
+                        <DxSpinEdit @bind-Value="@DiagnosisYear" MinValue="1900" MaxValue="@DateTime.Now.Year" />
                     </DxFormLayoutItem>
-                    <DxCheckBox @bind-Checked="@DiagnosisDyslipidemia">Dyslipidémia</DxCheckBox>
-                    <DxCheckBox @bind-Checked="@DiagnosisICHS">Ischemická choroba srdca</DxCheckBox>
-                    <DxCheckBox @bind-Checked="@DiagnosisHeartFailure">Srdcové zlyhanie</DxCheckBox>
-                    <DxCheckBox @bind-Checked="@DiagnosisFibrillation">Fibrilácia predsiení</DxCheckBox>
-                    <DxCheckBox @bind-Checked="@DiagnosisStroke">Cievna mozgová príhoda</DxCheckBox>
-                    <DxCheckBox @bind-Checked="@DiagnosisArterialD">Periférne artériové ochorenie</DxCheckBox>
-                    <DxCheckBox @bind-Checked="@DiagnosisInsufficiency">Chronická venózna insuficiencia</DxCheckBox>
-                    <DxCheckBox @bind-Checked="@DiagnosisKidneyD">Chronické ochorenie obličiek</DxCheckBox>
-                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH2" Visible="@DiagnosisKidneyD">
+                    <DxFormLayoutItem ColSpanMd="6">
+                        <DxCheckBox @bind-Checked="@DiagnosisYearUnknown">neznámy</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="rok zahájenia liečby" ColSpanMd="6" CaptionCssClass="caption-styleH1">
+                        <DxSpinEdit @bind-Value="@TreatmentYear" MinValue="1900" MaxValue="@DateTime.Now.Year" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="6">
+                        <DxCheckBox @bind-Checked="@TreatmentYearUnknown">neznámy</DxCheckBox>
+                    </DxFormLayoutItem>
+                </DxFormLayoutGroup>
+                <DxFormLayoutGroup Caption="Iné relevantné diagnózy a stavy prítomné už pred zaradením do štúdie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <p><strong>Z uvedených možností prosím vyberte všetky relevantné diagnózy a stavy prítomné už pred zaradením subjektu do štúdie.</strong></p>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisNone">žiadne</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="6" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisDiabetes">Diabetes mellitus</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="6" Caption="prosím špecifikujte" CaptionCssClass="caption-styleH1" Visible="@DiagnosisDiabetes">
+                        <DxComboBox Data="@DiabetesTypes" @bind-Value="@DiagnosisDiabetesType" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="6" CaptionCssClass="caption-styleH1" BeginRow="true">
+                        <DxCheckBox @bind-Checked="@DiagnosisDyslipidemia">Dyslipidémia</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@DiagnosisDyslipidemia">
+                        <DxComboBox Data="@DyslipidemiaDrugs" @bind-Value="@DiagnosisDyslipidemiaDrug" TextFieldName="Name" ValueFieldName="Id" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisICHS">ischemická choroba srdca, prosím vyberte príslušné možnosti</DxCheckBox>
+                    </DxFormLayoutItem>
+
+                    <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS" />
+                    <DxFormLayoutItem ColSpanMd="11" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS">
+                        <DxCheckBox @bind-Checked="@DiagnosisICHSInfarction">predchádzajúci infarkt myokardu</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS" />
+                    <DxFormLayoutItem ColSpanMd="11" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS">
+                        <DxCheckBox @bind-Checked="@DiagnosisICHSAngina">angina pectoris</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1" BeginRow="true" Visible="@DiagnosisICHS" />
+                    <DxFormLayoutItem ColSpanMd="5" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS">
+                        <DxCheckBox @bind-Checked="@DiagnosisICHSAngiography">pozitívny angiografický nález(y)</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@IsAngiopraphy">
+                        <DxComboBox Data="@AngiographyOptions" @bind-Value="@DiagnosisICHSAngiographyType" TextFieldName="DisplayText" ValueFieldName="Value" />
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1" BeginRow="true" Visible="@DiagnosisICHS" />
+                    <DxFormLayoutItem ColSpanMd="5" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS">
+                        <DxCheckBox @bind-Checked="@DiagnosisICHSRevascularization">predchádzajúca re-vaskularizácia</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@IsRevascularization">
+                        <DxComboBox Data="@RevascularizationOptions" @bind-Value="@DiagnosisICHSRevascularizationType" TextFieldName="DisplayText" ValueFieldName="Value" />
+                    </DxFormLayoutItem>
+
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisHeartFailure">srdcové zlyhanie</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisFibrillation">fibrilácia predsiení</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisStroke">predchádzajúca cievna mozková príhoda a/alebo TIA</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisArterialD">periférne artériové ochorenie (PAD)</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisInsufficiency">chronická venózna insuficiencia</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem ColSpanMd="6" CaptionCssClass="caption-styleH1">
+                        <DxCheckBox @bind-Checked="@DiagnosisKidneyD">chronické ochorenie obličiek</DxCheckBox>
+                    </DxFormLayoutItem>
+                    <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@DiagnosisKidneyD">
                         <DxComboBox Data="@KidneyDiseaseOptions" @bind-Value="@DiagnosisKidneyDType" TextFieldName="DisplayText" ValueFieldName="Value" />
                     </DxFormLayoutItem>
-                </DxFormLayoutItem>
+                </DxFormLayoutGroup>
             </DxFormLayoutGroup>
         </DxFormLayout>
     </EditForm>
@@ -74,40 +127,6 @@ else
     public required string patientId { get; set; }
     public Data.Models.DemographyHistory? DemographyHistoryQuestionaire { get; set; }
     private string? Message;
-
-    // public Data.Models.DemographyHistory? DemographyHistoryQuestionary { get; set; } = new()
-    //     {
-    //         Id = string.Empty,
-    //         IsMan = true,
-    //         Age = DemographyHistoryQuestionary.Age,
-    //         Smoker = true,
-    //         Education = true,
-    //         DiagnosisYear = true,
-    //         DiagnosisYearUnknown = true,
-    //         TreatmentYear = true,
-    //         TreatmentYearUnknown = true,
-    //         DiagnosisNone = true,
-    //         DiagnosisDiabetes = true,
-    //         DiagnosisDiabetesType = true,
-    //         DiagnosisDyslipidemia = true,
-    //         DiagnosisDyslipidemiaDrug = true,
-    //         DiagnosisICHSInfarction = true,
-    //         DiagnosisICHSAngina = true,
-    //         DiagnosisICHSAngiography = true,
-    //         DiagnosisICHSAngiographyType = true,
-    //         DiagnosisICHSRevascularization = true,
-    //         DiagnosisICHSRevascularizationType = true,
-    //         DiagnosisHeartFailure = true,
-    //         DiagnosisFibrillation = true,
-    //         DiagnosisStroke = true,
-    //         DiagnosisArterialD = true,
-    //         DiagnosisInsufficiency = true,
-    //         DiagnosisKidneyD = true,
-    //         DiagnosisKidneyDType = true,
-    //         ModifiedAt = DateTime.Now,
-    //         CreatedAt = DateTime.Now,
-    //     };
-
     private IEnumerable<GenderOption> Gender { get; set; } = new List<GenderOption>
     {
         new GenderOption { DisplayText = "Muž", Value = true },
@@ -124,6 +143,64 @@ else
         public string DisplayText { get; set; }
         public T Value { get; set; }
     };
+    private List<Option<SmokerEnum>> SmokerOptions => Enum.GetValues(typeof(SmokerEnum))
+        .Cast<SmokerEnum>()
+        .Select(e => new Option<SmokerEnum> { Value = e, DisplayText = e.GetAttribute<DisplayAttribute>()?.Name ?? e.ToString() })
+        .ToList();
+    private List<Option<EducationEnum>> EducationOptions => Enum.GetValues(typeof(EducationEnum))
+        .Cast<EducationEnum>()
+        .Select(e => new Option<EducationEnum> { Value = e, DisplayText = e.GetAttribute<DisplayAttribute>()?.Name ?? e.ToString() })
+        .ToList();
+    private List<Option<AngiographyEnum>> AngiographyOptions => Enum.GetValues(typeof(AngiographyEnum))
+        .Cast<AngiographyEnum>()
+        .Select(e => new Option<AngiographyEnum> { Value = e, DisplayText = e.GetAttribute<DisplayAttribute>()?.Name ?? e.ToString() })
+        .ToList();
+    private List<Option<RevascularizationEnum>> RevascularizationOptions => Enum.GetValues(typeof(RevascularizationEnum))
+        .Cast<RevascularizationEnum>()
+        .Select(e => new Option<RevascularizationEnum> { Value = e, DisplayText = e.GetAttribute<DisplayAttribute>()?.Name ?? e.ToString() })
+        .ToList();
+    private List<Option<KidneyDiseaseEnum>> KidneyDiseaseOptions => Enum.GetValues(typeof(KidneyDiseaseEnum))
+        .Cast<KidneyDiseaseEnum>()
+        .Select(e => new Option<KidneyDiseaseEnum> { Value = e, DisplayText = e.GetAttribute<DisplayAttribute>()?.Name ?? e.ToString() })
+        .ToList();
+    private IEnumerable<string> DiabetesTypes = new[] { "---", "typ 1", "typ 2" };
+    private IEnumerable<DyslipidemiaDrug> DyslipidemiaDrugs { get; set; } = [];
+    private bool IsAngiopraphy => DemographyHistoryQuestionaire!.DiagnosisICHS & DemographyHistoryQuestionaire!.DiagnosisICHSAngiography;
+    private bool IsRevascularization => DemographyHistoryQuestionaire!.DiagnosisICHS & DemographyHistoryQuestionaire!.DiagnosisICHSRevascularization;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            DyslipidemiaDrugs = await QuestionnaireService.GetDyslipidemiaDrugsAsync();
+
+            DemographyHistoryQuestionaire = await QuestionnaireService.GetDemographyHistoryByIdAsync(patientId);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private System.Timers.Timer? debounceTimer;
+    private async Task OnFieldChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceTimer = new System.Timers.Timer(1000);
+        debounceTimer.AutoReset = false;
+        debounceTimer.Elapsed += async (s, e) =>
+        {
+            var result = await QuestionnaireService.SaveDemographyHistoryQuestionaryAsync(DemographyHistoryQuestionaire!);
+            if (!result.Success)
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
 
     private bool IsMan
     {
@@ -245,14 +322,38 @@ else
             }
         }
     }
-    private int DiagnosisDiabetesType
+    private string DiagnosisDiabetesType
     {
-        get => DemographyHistoryQuestionaire!.DiagnosisDiabetesType;
+        get
+        {
+            switch (DemographyHistoryQuestionaire!.DiagnosisDiabetesType)
+            {
+                case 1:
+                    return "typ 1";
+                case 2:
+                    return "typ 2";
+                default:
+                    return "---";
+            }
+        }
         set
         {
-            if (DemographyHistoryQuestionaire!.DiagnosisDiabetesType != value)
+            int type = 0;
+            switch (value)
             {
-                DemographyHistoryQuestionaire!.DiagnosisDiabetesType = value;
+                case "typ 1":
+                    type = 1;
+                    break;
+                case "typ 2":
+                    type = 2;
+                    break;
+                default:
+                    type = 0;
+                    break;
+            }
+            if (DemographyHistoryQuestionaire!.DiagnosisDiabetesType != type)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisDiabetesType = type;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -449,50 +550,7 @@ else
             }
         }
     }
-    private List<Option<SmokerEnum>> SmokerOptions => Enum.GetValues(typeof(SmokerEnum))
-        .Cast<SmokerEnum>()
-        .Select(e => new Option<SmokerEnum> { Value = e, DisplayText = e.ToString() })
-        .ToList();
 
-    private List<Option<EducationEnum>> EducationOptions => Enum.GetValues(typeof(EducationEnum))
-        .Cast<EducationEnum>()
-        .Select(e => new Option<EducationEnum> { Value = e, DisplayText = e.ToString() })
-        .ToList();
-    private List<Option<AngiographyEnum>> AngiographyOptions => Enum.GetValues(typeof(AngiographyEnum))
-    .Cast<AngiographyEnum>()
-    .Select(e => new Option<AngiographyEnum> { Value = e, DisplayText = e.ToString() })
-    .ToList();
-    private List<Option<RevascularizationEnum>> Revascularization => Enum.GetValues(typeof(RevascularizationEnum))
-    .Cast<RevascularizationEnum>()
-    .Select(e => new Option<RevascularizationEnum> { Value = e, DisplayText = e.ToString() })
-    .ToList();
-    private List<Option<KidneyDiseaseEnum>> KidneyDiseaseOptions => Enum.GetValues(typeof(KidneyDiseaseEnum))
-    .Cast<KidneyDiseaseEnum>()
-    .Select(e => new Option<KidneyDiseaseEnum> { Value = e, DisplayText = e.ToString() })
-    .ToList();
-
-    private System.Timers.Timer? debounceTimer;
-    private async Task OnFieldChangedAsync()
-    {
-        // Ak existuje starý timer, zastaviť ho
-        debounceTimer?.Stop();
-
-        // Nový timer na 1 sekundu
-        debounceTimer = new System.Timers.Timer(1000);
-        debounceTimer.AutoReset = false;
-        debounceTimer.Elapsed += async (s, e) =>
-        {
-            var result = await QuestionnaireService.SaveDemographyHistoryQuestionaryAsync(DemographyHistoryQuestionaire!);
-            if (!result.Success)
-                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
-            else
-                ModifyToast();
-        };
-        debounceTimer.Start();
-
-        // Await the timer to avoid CS1998 warning
-        await Task.CompletedTask;
-    }
     private void ModifyToast()
     {
         ToastService.ShowToast(new ToastOptions
@@ -502,15 +560,5 @@ else
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
             });
-    }
-
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            DemographyHistoryQuestionaire = await QuestionnaireService.GetDemographyHistoryByIdAsync(patientId);
-            await InvokeAsync(StateHasChanged);
-        }
     }
 }

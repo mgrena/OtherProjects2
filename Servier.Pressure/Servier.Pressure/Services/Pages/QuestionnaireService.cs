@@ -270,7 +270,9 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             DemographyHistory.TreatmentYearUnknown = demographyhistory.TreatmentYearUnknown;
             DemographyHistory.DiagnosisNone = demographyhistory.DiagnosisNone;
             DemographyHistory.DiagnosisDiabetes = demographyhistory.DiagnosisDiabetes;
+            DemographyHistory.DiagnosisDiabetesType = demographyhistory.DiagnosisDiabetesType;
             DemographyHistory.DiagnosisDyslipidemia = demographyhistory.DiagnosisDyslipidemia;
+            DemographyHistory.DiagnosisDyslipidemiaDrug = demographyhistory.DiagnosisDyslipidemiaDrug;
             DemographyHistory.DiagnosisICHS = demographyhistory.DiagnosisICHS;
             DemographyHistory.DiagnosisICHSInfarction = demographyhistory.DiagnosisICHSInfarction;
             DemographyHistory.DiagnosisICHSAngina = demographyhistory.DiagnosisICHSAngina;

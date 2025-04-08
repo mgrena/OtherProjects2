@@ -24,7 +24,7 @@ public class EmailSender(IOptions<SmtpOptions> optionsAccessor, ILogger<EmailSen
     public Task SendConfirmationLinkAsync(ApplicationUser user, string email,
         string confirmationLink) => SendEmailAsync(email, "domacemonitorovanietlakukrvi.sk overenie e-mail adresy",
         $"<!DOCTYPE html><html><body><p>Dobrý deň,</p>" +
-            $"<p>Prijali sme žiadosť o potvrdenie e-mail adresy pre váš účet na stránke <a href='https://www.domacemonitorovanietlakukrvi.sk/' style='color: blue; text-decoration: underline;'>ehservices.crmtanzanit.sk</a> " +
+            $"<p>Prijali sme žiadosť o potvrdenie e-mail adresy pre váš účet na stránke <a href='https://www.domacemonitorovanietlakukrvi.sk/' style='color: blue; text-decoration: underline;'>domacemonitorovanietlakukrvi.sk</a> " +
             $"spoločnosti Servier Slovensko spol s.r.o.. Tento e-mal Vám prišiel pretože ste boli zaradený/á do projektu DMTK 2025 alebo ste požiadali o znovu odoslanie potvrdenia e-mailom. " +
             $"Ak ste túto požiadavku nevykonali, môžete túto správu ignorovať.</p>" +
             $"<p>E-mail adresu potvrdíte kliknutím na nasledujúci odkaz:</p>" +
@@ -43,7 +43,7 @@ public class EmailSender(IOptions<SmtpOptions> optionsAccessor, ILogger<EmailSen
             $"<p>Odkaz je platný po obmedzený čas.</p><p>S pozdravom,<br>Váš tím podpory</p></body></html>");
 
     public Task SendPasswordResetCodeAsync(ApplicationUser user, string email,
-        string resetCode) => SendEmailAsync(email, "ehservices.crmtanzanit.sk obnovenie hesla",
+        string resetCode) => SendEmailAsync(email, "domacemonitorovanietlakukrvi.sk obnovenie hesla",
         $"Obnovte svoje heslo pomocou nasledujúceho kódu: {resetCode}");
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)

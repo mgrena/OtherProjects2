@@ -96,7 +96,7 @@ public class DemographyHistory
     [Column("diag_dyslipidemia")]
     public bool DiagnosisDyslipidemia { get; set; } = false;
     [Column("diag_dyslipidemia_drug")]
-    public int DiagnosisDyslipidemiaDrug { get; set; } = 0;
+    public int DiagnosisDyslipidemiaDrug { get; set; } = 1;
     [Column("diag_ICHS")]
     public bool DiagnosisICHS { get; set; } = false;
     [Column("diag_ICHS_infarction")]
