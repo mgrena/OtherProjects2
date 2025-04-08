@@ -141,10 +141,13 @@
     {
         if (e.ElementType == GridElementType.DataRow)
         {
-            var patient = Patients?[e.VisibleIndex];
-            if (patient != null && patient.Valid == Data.Models.Patient.ValidEnum.Predčasne_vylúčený)
+            if (Patients != null && e.VisibleIndex >= 0 && e.VisibleIndex < Patients.Count)
             {
-                e.Style = "background-color: #f0f0f0; color: black;";
+                var patient = Patients?[e.VisibleIndex];
+                if (patient != null && patient.Valid == Data.Models.Patient.ValidEnum.Predčasne_vylúčený)
+                {
+                    e.Style = "background-color: #f0f0f0; color: black;";
+                }
             }
         }
         if (e.ElementType == GridElementType.HeaderCell)

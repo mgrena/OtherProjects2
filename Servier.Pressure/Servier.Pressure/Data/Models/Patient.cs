@@ -8,7 +8,7 @@ public class Patient
 {
     public enum ValidEnum
     {
-        Aktivný,
+        Aktívny,
         Predčasne_vylúčený
     }
 
@@ -23,7 +23,7 @@ public class Patient
     public required string UserId { get; set; }
 
     [Column("valid")]
-    public ValidEnum Valid { get; set; } = ValidEnum.Aktivný;
+    public ValidEnum Valid { get; set; } = ValidEnum.Aktívny;
 
     /// <summary>
     ///  Patient code

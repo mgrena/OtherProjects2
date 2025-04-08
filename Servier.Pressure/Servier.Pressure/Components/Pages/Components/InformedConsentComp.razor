@@ -29,12 +29,15 @@ else
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
             <DxFormLayoutGroup Caption="Zaraďovacie kritériá" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-                <DxFormLayoutItem Caption="Zaradení môžu byť len pacienti spĺňajúci všetky zaraďovacie kritériá." ColSpanMd="12" CaptionCssClass="caption-styleH1" />
+                <DxFormLayoutItem Caption="Zaradení môžu byť len pacienti spĺňajúci všetky zaraďovacie kritériá:" ColSpanMd="12" CaptionCssClass="caption-styleH1" />
                 <DxFormLayoutItem Caption="Muž alebo žena vo veku ≥ 18 rokov" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOption" @bind-Value="@IsAdult" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Pacient s artériovou hypertenziou farmakologicky liečenou ≥ 12 mesiacov a bez zmien antihypertenzívnej liečby v priebehu 3 mesiacov" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOption" @bind-Value="@IsStableHypertension" TextFieldName="DisplayText" ValueFieldName="Value" />
+                </DxFormLayoutItem>
+                <DxFormLayoutItem Caption="Pacient schopný porozumieť poskytnutým informáciám a ochotný podpísať formulár informovaného súhlasu" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOption" @bind-Value="@IsInformedConsent" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
             <DxFormLayoutGroup Caption="Vylučovacie kritériá" ColSpanMd="12" CaptionCssClass="caption-styleH0">
