@@ -141,6 +141,7 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
                 var visit1 = await GetTreatment1VisitAsync(patientId);
                 if (visit1 != null) 
                 {
+                    result.IsChanged = visit1.IsChanged;
                     result.FixCombination3Unknown = visit1.FixCombination3Unknown;
                     result.FixCombinationMixUnknown = visit1.FixCombinationMixUnknown;
                 }
@@ -149,6 +150,7 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
                 var visit2 = await GetTreatment2VisitAsync(patientId);
                 if (visit2 != null) 
                 {
+                    result.IsChanged = visit2.IsChanged;
                     result.FixCombination3Unknown = visit2.FixCombination3Unknown;
                     result.FixCombinationMixUnknown = visit2.FixCombinationMixUnknown;
                 }
@@ -520,12 +522,12 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         var existEntry = await aContext.TreatmentMonotherapies.FirstOrDefaultAsync(i => i.Id == entry.Id);
         if (existEntry == null)
         {
-            _logger.LogInformation("The TreatmentMonotherapy for patient {id} and visit {visit} has been added.", entry.Id, entry.VisitNumber.ToString());
+            _logger.LogInformation("The TreatmentMonotherapy for patient {patient} and visit {visit} has been added.", entry.PatientId, entry.VisitNumber.ToString());
             aContext.TreatmentMonotherapies.Add(entry);
         }
         else
         {
-            _logger.LogInformation("The TreatmentMonotherapy for patient {id} and visit {visit} has been updated.", entry.Id, entry.VisitNumber.ToString());
+            _logger.LogInformation("The TreatmentMonotherapy {id} for patient {patient} and visit {visit} has been updated.", entry.Id, entry.PatientId, entry.VisitNumber.ToString());
             existEntry.DrugId = entry.DrugId;
             existEntry.IsAldosteroneAntagonist = entry.IsAldosteroneAntagonist;
             existEntry.Dose = entry.Dose;
@@ -554,12 +556,12 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         var existEntry = await aContext.TreatmentMultitherapies.FirstOrDefaultAsync(i => i.Id == entry.Id);
         if (existEntry == null)
         {
-            _logger.LogInformation("The TreatmentMultitherapy for patient {id} and visit {visit} has been added.", entry.Id, entry.VisitNumber.ToString());
+            _logger.LogInformation("The TreatmentMultitherapy for patient {patient} and visit {visit} has been added.", entry.PatientId, entry.VisitNumber.ToString());
             aContext.TreatmentMultitherapies.Add(entry);
         }
         else
         {
-            _logger.LogInformation("The TreatmentMultitherapy for patient {id} and visit {visit} has been updated.", entry.Id, entry.VisitNumber.ToString());
+            _logger.LogInformation("The TreatmentMultitherapy {id} for patient {patient} and visit {visit} has been updated.", entry.Id, entry.PatientId, entry.VisitNumber.ToString());
             existEntry.DrugId = entry.DrugId;
             existEntry.Dose1 = entry.Dose1;
             existEntry.Dose2 = entry.Dose2;
@@ -638,7 +640,7 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         if (existEntry != null)
         {
             _logger.LogInformation("The TreatmentMonotherapy for patient {id} and visit {visit} has been deleted.", entry.Id, entry.VisitNumber.ToString());
-            aContext.TreatmentMonotherapies.Remove(entry);
+            aContext.TreatmentMonotherapies.Remove(existEntry);
         }
 
         try
@@ -660,7 +662,7 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         if (existEntry != null)
         {
             _logger.LogInformation("The TreatmentMultitherapy for patient {id} and visit {visit} has been deleted.", entry.Id, entry.VisitNumber.ToString());
-            aContext.TreatmentMultitherapies.Remove(entry);
+            aContext.TreatmentMultitherapies.Remove(existEntry);
         }
 
         try

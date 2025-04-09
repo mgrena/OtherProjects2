@@ -1,6 +1,7 @@
 ﻿@using Servier.Pressure.Components.Account.Shared
 @using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Helpers
 @using Servier.Pressure.Services.Pages
 
 @attribute [StreamRendering(true)]
@@ -8,6 +9,7 @@
 
 @inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
+@inject AppState AppState
 
 @if (TreatmentBefore == null)
 {
@@ -51,6 +53,7 @@ else
     {
         if (firstRender)
         {
+            AppState.TreatmentChanged = true;
             DyslipidemiaDrugs = await QuestionnaireService.GetDyslipidemiaDrugsAsync();
             var entity = await QuestionnaireService.GetTreatmentBeforeAsync(patientId);
             if (entity != null)

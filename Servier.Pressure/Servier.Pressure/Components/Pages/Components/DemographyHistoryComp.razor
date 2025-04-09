@@ -21,21 +21,21 @@ else
     <EditForm Model="@DemographyHistoryQuestionaire" Context="EditFormContext">
         <DxFormLayout CssClass="w-100">
             <DxFormLayoutGroup Caption="Demografia" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-                <DxFormLayoutItem Caption="Pohlavie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="pohlavie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Gender" @bind-Value="@IsMan" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Rok narodenia" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="rok narodenia" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxSpinEdit @bind-Value="@Age" MinValue="1900" MaxValue="@DateTime.Now.Year" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Fajčenie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="fajčenie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@SmokerOptions" @bind-Value="@Smoker" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Najvyššie dosiahnuté vzdelanie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="najvyššie dosiahnuté vzdelanie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@EducationOptions" @bind-Value="@Education" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
             <DxFormLayoutGroup Caption="Anamnéza" ColSpanMd="12" CaptionCssClass="caption-styleH0">
-                <DxFormLayoutGroup Caption="Artériová hypertenzia" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutGroup Caption="Artériová hypertenzia" ColSpanMd="12">
                     <DxFormLayoutItem Caption="rok stanovenia diagnózy" ColSpanMd="6" CaptionCssClass="caption-styleH1">
                         <DxSpinEdit @bind-Value="@DiagnosisYear" MinValue="1900" MaxValue="@DateTime.Now.Year" />
                     </DxFormLayoutItem>
@@ -49,7 +49,7 @@ else
                         <DxCheckBox @bind-Checked="@TreatmentYearUnknown">neznámy</DxCheckBox>
                     </DxFormLayoutItem>
                 </DxFormLayoutGroup>
-                <DxFormLayoutGroup Caption="Iné relevantné diagnózy a stavy prítomné už pred zaradením do štúdie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
+                <DxFormLayoutGroup Caption="Iné relevantné diagnózy a stavy prítomné už pred zaradením do štúdie" ColSpanMd="12">
                     <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
                         <p><strong>Z uvedených možností prosím vyberte všetky relevantné diagnózy a stavy prítomné už pred zaradením subjektu do štúdie.</strong></p>
                     </DxFormLayoutItem>
@@ -57,13 +57,13 @@ else
                         <DxCheckBox @bind-Checked="@DiagnosisNone">žiadne</DxCheckBox>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem ColSpanMd="6" CaptionCssClass="caption-styleH1">
-                        <DxCheckBox @bind-Checked="@DiagnosisDiabetes">Diabetes mellitus</DxCheckBox>
+                        <DxCheckBox @bind-Checked="@DiagnosisDiabetes">diabetes mellitus</DxCheckBox>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem ColSpanMd="6" Caption="prosím špecifikujte" CaptionCssClass="caption-styleH1" Visible="@DiagnosisDiabetes">
                         <DxComboBox Data="@DiabetesTypes" @bind-Value="@DiagnosisDiabetesType" />
                     </DxFormLayoutItem>
                     <DxFormLayoutItem ColSpanMd="6" CaptionCssClass="caption-styleH1" BeginRow="true">
-                        <DxCheckBox @bind-Checked="@DiagnosisDyslipidemia">Dyslipidémia</DxCheckBox>
+                        <DxCheckBox @bind-Checked="@DiagnosisDyslipidemia">dyslipidémia</DxCheckBox>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@DiagnosisDyslipidemia">
                         <DxComboBox Data="@DyslipidemiaDrugs" @bind-Value="@DiagnosisDyslipidemiaDrug" TextFieldName="Name" ValueFieldName="Id" />

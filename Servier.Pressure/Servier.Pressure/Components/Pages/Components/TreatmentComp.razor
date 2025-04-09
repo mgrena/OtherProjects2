@@ -10,326 +10,411 @@
 
 @inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
+@inject AppState AppState
+@implements IDisposable
 
-<StatusMessage Message="@Message" />
-<p>Monoterapia a/alebo voľné kombinácie (možnosť výberu viacerých možností)</p>
-@if (!IsMonotherapyDataReady)
+@if (@AppState.TreatmentChanged)
 {
-    <p><em>Načítavanie...</em></p>
-}
-else
-{
-    <DxGrid @ref="MonotherapyGrid" Data="@TreatmentMonotherapies" CssClass="mw-1100"
-    EditMode="GridEditMode.EditCell"
-    EditModelSaving="MonotherapyGrid_EditModelSaving">
-        <Columns>
-            <DxGridDataColumn Caption="Terapia">
-                <CellDisplayTemplate Context="gridContext">
-                    @GetMonotherapyText(((TreatmentMonotherapy)gridContext.DataItem).Monotherapy)
-                </CellDisplayTemplate>
-            </DxGridDataColumn>
-            <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
-                        if (rowItem.DrugId > 0)
-                        {
-                            string drug = string.Empty;
-                            if (rowItem.Monotherapy == MonotherapyEnum.Diuretic && rowItem.IsAldosteroneAntagonist)
+    <StatusMessage Message="@Message" />
+    <p>Monoterapia a/alebo voľné kombinácie (možnosť výberu viacerých možností)</p>
+    @if (!IsMonotherapyDataReady)
+    {
+        <p><em>Načítavanie...</em></p>
+    }
+    else
+    {
+        <DxGrid @ref="MonotherapyGrid" Data="@TreatmentMonotherapies" CssClass="mw-1100"
+        EditMode="GridEditMode.EditCell"
+        EditModelSaving="MonotherapyGrid_EditModelSaving">
+            <Columns>
+                <DxGridDataColumn Caption="Terapia">
+                    <CellDisplayTemplate Context="gridContext">
+                        @GetMonotherapyText(((TreatmentMonotherapy)gridContext.DataItem).Monotherapy)
+                    </CellDisplayTemplate>
+                </DxGridDataColumn>
+                <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
+                            if (rowItem.DrugId > 0)
                             {
-                                var items = GetTreatmentMonotherapyDrugs(MonotherapyEnum.Diuretic);
-                                drug = items.FirstOrDefault(i => i.Id == 36)?.Name ?? string.Empty;
+                                string drug = string.Empty;
+                                if (rowItem.Monotherapy == MonotherapyEnum.Diuretic && rowItem.IsAldosteroneAntagonist)
+                                {
+                                    var items = GetTreatmentMonotherapyDrugs(MonotherapyEnum.Diuretic);
+                                    drug = items.FirstOrDefault(i => i.Id == 36)?.Name ?? string.Empty;
+                                }
+                                else
+                                {
+                                    var items = GetTreatmentMonotherapyDrugs(rowItem.Monotherapy);
+                                    drug = items.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                                }
+                                <div class="text-start">@drug</div>
                             }
-                            else
+                        }
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMonotherapy)gridContext.EditModel;
+                        }
+                        <DxComboBox Data="@GetTreatmentMonotherapyDrugs(rowItem.Monotherapy)" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMonotherapyDrug drug) => OnMonotherapyDrugChanged(drug, rowItem))" />
+                    </CellEditTemplate>
+                </DxGridDataColumn>
+                <DxGridDataColumn FieldName="DrugId" Width="@AldosteroneAntagonistWidth" MinWidth="0">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
+                            if (rowItem.DrugId > 0 && rowItem.Monotherapy == MonotherapyEnum.Diuretic && rowItem.IsAldosteroneAntagonist)
                             {
-                                var items = GetTreatmentMonotherapyDrugs(rowItem.Monotherapy);
-                                drug = items.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                                string drug = DiureticAldosteroneDrugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                                <div class="text-start">@drug</div>
                             }
-                            <div class="text-start">@drug</div>
                         }
-                    }
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMonotherapy)gridContext.EditModel;
-                    }
-                    <DxComboBox Data="@GetTreatmentMonotherapyDrugs(rowItem.Monotherapy)" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMonotherapyDrug drug) => OnMonotherapyDrugChanged(drug, rowItem))" />
-                </CellEditTemplate>
-            </DxGridDataColumn>
-            <DxGridDataColumn FieldName="DrugId" Width="@AldosteroneAntagonistWidth" MinWidth="0">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
-                        if (rowItem.DrugId > 0 && rowItem.Monotherapy == MonotherapyEnum.Diuretic && rowItem.IsAldosteroneAntagonist)
-                        {
-                            string drug = DiureticAldosteroneDrugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
-                            <div class="text-start">@drug</div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMonotherapy)gridContext.EditModel;
+                            if (rowItem.Monotherapy == MonotherapyEnum.Diuretic)
+                            {
+                                <DxComboBox Data="@DiureticAldosteroneDrugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" />
+                            }
                         }
-                    }
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMonotherapy)gridContext.EditModel;
-                        if (rowItem.Monotherapy == MonotherapyEnum.Diuretic)
-                        {
-                            <DxComboBox Data="@DiureticAldosteroneDrugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" />
+                    </CellEditTemplate>
+                </DxGridDataColumn>
+                <DxGridDataColumn Caption="Dávka / tbl (mg)" FieldName="Dose">
+                    <CellEditTemplate Context="editContext">
+                        <DxSpinEdit @bind-Value="@(((TreatmentMonotherapy)editContext.EditModel).Dose)" MinValue="0" />
+                    </CellEditTemplate>
+                </DxGridDataColumn>
+                <DxGridBandColumn Caption="Počet užitých tabliet">
+                    <Columns>
+                        <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMonotherapy)editContext.EditModel).NumberMorning)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMonotherapy)editContext.EditModel).NumberNoon)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMonotherapy)editContext.EditModel).NumberEvening)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                    </Columns>
+                </DxGridBandColumn>
+                <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
+                <DxGridCommandColumn Width="60px" NewButtonVisible="false">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
                         }
-                    }
-                </CellEditTemplate>
-            </DxGridDataColumn>
-            <DxGridDataColumn Caption="Dávka / tbl (mg)" FieldName="Dose" />
-            <DxGridBandColumn Caption="Počet užitých tabliet">
-                <Columns>
-                    <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px">
-                        <CellEditTemplate Context="editContext">
-                            <DxSpinEdit @bind-Value="@(((TreatmentMonotherapy)editContext.EditModel).NumberMorning)" MinValue="0" />
-                        </CellEditTemplate>
-                    </DxGridDataColumn>
-                    <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px" />
-                    <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px" />
-                </Columns>
-            </DxGridBandColumn>
-            <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
-            <DxGridCommandColumn Width="60px" NewButtonVisible="false">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
-                    }
-                    <div class="grid-cell-align-center">
-                        <DxButton IconCssClass="grid-icon grid-icon-delete"
-                        RenderStyle="ButtonRenderStyle.Link"
-                        title="Vymazať dáta riadku"
-                        Click="@(async () => await OnMonotherapyRowResetClick(rowItem))" />
-                    </div>
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="editContext">
-                    <div class="grid-cell-align-center">
-                        <DxButton Enabled="false"
-                        aria-label="Delete"
-                        CssClass="grid-disabled-button"
-                        IconCssClass="grid-icon grid-icon-delete"
-                        RenderStyle="ButtonRenderStyle.Link" />
-                    </div>
-                </CellEditTemplate>
-            </DxGridCommandColumn>
-        </Columns>
-    </DxGrid>
-}
-<p><br />Fixné kombinácie 2 antihypertenzív (možnosť výberu viacerých možností)</p>
-@if (!IsMultitherapyDataReady)
-{
-    <p><em>Načítavanie...</em></p>
-}
-else
-{
-    <DxGrid @ref="Antihypertensive2Grid" Data="@TreatmentAntihypertensives2" CssClass="mw-1100"
-    PageSize="25"
-    EditMode="GridEditMode.EditCell"
-    EditModelSaving="MultitherapyGrid_EditModelSaving">
-        <Columns>
-            <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
-                        if (rowItem.DrugId > 0)
-                        {
-                            string drug = Antihypertensive2Drugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
-                            <div class="text-start">@drug</div>
+                        <div class="grid-cell-align-center">
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                            RenderStyle="ButtonRenderStyle.Link"
+                            title="Vymazať dáta riadku"
+                            Click="@(async () => await OnMonotherapyRowResetClick(rowItem))" />
+                        </div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="editContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton Enabled="false"
+                            aria-label="Delete"
+                            CssClass="grid-disabled-button"
+                            IconCssClass="grid-icon grid-icon-delete"
+                            RenderStyle="ButtonRenderStyle.Link" />
+                        </div>
+                    </CellEditTemplate>
+                </DxGridCommandColumn>
+            </Columns>
+        </DxGrid>
+    }
+    <p><br />Fixné kombinácie 2 antihypertenzív (možnosť výberu viacerých možností)</p>
+    @if (!IsMultitherapyDataReady)
+    {
+        <p><em>Načítavanie...</em></p>
+    }
+    else
+    {
+        <DxGrid @ref="Antihypertensive2Grid" Data="@TreatmentAntihypertensives2" CssClass="mw-1100"
+        PageSize="25"
+        EditMode="GridEditMode.EditCell"
+        EditModelSaving="MultitherapyGrid_EditModelSaving">
+            <Columns>
+                <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                            if (rowItem.DrugId > 0)
+                            {
+                                string drug = Antihypertensive2Drugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                                <div class="text-start">@drug</div>
+                            }
                         }
-                    }
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
-                    }
-                    <DxComboBox Data="@Antihypertensive2Drugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive2))" />
-                </CellEditTemplate>
-            </DxGridDataColumn>
-            <DxGridBandColumn Caption="Dávka / tbl (mg)">
-                <Columns>
-                    <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50" />
-                    <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50" />
-                </Columns>
-            </DxGridBandColumn>
-            <DxGridBandColumn Caption="Počet užitých tabliet">
-                <Columns>
-                    <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px" />
-                    <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px" />
-                    <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px" />
-                </Columns>
-            </DxGridBandColumn>
-            <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
-            <DxGridCommandColumn Width="60px" NewButtonVisible="false">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
-                    }
-                    <div class="grid-cell-align-center">
-                        <DxButton IconCssClass="grid-icon grid-icon-delete"
-                        RenderStyle="ButtonRenderStyle.Link"
-                        title="Vymazať dáta riadku"
-                        Click="@(async () => await OnAntihypertensive2RowResetClick(rowItem))" />
-                    </div>
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="editContext">
-                    <div class="grid-cell-align-center">
-                        <DxButton Enabled="false"
-                        aria-label="Delete"
-                        CssClass="grid-disabled-button"
-                        IconCssClass="grid-icon grid-icon-delete"
-                        RenderStyle="ButtonRenderStyle.Link" />
-                    </div>
-                </CellEditTemplate>
-            </DxGridCommandColumn>
-        </Columns>
-    </DxGrid>
-}
-<p><br />Fixné kombinácie 3 antihypertenzív (možnosť výberu viacerých možností)</p>
-@if (!IsMultitherapyDataReady)
-{
-    <p><em>Načítavanie...</em></p>
-}
-else
-{
-    <DxGrid @ref="Antihypertensive3Grid" Data="@TreatmentAntihypertensives3" CssClass="mw-1100"
-    PageSize="25"
-    EditMode="GridEditMode.EditCell"
-    EditModelSaving="MultitherapyGrid_EditModelSaving">
-        <Columns>
-            <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
-                        if (rowItem.DrugId > 0)
-                        {
-                            string drug = Antihypertensive3Drugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
-                            <div class="text-start">@drug</div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
                         }
-                    }
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
-                    }
-                    <DxComboBox Data="@Antihypertensive3Drugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive3))" />
-                </CellEditTemplate>
-            </DxGridDataColumn>
-            <DxGridBandColumn Caption="Dávka / tbl (mg)">
-                <Columns>
-                    <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50" />
-                    <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50" />
-                    <DxGridDataColumn Caption="Látka 3" FieldName="Dose3" Width="8%" MinWidth="50" />
-                </Columns>
-            </DxGridBandColumn>
-            <DxGridBandColumn Caption="Počet užitých tabliet">
-                <Columns>
-                    <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px" />
-                    <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px" />
-                    <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px" />
-                </Columns>
-            </DxGridBandColumn>
-            <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
-            <DxGridCommandColumn Width="60px" NewButtonVisible="false">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
-                    }
-                    <div class="grid-cell-align-center">
-                        <DxButton IconCssClass="grid-icon grid-icon-delete"
-                        RenderStyle="ButtonRenderStyle.Link"
-                        title="Vymazať dáta riadku"
-                        Click="@(async () => await OnAntihypertensive3RowResetClick(rowItem))" />
-                    </div>
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="editContext">
-                    <div class="grid-cell-align-center">
-                        <DxButton Enabled="false"
-                        aria-label="Delete"
-                        CssClass="grid-disabled-button"
-                        IconCssClass="grid-icon grid-icon-delete"
-                        RenderStyle="ButtonRenderStyle.Link" />
-                    </div>
-                </CellEditTemplate>
-            </DxGridCommandColumn>
-        </Columns>
-    </DxGrid>
-    <EditForm Model="@TreatmentUnknowns" Context="Edit3FormContext">
-        <DxCheckBox @bind-Checked="@IsAntihypertensive3Unknown">neznáme</DxCheckBox>
-    </EditForm>
+                        <DxComboBox Data="@Antihypertensive2Drugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive2))" />
+                    </CellEditTemplate>
+                </DxGridDataColumn>
+                <DxGridBandColumn Caption="Dávka / tbl (mg)">
+                    <Columns>
+                        <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).Dose1)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).Dose2)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                    </Columns>
+                </DxGridBandColumn>
+                <DxGridBandColumn Caption="Počet užitých tabliet">
+                    <Columns>
+                        <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberMorning)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberNoon)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberEvening)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                    </Columns>
+                </DxGridBandColumn>
+                <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
+                <DxGridCommandColumn Width="60px" NewButtonVisible="false">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                        }
+                        <div class="grid-cell-align-center">
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                            RenderStyle="ButtonRenderStyle.Link"
+                            title="Vymazať dáta riadku"
+                            Click="@(async () => await OnAntihypertensive2RowResetClick(rowItem))" />
+                        </div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="editContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton Enabled="false"
+                            aria-label="Delete"
+                            CssClass="grid-disabled-button"
+                            IconCssClass="grid-icon grid-icon-delete"
+                            RenderStyle="ButtonRenderStyle.Link" />
+                        </div>
+                    </CellEditTemplate>
+                </DxGridCommandColumn>
+            </Columns>
+        </DxGrid>
+    }
+    <p><br />Fixné kombinácie 3 antihypertenzív (možnosť výberu viacerých možností)</p>
+    @if (!IsMultitherapyDataReady)
+    {
+        <p><em>Načítavanie...</em></p>
+    }
+    else
+    {
+        <DxGrid @ref="Antihypertensive3Grid" Data="@TreatmentAntihypertensives3" CssClass="mw-1100"
+        PageSize="25"
+        EditMode="GridEditMode.EditCell"
+        EditModelSaving="MultitherapyGrid_EditModelSaving">
+            <Columns>
+                <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                            if (rowItem.DrugId > 0)
+                            {
+                                string drug = Antihypertensive3Drugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                                <div class="text-start">@drug</div>
+                            }
+                        }
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
+                        }
+                        <DxComboBox Data="@Antihypertensive3Drugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive3))" />
+                    </CellEditTemplate>
+                </DxGridDataColumn>
+                <DxGridBandColumn Caption="Dávka / tbl (mg)">
+                    <Columns>
+                        <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).Dose1)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).Dose2)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="Látka 3" FieldName="Dose3" Width="8%" MinWidth="50">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).Dose3)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                    </Columns>
+                </DxGridBandColumn>
+                <DxGridBandColumn Caption="Počet užitých tabliet">
+                    <Columns>
+                        <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberMorning)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberNoon)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberEvening)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                    </Columns>
+                </DxGridBandColumn>
+                <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
+                <DxGridCommandColumn Width="60px" NewButtonVisible="false">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                        }
+                        <div class="grid-cell-align-center">
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                            RenderStyle="ButtonRenderStyle.Link"
+                            title="Vymazať dáta riadku"
+                            Click="@(async () => await OnAntihypertensive3RowResetClick(rowItem))" />
+                        </div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="editContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton Enabled="false"
+                            aria-label="Delete"
+                            CssClass="grid-disabled-button"
+                            IconCssClass="grid-icon grid-icon-delete"
+                            RenderStyle="ButtonRenderStyle.Link" />
+                        </div>
+                    </CellEditTemplate>
+                </DxGridCommandColumn>
+            </Columns>
+        </DxGrid>
+        <EditForm Model="@TreatmentUnknowns" Context="Edit3FormContext">
+            <DxCheckBox @bind-Checked="@IsAntihypertensive3Unknown">neznáme</DxCheckBox>
+        </EditForm>
 
-}
-<p><br />Fixné kombinácie antihypertenzív a hypolipidemík (možnosť výberu viacerých možností)</p>
-@if (!IsMultitherapyDataReady)
-{
-    <p><em>Načítavanie...</em></p>
-}
-else
-{
-    <DxGrid @ref="WithHypolypedidemicGrid" Data="@TreatmentWithHypolypedidemic" CssClass="mw-1100"
-    PageSize="25"
-    EditMode="GridEditMode.EditCell"
-    EditModelSaving="MultitherapyGrid_EditModelSaving">
-        <Columns>
-            <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
-                        if (rowItem.DrugId > 0)
-                        {
-                            string drug = WithHypolypedidemicDrugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
-                            <div class="text-start">@drug</div>
+    }
+    <p><br />Fixné kombinácie antihypertenzív a hypolipidemík (možnosť výberu viacerých možností)</p>
+    @if (!IsMultitherapyDataReady)
+    {
+        <p><em>Načítavanie...</em></p>
+    }
+    else
+    {
+        <DxGrid @ref="WithHypolypedidemicGrid" Data="@TreatmentWithHypolypedidemic" CssClass="mw-1100"
+        PageSize="25"
+        EditMode="GridEditMode.EditCell"
+        EditModelSaving="MultitherapyGrid_EditModelSaving">
+            <Columns>
+                <DxGridDataColumn FieldName="DrugId" Caption="Účinná látka">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                            if (rowItem.DrugId > 0)
+                            {
+                                string drug = WithHypolypedidemicDrugs.FirstOrDefault(i => i.Id == rowItem.DrugId)?.Name ?? string.Empty;
+                                <div class="text-start">@drug</div>
+                            }
                         }
-                    }
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
-                    }
-                    <DxComboBox Data="@WithHypolypedidemicDrugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive3))" />
-                </CellEditTemplate>
-            </DxGridDataColumn>
-            <DxGridBandColumn Caption="Dávka / tbl (mg)">
-                <Columns>
-                    <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50" />
-                    <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50" />
-                    <DxGridDataColumn Caption="Látka 3" FieldName="Dose3" Width="8%" MinWidth="50" />
-                </Columns>
-            </DxGridBandColumn>
-            <DxGridBandColumn Caption="Počet užitých tabliet">
-                <Columns>
-                    <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px" />
-                    <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px" />
-                    <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px" />
-                </Columns>
-            </DxGridBandColumn>
-            <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
-            <DxGridCommandColumn Width="60px" NewButtonVisible="false">
-                <CellDisplayTemplate Context="gridContext">
-                    @{
-                        var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
-                    }
-                    <div class="grid-cell-align-center">
-                        <DxButton IconCssClass="grid-icon grid-icon-delete"
-                        RenderStyle="ButtonRenderStyle.Link"
-                        title="Vymazať dáta riadku"
-                        Click="@(async () => await OnWithHypolypedidemicRowResetClick(rowItem))" />
-                    </div>
-                </CellDisplayTemplate>
-                <CellEditTemplate Context="editContext">
-                    <div class="grid-cell-align-center">
-                        <DxButton Enabled="false"
-                        aria-label="Delete"
-                        CssClass="grid-disabled-button"
-                        IconCssClass="grid-icon grid-icon-delete"
-                        RenderStyle="ButtonRenderStyle.Link" />
-                    </div>
-                </CellEditTemplate>
-            </DxGridCommandColumn>
-        </Columns>
-    </DxGrid>
-    <EditForm Model="@TreatmentUnknowns" Context="Edit3FormContext">
-        <DxCheckBox @bind-Checked="@IsWithHypolypedidemicUnknown">neznáme</DxCheckBox>
-    </EditForm>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.EditModel;
+                        }
+                        <DxComboBox Data="@WithHypolypedidemicDrugs" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMultitherapyDrug drug) => OnMultitherapyDrugChanged(drug, rowItem, MultitherapyEnum.Antihypertensive3))" />
+                    </CellEditTemplate>
+                </DxGridDataColumn>
+                <DxGridBandColumn Caption="Dávka / tbl (mg)">
+                    <Columns>
+                        <DxGridDataColumn Caption="Látka 1" FieldName="Dose1" Width="8%" MinWidth="50">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).Dose1)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="Látka 2" FieldName="Dose2" Width="8%" MinWidth="50">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).Dose2)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="Látka 3" FieldName="Dose3" Width="8%" MinWidth="50">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).Dose3)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                    </Columns>
+                </DxGridBandColumn>
+                <DxGridBandColumn Caption="Počet užitých tabliet">
+                    <Columns>
+                        <DxGridDataColumn Caption="R" FieldName="NumberMorning" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberMorning)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="O" FieldName="NumberNoon" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberNoon)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                        <DxGridDataColumn Caption="V" FieldName="NumberEvening" Width="50px">
+                            <CellEditTemplate Context="editContext">
+                                <DxSpinEdit @bind-Value="@(((TreatmentMultitherapy)editContext.EditModel).NumberEvening)" MinValue="0" />
+                            </CellEditTemplate>
+                        </DxGridDataColumn>
+                    </Columns>
+                </DxGridBandColumn>
+                <DxGridDataColumn Caption="neznáme" FieldName="IsUnknown" Width="8%" MinWidth="90" />
+                <DxGridCommandColumn Width="60px" NewButtonVisible="false">
+                    <CellDisplayTemplate Context="gridContext">
+                        @{
+                            var rowItem = (TreatmentMultitherapy)gridContext.DataItem;
+                        }
+                        <div class="grid-cell-align-center">
+                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                            RenderStyle="ButtonRenderStyle.Link"
+                            title="Vymazať dáta riadku"
+                            Click="@(async () => await OnWithHypolypedidemicRowResetClick(rowItem))" />
+                        </div>
+                    </CellDisplayTemplate>
+                    <CellEditTemplate Context="editContext">
+                        <div class="grid-cell-align-center">
+                            <DxButton Enabled="false"
+                            aria-label="Delete"
+                            CssClass="grid-disabled-button"
+                            IconCssClass="grid-icon grid-icon-delete"
+                            RenderStyle="ButtonRenderStyle.Link" />
+                        </div>
+                    </CellEditTemplate>
+                </DxGridCommandColumn>
+            </Columns>
+        </DxGrid>
+        <EditForm Model="@TreatmentUnknowns" Context="Edit3FormContext">
+            <DxCheckBox @bind-Checked="@IsWithHypolypedidemicUnknown">neznáme</DxCheckBox>
+        </EditForm>
+    }
 }
 
 @code {
@@ -363,43 +448,30 @@ else
     private IEnumerable<TreatmentMultitherapyDrug> WithHypolypedidemicDrugs { get; set; } = [];
     private string AldosteroneAntagonistWidth { get; set; } = "0";
     private string? Message;
+    private bool IsInitialized = false;
 
+    protected override void OnInitialized()
+    {
+        AppState.OnChange += OnAppStateChanged;
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // get monotherapies primary data
-            var treatmentTask = QuestionnaireService.GetTreatmentUnknownsAsync(patientId, visitNum);
-            var monotherapiesTask = LoadMonotherapyData();
-            var aCEInhibitorTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.ACEInhibitor, false);
-            var angiotensinIIReceptorBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.AngiotensinIIReceptorBlocker, false);
-            var calciumChannelBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.CalciumChannelBlocker, false);
-            var betaBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.BetaBlocker, false);
-            var diureticTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Diuretic, false);
-            var diureticAldosteroneTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Diuretic, true);
-            var otherTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Other, false);
-            var multitherapyDrugsTask = QuestionnaireService.GetTreatmentMultitherapyDrugsAsync();
-            await Task.WhenAll(treatmentTask, monotherapiesTask, aCEInhibitorTask, angiotensinIIReceptorBlockerTask, calciumChannelBlockerTask, betaBlockerTask, diureticTask,
-                diureticAldosteroneTask, otherTask, multitherapyDrugsTask);
-            TreatmentUnknowns = treatmentTask.Result;
-            ACEInhibitorDrugs = aCEInhibitorTask.Result;
-            AngiotensinIIReceptorBlockerDrugs = angiotensinIIReceptorBlockerTask.Result;
-            CalciumChannelBlockerDrugs = calciumChannelBlockerTask.Result;
-            BetaBlockerDrugs = betaBlockerTask.Result;
-            DiureticDrugs = diureticTask.Result;
-            DiureticAldosteroneDrugs = diureticAldosteroneTask.Result;
-            OtherDrugs = otherTask.Result;
-            var multitherapyDrugs = multitherapyDrugsTask.Result;
-
-            Antihypertensive2Drugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.Antihypertensive2);
-            Antihypertensive3Drugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.Antihypertensive3);
-            WithHypolypedidemicDrugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.WithHypolypedidemic);
-
-            var antihypertensives2Task = LoadMultitherapyData();
-            await Task.WhenAll(antihypertensives2Task);
-
-            await InvokeAsync(StateHasChanged);
+            if (AppState.TreatmentChanged)
+                await LoadDataAsync();
+            IsInitialized = true;
         }
+    }
+    private async void OnAppStateChanged()
+    {
+        if (!IsInitialized)
+            return;
+
+        if (AppState.TreatmentChanged)
+            await LoadDataAsync();
+
+        await InvokeAsync(StateHasChanged); // re-render
     }
     private async Task SaveTreatment()
     {
@@ -414,6 +486,9 @@ else
     {
         var therapyUpdated = (TreatmentMonotherapy)e.EditModel;
         var therapyOrig = (TreatmentMonotherapy)e.DataItem;
+
+        if (MonotherapyGrid is DxGrid grid)
+            await grid.CancelEditAsync();
 
         // for diuretic check if is aldosterone antagonist and show/hide column
         if (therapyUpdated.Monotherapy == MonotherapyEnum.Diuretic && therapyUpdated.DrugId == 36)
@@ -544,8 +619,57 @@ else
     {
         if (drug == null || multitherapy == null) return;
 
-        // var therapyOrig = TreatmentMonotherapies.First(i => i.Monotherapy == monotherapy.Monotherapy);
-        // therapyOrig.DrugId = drug.Id;
+        switch (type)
+        {
+            case MultitherapyEnum.Antihypertensive2:
+                var antihypertensives2 = TreatmentAntihypertensives2.First();
+                antihypertensives2.DrugId = drug.Id;
+                break;
+            case MultitherapyEnum.Antihypertensive3:
+                var antihypertensives3 = TreatmentAntihypertensives3.First();
+                antihypertensives3.DrugId = drug.Id;
+                break;
+            case MultitherapyEnum.WithHypolypedidemic:
+                var withHypolypedidemic = TreatmentWithHypolypedidemic.First();
+                withHypolypedidemic.DrugId = drug.Id;
+                break;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LoadDataAsync()
+    {
+        // get monotherapies primary data
+        var treatmentTask = QuestionnaireService.GetTreatmentUnknownsAsync(patientId, visitNum);
+        var monotherapiesTask = LoadMonotherapyData();
+        var aCEInhibitorTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.ACEInhibitor, false);
+        var angiotensinIIReceptorBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.AngiotensinIIReceptorBlocker, false);
+        var calciumChannelBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.CalciumChannelBlocker, false);
+        var betaBlockerTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.BetaBlocker, false);
+        var diureticTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Diuretic, false);
+        var diureticAldosteroneTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Diuretic, true);
+        var otherTask = QuestionnaireService.GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum.Other, false);
+        var multitherapyDrugsTask = QuestionnaireService.GetTreatmentMultitherapyDrugsAsync();
+        await Task.WhenAll(treatmentTask, monotherapiesTask, aCEInhibitorTask, angiotensinIIReceptorBlockerTask, calciumChannelBlockerTask, betaBlockerTask, diureticTask,
+            diureticAldosteroneTask, otherTask, multitherapyDrugsTask);
+        TreatmentUnknowns = treatmentTask.Result;
+        ACEInhibitorDrugs = aCEInhibitorTask.Result;
+        AngiotensinIIReceptorBlockerDrugs = angiotensinIIReceptorBlockerTask.Result;
+        CalciumChannelBlockerDrugs = calciumChannelBlockerTask.Result;
+        BetaBlockerDrugs = betaBlockerTask.Result;
+        DiureticDrugs = diureticTask.Result;
+        DiureticAldosteroneDrugs = diureticAldosteroneTask.Result;
+        OtherDrugs = otherTask.Result;
+        var multitherapyDrugs = multitherapyDrugsTask.Result;
+
+        Antihypertensive2Drugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.Antihypertensive2);
+        Antihypertensive3Drugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.Antihypertensive3);
+        WithHypolypedidemicDrugs = multitherapyDrugs.Where(i => i.Multitherapy == MultitherapyEnum.WithHypolypedidemic);
+
+        var antihypertensives2Task = LoadMultitherapyData();
+        await Task.WhenAll(antihypertensives2Task);
+
         await InvokeAsync(StateHasChanged);
     }
 
@@ -688,5 +812,10 @@ else
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
             });
+    }
+
+    public void Dispose()
+    {
+        AppState.OnChange -= OnAppStateChanged;
     }
 }

@@ -29,7 +29,7 @@ else
                 @if (AmbulatoryMonitor)
                 {
                     <DxFormLayoutGroup Caption="Tlak krvi a pulz - ambulantný tlakomer (merané na návšteve 2)" ColSpanMd="12">
-                        <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
                             <Template>
                                 <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Hands" @bind-Value="@AmbulatoryHand" />
                                 <p><i><strong>Poznámka:</strong> Prosím, uvádzajte hodnoty namerané na ruke s vyšším krvným tlakom.</i></p>
@@ -126,7 +126,7 @@ else
                 @if (BorrowedMonitor)
                 {
                     <DxFormLayoutGroup Caption="Tlak krvi a pulz - tlakomer zapožičaný subjektu (merané na návšteve 2)" ColSpanMd="12">
-                        <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                        <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
                             <Template>
                                 <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Hands" @bind-Value="@BorrowedHand" />
                                 <p><i><strong>Poznámka:</strong> Prosím, uvádzajte hodnoty namerané na ruke s vyšším krvným tlakom.</i></p>

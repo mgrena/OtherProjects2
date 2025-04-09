@@ -26,7 +26,7 @@ else
                 </DxFormLayoutItem>
                 @if (!Treatment2Visit!.IsProperlyTerminated)
                 {
-                    <DxFormLayoutItem Caption="Vydanie záznamníku domáceho monitorovania tlaku subjektu?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                    <DxFormLayoutItem Caption="Dôvod predčasného ukončenia účasti subjektu" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                         <DxRadioGroup Layout="@RadioGroupLayout.Vertical" Items="@Reasons" @bind-Value="@TerminationReason" TextFieldName="DisplayText" ValueFieldName="Value" />
                     </DxFormLayoutItem>
                 }

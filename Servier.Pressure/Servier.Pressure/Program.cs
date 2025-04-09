@@ -34,6 +34,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<WorkplaceService>();
 builder.Services.AddScoped<QuestionnaireService>();
+builder.Services.AddSingleton<AppState>();
 
 // add authentication
 builder.Services.AddAuthentication(options => {

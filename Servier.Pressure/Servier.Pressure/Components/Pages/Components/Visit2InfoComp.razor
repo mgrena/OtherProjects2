@@ -23,10 +23,10 @@ else
                 <DxFormLayoutItem Caption="Dátum návštevy" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxDateEdit @bind-Date="@VisitDate" MinDate="@MinDate" ShowClearButton="true" ShowTodayButton="true" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Zmena antihypertenzívnej liečby na návšteve 1" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="Záznamník domáceho monitorovania tlaku vrátený a skontrolovaný" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@YesNo" @bind-Value="@IsReturnedRecorder" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Vydanie záznamníku domáceho monitorovania tlaku subjektu?" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="Zhodnotenie adherencie subjektu skúšajúcim (od návštevy 1)" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Evaluations" @bind-Value="@SubjectEvaluation" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>

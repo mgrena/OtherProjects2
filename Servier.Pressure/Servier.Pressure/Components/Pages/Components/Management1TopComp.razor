@@ -1,6 +1,7 @@
 ﻿@using Servier.Pressure.Components.Account.Shared
 @using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Helpers
 @using Servier.Pressure.Services.Pages
 
 @attribute [StreamRendering(true)]
@@ -8,6 +9,7 @@
 
 @inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
+@inject AppState AppState
 
 @if (Treatment1Visit == null)
 {
@@ -43,6 +45,7 @@ else
         if (firstRender)
         {
             var entity = await QuestionnaireService.GetTreatment1VisitAsync(patientId);
+            AppState.TreatmentChanged = entity?.IsChanged ?? false;
             if (entity != null)
                 Treatment1Visit = entity;
             else
@@ -62,16 +65,62 @@ else
         debounceTimer.AutoReset = false;
         debounceTimer.Elapsed += async (s, e) =>
         {
+            bool oldValue = false;
+            bool newValue = false;
+            // read entity
             var entity = await QuestionnaireService.GetTreatment1VisitAsync(patientId);
             if (entity != null)
+            {
+                oldValue = entity.IsChanged;
+                newValue = Treatment1Visit!.IsChanged;
                 entity.IsChanged = Treatment1Visit!.IsChanged;
+            }
             else
+            {
                 entity = Treatment1Visit;
+                oldValue = newValue = Treatment1Visit!.IsChanged;
+            }
+
+            // save entity change
             var result = await QuestionnaireService.SaveTreatment1VisitAsync(entity!);
             if (!result.Success)
                 Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else
                 ModifyToast();
+
+            // update treatments
+            if (oldValue != newValue)
+            {
+                if (newValue)
+                {
+                    // copy treatment data from before visit
+                    var monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, VisitEnum.before);
+                    foreach (var item in monotherapies)
+                    {
+                        item.Id = 0;
+                        item.VisitNumber = VisitEnum.first;
+                        await QuestionnaireService.SaveTreatmentMonotherapyAsync(item);
+                    }
+                    var multitherapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, VisitEnum.before);
+                    foreach (var item in multitherapies)
+                    {
+                        item.Id = 0;
+                        item.VisitNumber = VisitEnum.first;
+                        await QuestionnaireService.SaveTreatmentMultitherapyAsync(item);
+                    }
+                }
+                else
+                {
+                    // clear treatment data
+                    var monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, VisitEnum.first);
+                    foreach (var item in monotherapies)
+                        await QuestionnaireService.DeleteTreatmentMonotherapyAsync(item);
+                    var multitherapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, VisitEnum.first);
+                    foreach (var item in multitherapies)
+                        await QuestionnaireService.DeleteTreatmentMultitherapyAsync(item);
+                }
+                AppState.TreatmentChanged = newValue;
+            }
         };
         debounceTimer.Start();
 

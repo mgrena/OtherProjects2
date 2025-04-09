@@ -45,7 +45,7 @@ else
                 <DxFormLayoutItem Caption="Pacient už zaradený do tejto štúdie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOption" @bind-Value="@IsAlreadyEnrolled" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
-                <DxFormLayoutItem Caption="Prítomnosť rezistentnej hypertenzie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
+                <DxFormLayoutItem Caption="Prítomnosť, alebo známa anamnéza, rezistentnej hypertenzie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@ConsentOption" @bind-Value="@IsResistantHypertension" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="Účasť v intervenčnom klinickom skúšaní (aktuálne alebo v priebehu 30 dní pred Návštevou 1)" ColSpanMd="12" CaptionCssClass="caption-styleH1">
