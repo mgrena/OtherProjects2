@@ -32,6 +32,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     // second visit
     public DbSet<Treatment2Visit> Treatments2Visit { get; set; }
     public DbSet<PhysicalExamination2> PhysicalExaminations2 { get; set; }
+    public DbSet<BloodPressureMonitor> BloodPressureMonitors { get; set; }
+    public DbSet<DayRecord> DayRecords { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{

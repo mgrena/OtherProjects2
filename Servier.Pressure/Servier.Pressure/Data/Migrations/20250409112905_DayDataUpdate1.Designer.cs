@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Servier.Pressure.Data;
 
@@ -11,9 +12,11 @@ using Servier.Pressure.Data;
 namespace Servier.Pressure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250409112905_DayDataUpdate1")]
+    partial class DayDataUpdate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1233,12 +1236,10 @@ namespace Servier.Pressure.Migrations
 
             modelBuilder.Entity("Servier.Pressure.Data.Models.DayRecord", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("PatientId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar")
+                        .HasColumnName("id_patient");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2")
@@ -1292,13 +1293,7 @@ namespace Servier.Pressure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("measurement_1_stk");
 
-                    b.Property<string>("PatientId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("id_patient");
-
-                    b.HasKey("Id");
+                    b.HasKey("PatientId");
 
                     b.ToTable("day_records");
                 });

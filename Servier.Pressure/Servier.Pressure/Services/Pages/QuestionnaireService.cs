@@ -108,6 +108,20 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         return await aContext.Treatments2Visit.FirstOrDefaultAsync(i => i.Id == patientId);
     }
+    public async Task<BloodPressureMonitor?> GetBloodPressureMonitorAsync(string patientId)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var result = await aContext.BloodPressureMonitors.FirstOrDefaultAsync(i => i.Id == patientId);
+        result ??= new()
+        {
+            Id = patientId,
+            ModifiedAt = DateTime.Now,
+            CreatedAt = DateTime.Now,
+
+        };
+        return result;
+    }
 
     public async Task<List<TreatmentMonotherapy>> GetTreatmentMonotherapiesAsync(string patientId, VisitEnum visitNum)
     {
@@ -120,6 +134,12 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         using var scope = _scopeFactory.CreateScope();
         var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         return await aContext.TreatmentMultitherapies.Where(i => i.PatientId == patientId && i.VisitNumber == visitNum).ToListAsync();
+    }
+    public async Task<List<DayRecord>> GetDayRecordsAsync(string patientId)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.DayRecords.Where(i => i.PatientId == patientId).ToListAsync();
     }
     public async Task<TreatmentUnknowns> GetTreatmentUnknownsAsync(string patientId, VisitEnum visitNum)
     {
@@ -514,6 +534,35 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
         }
     }
+    public async Task<OperationResult> SaveBloodPressureMonitorAsync(BloodPressureMonitor entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.BloodPressureMonitors.FirstOrDefaultAsync(i => i.Id == entry.Id);
+        if (existEntry == null)
+        {
+            _logger.LogInformation("The Monitor for patient {id} has been added.", entry.Id);
+            aContext.BloodPressureMonitors.Add(entry);
+        }
+        else
+        {
+            _logger.LogInformation("The Monitor for patient {id} has been updated.", entry.Id);
+            existEntry.IsOmronMonitor = entry.IsOmronMonitor;
+            existEntry.OmronNumber = entry.OmronNumber;
+            existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
 
     public async Task<OperationResult> SaveTreatmentMonotherapyAsync(TreatmentMonotherapy entry)
     {
@@ -570,6 +619,43 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.NumberNoon = entry.NumberNoon;
             existEntry.NumberEvening = entry.NumberEvening;
             existEntry.IsUnknown = entry.IsUnknown;
+            existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
+    public async Task<OperationResult> SaveDayRecordAsync(DayRecord entry)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntry = await aContext.DayRecords.FirstOrDefaultAsync(i => i.PatientId == entry.PatientId && i.DayNumber == entry.DayNumber);
+        if (existEntry == null)
+        {
+            _logger.LogInformation("The DayRecord for patient {patient} and day {day} has been added.", entry.PatientId, entry.DayNumber.ToString());
+            aContext.DayRecords.Add(entry);
+        }
+        else
+        {
+            _logger.LogInformation("The DayRecord {id} for patient {patient} and day {day} has been updated.", entry.Id, entry.PatientId, entry.DayNumber.ToString());
+            existEntry.MorningPressureUnknown = entry.MorningPressureUnknown;
+            existEntry.MorningPulseUnknown = entry.MorningPulseUnknown;
+            existEntry.MorningStk = entry.MorningStk;
+            existEntry.MorningDtk = entry.MorningDtk;
+            existEntry.MorningSf = entry.MorningSf;
+            existEntry.EveningPressureUnknown = entry.EveningPressureUnknown;
+            existEntry.EveningPulseUnknown = entry.EveningPulseUnknown;
+            existEntry.EveningStk = entry.EveningStk;
+            existEntry.EveningDtk = entry.EveningDtk;
+            existEntry.EveningSf = entry.EveningSf;
             existEntry.ModifiedAt = DateTime.Now;
         }
 

@@ -331,6 +331,12 @@ html, body {
     white-space: normal !important;
     word-break: break-word;
 }
+.caption-styleH1b {
+    font-size: 14px;
+    font-weight: bold;
+    white-space: normal !important;
+    word-break: break-word;
+}
 
 .caption-styleH1-blue {
     font-size: 14px;
