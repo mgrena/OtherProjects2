@@ -44,9 +44,9 @@ else
                         <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement1Stk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement1Stk" Mask="999" />
                                     <span>/</span>
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement1Dtk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement1Dtk" Mask="999" />
                                     <span> mmHg</span>
                                 </div>
                             </Template>
@@ -56,7 +56,7 @@ else
                         <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement1Sf" MinValue="0" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement1Sf" Mask="999" />
                                     <span> úderov za minútu</span>
                                 </div>
                             </Template>
@@ -71,9 +71,9 @@ else
                         <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement2Stk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement2Stk" Mask="999" />
                                     <span>/</span>
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement2Dtk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement2Dtk" Mask="999" />
                                     <span> mmHg</span>
                                 </div>
                             </Template>
@@ -83,7 +83,7 @@ else
                         <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement2Sf" MinValue="0" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement2Sf" Mask="999" />
                                     <span> úderov za minútu</span>
                                 </div>
                             </Template>
@@ -98,9 +98,9 @@ else
                         <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement3Stk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement3Stk" Mask="999" />
                                     <span>/</span>
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement3Dtk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement3Dtk" Mask="999" />
                                     <span> mmHg</span>
                                 </div>
                             </Template>
@@ -110,7 +110,7 @@ else
                         <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@AmbulatoryMeasurement3Sf" MinValue="0" />
+                                    <DxMaskedInput @bind-Value="@AmbulatoryMeasurement3Sf" Mask="999" />
                                     <span> úderov za minútu</span>
                                 </div>
                             </Template>
@@ -141,9 +141,9 @@ else
                         <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement1Stk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement1Stk" Mask="999" />
                                     <span>/</span>
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement1Dtk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement1Dtk" Mask="999" />
                                     <span> mmHg</span>
                                 </div>
                             </Template>
@@ -153,7 +153,7 @@ else
                         <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement1Sf" MinValue="0" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement1Sf" Mask="999" />
                                     <span> úderov za minútu</span>
                                 </div>
                             </Template>
@@ -168,9 +168,9 @@ else
                         <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement2Stk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement2Stk" Mask="999" />
                                     <span>/</span>
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement2Dtk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement2Dtk" Mask="999" />
                                     <span> mmHg</span>
                                 </div>
                             </Template>
@@ -180,7 +180,7 @@ else
                         <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement2Sf" MinValue="0" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement2Sf" Mask="999" />
                                     <span> úderov za minútu</span>
                                 </div>
                             </Template>
@@ -195,9 +195,9 @@ else
                         <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement3Stk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement3Stk" Mask="999" />
                                     <span>/</span>
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement3Dtk" MinValue="0" Increment="5" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement3Dtk" Mask="999" />
                                     <span> mmHg</span>
                                 </div>
                             </Template>
@@ -207,7 +207,7 @@ else
                         <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                             <Template>
                                 <div class="d-flex align-items-center gap-2">
-                                    <DxSpinEdit @bind-Value="@BorrowedMeasurement3Sf" MinValue="0" />
+                                    <DxMaskedInput @bind-Value="@BorrowedMeasurement3Sf" Mask="999" />
                                     <span> úderov za minútu</span>
                                 </div>
                             </Template>
@@ -303,38 +303,47 @@ else
             }
         }
     }
-    private int AmbulatoryMeasurement1Stk
+    private string AmbulatoryMeasurement1Stk
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement1Stk;
+        get => PhysicalExamination?.AmbulatoryMeasurement1Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement1Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement1Stk != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement1Stk = value;
+                PhysicalExamination!.AmbulatoryMeasurement1Stk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int AmbulatoryMeasurement1Dtk
+    private string AmbulatoryMeasurement1Dtk
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement1Dtk;
+        get => PhysicalExamination?.AmbulatoryMeasurement1Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement1Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement1Dtk != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement1Dtk = value;
+                PhysicalExamination!.AmbulatoryMeasurement1Dtk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int AmbulatoryMeasurement1Sf
+    private string AmbulatoryMeasurement1Sf
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement1Sf;
+        get => PhysicalExamination?.AmbulatoryMeasurement1Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement1Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement1Sf != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement1Sf = value;
+                PhysicalExamination!.AmbulatoryMeasurement1Sf = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -351,38 +360,47 @@ else
             }
         }
     }
-    private int AmbulatoryMeasurement2Stk
+    private string AmbulatoryMeasurement2Stk
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement2Stk;
+        get => PhysicalExamination?.AmbulatoryMeasurement2Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement2Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement2Stk != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement2Stk = value;
+                PhysicalExamination!.AmbulatoryMeasurement2Stk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int AmbulatoryMeasurement2Dtk
+    private string AmbulatoryMeasurement2Dtk
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement2Dtk;
+        get => PhysicalExamination?.AmbulatoryMeasurement2Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement2Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement2Dtk != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement2Dtk = value;
+                PhysicalExamination!.AmbulatoryMeasurement2Dtk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int AmbulatoryMeasurement2Sf
+    private string AmbulatoryMeasurement2Sf
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement2Sf;
+        get => PhysicalExamination?.AmbulatoryMeasurement2Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement2Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement2Sf != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement2Sf = value;
+                PhysicalExamination!.AmbulatoryMeasurement2Sf = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -399,38 +417,47 @@ else
             }
         }
     }
-    private int AmbulatoryMeasurement3Stk
+    private string AmbulatoryMeasurement3Stk
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement3Stk;
+        get => PhysicalExamination?.AmbulatoryMeasurement3Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement3Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement3Stk != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement3Stk = value;
+                PhysicalExamination!.AmbulatoryMeasurement3Stk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int AmbulatoryMeasurement3Dtk
+    private string AmbulatoryMeasurement3Dtk
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement3Dtk;
+        get => PhysicalExamination?.AmbulatoryMeasurement3Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement3Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement3Dtk != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement3Dtk = value;
+                PhysicalExamination!.AmbulatoryMeasurement3Dtk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int AmbulatoryMeasurement3Sf
+    private string AmbulatoryMeasurement3Sf
     {
-        get => PhysicalExamination!.AmbulatoryMeasurement3Sf;
+        get => PhysicalExamination?.AmbulatoryMeasurement3Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.AmbulatoryMeasurement3Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.AmbulatoryMeasurement3Sf != newValue)
             {
-                PhysicalExamination!.AmbulatoryMeasurement3Sf = value;
+                PhysicalExamination!.AmbulatoryMeasurement3Sf = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -476,38 +503,47 @@ else
             }
         }
     }
-    private int BorrowedMeasurement1Stk
+    private string BorrowedMeasurement1Stk
     {
-        get => PhysicalExamination!.BorrowedMeasurement1Stk;
+        get => PhysicalExamination?.BorrowedMeasurement1Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement1Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement1Stk != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement1Stk = value;
+                PhysicalExamination!.BorrowedMeasurement1Stk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int BorrowedMeasurement1Dtk
+    private string BorrowedMeasurement1Dtk
     {
-        get => PhysicalExamination!.BorrowedMeasurement1Dtk;
+        get => PhysicalExamination?.BorrowedMeasurement1Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement1Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement1Dtk != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement1Dtk = value;
+                PhysicalExamination!.BorrowedMeasurement1Dtk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int BorrowedMeasurement1Sf
+    private string BorrowedMeasurement1Sf
     {
-        get => PhysicalExamination!.BorrowedMeasurement1Sf;
+        get => PhysicalExamination?.BorrowedMeasurement1Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement1Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement1Sf != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement1Sf = value;
+                PhysicalExamination!.BorrowedMeasurement1Sf = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -524,38 +560,47 @@ else
             }
         }
     }
-    private int BorrowedMeasurement2Stk
+    private string BorrowedMeasurement2Stk
     {
-        get => PhysicalExamination!.BorrowedMeasurement2Stk;
+        get => PhysicalExamination?.BorrowedMeasurement2Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement2Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement2Stk != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement2Stk = value;
+                PhysicalExamination!.BorrowedMeasurement2Stk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int BorrowedMeasurement2Dtk
+    private string BorrowedMeasurement2Dtk
     {
-        get => PhysicalExamination!.BorrowedMeasurement2Dtk;
+        get => PhysicalExamination?.BorrowedMeasurement2Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement2Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement2Dtk != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement2Dtk = value;
+                PhysicalExamination!.BorrowedMeasurement2Dtk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int BorrowedMeasurement2Sf
+    private string BorrowedMeasurement2Sf
     {
-        get => PhysicalExamination!.BorrowedMeasurement2Sf;
+        get => PhysicalExamination?.BorrowedMeasurement2Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement2Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement2Sf != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement2Sf = value;
+                PhysicalExamination!.BorrowedMeasurement2Sf = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -572,38 +617,47 @@ else
             }
         }
     }
-    private int BorrowedMeasurement3Stk
+    private string BorrowedMeasurement3Stk
     {
-        get => PhysicalExamination!.BorrowedMeasurement3Stk;
+        get => PhysicalExamination?.BorrowedMeasurement3Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement3Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement3Stk != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement3Stk = value;
+                PhysicalExamination!.BorrowedMeasurement3Stk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int BorrowedMeasurement3Dtk
+    private string BorrowedMeasurement3Dtk
     {
-        get => PhysicalExamination!.BorrowedMeasurement3Dtk;
+        get => PhysicalExamination?.BorrowedMeasurement3Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement3Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement3Dtk != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement3Dtk = value;
+                PhysicalExamination!.BorrowedMeasurement3Dtk = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
     }
-    private int BorrowedMeasurement3Sf
+    private string BorrowedMeasurement3Sf
     {
-        get => PhysicalExamination!.BorrowedMeasurement3Sf;
+        get => PhysicalExamination?.BorrowedMeasurement3Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.BorrowedMeasurement3Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.BorrowedMeasurement3Sf != newValue)
             {
-                PhysicalExamination!.BorrowedMeasurement3Sf = value;
+                PhysicalExamination!.BorrowedMeasurement3Sf = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }

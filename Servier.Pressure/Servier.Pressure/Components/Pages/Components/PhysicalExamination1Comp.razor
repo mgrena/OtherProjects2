@@ -22,7 +22,7 @@ else
                     <DxFormLayoutItem Caption="výška" ColSpanMd="8" CaptionCssClass="caption-styleH1">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Height" MinValue="140" />
+                                <DxMaskedInput @bind-Value="@Height" Mask="999.9" />
                                 <span style="margin-left: 5px;">cm</span>
                             </div>
                         </Template>
@@ -33,7 +33,7 @@ else
                     <DxFormLayoutItem Caption="hmotnosť" ColSpanMd="8" CaptionCssClass="caption-styleH1">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Weight" MinValue="50" />
+                                <DxMaskedInput @bind-Value="@Weight" Mask="999.9" />
                                 <span style="margin-left: 5px;">kg</span>
                             </div>
                         </Template>
@@ -46,7 +46,7 @@ else
                     <DxFormLayoutItem Caption="obvod pása" ColSpanMd="8" CaptionCssClass="caption-styleH1">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Waist" MinValue="50" />
+                                <DxMaskedInput @bind-Value="@Waist" Mask="999" />
                                 <span style="margin-left: 5px;">cm</span>
                             </div>
                         </Template>
@@ -70,9 +70,9 @@ else
                     <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div class="d-flex align-items-center gap-2">
-                                <DxSpinEdit @bind-Value="@Measurement1Stk" MinValue="0" Increment="5" />
+                                <DxMaskedInput @bind-Value="@Measurement1Stk" Mask="999" />
                                 <span>/</span>
-                                <DxSpinEdit @bind-Value="@Measurement1Dtk" MinValue="0" Increment="5" />
+                                <DxMaskedInput @bind-Value="@Measurement1Dtk" Mask="999" />
                                 <span> mmHg</span>
                             </div>
                         </Template>
@@ -82,7 +82,7 @@ else
                     <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div class="d-flex align-items-center gap-2">
-                                <DxSpinEdit @bind-Value="@Measurement1Sf" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@Measurement1Sf" Mask="999" />
                                 <span> úderov za minútu</span>
                             </div>
                         </Template>
@@ -97,9 +97,9 @@ else
                     <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div class="d-flex align-items-center gap-2">
-                                <DxSpinEdit @bind-Value="@Measurement2Stk" MinValue="0" Increment="5" />
+                                <DxMaskedInput @bind-Value="@Measurement2Stk" Mask="999" />
                                 <span>/</span>
-                                <DxSpinEdit @bind-Value="@Measurement2Dtk" MinValue="0" Increment="5" />
+                                <DxMaskedInput @bind-Value="@Measurement2Dtk" Mask="999" />
                                 <span> mmHg</span>
                             </div>
                         </Template>
@@ -109,7 +109,7 @@ else
                     <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div class="d-flex align-items-center gap-2">
-                                <DxSpinEdit @bind-Value="@Measurement2Sf" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@Measurement2Sf" Mask="999" />
                                 <span> úderov za minútu</span>
                             </div>
                         </Template>
@@ -124,9 +124,9 @@ else
                     <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div class="d-flex align-items-center gap-2">
-                                <DxSpinEdit @bind-Value="@Measurement3Stk" MinValue="0" Increment="5" />
+                                <DxMaskedInput @bind-Value="@Measurement3Stk" Mask="999" />
                                 <span>/</span>
-                                <DxSpinEdit @bind-Value="@Measurement3Dtk" MinValue="0" Increment="5" />
+                                <DxMaskedInput @bind-Value="@Measurement3Dtk" Mask="999" />
                                 <span> mmHg</span>
                             </div>
                         </Template>
@@ -136,7 +136,7 @@ else
                     <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div class="d-flex align-items-center gap-2">
-                                <DxSpinEdit @bind-Value="@Measurement3Sf" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@Measurement3Sf" Mask="999" />
                                 <span> úderov za minútu</span>
                             </div>
                         </Template>
@@ -166,7 +166,7 @@ else
                     <DxFormLayoutItem Caption="celk. cholesterol" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Cholesterol" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@Cholesterol" Mask="999.9" />
                                 <span style="margin-left: 5px;">mmol/l</span>
                             </div>
                         </Template>
@@ -177,7 +177,7 @@ else
                     <DxFormLayoutItem Caption="LDL" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@LDL" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@LDL" Mask="999.9" />
                                 <span style="margin-left: 5px;">mmol/l</span>
                             </div>
                         </Template>
@@ -188,7 +188,7 @@ else
                     <DxFormLayoutItem Caption="HDL" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@HDL" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@HDL" Mask="999.9" />
                                 <span style="margin-left: 5px;">mmol/l</span>
                             </div>
                         </Template>
@@ -201,7 +201,7 @@ else
                     <DxFormLayoutItem Caption="triglyceridy" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Triglycerides" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@Triglycerides" Mask="999.9" />
                                 <span style="margin-left: 5px;">mmol/l</span>
                             </div>
                         </Template>
@@ -212,7 +212,7 @@ else
                     <DxFormLayoutItem Caption="albumín" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Albumin" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@Albumin" Mask="999.9" />
                                 <span style="margin-left: 5px;">mmol/l</span>
                             </div>
                         </Template>
@@ -223,7 +223,7 @@ else
                     <DxFormLayoutItem Caption="kreatinín" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Creatinine" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@Creatinine" Mask="999.9" />
                                 <span style="margin-left: 5px;">mmol/l</span>
                             </div>
                         </Template>
@@ -234,7 +234,7 @@ else
                     <DxFormLayoutItem Caption="glykémia (nalačno)" ColSpanMd="8" CaptionCssClass="caption-styleH1 long-caption">
                         <Template>
                             <div style="display: flex; align-items: center;">
-                                <DxSpinEdit DisplayFormat="F1" @bind-Value="@Glycemia" MinValue="0" />
+                                <DxMaskedInput @bind-Value="@Glycemia" Mask="999.9" />
                                 <span style="margin-left: 5px;">mmol/l</span>
                             </div>
                         </Template>
@@ -312,14 +312,17 @@ else
         await Task.CompletedTask;
     }
 
-    private decimal Height
+    private string Height
     {
-        get => PhysicalExamination!.Height;
+        get => PhysicalExamination?.Height.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Height != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Height != newValue)
             {
-                PhysicalExamination!.Height = value;
+                PhysicalExamination!.Height = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
@@ -336,14 +339,17 @@ else
             }
         }
     }
-    private decimal Weight
+    private string Weight
     {
-        get => PhysicalExamination!.Weight;
+        get => PhysicalExamination?.Weight.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Weight != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Weight != newValue)
             {
-                PhysicalExamination!.Weight = value;
+                PhysicalExamination!.Weight = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
@@ -361,14 +367,17 @@ else
         }
     }
     private string BMI { get => (PhysicalExamination!.Weight / ((PhysicalExamination!.Height / 100) * (PhysicalExamination!.Height / 100))).ToString("F2") + " kg/m2"; }
-    private decimal Waist
+    private string Waist
     {
-        get => PhysicalExamination!.Waist;
+        get => PhysicalExamination?.Waist.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Waist != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Waist != newValue)
             {
-                PhysicalExamination!.Waist = value;
+                PhysicalExamination!.Waist = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
@@ -410,38 +419,47 @@ else
             }
         }
     }
-    private int Measurement1Stk
+    private string Measurement1Stk
     {
-        get => PhysicalExamination!.Measurement1Stk;
+        get => PhysicalExamination?.Measurement1Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement1Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement1Stk != newValue)
             {
-                PhysicalExamination!.Measurement1Stk = value;
+                PhysicalExamination!.Measurement1Stk = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
-    private int Measurement1Dtk
+    private string Measurement1Dtk
     {
-        get => PhysicalExamination!.Measurement1Dtk;
+        get => PhysicalExamination?.Measurement1Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement1Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement1Dtk != newValue)
             {
-                PhysicalExamination!.Measurement1Dtk = value;
+                PhysicalExamination!.Measurement1Dtk = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
-    private int Measurement1Sf
+    private string Measurement1Sf
     {
-        get => PhysicalExamination!.Measurement1Sf;
+        get => PhysicalExamination?.Measurement1Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement1Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement1Sf != newValue)
             {
-                PhysicalExamination!.Measurement1Sf = value;
+                PhysicalExamination!.Measurement1Sf = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
@@ -458,38 +476,47 @@ else
             }
         }
     }
-    private int Measurement2Stk
+    private string Measurement2Stk
     {
-        get => PhysicalExamination!.Measurement2Stk;
+        get => PhysicalExamination?.Measurement2Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement2Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement2Stk != newValue)
             {
-                PhysicalExamination!.Measurement2Stk = value;
+                PhysicalExamination!.Measurement2Stk = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
-    private int Measurement2Dtk
+    private string Measurement2Dtk
     {
-        get => PhysicalExamination!.Measurement2Dtk;
+        get => PhysicalExamination?.Measurement2Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement2Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement2Dtk != newValue)
             {
-                PhysicalExamination!.Measurement2Dtk = value;
+                PhysicalExamination!.Measurement2Dtk = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
-    private int Measurement2Sf
+    private string Measurement2Sf
     {
-        get => PhysicalExamination!.Measurement2Sf;
+        get => PhysicalExamination?.Measurement2Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement2Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement2Sf != newValue)
             {
-                PhysicalExamination!.Measurement2Sf = value;
+                PhysicalExamination!.Measurement2Sf = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
@@ -506,38 +533,47 @@ else
             }
         }
     }
-    private int Measurement3Stk
+    private string Measurement3Stk
     {
-        get => PhysicalExamination!.Measurement3Stk;
+        get => PhysicalExamination?.Measurement3Stk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement3Stk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement3Stk != newValue)
             {
-                PhysicalExamination!.Measurement3Stk = value;
+                PhysicalExamination!.Measurement3Stk = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
-    private int Measurement3Dtk
+    private string Measurement3Dtk
     {
-        get => PhysicalExamination!.Measurement3Dtk;
+        get => PhysicalExamination?.Measurement3Dtk.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement3Dtk != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement3Dtk != newValue)
             {
-                PhysicalExamination!.Measurement3Dtk = value;
+                PhysicalExamination!.Measurement3Dtk = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
     }
-    private int Measurement3Sf
+    private string Measurement3Sf
     {
-        get => PhysicalExamination!.Measurement3Sf;
+        get => PhysicalExamination?.Measurement3Sf.ToString() ?? string.Empty;
         set
         {
-            if (PhysicalExamination!.Measurement3Sf != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (PhysicalExamination!.Measurement3Sf != newValue)
             {
-                PhysicalExamination!.Measurement3Sf = value;
+                PhysicalExamination!.Measurement3Sf = newValue;
                 InvokeAsync(OnPEFieldChangedAsync);
             }
         }
@@ -546,14 +582,17 @@ else
     private string MeasurementDtk { get => ((PhysicalExamination!.Measurement1Dtk + PhysicalExamination!.Measurement2Dtk + PhysicalExamination!.Measurement3Dtk) / 3m).ToString("F2"); }
     private string MeasurementSf { get => ((PhysicalExamination!.Measurement2Sf + PhysicalExamination!.Measurement3Sf) / 2m).ToString("F2"); }
 
-    private decimal Cholesterol
+    private string Cholesterol
     {
-        get => LaboratoryTest!.Cholesterol;
+        get => LaboratoryTest?.Cholesterol.ToString() ?? string.Empty;
         set
         {
-            if (LaboratoryTest!.Cholesterol != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (LaboratoryTest!.Cholesterol != newValue)
             {
-                LaboratoryTest!.Cholesterol = value;
+                LaboratoryTest!.Cholesterol = newValue;
                 InvokeAsync(OnLTFieldChangedAsync);
             }
         }
@@ -570,14 +609,17 @@ else
             }
         }
     }
-    private decimal LDL
+    private string LDL
     {
-        get => LaboratoryTest!.LDL;
+        get => LaboratoryTest?.LDL.ToString() ?? string.Empty;
         set
         {
-            if (LaboratoryTest!.LDL != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (LaboratoryTest!.LDL != newValue)
             {
-                LaboratoryTest!.LDL = value;
+                LaboratoryTest!.LDL = newValue;
                 InvokeAsync(OnLTFieldChangedAsync);
             }
         }
@@ -594,14 +636,17 @@ else
             }
         }
     }
-    private decimal HDL
+    private string HDL
     {
-        get => LaboratoryTest!.HDL;
+        get => LaboratoryTest?.HDL.ToString() ?? string.Empty;
         set
         {
-            if (LaboratoryTest!.HDL != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (LaboratoryTest!.HDL != newValue)
             {
-                LaboratoryTest!.HDL = value;
+                LaboratoryTest!.HDL = newValue;
                 InvokeAsync(OnLTFieldChangedAsync);
             }
         }
@@ -619,14 +664,17 @@ else
         }
     }
     private string NonHDL { get => (LaboratoryTest!.Cholesterol - LaboratoryTest!.HDL).ToString("F2") + " mmol/l"; }
-    private decimal Triglycerides
+    private string Triglycerides
     {
-        get => LaboratoryTest!.Triglycerides;
+        get => LaboratoryTest?.Triglycerides.ToString() ?? string.Empty;
         set
         {
-            if (LaboratoryTest!.Triglycerides != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (LaboratoryTest!.Triglycerides != newValue)
             {
-                LaboratoryTest!.Triglycerides = value;
+                LaboratoryTest!.Triglycerides = newValue;
                 InvokeAsync(OnLTFieldChangedAsync);
             }
         }
@@ -643,14 +691,17 @@ else
             }
         }
     }
-    private decimal Albumin
+    private string Albumin
     {
-        get => LaboratoryTest!.Albumin;
+        get => LaboratoryTest?.Albumin.ToString() ?? string.Empty;
         set
         {
-            if (LaboratoryTest!.Albumin != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (LaboratoryTest!.Albumin != newValue)
             {
-                LaboratoryTest!.Albumin = value;
+                LaboratoryTest!.Albumin = newValue;
                 InvokeAsync(OnLTFieldChangedAsync);
             }
         }
@@ -667,14 +718,17 @@ else
             }
         }
     }
-    private decimal Creatinine
+    private string Creatinine
     {
-        get => LaboratoryTest!.Creatinine;
+        get => LaboratoryTest?.Creatinine.ToString() ?? string.Empty;
         set
         {
-            if (LaboratoryTest!.Creatinine != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (LaboratoryTest!.Creatinine != newValue)
             {
-                LaboratoryTest!.Creatinine = value;
+                LaboratoryTest!.Creatinine = newValue;
                 InvokeAsync(OnLTFieldChangedAsync);
             }
         }
@@ -691,14 +745,17 @@ else
             }
         }
     }
-    private decimal Glycemia
+    private string Glycemia
     {
-        get => LaboratoryTest!.Glycemia;
+        get => LaboratoryTest?.Glycemia.ToString() ?? string.Empty;
         set
         {
-            if (LaboratoryTest!.Glycemia != value)
+            decimal newValue = 0;
+            if (decimal.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (LaboratoryTest!.Glycemia != newValue)
             {
-                LaboratoryTest!.Glycemia = value;
+                LaboratoryTest!.Glycemia = newValue;
                 InvokeAsync(OnLTFieldChangedAsync);
             }
         }

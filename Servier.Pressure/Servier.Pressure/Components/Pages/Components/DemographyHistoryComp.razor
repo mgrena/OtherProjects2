@@ -25,7 +25,7 @@ else
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@Gender" @bind-Value="@IsMan" TextFieldName="DisplayText" ValueFieldName="Value" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="rok narodenia" ColSpanMd="12" CaptionCssClass="caption-styleH1">
-                    <DxSpinEdit @bind-Value="@Age" MinValue="1900" MaxValue="@DateTime.Now.Year" />
+                    <DxMaskedInput @bind-Value="@Age" Mask="9999" />
                 </DxFormLayoutItem>
                 <DxFormLayoutItem Caption="fajčenie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
                     <DxRadioGroup Layout="@RadioGroupLayout.Horizontal" Items="@SmokerOptions" @bind-Value="@Smoker" TextFieldName="DisplayText" ValueFieldName="Value" />
@@ -37,13 +37,13 @@ else
             <DxFormLayoutGroup Caption="Anamnéza" ColSpanMd="12" CaptionCssClass="caption-styleH0">
                 <DxFormLayoutGroup Caption="Artériová hypertenzia" ColSpanMd="12">
                     <DxFormLayoutItem Caption="rok stanovenia diagnózy" ColSpanMd="6" CaptionCssClass="caption-styleH1">
-                        <DxSpinEdit @bind-Value="@DiagnosisYear" MinValue="1900" MaxValue="@DateTime.Now.Year" />
+                        <DxMaskedInput @bind-Value="@DiagnosisYear" Mask="9999" />
                     </DxFormLayoutItem>
                     <DxFormLayoutItem ColSpanMd="6">
                         <DxCheckBox @bind-Checked="@DiagnosisYearUnknown">neznámy</DxCheckBox>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem Caption="rok zahájenia liečby" ColSpanMd="6" CaptionCssClass="caption-styleH1">
-                        <DxSpinEdit @bind-Value="@TreatmentYear" MinValue="1900" MaxValue="@DateTime.Now.Year" />
+                        <DxMaskedInput @bind-Value="@TreatmentYear" Mask="9999" />
                     </DxFormLayoutItem>
                     <DxFormLayoutItem ColSpanMd="6">
                         <DxCheckBox @bind-Checked="@TreatmentYearUnknown">neznámy</DxCheckBox>
@@ -214,14 +214,17 @@ else
             }
         }
     }
-    private int Age
+    private string Age
     {
-        get => DemographyHistoryQuestionaire!.Age;
+        get => DemographyHistoryQuestionaire?.Age.ToString() ?? string.Empty;
         set
         {
-            if (DemographyHistoryQuestionaire!.Age != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (DemographyHistoryQuestionaire!.Age != newValue)
             {
-                DemographyHistoryQuestionaire!.Age = value;
+                DemographyHistoryQuestionaire!.Age = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -250,14 +253,17 @@ else
             }
         }
     }
-    private int DiagnosisYear
+    private string DiagnosisYear
     {
-        get => DemographyHistoryQuestionaire!.DiagnosisYear;
+        get => DemographyHistoryQuestionaire?.DiagnosisYear.ToString() ?? string.Empty;
         set
         {
-            if (DemographyHistoryQuestionaire!.DiagnosisYear != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (DemographyHistoryQuestionaire!.DiagnosisYear != newValue)
             {
-                DemographyHistoryQuestionaire!.DiagnosisYear = value;
+                DemographyHistoryQuestionaire!.DiagnosisYear = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -274,14 +280,17 @@ else
             }
         }
     }
-    private int TreatmentYear
+    private string TreatmentYear
     {
-        get => DemographyHistoryQuestionaire!.TreatmentYear;
+        get => DemographyHistoryQuestionaire?.TreatmentYear.ToString() ?? string.Empty;
         set
         {
-            if (DemographyHistoryQuestionaire!.TreatmentYear != value)
+            int newValue = 0;
+            if (int.TryParse(value, out var parsed))
+                newValue = parsed;
+            if (DemographyHistoryQuestionaire!.TreatmentYear != newValue)
             {
-                DemographyHistoryQuestionaire!.TreatmentYear = value;
+                DemographyHistoryQuestionaire!.TreatmentYear = newValue;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
