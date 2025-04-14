@@ -349,6 +349,10 @@ html, body {
     max-width: 150px;
 }
 
+.long-captionp {
+    max-width: 60%;
+}
+
 .form-separator hr {
     margin: 4px 0;
     padding: 0;

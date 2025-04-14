@@ -646,16 +646,26 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         else
         {
             _logger.LogInformation("The DayRecord {id} for patient {patient} and day {day} has been updated.", entry.Id, entry.PatientId, entry.DayNumber.ToString());
-            existEntry.MorningPressureUnknown = entry.MorningPressureUnknown;
-            existEntry.MorningPulseUnknown = entry.MorningPulseUnknown;
-            existEntry.MorningStk = entry.MorningStk;
-            existEntry.MorningDtk = entry.MorningDtk;
-            existEntry.MorningSf = entry.MorningSf;
-            existEntry.EveningPressureUnknown = entry.EveningPressureUnknown;
-            existEntry.EveningPulseUnknown = entry.EveningPulseUnknown;
-            existEntry.EveningStk = entry.EveningStk;
-            existEntry.EveningDtk = entry.EveningDtk;
-            existEntry.EveningSf = entry.EveningSf;
+            existEntry.Morning1PressureUnknown = entry.Morning1PressureUnknown;
+            existEntry.Morning1PulseUnknown = entry.Morning1PulseUnknown;
+            existEntry.Morning1Stk = entry.Morning1Stk;
+            existEntry.Morning1Dtk = entry.Morning1Dtk;
+            existEntry.Morning1Sf = entry.Morning1Sf;
+            existEntry.Morning2PressureUnknown = entry.Morning2PressureUnknown;
+            existEntry.Morning2PulseUnknown = entry.Morning2PulseUnknown;
+            existEntry.Morning2Stk = entry.Morning2Stk;
+            existEntry.Morning2Dtk = entry.Morning2Dtk;
+            existEntry.Morning2Sf = entry.Morning2Sf;
+            existEntry.Evening1PressureUnknown = entry.Evening1PressureUnknown;
+            existEntry.Evening1PulseUnknown = entry.Evening1PulseUnknown;
+            existEntry.Evening1Stk = entry.Evening1Stk;
+            existEntry.Evening1Dtk = entry.Evening1Dtk;
+            existEntry.Evening1Sf = entry.Evening1Sf;
+            existEntry.Evening2PressureUnknown = entry.Evening2PressureUnknown;
+            existEntry.Evening2PulseUnknown = entry.Evening2PulseUnknown;
+            existEntry.Evening2Stk = entry.Evening2Stk;
+            existEntry.Evening2Dtk = entry.Evening2Dtk;
+            existEntry.Evening2Sf = entry.Evening2Sf;
             existEntry.ModifiedAt = DateTime.Now;
         }
 

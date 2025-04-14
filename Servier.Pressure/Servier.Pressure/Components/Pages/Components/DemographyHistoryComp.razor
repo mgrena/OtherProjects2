@@ -62,12 +62,12 @@ else
                     <DxFormLayoutItem ColSpanMd="6" Caption="prosím špecifikujte" CaptionCssClass="caption-styleH1" Visible="@DiagnosisDiabetes">
                         <DxComboBox Data="@DiabetesTypes" @bind-Value="@DiagnosisDiabetesType" />
                     </DxFormLayoutItem>
-                    <DxFormLayoutItem ColSpanMd="6" CaptionCssClass="caption-styleH1" BeginRow="true">
+                    <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1" BeginRow="true">
                         <DxCheckBox @bind-Checked="@DiagnosisDyslipidemia">dyslipidémia</DxCheckBox>
                     </DxFormLayoutItem>
-                    <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@DiagnosisDyslipidemia">
+                    @* <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@DiagnosisDyslipidemia">
                         <DxComboBox Data="@DyslipidemiaDrugs" @bind-Value="@DiagnosisDyslipidemiaDrug" TextFieldName="Name" ValueFieldName="Id" />
-                    </DxFormLayoutItem>
+                    </DxFormLayoutItem> *@
                     <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
                         <DxCheckBox @bind-Checked="@DiagnosisICHS">ischemická choroba srdca, prosím vyberte príslušné možnosti</DxCheckBox>
                     </DxFormLayoutItem>

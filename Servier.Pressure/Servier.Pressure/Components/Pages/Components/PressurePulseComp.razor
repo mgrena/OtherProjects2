@@ -38,59 +38,73 @@ else
                         @foreach (var item in DayRecords)
                         {
                             <DxFormLayoutItem Caption="@item.DayNumber" ColSpanMd="12" CaptionCssClass="caption-styleH1b" />
-                            <DxFormLayoutItem Caption="ráno" ColSpanMd="12" CaptionCssClass="caption-styleH1" />
-                            <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <DxFormLayoutItem Caption="ráno" ColSpanMd="2" CaptionCssClass="caption-styleH1" CaptionPosition="CaptionPosition.Vertical" />
+                            <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="5" CaptionCssClass="caption-styleH1" CaptionPosition="CaptionPosition.Vertical">
                                 <Template>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <DxMaskedInput @bind-Value="@item.MorningStk" Mask="999" ReadOnly="@IsOmronMonitor" />
-                                        <span>/</span>
-                                        <DxMaskedInput @bind-Value="@item.MorningDtk" Mask="999" ReadOnly="@IsOmronMonitor" />
-                                        <span> mmHg</span>
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <DxMaskedInput @bind-Value="@item.Morning1Stk" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span>/</span>
+                                            <DxMaskedInput @bind-Value="@item.Morning1Dtk" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span> mmHg</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <DxMaskedInput @bind-Value="@item.Morning2Stk" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span>/</span>
+                                            <DxMaskedInput @bind-Value="@item.Morning2Dtk" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span> mmHg</span>
+                                        </div>
                                     </div>
                                 </Template>
                             </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
-                                <DxCheckBox @bind-Checked="@item.MorningPressureUnknown" ReadOnly="@IsOmronMonitor" />
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
+                            <DxFormLayoutItem Caption="pulz" ColSpanMd="5" CaptionCssClass="caption-styleH1" CaptionPosition="CaptionPosition.Vertical">
                                 <Template>
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <DxMaskedInput @bind-Value="@item.Morning1Sf" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span> úderov za minútu</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <DxMaskedInput @bind-Value="@item.Morning2Sf" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span> úderov za minútu</span>
+                                        </div>
+                                    </div>
+                                </Template>
+                            </DxFormLayoutItem>
+                            <DxFormLayoutItem Caption="večer" ColSpanMd="2" CaptionCssClass="caption-styleH1" CaptionPosition="CaptionPosition.Vertical" />
+                            <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="5" CaptionCssClass="caption-styleH1" CaptionPosition="CaptionPosition.Vertical">
+                                <Template>
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <DxMaskedInput @bind-Value="@item.Evening1Stk" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span>/</span>
+                                            <DxMaskedInput @bind-Value="@item.Evening1Dtk" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span> mmHg</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <DxMaskedInput @bind-Value="@item.Evening2Stk" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span>/</span>
+                                            <DxMaskedInput @bind-Value="@item.Evening2Dtk" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                            <span> mmHg</span>
+                                        </div>
+                                    </div>
+                                </Template>
+                            </DxFormLayoutItem>
+                            <DxFormLayoutItem Caption="pulz" ColSpanMd="5" CaptionCssClass="caption-styleH1" CaptionPosition="CaptionPosition.Vertical">
+                                <Template>
+                                    <div class="d-flex flex-column gap-2">
+
+                                    </div>
                                     <div class="d-flex align-items-center gap-2">
-                                        <DxMaskedInput @bind-Value="@item.MorningSf" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                        <DxMaskedInput @bind-Value="@item.Evening1Sf" Mask="999" ReadOnly="@IsOmronMonitor" />
+                                        <span> úderov za minútu</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <DxMaskedInput @bind-Value="@item.Evening2Sf" Mask="999" ReadOnly="@IsOmronMonitor" />
                                         <span> úderov za minútu</span>
                                     </div>
                                 </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
-                                <DxCheckBox @bind-Checked="@item.MorningPulseUnknown" ReadOnly="@IsOmronMonitor" />
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="večer" ColSpanMd="12" CaptionCssClass="caption-styleH1" />
-                            <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="tlak krvi" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
-                                <Template>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <DxMaskedInput @bind-Value="@item.EveningStk" Mask="999" ReadOnly="@IsOmronMonitor" />
-                                        <span>/</span>
-                                        <DxMaskedInput @bind-Value="@item.EveningDtk" Mask="999" ReadOnly="@IsOmronMonitor" />
-                                        <span> mmHg</span>
-                                    </div>
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
-                                <DxCheckBox @bind-Checked="@item.EveningPressureUnknown" ReadOnly="@IsOmronMonitor" />
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="pulz" ColSpanMd="7" CaptionCssClass="caption-styleH1 long-caption">
-                                <Template>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <DxMaskedInput @bind-Value="@item.EveningSf" Mask="999" ReadOnly="@IsOmronMonitor" />
-                                        <span> úderov za minútu</span>
-                                    </div>
-                                </Template>
-                            </DxFormLayoutItem>
-                            <DxFormLayoutItem Caption="nevyšetrené" ColSpanMd="4" CaptionCssClass="caption-styleH1 long-caption">
-                                <DxCheckBox @bind-Checked="@item.EveningPulseUnknown" ReadOnly="@IsOmronMonitor" />
                             </DxFormLayoutItem>
                             <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
                         }
@@ -241,9 +255,14 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.MorningStk.HasValue && item.Record.MorningStk.Value > 0)
+                if (item.Record.Morning1Stk.HasValue && item.Record.Morning1Stk.Value > 0)
                 {
-                    value += item.Record.MorningStk.Value;
+                    value += item.Record.Morning1Stk.Value;
+                    count++;
+                }
+                if (item.Record.Morning2Stk.HasValue && item.Record.Morning2Stk.Value > 0)
+                {
+                    value += item.Record.Morning2Stk.Value;
                     count++;
                 }
             }
@@ -260,9 +279,14 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.MorningDtk.HasValue && item.Record.MorningDtk.Value > 0)
+                if (item.Record.Morning1Dtk.HasValue && item.Record.Morning1Dtk.Value > 0)
                 {
-                    value += item.Record.MorningDtk.Value;
+                    value += item.Record.Morning1Dtk.Value;
+                    count++;
+                }
+                if (item.Record.Morning2Dtk.HasValue && item.Record.Morning2Dtk.Value > 0)
+                {
+                    value += item.Record.Morning2Dtk.Value;
                     count++;
                 }
             }
@@ -279,9 +303,14 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.MorningSf.HasValue && item.Record.MorningSf.Value > 0)
+                if (item.Record.Morning1Sf.HasValue && item.Record.Morning1Sf.Value > 0)
                 {
-                    value += item.Record.MorningSf.Value;
+                    value += item.Record.Morning1Sf.Value;
+                    count++;
+                }
+                if (item.Record.Morning2Sf.HasValue && item.Record.Morning2Sf.Value > 0)
+                {
+                    value += item.Record.Morning2Sf.Value;
                     count++;
                 }
             }
@@ -298,9 +327,14 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.EveningStk.HasValue && item.Record.EveningStk.Value > 0)
+                if (item.Record.Evening1Stk.HasValue && item.Record.Evening1Stk.Value > 0)
                 {
-                    value += item.Record.EveningStk.Value;
+                    value += item.Record.Evening1Stk.Value;
+                    count++;
+                }
+                if (item.Record.Evening2Stk.HasValue && item.Record.Evening2Stk.Value > 0)
+                {
+                    value += item.Record.Evening2Stk.Value;
                     count++;
                 }
             }
@@ -317,9 +351,14 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.EveningDtk.HasValue && item.Record.EveningDtk.Value > 0)
+                if (item.Record.Evening1Dtk.HasValue && item.Record.Evening1Dtk.Value > 0)
                 {
-                    value += item.Record.EveningDtk.Value;
+                    value += item.Record.Evening1Dtk.Value;
+                    count++;
+                }
+                if (item.Record.Evening2Dtk.HasValue && item.Record.Evening2Dtk.Value > 0)
+                {
+                    value += item.Record.Evening2Dtk.Value;
                     count++;
                 }
             }
@@ -336,9 +375,14 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.EveningSf.HasValue && item.Record.EveningSf.Value > 0)
+                if (item.Record.Evening1Sf.HasValue && item.Record.Evening1Sf.Value > 0)
                 {
-                    value += item.Record.EveningSf.Value;
+                    value += item.Record.Evening1Sf.Value;
+                    count++;
+                }
+                if (item.Record.Evening2Sf.HasValue && item.Record.Evening2Sf.Value > 0)
+                {
+                    value += item.Record.Evening2Sf.Value;
                     count++;
                 }
             }
@@ -355,14 +399,24 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.MorningStk.HasValue && item.Record.MorningStk.Value > 0)
+                if (item.Record.Morning1Stk.HasValue && item.Record.Morning1Stk.Value > 0)
                 {
-                    value += item.Record.MorningStk.Value;
+                    value += item.Record.Morning1Stk.Value;
                     count++;
                 }
-                if (item.Record.EveningStk.HasValue && item.Record.EveningStk.Value > 0)
+                if (item.Record.Morning2Stk.HasValue && item.Record.Morning2Stk.Value > 0)
                 {
-                    value += item.Record.EveningStk.Value;
+                    value += item.Record.Morning2Stk.Value;
+                    count++;
+                }
+                if (item.Record.Evening1Stk.HasValue && item.Record.Evening1Stk.Value > 0)
+                {
+                    value += item.Record.Evening1Stk.Value;
+                    count++;
+                }
+                if (item.Record.Evening2Stk.HasValue && item.Record.Evening2Stk.Value > 0)
+                {
+                    value += item.Record.Evening2Stk.Value;
                     count++;
                 }
             }
@@ -379,14 +433,24 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.MorningDtk.HasValue && item.Record.MorningDtk.Value > 0)
+                if (item.Record.Morning1Dtk.HasValue && item.Record.Morning1Dtk.Value > 0)
                 {
-                    value += item.Record.MorningDtk.Value;
+                    value += item.Record.Morning1Dtk.Value;
                     count++;
                 }
-                if (item.Record.EveningDtk.HasValue && item.Record.EveningDtk.Value > 0)
+                if (item.Record.Morning2Dtk.HasValue && item.Record.Morning2Dtk.Value > 0)
                 {
-                    value += item.Record.EveningDtk.Value;
+                    value += item.Record.Morning2Dtk.Value;
+                    count++;
+                }
+                if (item.Record.Evening1Dtk.HasValue && item.Record.Evening1Dtk.Value > 0)
+                {
+                    value += item.Record.Evening1Dtk.Value;
+                    count++;
+                }
+                if (item.Record.Evening2Dtk.HasValue && item.Record.Evening2Dtk.Value > 0)
+                {
+                    value += item.Record.Evening2Dtk.Value;
                     count++;
                 }
             }
@@ -403,14 +467,24 @@ else
             int count = 0;
             foreach (var item in DayRecords!)
             {
-                if (item.Record.MorningSf.HasValue && item.Record.MorningSf.Value > 0)
+                if (item.Record.Morning1Sf.HasValue && item.Record.Morning1Sf.Value > 0)
                 {
-                    value += item.Record.MorningSf.Value;
+                    value += item.Record.Morning1Sf.Value;
                     count++;
                 }
-                if (item.Record.EveningSf.HasValue && item.Record.EveningSf.Value > 0)
+                if (item.Record.Morning2Sf.HasValue && item.Record.Morning2Sf.Value > 0)
                 {
-                    value += item.Record.EveningSf.Value;
+                    value += item.Record.Morning2Sf.Value;
+                    count++;
+                }
+                if (item.Record.Evening1Sf.HasValue && item.Record.Evening1Sf.Value > 0)
+                {
+                    value += item.Record.Evening1Sf.Value;
+                    count++;
+                }
+                if (item.Record.Evening2Sf.HasValue && item.Record.Evening2Sf.Value > 0)
+                {
+                    value += item.Record.Evening2Sf.Value;
                     count++;
                 }
             }
@@ -441,140 +515,278 @@ else
         public event EventHandler? PropertyChanged;
 
         public string DayNumber { get => $"Deň {Record.DayNumber}"; }
-        public bool MorningPressureUnknown
+        public bool Morning1PressureUnknown
         {
-            get => Record.MorningPressureUnknown;
+            get => Record.Morning1PressureUnknown;
             set
             {
-                if (Record.MorningPressureUnknown != value)
+                if (Record.Morning1PressureUnknown != value)
                 {
-                    Record.MorningPressureUnknown = value;
+                    Record.Morning1PressureUnknown = value;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        public bool MorningPulseUnknown
+        public bool Morning1PulseUnknown
         {
-            get => Record.MorningPulseUnknown;
+            get => Record.Morning1PulseUnknown;
             set
             {
-                if (Record.MorningPulseUnknown != value)
+                if (Record.Morning1PulseUnknown != value)
                 {
-                    Record.MorningPulseUnknown = value;
+                    Record.Morning1PulseUnknown = value;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        public string MorningStk
+        public string Morning1Stk
         {
-            get => Record?.MorningStk?.ToString() ?? string.Empty;
+            get => Record?.Morning1Stk?.ToString() ?? string.Empty;
             set
             {
                 int? newValue = null;
                 if (int.TryParse(value, out var parsed))
                     newValue = parsed;
-                if (Record.MorningStk != newValue)
+                if (Record.Morning1Stk != newValue)
                 {
-                    Record.MorningStk = newValue;
+                    Record.Morning1Stk = newValue;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        public string MorningDtk
+        public string Morning1Dtk
         {
-            get => Record?.MorningDtk?.ToString() ?? string.Empty;
+            get => Record?.Morning1Dtk?.ToString() ?? string.Empty;
             set
             {
                 int? newValue = null;
                 if (int.TryParse(value, out var parsed))
                     newValue = parsed;
-                if (Record.MorningDtk != newValue)
+                if (Record.Morning1Dtk != newValue)
                 {
-                    Record.MorningDtk = newValue;
+                    Record.Morning1Dtk = newValue;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        public string MorningSf
+        public string Morning1Sf
         {
-            get => Record?.MorningSf?.ToString() ?? string.Empty;
+            get => Record?.Morning1Sf?.ToString() ?? string.Empty;
             set
             {
                 int? newValue = null;
                 if (int.TryParse(value, out var parsed))
                     newValue = parsed;
-                if (Record.MorningSf != newValue)
+                if (Record.Morning1Sf != newValue)
                 {
-                    Record.MorningSf = newValue;
+                    Record.Morning1Sf = newValue;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        public bool EveningPressureUnknown
+        public bool Morning2PressureUnknown
         {
-            get => Record.EveningPressureUnknown;
+            get => Record.Morning2PressureUnknown;
             set
             {
-                if (Record.EveningPressureUnknown != value)
+                if (Record.Morning2PressureUnknown != value)
                 {
-                    Record.EveningPressureUnknown = value;
+                    Record.Morning2PressureUnknown = value;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        public bool EveningPulseUnknown
+        public bool Morning2PulseUnknown
         {
-            get => Record.EveningPulseUnknown;
+            get => Record.Morning2PulseUnknown;
             set
             {
-                if (Record.EveningPulseUnknown != value)
+                if (Record.Morning2PulseUnknown != value)
                 {
-                    Record.EveningPulseUnknown = value;
+                    Record.Morning2PulseUnknown = value;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        public string EveningStk
+        public string Morning2Stk
         {
-            get => Record?.EveningStk?.ToString() ?? string.Empty;
-            set
-            {
-                int? newValue = null;
-                if (int.TryParse(value, out var parsed))
-                    newValue = parsed;
-                if (Record.EveningStk != newValue)
-                {
-                    Record.EveningStk = newValue;
-                    PropertyChanged?.Invoke(this, EventArgs.Empty);
-                }
-            }
-        }
-        public string EveningDtk
-        {
-            get => Record?.EveningDtk?.ToString() ?? string.Empty;
+            get => Record?.Morning2Stk?.ToString() ?? string.Empty;
             set
             {
                 int? newValue = null;
                 if (int.TryParse(value, out var parsed))
                     newValue = parsed;
-                if (Record.EveningDtk != newValue)
+                if (Record.Morning2Stk != newValue)
                 {
-                    Record.EveningDtk = newValue;
+                    Record.Morning2Stk = newValue;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-        public string EveningSf
+        public string Morning2Dtk
         {
-            get => Record?.EveningSf?.ToString() ?? string.Empty;
+            get => Record?.Morning2Dtk?.ToString() ?? string.Empty;
             set
             {
                 int? newValue = null;
                 if (int.TryParse(value, out var parsed))
                     newValue = parsed;
-                if (Record.EveningSf != newValue)
+                if (Record.Morning2Dtk != newValue)
                 {
-                    Record.EveningSf = newValue;
+                    Record.Morning2Dtk = newValue;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public string Morning2Sf
+        {
+            get => Record?.Morning2Sf?.ToString() ?? string.Empty;
+            set
+            {
+                int? newValue = null;
+                if (int.TryParse(value, out var parsed))
+                    newValue = parsed;
+                if (Record.Morning2Sf != newValue)
+                {
+                    Record.Morning2Sf = newValue;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public bool Evening1PressureUnknown
+        {
+            get => Record.Evening1PressureUnknown;
+            set
+            {
+                if (Record.Evening1PressureUnknown != value)
+                {
+                    Record.Evening1PressureUnknown = value;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public bool Evening1PulseUnknown
+        {
+            get => Record.Evening1PulseUnknown;
+            set
+            {
+                if (Record.Evening1PulseUnknown != value)
+                {
+                    Record.Evening1PulseUnknown = value;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public string Evening1Stk
+        {
+            get => Record?.Evening1Stk?.ToString() ?? string.Empty;
+            set
+            {
+                int? newValue = null;
+                if (int.TryParse(value, out var parsed))
+                    newValue = parsed;
+                if (Record.Evening1Stk != newValue)
+                {
+                    Record.Evening1Stk = newValue;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public string Evening1Dtk
+        {
+            get => Record?.Evening1Dtk?.ToString() ?? string.Empty;
+            set
+            {
+                int? newValue = null;
+                if (int.TryParse(value, out var parsed))
+                    newValue = parsed;
+                if (Record.Evening1Dtk != newValue)
+                {
+                    Record.Evening1Dtk = newValue;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public string Evening1Sf
+        {
+            get => Record?.Evening1Sf?.ToString() ?? string.Empty;
+            set
+            {
+                int? newValue = null;
+                if (int.TryParse(value, out var parsed))
+                    newValue = parsed;
+                if (Record.Evening1Sf != newValue)
+                {
+                    Record.Evening1Sf = newValue;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public bool Evening2PressureUnknown
+        {
+            get => Record.Evening2PressureUnknown;
+            set
+            {
+                if (Record.Evening2PressureUnknown != value)
+                {
+                    Record.Evening2PressureUnknown = value;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public bool Evening2PulseUnknown
+        {
+            get => Record.Evening2PulseUnknown;
+            set
+            {
+                if (Record.Evening2PulseUnknown != value)
+                {
+                    Record.Evening2PulseUnknown = value;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public string Evening2Stk
+        {
+            get => Record?.Evening2Stk?.ToString() ?? string.Empty;
+            set
+            {
+                int? newValue = null;
+                if (int.TryParse(value, out var parsed))
+                    newValue = parsed;
+                if (Record.Evening2Stk != newValue)
+                {
+                    Record.Evening2Stk = newValue;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public string Evening2Dtk
+        {
+            get => Record?.Evening2Dtk?.ToString() ?? string.Empty;
+            set
+            {
+                int? newValue = null;
+                if (int.TryParse(value, out var parsed))
+                    newValue = parsed;
+                if (Record.Evening2Dtk != newValue)
+                {
+                    Record.Evening2Dtk = newValue;
+                    PropertyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+        public string Evening2Sf
+        {
+            get => Record?.Evening2Sf?.ToString() ?? string.Empty;
+            set
+            {
+                int? newValue = null;
+                if (int.TryParse(value, out var parsed))
+                    newValue = parsed;
+                if (Record.Evening2Sf != newValue)
+                {
+                    Record.Evening2Sf = newValue;
                     PropertyChanged?.Invoke(this, EventArgs.Empty);
                 }
             }

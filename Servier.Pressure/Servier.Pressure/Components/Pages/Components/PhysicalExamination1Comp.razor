@@ -213,7 +213,7 @@ else
                         <Template>
                             <div style="display: flex; align-items: center;">
                                 <DxMaskedInput @bind-Value="@Albumin" Mask="999.9" />
-                                <span style="margin-left: 5px;">mmol/l</span>
+                                <span style="margin-left: 5px;">g/l</span>
                             </div>
                         </Template>
                     </DxFormLayoutItem>
@@ -224,7 +224,7 @@ else
                         <Template>
                             <div style="display: flex; align-items: center;">
                                 <DxMaskedInput @bind-Value="@Creatinine" Mask="999.9" />
-                                <span style="margin-left: 5px;">mmol/l</span>
+                                <span style="margin-left: 5px;">μmo/l</span>
                             </div>
                         </Template>
                     </DxFormLayoutItem>
@@ -366,7 +366,16 @@ else
             }
         }
     }
-    private string BMI { get => (PhysicalExamination!.Weight / ((PhysicalExamination!.Height / 100) * (PhysicalExamination!.Height / 100))).ToString("F2") + " kg/m2"; }
+    private string BMI
+    {
+        get
+        {
+            if (PhysicalExamination?.Height == 0)
+                return "0 kg/m2";
+            else
+                return (PhysicalExamination!.Weight / ((PhysicalExamination!.Height / 100) * (PhysicalExamination!.Height / 100))).ToString("F2") + " kg/m2";
+        }
+    }
     private string Waist
     {
         get => PhysicalExamination?.Waist.ToString() ?? string.Empty;

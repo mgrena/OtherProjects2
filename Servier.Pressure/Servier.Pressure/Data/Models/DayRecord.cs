@@ -17,27 +17,49 @@ public class DayRecord
     [Column("day_num")]
     public required int DayNumber { get; set; } = 1;
 
-    [Column("measurement_1_pressure")]
-    public bool MorningPressureUnknown { get; set; } = false;
-    [Column("measurement_1_pulse")]
-    public bool MorningPulseUnknown { get; set; } = false;
-    [Column("measurement_1_stk")]
-    public int? MorningStk { get; set; }
-    [Column("measurement_1_dtk")]
-    public int? MorningDtk { get; set; }
-    [Column("measurement_1_sf")]
-    public int? MorningSf { get; set; }
+    [Column("morning_1_pressure")]
+    public bool Morning1PressureUnknown { get; set; } = false;
+    [Column("morning_1_pulse")]
+    public bool Morning1PulseUnknown { get; set; } = false;
+    [Column("morning_1_stk")]
+    public int? Morning1Stk { get; set; }
+    [Column("morning_1_dtk")]
+    public int? Morning1Dtk { get; set; }
+    [Column("morning_1_sf")]
+    public int? Morning1Sf { get; set; }
 
-    [Column("measurement_2_pressure")]
-    public bool EveningPressureUnknown { get; set; } = false;
-    [Column("measurement_2_pulse")]
-    public bool EveningPulseUnknown { get; set; } = false;
-    [Column("measurement_2_stk")]
-    public int? EveningStk { get; set; }
-    [Column("measurement_2_dtk")]
-    public int? EveningDtk { get; set; }
-    [Column("measurement_2_sf")]
-    public int? EveningSf { get; set; }
+    [Column("morning_2_pressure")]
+    public bool Morning2PressureUnknown { get; set; } = false;
+    [Column("morning_2_pulse")]
+    public bool Morning2PulseUnknown { get; set; } = false;
+    [Column("morning_2_stk")]
+    public int? Morning2Stk { get; set; }
+    [Column("morning_2_dtk")]
+    public int? Morning2Dtk { get; set; }
+    [Column("morning_2_sf")]
+    public int? Morning2Sf { get; set; }
+
+    [Column("evening_1_pressure")]
+    public bool Evening1PressureUnknown { get; set; } = false;
+    [Column("evening_1_pulse")]
+    public bool Evening1PulseUnknown { get; set; } = false;
+    [Column("evening_1_stk")]
+    public int? Evening1Stk { get; set; }
+    [Column("evening_1_dtk")]
+    public int? Evening1Dtk { get; set; }
+    [Column("evening_1_sf")]
+    public int? Evening1Sf { get; set; }
+
+    [Column("evening_2_pressure")]
+    public bool Evening2PressureUnknown { get; set; } = false;
+    [Column("evening_2_pulse")]
+    public bool Evening2PulseUnknown { get; set; } = false;
+    [Column("evening_2_stk")]
+    public int? Evening2Stk { get; set; }
+    [Column("evening_2_dtk")]
+    public int? Evening2Dtk { get; set; }
+    [Column("evening_2_sf")]
+    public int? Evening2Sf { get; set; }
 
     [Column("modified_at")]
     public required DateTime ModifiedAt { get; set; } = DateTime.Now;

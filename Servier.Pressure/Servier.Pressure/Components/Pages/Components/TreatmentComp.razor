@@ -60,7 +60,7 @@
                         <DxComboBox Data="@GetTreatmentMonotherapyDrugs(rowItem.Monotherapy)" @bind-Value="@rowItem.DrugId" TextFieldName="Name" ValueFieldName="Id" SelectedItemChanged="@((TreatmentMonotherapyDrug drug) => OnMonotherapyDrugChanged(drug, rowItem))" />
                     </CellEditTemplate>
                 </DxGridDataColumn>
-                <DxGridDataColumn FieldName="DrugId" Width="@AldosteroneAntagonistWidth" MinWidth="0">
+                <DxGridDataColumn FieldName="DrugId" Caption="antagonista aldosterónu" Width="@AldosteroneAntagonistWidth" MinWidth="0">
                     <CellDisplayTemplate Context="gridContext">
                         @{
                             var rowItem = (TreatmentMonotherapy)gridContext.DataItem;
