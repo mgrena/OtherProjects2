@@ -123,6 +123,12 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         return result;
     }
 
+    public async Task<List<TreatmentDyslipidemiaDrug>> GetTreatmentDyslipidemiaDrugsAsync(string patientId)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await aContext.TreatmentDyslipidemiaDrugs.Where(i => i.PatientId == patientId).ToListAsync();
+    }
     public async Task<List<TreatmentMonotherapy>> GetTreatmentMonotherapiesAsync(string patientId, VisitEnum visitNum)
     {
         using var scope = _scopeFactory.CreateScope();
@@ -299,9 +305,11 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             DemographyHistory.DiagnosisICHSInfarction = demographyhistory.DiagnosisICHSInfarction;
             DemographyHistory.DiagnosisICHSAngina = demographyhistory.DiagnosisICHSAngina;
             DemographyHistory.DiagnosisICHSAngiography = demographyhistory.DiagnosisICHSAngiography;
-            DemographyHistory.DiagnosisICHSAngiographyType = demographyhistory.DiagnosisICHSAngiographyType;
+            DemographyHistory.DiagnosisICHSAngiographyAngiography = demographyhistory.DiagnosisICHSAngiographyAngiography;
+            DemographyHistory.DiagnosisICHSAngiographyCT = demographyhistory.DiagnosisICHSAngiographyCT;
             DemographyHistory.DiagnosisICHSRevascularization = demographyhistory.DiagnosisICHSRevascularization;
-            DemographyHistory.DiagnosisICHSRevascularizationType = demographyhistory.DiagnosisICHSRevascularizationType;
+            DemographyHistory.DiagnosisICHSRevascularizationPCI = demographyhistory.DiagnosisICHSRevascularizationPCI;
+            DemographyHistory.DiagnosisICHSRevascularizationCABG = demographyhistory.DiagnosisICHSRevascularizationCABG;
             DemographyHistory.DiagnosisHeartFailure = demographyhistory.DiagnosisHeartFailure;
             DemographyHistory.DiagnosisFibrillation = demographyhistory.DiagnosisFibrillation;
             DemographyHistory.DiagnosisStroke = demographyhistory.DiagnosisStroke;
@@ -564,6 +572,41 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         }
     }
 
+    public async Task<OperationResult> SaveTreatmentDyslipidemiaDrugsAsync(string patientId, IEnumerable<int> selectedIds)
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var existEntries = await aContext.TreatmentDyslipidemiaDrugs.Where(i => i.PatientId == patientId).ToListAsync();
+        _logger.LogInformation("The TreatmentDyslipidemiaDrugs for patient {patient} have been updated.", patientId);
+
+        List<int> oldItems = [];
+        foreach (var entry in existEntries)
+        {
+            if (selectedIds.Contains(entry.Id))
+            { 
+                oldItems.Add(entry.Id);
+                entry.CreatedAt = DateTime.Now;
+            }
+            else
+                aContext.TreatmentDyslipidemiaDrugs.Remove(entry);
+        }
+        foreach (var entry in selectedIds)
+        {
+            if (!oldItems.Contains(entry))
+                aContext.TreatmentDyslipidemiaDrugs.Add(new() { PatientId = patientId, DrugId = entry, CreatedAt = DateTime.Now });
+        }
+
+        try
+        {
+            await aContext.SaveChangesAsync();
+            return OperationResult.SuccessResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return OperationResult.FailureResult("Pri ukladaní údajov došlo k neočakávanej chybe.", ex.Message);
+        }
+    }
     public async Task<OperationResult> SaveTreatmentMonotherapyAsync(TreatmentMonotherapy entry)
     {
         using var scope = _scopeFactory.CreateScope();

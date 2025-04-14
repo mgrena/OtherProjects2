@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Servier.Pressure.Data;
 
@@ -11,9 +12,11 @@ using Servier.Pressure.Data;
 namespace Servier.Pressure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250414112949_DemographyHistoryRework1")]
+    partial class DemographyHistoryRework1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2043,34 +2046,6 @@ namespace Servier.Pressure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("treatments_before");
-                });
-
-            modelBuilder.Entity("Servier.Pressure.Data.Models.TreatmentDyslipidemiaDrug", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
-
-                    b.Property<int>("DrugId")
-                        .HasColumnType("int")
-                        .HasColumnName("id_drug");
-
-                    b.Property<string>("PatientId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar")
-                        .HasColumnName("id_patient");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("treatment_dyslipidemia_drugs");
                 });
 
             modelBuilder.Entity("Servier.Pressure.Data.Models.TreatmentMonotherapy", b =>

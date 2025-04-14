@@ -81,18 +81,24 @@ else
                         <DxCheckBox @bind-Checked="@DiagnosisICHSAngina">angina pectoris</DxCheckBox>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1" BeginRow="true" Visible="@DiagnosisICHS" />
-                    <DxFormLayoutItem ColSpanMd="5" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS">
+                    <DxFormLayoutItem ColSpanMd="5" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS" CssClass="align-top">
                         <DxCheckBox @bind-Checked="@DiagnosisICHSAngiography">pozitívny angiografický nález(y)</DxCheckBox>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@IsAngiopraphy">
-                        <DxComboBox Data="@AngiographyOptions" @bind-Value="@DiagnosisICHSAngiographyType" TextFieldName="DisplayText" ValueFieldName="Value" />
+                        <Template>
+                            <DxCheckBox @bind-Checked="@DiagnosisICHSAngiographyAngiography">koronárna angiografia</DxCheckBox>
+                            <DxCheckBox @bind-Checked="@DiagnosisICHSAngiographyCT">počítačová tomografia (CT)</DxCheckBox>
+                        </Template>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem ColSpanMd="1" CaptionCssClass="caption-styleH1" BeginRow="true" Visible="@DiagnosisICHS" />
-                    <DxFormLayoutItem ColSpanMd="5" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS">
+                    <DxFormLayoutItem ColSpanMd="5" CaptionCssClass="caption-styleH1" Visible="@DiagnosisICHS" CssClass="align-top">
                         <DxCheckBox @bind-Checked="@DiagnosisICHSRevascularization">predchádzajúca re-vaskularizácia</DxCheckBox>
                     </DxFormLayoutItem>
                     <DxFormLayoutItem Caption="prosím špecifikujte" ColSpanMd="6" CaptionCssClass="caption-styleH1" Visible="@IsRevascularization">
-                        <DxComboBox Data="@RevascularizationOptions" @bind-Value="@DiagnosisICHSRevascularizationType" TextFieldName="DisplayText" ValueFieldName="Value" />
+                        <Template>
+                            <DxCheckBox @bind-Checked="@DiagnosisICHSRevascularizationPCI">perkutánna koronárna intervencia (PCI)</DxCheckBox>
+                            <DxCheckBox @bind-Checked="@DiagnosisICHSRevascularizationCABG">by-pass koronárnej artérie (CABG)</DxCheckBox>
+                        </Template>
                     </DxFormLayoutItem>
 
                     <DxFormLayoutItem ColSpanMd="12" CaptionCssClass="caption-styleH1">
@@ -150,14 +156,6 @@ else
     private List<Option<EducationEnum>> EducationOptions => Enum.GetValues(typeof(EducationEnum))
         .Cast<EducationEnum>()
         .Select(e => new Option<EducationEnum> { Value = e, DisplayText = e.GetAttribute<DisplayAttribute>()?.Name ?? e.ToString() })
-        .ToList();
-    private List<Option<AngiographyEnum>> AngiographyOptions => Enum.GetValues(typeof(AngiographyEnum))
-        .Cast<AngiographyEnum>()
-        .Select(e => new Option<AngiographyEnum> { Value = e, DisplayText = e.GetAttribute<DisplayAttribute>()?.Name ?? e.ToString() })
-        .ToList();
-    private List<Option<RevascularizationEnum>> RevascularizationOptions => Enum.GetValues(typeof(RevascularizationEnum))
-        .Cast<RevascularizationEnum>()
-        .Select(e => new Option<RevascularizationEnum> { Value = e, DisplayText = e.GetAttribute<DisplayAttribute>()?.Name ?? e.ToString() })
         .ToList();
     private List<Option<KidneyDiseaseEnum>> KidneyDiseaseOptions => Enum.GetValues(typeof(KidneyDiseaseEnum))
         .Cast<KidneyDiseaseEnum>()
@@ -439,14 +437,26 @@ else
             }
         }
     }
-    private AngiographyEnum DiagnosisICHSAngiographyType
+    private bool DiagnosisICHSAngiographyAngiography
     {
-        get => DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyType;
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyAngiography;
         set
         {
-            if (DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyType != value)
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyAngiography != value)
             {
-                DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyType = value;
+                DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyAngiography = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisICHSAngiographyCT
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyCT;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyCT != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHSAngiographyCT = value;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }
@@ -463,14 +473,26 @@ else
             }
         }
     }
-    private RevascularizationEnum DiagnosisICHSRevascularizationType
+    private bool DiagnosisICHSRevascularizationPCI
     {
-        get => DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationType;
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationPCI;
         set
         {
-            if (DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationType != value)
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationPCI != value)
             {
-                DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationType = value;
+                DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationPCI = value;
+                InvokeAsync(OnFieldChangedAsync);
+            }
+        }
+    }
+    private bool DiagnosisICHSRevascularizationCABG
+    {
+        get => DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationCABG;
+        set
+        {
+            if (DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationCABG != value)
+            {
+                DemographyHistoryQuestionaire!.DiagnosisICHSRevascularizationCABG = value;
                 InvokeAsync(OnFieldChangedAsync);
             }
         }

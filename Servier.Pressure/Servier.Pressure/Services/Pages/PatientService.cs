@@ -29,7 +29,7 @@ public class PatientService(ApplicationDbContext context, AuthenticationStatePro
             patients = await _context.Patients
                 .Where(p => p.DeletedAt == null && p.UserId == userId)
                 .OrderBy(p => p.Valid == Patient.ValidEnum.Predčasne_vylúčený)
-                .ThenByDescending(p => p.CreatedAt)
+                .ThenBy(p => p.PatientCode)
                 .ToListAsync();
         }
         else if (user.IsInRole("Admin"))
@@ -38,7 +38,7 @@ public class PatientService(ApplicationDbContext context, AuthenticationStatePro
             patients = await _context.Patients
                .Where(p => p.DeletedAt == null)
                .OrderBy(p => p.Valid == Patient.ValidEnum.Predčasne_vylúčený)
-               .ThenByDescending(p => p.CreatedAt)
+               .ThenBy(p => p.PatientCode)
                .ToListAsync();
         }
         else

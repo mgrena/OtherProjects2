@@ -24,6 +24,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     // introduction
     public DbSet<InformedConsentCompetence> InformedConsentCompetences { get; set; }
     public DbSet<TreatmentBefore> TreatmentsBefore { get; set; }
+    public DbSet<TreatmentDyslipidemiaDrug> TreatmentDyslipidemiaDrugs { get; set; }
     // first visit
     public DbSet<Treatment1Visit> Treatments1Visit { get; set; }
     public DbSet<DemographyHistory> DemographyHistories { get; set; }

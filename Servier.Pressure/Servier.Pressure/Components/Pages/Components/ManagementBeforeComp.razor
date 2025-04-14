@@ -21,7 +21,9 @@ else
         <DxFormLayout CssClass="w-100">
             <DxFormLayoutGroup Caption="Manažment dyslipidémie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
                 <DxFormLayoutItem Caption="Farmakoterapia dyslipidémie" ColSpanMd="12" CaptionCssClass="caption-styleH1">
-                    <DxComboBox Data="@DyslipidemiaDrugs" @bind-Value="@DiagnosisDyslipidemiaDrug" TextFieldName="Name" ValueFieldName="Id" />
+                    <DxListBox Data="@DyslipidemiaDrugs" TextFieldName="Name" ValueFieldName="Id" SelectionMode="ListBoxSelectionMode.Multiple"
+                               ShowCheckboxes="true" @bind-Values="@SelectedDrugIds">
+                    </DxListBox>
                 </DxFormLayoutItem>
             </DxFormLayoutGroup>
             <DxFormLayoutGroup Caption="Manažment artériovej hypertenzie" ColSpanMd="12" CaptionCssClass="caption-styleH0">
@@ -47,6 +49,7 @@ else
 
     private TreatmentBefore? TreatmentBefore { get; set; }
     private IEnumerable<DyslipidemiaDrug> DyslipidemiaDrugs { get; set; } = [];
+    private List<int> DiagnosisDyslipidemiaDrugIds = [];
     private string? Message;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -54,12 +57,19 @@ else
         if (firstRender)
         {
             AppState.TreatmentChanged = true;
+            // list of stored DyslipidemiaDrugs
             DyslipidemiaDrugs = await QuestionnaireService.GetDyslipidemiaDrugsAsync();
+            // load treatment object
             var entity = await QuestionnaireService.GetTreatmentBeforeAsync(patientId);
             if (entity != null)
                 TreatmentBefore = entity;
             else
                 TreatmentBefore = new() { Id = patientId, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+
+            // load DyslipidemiaDrugs for this treatment
+            var drugs = await QuestionnaireService.GetTreatmentDyslipidemiaDrugsAsync(patientId);
+            DiagnosisDyslipidemiaDrugIds = drugs.Select(i => i.DrugId).ToList();
+
             await InvokeAsync(StateHasChanged);
         }
     }
@@ -86,6 +96,28 @@ else
         // Await the timer to avoid CS1998 warning
         await Task.CompletedTask;
     }
+    private System.Timers.Timer? debounceDyslipidemiaTimer;
+    private async Task OnDyslipidemiaChangedAsync()
+    {
+        // Ak existuje starý timer, zastaviť ho
+        debounceDyslipidemiaTimer?.Stop();
+
+        // Nový timer na 1 sekundu
+        debounceDyslipidemiaTimer = new System.Timers.Timer(1000);
+        debounceDyslipidemiaTimer.AutoReset = false;
+        debounceDyslipidemiaTimer.Elapsed += async (s, e) =>
+        {
+            var result = await QuestionnaireService.SaveTreatmentDyslipidemiaDrugsAsync(patientId, DiagnosisDyslipidemiaDrugIds);
+            if (!result.Success)
+                Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
+            else
+                ModifyToast();
+        };
+        debounceDyslipidemiaTimer.Start();
+
+        // Await the timer to avoid CS1998 warning
+        await Task.CompletedTask;
+    }
 
     private int DiagnosisDyslipidemiaDrug
     {
@@ -97,6 +129,15 @@ else
                 TreatmentBefore!.DiagnosisDyslipidemiaDrug = value;
                 InvokeAsync(OnFieldChangedAsync);
             }
+        }
+    }
+    private IEnumerable<int> SelectedDrugIds
+    {
+        get => DiagnosisDyslipidemiaDrugIds;
+        set
+        {
+            DiagnosisDyslipidemiaDrugIds = value.ToList();
+            InvokeAsync(OnDyslipidemiaChangedAsync);
         }
     }
     private bool GeneralPractitioner

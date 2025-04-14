@@ -23,22 +23,6 @@ public enum EducationEnum
     university = 3
 }
 
-public enum AngiographyEnum
-{
-    [Display(Name = "koronárna angiografia")]
-    angiography = 1,
-    [Display(Name = "počítačová tomografia (CT)")]
-    ct = 2
-}
-
-public enum RevascularizationEnum
-{
-    [Display(Name = "perkutánna koronárna intervencia (PCI)")]
-    pci = 1,
-    [Display(Name = "by-pass koronárnej artérie (CABG)")]
-    cabg = 2
-}
-
 public enum KidneyDiseaseEnum
 {
     [Display(Name = "G1 (GF ≥ 90 ml/min / 1.73 m2)")]
@@ -105,12 +89,16 @@ public class DemographyHistory
     public bool DiagnosisICHSAngina { get; set; } = false;
     [Column("diag_ICHS_angiography")]
     public bool DiagnosisICHSAngiography { get; set; } = false;
-    [Column("diag_ICHS_angiography_type")]
-    public AngiographyEnum DiagnosisICHSAngiographyType { get; set; } = 0;
+    [Column("diag_ICHS_angiography_angiography")]
+    public bool DiagnosisICHSAngiographyAngiography { get; set; } = false;
+    [Column("diag_ICHS_angiography_ct")]
+    public bool DiagnosisICHSAngiographyCT { get; set; } = false;
     [Column("diag_ICHS_revascularization")]
     public bool DiagnosisICHSRevascularization { get; set; } = false;
-    [Column("diag_ICHS_revascularization_type")]
-    public RevascularizationEnum DiagnosisICHSRevascularizationType { get; set; } = 0;
+    [Column("diag_ICHS_revascularization_pci")]
+    public bool DiagnosisICHSRevascularizationPCI { get; set; } = false;
+    [Column("diag_ICHS_revascularization_cabg")]
+    public bool DiagnosisICHSRevascularizationCABG { get; set; } = false;
     [Column("diag_failure")]
     public bool DiagnosisHeartFailure { get; set; } = false;
     [Column("diag_fibrillation")]
