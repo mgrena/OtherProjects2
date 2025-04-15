@@ -490,21 +490,6 @@
         if (MonotherapyGrid is DxGrid grid)
             await grid.CancelEditAsync();
 
-        // for diuretic check if is aldosterone antagonist and show/hide column
-        if (therapyUpdated.Monotherapy == MonotherapyEnum.Diuretic && therapyUpdated.DrugId == 36)
-        {
-            AldosteroneAntagonistWidth = "20%";
-            therapyOrig.IsAldosteroneAntagonist = true;
-            await InvokeAsync(StateHasChanged);
-            return;
-        }
-        else if (therapyOrig.Monotherapy == MonotherapyEnum.Diuretic && therapyOrig.DrugId == 36)
-        {
-            AldosteroneAntagonistWidth = "0";
-            therapyOrig.IsAldosteroneAntagonist = false;
-            await InvokeAsync(StateHasChanged);
-        }
-
         await UpdateMonotherapyData(therapyUpdated);
         await LoadMonotherapyData();
     }
@@ -535,6 +520,8 @@
 
         var therapyOrig = TreatmentMonotherapies.First(i => i.Monotherapy == monotherapy.Monotherapy);
         therapyOrig.DrugId = drug.Id;
+        therapyOrig.IsAldosteroneAntagonist = (monotherapy.Monotherapy == MonotherapyEnum.Diuretic && drug.Id == 36);
+        AldosteroneAntagonistWidth = (monotherapy.Monotherapy == MonotherapyEnum.Diuretic && drug.Id == 36) ? "20%" : "0";
         await InvokeAsync(StateHasChanged);
     }
 
@@ -678,32 +665,30 @@
         TreatmentMonotherapies.Clear();
         var monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, visitNum);
 
-        // for new visit get previous visit data
-        if (!monotherapies.Any() && visitNum != VisitEnum.before)
-        {
-            VisitEnum aPreviousNum = (VisitEnum)((int)visitNum - 1);
-            monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, aPreviousNum);
-            // save this data set to current visit
-            foreach (var item in monotherapies)
-            {
-                item.Id = 0;
-                item.VisitNumber = visitNum;
-                await QuestionnaireService.SaveTreatmentMonotherapyAsync(item);
-            }
-        }
-
         // prepare datasource
         bool isAldosteroneAntagonist = false;
         foreach (MonotherapyEnum item in Enum.GetValues(typeof(MonotherapyEnum)))
         {
-            var monotherapy = monotherapies.FirstOrDefault(i => i.Monotherapy == item);
-            if (monotherapy == null)
-                monotherapy = new TreatmentMonotherapy { PatientId = patientId, VisitNumber = visitNum, Monotherapy = item, IsAldosteroneAntagonist = false, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
-            else if (monotherapy.IsAldosteroneAntagonist)
-                isAldosteroneAntagonist = true;
+            // in the case of others there may be more entries
+            if (item != MonotherapyEnum.Other)
+            {
+                var monotherapy = monotherapies.FirstOrDefault(i => i.Monotherapy == item);
+                if (monotherapy == null)
+                    monotherapy = new TreatmentMonotherapy { PatientId = patientId, VisitNumber = visitNum, Monotherapy = item, IsAldosteroneAntagonist = false, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+                else if (monotherapy.IsAldosteroneAntagonist)
+                    isAldosteroneAntagonist = true;
 
-            TreatmentMonotherapies.Add(monotherapy);
+                TreatmentMonotherapies.Add(monotherapy);
+            }
         }
+        // add others
+        foreach (var entry in monotherapies.Where(i => i.Monotherapy == MonotherapyEnum.Other))
+        {
+            TreatmentMonotherapies.Add(entry);
+        }
+        var other = new TreatmentMonotherapy { PatientId = patientId, VisitNumber = visitNum, Monotherapy = MonotherapyEnum.Other, IsAldosteroneAntagonist = false, IsUnknown = false, CreatedAt = DateTime.Now, ModifiedAt = DateTime.Now };
+        TreatmentMonotherapies.Add(other);
+
         if (isAldosteroneAntagonist)
             AldosteroneAntagonistWidth = "20%";
 
@@ -742,20 +727,6 @@
         TreatmentWithHypolypedidemic.Clear();
 
         var therapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, visitNum);
-
-        // for new visit get previous visit data
-        if (!therapies.Any() && visitNum != VisitEnum.before)
-        {
-            VisitEnum aPreviousNum = (VisitEnum)((int)visitNum - 1);
-            therapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, aPreviousNum);
-            // save this data set to current visit
-            foreach (var item in therapies)
-            {
-                item.Id = 0;
-                item.VisitNumber = visitNum;
-                await QuestionnaireService.SaveTreatmentMultitherapyAsync(item);
-            }
-        }
 
         // prepare Antihypertensive2 datasource
         var therapy = therapies.FirstOrDefault(i => i.Multitherapy == MultitherapyEnum.Antihypertensive2);

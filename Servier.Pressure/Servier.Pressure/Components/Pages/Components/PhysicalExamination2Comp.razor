@@ -118,7 +118,7 @@ else
                         <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
                         <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
                         <DxFormLayoutItem Caption="Priemerný tlak krvi" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@AmbulatoryMeasurementStk / @AmbulatoryMeasurementDtk mmHg</span></DxFormLayoutItem>
-                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">autom. počítaný</span></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">z meraní č. 2 a 3</span></DxFormLayoutItem>
                         <DxFormLayoutItem Caption="Priemerný pulz" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@AmbulatoryMeasurementSf úderov za minútu</span></DxFormLayoutItem>
                         <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">z meraní č. 2 a 3</span></DxFormLayoutItem>
                     </DxFormLayoutGroup>
@@ -215,7 +215,7 @@ else
                         <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1"></DxFormLayoutItem>
                         <DxFormLayoutItem ColSpanMd="12" CssClass="form-separator"><Template><hr /></Template></DxFormLayoutItem>
                         <DxFormLayoutItem Caption="Priemerný tlak krvi" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@BorrowedMeasurementStk / @BorrowedMeasurementDtk mmHg</span></DxFormLayoutItem>
-                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">autom. počítaný</span></DxFormLayoutItem>
+                        <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">z meraní č. 2 a 3</span></DxFormLayoutItem>
                         <DxFormLayoutItem Caption="Priemerný pulz" ColSpanMd="8" CaptionCssClass="caption-styleH1-blue long-caption"><span style="color:#6e7de8;">@BorrowedMeasurementSf úderov za minútu</span></DxFormLayoutItem>
                         <DxFormLayoutItem Caption="" ColSpanMd="4" CaptionCssClass="caption-styleH1-blue"><span style="color:#6e7de8;">z meraní č. 2 a 3</span></DxFormLayoutItem>
                     </DxFormLayoutGroup>
@@ -462,9 +462,42 @@ else
             }
         }
     }
-    private string AmbulatoryMeasurementStk { get => ((PhysicalExamination!.AmbulatoryMeasurement1Stk + PhysicalExamination!.AmbulatoryMeasurement2Stk + PhysicalExamination!.AmbulatoryMeasurement3Stk) / 3m).ToString("F2"); }
-    private string AmbulatoryMeasurementDtk { get => ((PhysicalExamination!.AmbulatoryMeasurement1Dtk + PhysicalExamination!.AmbulatoryMeasurement2Dtk + PhysicalExamination!.AmbulatoryMeasurement3Dtk) / 3m).ToString("F2"); }
-    private string AmbulatoryMeasurementSf { get => ((PhysicalExamination!.AmbulatoryMeasurement2Sf + PhysicalExamination!.AmbulatoryMeasurement3Sf) / 2m).ToString("F2"); }
+    private string AmbulatoryMeasurementStk
+    {
+        get
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement2Stk != 0 && PhysicalExamination!.AmbulatoryMeasurement3Stk != 0)
+                return ((PhysicalExamination!.AmbulatoryMeasurement2Stk + PhysicalExamination!.AmbulatoryMeasurement3Stk) / 2m).ToString("F2");
+            else if (PhysicalExamination!.AmbulatoryMeasurement2Stk != 0)
+                return PhysicalExamination!.AmbulatoryMeasurement2Stk.ToString("F2");
+            else
+                return PhysicalExamination!.AmbulatoryMeasurement3Stk.ToString("F2");
+        }
+    }
+    private string AmbulatoryMeasurementDtk
+    {
+        get
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement2Dtk != 0 && PhysicalExamination!.AmbulatoryMeasurement3Dtk != 0)
+                return ((PhysicalExamination!.AmbulatoryMeasurement2Dtk + PhysicalExamination!.AmbulatoryMeasurement3Dtk) / 2m).ToString("F2");
+            else if (PhysicalExamination!.AmbulatoryMeasurement2Dtk != 0)
+                return PhysicalExamination!.AmbulatoryMeasurement2Dtk.ToString("F2");
+            else
+                return PhysicalExamination!.AmbulatoryMeasurement3Dtk.ToString("F2");
+        }
+    }
+    private string AmbulatoryMeasurementSf
+    {
+        get
+        {
+            if (PhysicalExamination!.AmbulatoryMeasurement2Sf != 0 && PhysicalExamination!.AmbulatoryMeasurement3Sf != 0)
+                return ((PhysicalExamination!.AmbulatoryMeasurement2Sf + PhysicalExamination!.AmbulatoryMeasurement3Sf) / 2m).ToString("F2");
+            else if (PhysicalExamination!.AmbulatoryMeasurement2Sf != 0)
+                return PhysicalExamination!.AmbulatoryMeasurement2Sf.ToString("F2");
+            else
+                return PhysicalExamination!.AmbulatoryMeasurement3Sf.ToString("F2");
+        }
+    }
 
     private bool BorrowedMonitor
     {
@@ -662,9 +695,42 @@ else
             }
         }
     }
-    private string BorrowedMeasurementStk { get => ((PhysicalExamination!.BorrowedMeasurement1Stk + PhysicalExamination!.BorrowedMeasurement2Stk + PhysicalExamination!.BorrowedMeasurement3Stk) / 3m).ToString("F2"); }
-    private string BorrowedMeasurementDtk { get => ((PhysicalExamination!.BorrowedMeasurement1Dtk + PhysicalExamination!.BorrowedMeasurement2Dtk + PhysicalExamination!.BorrowedMeasurement3Dtk) / 3m).ToString("F2"); }
-    private string BorrowedMeasurementSf { get => ((PhysicalExamination!.BorrowedMeasurement2Sf + PhysicalExamination!.BorrowedMeasurement3Sf) / 2m).ToString("F2"); }
+    private string BorrowedMeasurementStk
+    {
+        get
+        {
+            if (PhysicalExamination!.BorrowedMeasurement2Stk != 0 && PhysicalExamination!.BorrowedMeasurement3Stk != 0)
+                return ((PhysicalExamination!.BorrowedMeasurement2Stk + PhysicalExamination!.BorrowedMeasurement3Stk) / 2m).ToString("F2");
+            else if (PhysicalExamination!.BorrowedMeasurement2Stk != 0)
+                return PhysicalExamination!.BorrowedMeasurement2Stk.ToString("F2");
+            else
+                return PhysicalExamination!.BorrowedMeasurement3Stk.ToString("F2");
+        }
+    }
+    private string BorrowedMeasurementDtk
+    {
+        get
+        {
+            if (PhysicalExamination!.BorrowedMeasurement2Dtk != 0 && PhysicalExamination!.BorrowedMeasurement3Dtk != 0)
+                return ((PhysicalExamination!.BorrowedMeasurement2Dtk + PhysicalExamination!.BorrowedMeasurement3Dtk) / 2m).ToString("F2");
+            else if (PhysicalExamination!.BorrowedMeasurement2Dtk != 0)
+                return PhysicalExamination!.BorrowedMeasurement2Dtk.ToString("F2");
+            else
+                return PhysicalExamination!.BorrowedMeasurement3Dtk.ToString("F2");
+        }
+    }
+    private string BorrowedMeasurementSf
+    {
+        get
+        {
+            if (PhysicalExamination!.BorrowedMeasurement2Sf != 0 && PhysicalExamination!.BorrowedMeasurement3Sf != 0)
+                return ((PhysicalExamination!.BorrowedMeasurement2Sf + PhysicalExamination!.BorrowedMeasurement3Sf) / 2m).ToString("F2");
+            else if (PhysicalExamination!.BorrowedMeasurement2Sf != 0)
+                return PhysicalExamination!.BorrowedMeasurement2Sf.ToString("F2");
+            else
+                return PhysicalExamination!.BorrowedMeasurement3Sf.ToString("F2");
+        }
+    }
 
     private void ModifyToast()
     {

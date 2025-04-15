@@ -1,0 +1,33 @@
+﻿@inject HttpClient Http
+@implements IDisposable
+
+@* <h1>KeepAliveComp loaded!</h1> *@
+
+@code {
+    private Timer? _timer;
+
+    protected override Task OnInitializedAsync()
+    {
+        // Spusti keep-alive každých 50 sekúnd
+        _timer = new Timer(async _ =>
+        {
+            // Spusti HTTP volanie v Blazor synchronizačnom kontexte
+            _ = InvokeAsync(async () =>
+            {
+                try
+                {
+                    Console.WriteLine($"[{DateTime.Now}] Sending keep-alive...");
+                    await Http.GetAsync("/keep-alive");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Keep-alive failed: {ex.Message}");
+                }
+            });
+        }, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10)); // prvé oneskorenie 10s
+
+        return Task.CompletedTask;
+    }
+
+    public void Dispose() => _timer?.Dispose();
+}

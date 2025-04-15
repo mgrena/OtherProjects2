@@ -1,4 +1,6 @@
-﻿@implements IDisposable
+﻿@using Servier.Pressure.Components.Pages.Components
+
+@implements IDisposable
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 
@@ -40,6 +42,7 @@
             </div>
             <div class="p-4">
                 @Body
+                <KeepAliveComp />
             </div>
         </DrawerTarget>
     </Drawer>
