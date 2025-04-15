@@ -183,7 +183,12 @@ else
         // Ak existuje starý timer, zastaviť ho
         debounceTimer?.Stop();
 
-        // Nový timer na 1 sekundu
+        if (DemographyHistoryQuestionaire!.Age >= 1900 && DemographyHistoryQuestionaire!.Age < 2025
+                && (DemographyHistoryQuestionaire!.DiagnosisYearUnknown || DemographyHistoryQuestionaire!.DiagnosisYear >= 1900 && DemographyHistoryQuestionaire!.DiagnosisYear < 2025)
+                && (DemographyHistoryQuestionaire!.TreatmentYearUnknown || DemographyHistoryQuestionaire!.TreatmentYear >= 1900 && DemographyHistoryQuestionaire!.TreatmentYear < 2025))
+            Message = null;
+
+    // Nový timer na 1 sekundu
         debounceTimer = new System.Timers.Timer(1000);
         debounceTimer.AutoReset = false;
         debounceTimer.Elapsed += async (s, e) =>
@@ -220,6 +225,8 @@ else
             int newValue = 0;
             if (int.TryParse(value, out var parsed))
                 newValue = parsed;
+            if (newValue < 1900 || newValue > 2024)
+                Message = "Chyba: rok narodenia je uvedený v nesprávnom formáte";
             if (DemographyHistoryQuestionaire!.Age != newValue)
             {
                 DemographyHistoryQuestionaire!.Age = newValue;
@@ -259,6 +266,10 @@ else
             int newValue = 0;
             if (int.TryParse(value, out var parsed))
                 newValue = parsed;
+            if (newValue < 1901 && !DemographyHistoryQuestionaire!.DiagnosisYearUnknown)
+                Message = "Chyba: nie je zadaný rok stanovenia diagnózy";
+            else if (newValue > 2024 && !DemographyHistoryQuestionaire!.DiagnosisYearUnknown)
+                Message = "Chyba: pacienti majú mať už min. 1 rok liečenú hypertenziu (zaraďovacie kritérium)";
             if (DemographyHistoryQuestionaire!.DiagnosisYear != newValue)
             {
                 DemographyHistoryQuestionaire!.DiagnosisYear = newValue;
@@ -273,6 +284,8 @@ else
         {
             if (DemographyHistoryQuestionaire!.DiagnosisYearUnknown != value)
             {
+                if (!value && (DemographyHistoryQuestionaire!.DiagnosisYear < 1900 || DemographyHistoryQuestionaire!.DiagnosisYear > 2024))
+                    Message = "Chyba: rok stanovenia diagnózy je uvedený v nesprávnom formáte";
                 DemographyHistoryQuestionaire!.DiagnosisYearUnknown = value;
                 InvokeAsync(OnFieldChangedAsync);
             }
@@ -286,6 +299,10 @@ else
             int newValue = 0;
             if (int.TryParse(value, out var parsed))
                 newValue = parsed;
+            if (newValue < 1901 && !DemographyHistoryQuestionaire!.TreatmentYearUnknown)
+                Message = "Chyba: nie je zadaný rok zahájenia liečby";
+            else if (newValue > 2024 && !DemographyHistoryQuestionaire!.TreatmentYearUnknown)
+                Message = "Chyba: pacienti majú mať už min. 1 rok liečenú hypertenziu (zaraďovacie kritérium)";
             if (DemographyHistoryQuestionaire!.TreatmentYear != newValue)
             {
                 DemographyHistoryQuestionaire!.TreatmentYear = newValue;
@@ -300,6 +317,8 @@ else
         {
             if (DemographyHistoryQuestionaire!.TreatmentYearUnknown != value)
             {
+                if (!value && (DemographyHistoryQuestionaire!.TreatmentYear < 1900 || DemographyHistoryQuestionaire!.TreatmentYear > 2024))
+                    Message = "Chyba: rok zahájenia liečby je uvedený v nesprávnom formáte";
                 DemographyHistoryQuestionaire!.TreatmentYearUnknown = value;
                 InvokeAsync(OnFieldChangedAsync);
             }
