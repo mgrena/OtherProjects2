@@ -21,17 +21,17 @@ public class TreatmentMultitherapy
     public MultitherapyEnum Multitherapy { get; set; }
 
     [Column("dose_1")]
-    public int Dose1 { get; set; } = 0;
+    public decimal Dose1 { get; set; } = 0;
     [Column("dose_2")]
-    public int Dose2 { get; set; } = 0;
+    public decimal Dose2 { get; set; } = 0;
     [Column("dose_3")]
-    public int Dose3 { get; set; } = 0;
+    public decimal Dose3 { get; set; } = 0;
     [Column("number_morning")]
-    public int NumberMorning { get; set; } = 0;
+    public decimal NumberMorning { get; set; } = 0;
     [Column("number_noon")]
-    public int NumberNoon { get; set; } = 0;
+    public decimal NumberNoon { get; set; } = 0;
     [Column("number_evening")]
-    public int NumberEvening { get; set; } = 0;
+    public decimal NumberEvening { get; set; } = 0;
     [Column("is_unknown")]
     public required bool IsUnknown { get; set; } = false;
 

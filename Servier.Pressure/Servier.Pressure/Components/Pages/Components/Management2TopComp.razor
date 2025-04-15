@@ -72,23 +72,16 @@ else
         debounceTimer.AutoReset = false;
         debounceTimer.Elapsed += async (s, e) =>
         {
-            bool oldValue = false;
-            bool newValue = false;
             // read entity
             var entity = await QuestionnaireService.GetTreatment2VisitAsync(patientId);
             if (entity != null)
             {
-                oldValue = entity.IsChanged;
-                newValue = Treatment2Visit!.IsChanged;
                 entity.IsChanged = Treatment2Visit!.IsChanged;
                 entity.ChangeDate = Treatment2Visit!.ChangeDate;
                 entity.IsChangeDateUnknown = Treatment2Visit!.IsChangeDateUnknown;
             }
             else
-            {
                 entity = Treatment2Visit;
-                oldValue = newValue = Treatment2Visit!.IsChanged;
-            }
 
             // save entity change
             var result = await QuestionnaireService.SaveTreatment2VisitAsync(entity!);
@@ -96,49 +89,47 @@ else
                 Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else
                 ModifyToast();
-
-            // update treatments
-            if (oldValue != newValue)
-            {
-                if (newValue)
-                {
-                    // copy treatment data from first visit
-                    var monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, VisitEnum.first);
-                    if (!monotherapies.Any())
-                        monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, VisitEnum.before);
-                    foreach (var item in monotherapies)
-                    {
-                        item.Id = 0;
-                        item.VisitNumber = VisitEnum.second;
-                        await QuestionnaireService.SaveTreatmentMonotherapyAsync(item);
-                    }
-                    var multitherapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, VisitEnum.first);
-                    if (!multitherapies.Any())
-                        multitherapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, VisitEnum.before);
-                    foreach (var item in multitherapies)
-                    {
-                        item.Id = 0;
-                        item.VisitNumber = VisitEnum.second;
-                        await QuestionnaireService.SaveTreatmentMultitherapyAsync(item);
-                    }
-                }
-                else
-                {
-                    // clear treatment data
-                    var monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, VisitEnum.second);
-                    foreach (var item in monotherapies)
-                        await QuestionnaireService.DeleteTreatmentMonotherapyAsync(item);
-                    var multitherapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, VisitEnum.second);
-                    foreach (var item in multitherapies)
-                        await QuestionnaireService.DeleteTreatmentMultitherapyAsync(item);
-                }
-                AppState.TreatmentChanged = newValue;
-            }
         };
         debounceTimer.Start();
 
         // Await the timer to avoid CS1998 warning
         await Task.CompletedTask;
+    }
+    private async Task UpdateTreatmentsAsync(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            // copy treatment data from first visit
+            var monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, VisitEnum.first);
+            if (!monotherapies.Any())
+                monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, VisitEnum.before);
+            foreach (var item in monotherapies)
+            {
+                item.Id = 0;
+                item.VisitNumber = VisitEnum.second;
+                await QuestionnaireService.SaveTreatmentMonotherapyAsync(item);
+            }
+            var multitherapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, VisitEnum.first);
+            if (!multitherapies.Any())
+                multitherapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, VisitEnum.before);
+            foreach (var item in multitherapies)
+            {
+                item.Id = 0;
+                item.VisitNumber = VisitEnum.second;
+                await QuestionnaireService.SaveTreatmentMultitherapyAsync(item);
+            }
+        }
+        else
+        {
+            // clear treatment data
+            var monotherapies = await QuestionnaireService.GetTreatmentMonotherapiesAsync(patientId, VisitEnum.second);
+            foreach (var item in monotherapies)
+                await QuestionnaireService.DeleteTreatmentMonotherapyAsync(item);
+            var multitherapies = await QuestionnaireService.GetTreatmentMultitherapiesAsync(patientId, VisitEnum.second);
+            foreach (var item in multitherapies)
+                await QuestionnaireService.DeleteTreatmentMultitherapyAsync(item);
+        }
+        AppState.TreatmentChanged = newValue;
     }
 
     private string CurrentChange
@@ -146,11 +137,13 @@ else
         get => (Treatment2Visit!.IsChanged) ? "áno, prosím špecifikujte dátum zmeny a užívanú liečbu" : "nie";
         set
         {
+            bool orgiValue = Treatment2Visit!.IsChanged;
             bool isChanged = value == "áno, prosím špecifikujte dátum zmeny a užívanú liečbu";
-            if (Treatment2Visit!.IsChanged != isChanged)
+            if (orgiValue != isChanged)
             {
                 Treatment2Visit!.IsChanged = isChanged;
-                InvokeAsync(OnFieldChangedAsync);
+                _ = InvokeAsync(OnFieldChangedAsync);
+                _ = InvokeAsync(() => UpdateTreatmentsAsync(orgiValue, isChanged));
             }
         }
     }

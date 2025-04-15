@@ -30,13 +30,13 @@ public class TreatmentMonotherapy
     public required bool IsAldosteroneAntagonist { get; set; } = false;
 
     [Column("dose")]
-    public int Dose { get; set; } = 0;
+    public decimal Dose { get; set; } = 0;
     [Column("number_morning")]
-    public int NumberMorning { get; set; } = 0;
+    public decimal NumberMorning { get; set; } = 0;
     [Column("number_noon")]
-    public int NumberNoon { get; set; } = 0;
+    public decimal NumberNoon { get; set; } = 0;
     [Column("number_evening")]
-    public int NumberEvening { get; set; } = 0;
+    public decimal NumberEvening { get; set; } = 0;
     [Column("is_unknown")]
     public required bool IsUnknown { get; set; } = false;
 

@@ -18,7 +18,7 @@ public enum EvaluationEnum
 }
 public enum TerminationReasonEnum
 {
-    [Display(Name = "---")]
+    [Display(Name = "vyberte jednu z možností")]
     none = 0,
     [Display(Name = "subjekt neprišiel na Návštevu 2")]
     notcome = 1,
