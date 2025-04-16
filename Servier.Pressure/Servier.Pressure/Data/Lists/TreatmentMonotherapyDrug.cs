@@ -15,8 +15,10 @@ public enum MonotherapyEnum
     BetaBlocker = 4,
     [Display(Name = "diuretikum")]
     Diuretic = 5,
+    [Display(Name = "antagonista aldosterónu")]
+    AldosteroneAntagonist = 6,
     [Display(Name = "iné")]
-    Other = 6
+    Other = 7
 }
 
 [Table("list_treatment_monotherapy_drugs")]
@@ -28,8 +30,6 @@ public class TreatmentMonotherapyDrug
 
     [Column("monotherapy")]
     public required MonotherapyEnum Monotherapy { get; set; }
-    [Column("is_aldosterone_antagonist")]
-    public required bool IsAldosteroneAntagonist { get; set; } = false;
     [Column("order_number")]
     public required int Order { get; set; } = 0;
     [Column("drug", TypeName = "nvarchar"), StringLength(255)]

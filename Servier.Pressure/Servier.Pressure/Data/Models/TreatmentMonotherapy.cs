@@ -26,8 +26,6 @@ public class TreatmentMonotherapy
     public int DrugId { get; set; } = 0;
     [Column("monotherapy")]
     public MonotherapyEnum Monotherapy { get; set; }
-    [Column("is_aldosterone_antagonist")]
-    public required bool IsAldosteroneAntagonist { get; set; } = false;
 
     [Column("dose")]
     public decimal Dose { get; set; } = 0;

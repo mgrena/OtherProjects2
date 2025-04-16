@@ -106,7 +106,7 @@ public class UserService(UserManager<ApplicationUser> userManager, RoleManager<I
                 "<p>V prípade akýchkoľvek otázok alebo problémov s registráciou nás neváhajte kontaktovať na telefónnom čísle +421 948 634 336. Radi Vám pomôžeme.<br>" +
                 "Ďakujeme za Vašu účasť a tešíme sa na spoluprácu.</p>" +
                 "<p>S pozdravom,<br>Váš tím podpory</p></body></html>", HtmlEncoder.Default.Encode(callbackUrl));
-            await eSender.SendEmailAsync(user.UserName!, "Pozvanka k ucasti na projekte o Parkinsonovej chorobe", body);
+            await eSender.SendEmailAsync(user.UserName!, "Pozvanka k ucasti na projekte DMTK 2025", body);
         }
 
         //await _emailSender.SendConfirmationLinkAsync(dummyUser, user.UserName!, HtmlEncoder.Default.Encode(callbackUrl));

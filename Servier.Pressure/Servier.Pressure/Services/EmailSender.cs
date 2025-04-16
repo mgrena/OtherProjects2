@@ -25,7 +25,7 @@ public class EmailSender(IOptions<SmtpOptions> optionsAccessor, ILogger<EmailSen
         string confirmationLink) => SendEmailAsync(email, "domacemonitorovanietlakukrvi.sk overenie e-mail adresy",
         $"<!DOCTYPE html><html><body><p>Dobrý deň,</p>" +
             $"<p>Prijali sme žiadosť o potvrdenie e-mail adresy pre váš účet na stránke <a href='https://www.domacemonitorovanietlakukrvi.sk/' style='color: blue; text-decoration: underline;'>domacemonitorovanietlakukrvi.sk</a> " +
-            $"spoločnosti Servier Slovensko spol s.r.o.. Tento e-mal Vám prišiel pretože ste boli zaradený/á do projektu DMTK 2025 alebo ste požiadali o znovu odoslanie potvrdenia e-mailom. " +
+            $"spoločnosti Servier Slovensko spol s.r.o.. Tento e-mail Vám prišiel pretože ste boli zaradený/á do projektu DMTK 2025 alebo ste požiadali o znovu odoslanie potvrdenia e-mailom. " +
             $"Ak ste túto požiadavku nevykonali, môžete túto správu ignorovať.</p>" +
             $"<p>E-mail adresu potvrdíte kliknutím na nasledujúci odkaz:</p>" +
             $"<p><a href='{confirmationLink}' style='color: blue; text-decoration: underline;'>Potvrdiť e-mail</a></p>" +

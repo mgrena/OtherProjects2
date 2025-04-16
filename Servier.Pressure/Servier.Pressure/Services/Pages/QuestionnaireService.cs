@@ -192,11 +192,11 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         return await aContext.DyslipidemiaDrugs.OrderBy(i => i.Id).ToListAsync();
     }
-    public async Task<List<TreatmentMonotherapyDrug>> GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum category, bool isAldosteroneAntagonist)
+    public async Task<List<TreatmentMonotherapyDrug>> GetTreatmentMonotherapyDrugsAsync(MonotherapyEnum category)
     {
         using var scope = _scopeFactory.CreateScope();
         var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        return await aContext.TreatmentMonotherapyDrugs.Where(i => i.Monotherapy == category && i.IsAldosteroneAntagonist == isAldosteroneAntagonist).OrderBy(i=> i.Order).ToListAsync();
+        return await aContext.TreatmentMonotherapyDrugs.Where(i => i.Monotherapy == category).OrderBy(i=> i.Order).ToListAsync();
     }
     public async Task<List<TreatmentMultitherapyDrug>> GetTreatmentMultitherapyDrugsAsync()
     {
@@ -621,7 +621,6 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         {
             _logger.LogInformation("The TreatmentMonotherapy {id} for patient {patient} and visit {visit} has been updated.", entry.Id, entry.PatientId, entry.VisitNumber.ToString());
             existEntry.DrugId = entry.DrugId;
-            existEntry.IsAldosteroneAntagonist = entry.IsAldosteroneAntagonist;
             existEntry.Dose = entry.Dose;
             existEntry.NumberMorning = entry.NumberMorning;
             existEntry.NumberNoon = entry.NumberNoon;
