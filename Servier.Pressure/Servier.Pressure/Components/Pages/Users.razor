@@ -59,6 +59,7 @@ else
     CustomizeEditModel="Grid_CustomizeEditModel"
     EditModelSaving="Grid_EditModelSaving"
     DataItemDeleting="Grid_DataItemDeleting"
+    CustomizeElement="Grid_CustomizeElement"
     TextWrapEnabled="false"
     HighlightRowOnHover="true"
     KeyFieldName="Id">
@@ -261,6 +262,20 @@ else
         DeleteToast();
         await UpdateDataAsync();
     }
+    private void Grid_CustomizeElement(GridCustomizeElementEventArgs e)
+    {
+        if (e.ElementType == GridElementType.DataRow)
+        {
+            if (DataSource != null && e.VisibleIndex >= 0 && e.VisibleIndex < DataSource.Count)
+            {
+                var user = Grid.GetDataItem(e.VisibleIndex) as ApplicationUser;
+                if (user != null && user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTimeOffset.UtcNow)
+                {
+                    e.Style = "color:gray;font-style:italic;";
+                }
+            }
+        }
+    }
     private async Task UpdateDataAsync()
     {
         DataSource = await UserService.GetUsersAsync();
@@ -356,7 +371,7 @@ else
         ToastService.ShowToast(new ToastOptions
             {
                 ProviderName = "Overview",
-                Title = "Používateľ bol úspešne odstránený",
+                Title = "Používateľ bol úspešne zablokovaný",
                 ThemeMode = ToastThemeMode.Saturated,
                 RenderStyle = ToastRenderStyle.Success,
             });
