@@ -654,6 +654,8 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         {
             _logger.LogInformation("The TreatmentMultitherapy {id} for patient {patient} and visit {visit} has been updated.", entry.Id, entry.PatientId, entry.VisitNumber.ToString());
             existEntry.DrugId = entry.DrugId;
+            existEntry.IsOther = entry.IsOther;
+            existEntry.Other = entry.Other;
             existEntry.Dose1 = entry.Dose1;
             existEntry.Dose2 = entry.Dose2;
             existEntry.Dose3 = entry.Dose3;

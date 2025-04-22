@@ -19,6 +19,10 @@ public class TreatmentMultitherapy
     public int DrugId { get; set; } = 0;
     [Column("multitherapy")]
     public MultitherapyEnum Multitherapy { get; set; }
+    [Column("is_other")]
+    public bool IsOther { get; set; } = false;
+    [Column("other", TypeName = "nvarchar"), StringLength(250)]
+    public string? Other { get; set; }
 
     [Column("dose_1")]
     public decimal Dose1 { get; set; } = 0;
