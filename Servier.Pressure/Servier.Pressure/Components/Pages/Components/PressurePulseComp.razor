@@ -1,6 +1,7 @@
 ﻿@using Servier.Pressure.Components.Account.Shared
 @using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
+@using Servier.Pressure.Services
 @using Servier.Pressure.Services.Pages
 
 @attribute [StreamRendering(true)]
@@ -8,6 +9,7 @@
 
 @inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
+@inject SurveyProgressService ProgressService
 
 @if (BloodPressureMonitor == null)
 {
@@ -176,7 +178,10 @@ else
             if (!result.Success)
                 Message = $"Chyba: {result.ErrorMessage} {result.AdditionalInfo}";
             else
+            {
                 ModifyToast();
+                ProgressService.UpdateField("IsHomeMonitoring06", true);
+            }
         };
         debouncePETimer.Start();
 
@@ -203,7 +208,10 @@ else
             if (!result.Success)
                 Message = $"Chyba: {result.ErrorMessage} {result.AdditionalInfo}";
             else
+            {
                 ModifyToast();
+                ProgressService.UpdateField("IsHomeMonitoring06", true);
+            }
 
             debounceTimers.Remove(day);
             timer.Dispose();

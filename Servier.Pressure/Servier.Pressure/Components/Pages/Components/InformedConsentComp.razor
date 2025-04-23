@@ -3,6 +3,7 @@
 @using Servier.Pressure.Components.Account.Shared
 @using Servier.Pressure.Data.Models
 @using Servier.Pressure.Helpers
+@using Servier.Pressure.Services
 @using Servier.Pressure.Services.Pages
 
 @attribute [StreamRendering(true)]
@@ -11,6 +12,7 @@
 @inject IToastNotificationService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject QuestionnaireService QuestionnaireService
+@inject SurveyProgressService ProgressService
 
 @if (InformedConsentCompetenceQuestionary == null)
 {
@@ -111,7 +113,10 @@ else
             if (!result.Success)
                 Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else
+            {
                 ModifyToast();
+                ProgressService.UpdateField("IsConsentCompetence01", true);
+            }
         };
         debounceTimer.Start();
 

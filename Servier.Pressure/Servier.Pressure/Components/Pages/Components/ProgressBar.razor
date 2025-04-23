@@ -1,0 +1,25 @@
+﻿@using Servier.Pressure.Services
+
+@inject SurveyProgressService ProgressService
+@implements IDisposable
+
+<br />
+<div class="progress">
+    <div class="progress-bar" style="width:@ProgressService.GetProgressPercent()%">
+        @ProgressService.GetProgressPercent()%
+    </div>
+</div>
+<br />
+
+@code {
+    protected override void OnInitialized()
+    {
+        ProgressService.SetDispatcher(InvokeAsync);
+        ProgressService.OnProgressChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ProgressService.OnProgressChanged -= StateHasChanged;
+    }
+}

@@ -75,6 +75,13 @@
                                     <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" DataRowEditorVisible="false" />
                                 }
                                 <DxGridDataColumn FieldName="Valid" Caption="Stav pacienta" TextAlignment="GridTextAlignment.Center" DataRowEditorVisible="false" />
+                                <DxGridDataColumn>
+                                    <CellDisplayTemplate Context="gridContext">
+                                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                                            <ProgressBarCell ProgressPercentage="@(((Data.Models.Patient)(gridContext.DataItem))?.ProgressPercentage ?? 0)" />
+                                        </div>
+                                    </CellDisplayTemplate>
+                </DxGridDataColumn>
                                 <DxGridCommandColumn Width="80px" Caption="Akcie" NewButtonVisible="false">
                                     <CellDisplayTemplate Context="gridContext">
                                         @{

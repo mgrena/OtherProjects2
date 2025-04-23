@@ -3,6 +3,7 @@
 @using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
 @using Servier.Pressure.Helpers
+@using Servier.Pressure.Services
 @using Servier.Pressure.Services.Pages
 
 @attribute [StreamRendering(true)]
@@ -10,6 +11,7 @@
 
 @inject QuestionnaireService QuestionnaireService
 @inject IToastNotificationService ToastService
+@inject SurveyProgressService ProgressService
 
 @if (Treatment2Visit == null)
 {
@@ -83,7 +85,10 @@ else
             if (!result.Success)
                 Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
             else
+            {
                 ModifyToast();
+                ProgressService.UpdateField("IsVisit205", true);
+            }
         };
         debounceTimer.Start();
 

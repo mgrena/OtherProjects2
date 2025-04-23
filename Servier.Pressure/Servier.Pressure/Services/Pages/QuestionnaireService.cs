@@ -228,6 +228,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             InformedConsentCompetence.IsPregnant = informedconsentcompetence.IsPregnant;
         }
 
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == informedconsentcompetence.Id);
+        if (patient != null)
+        {
+            patient.IsConsentCompetence01 = true;
+            _logger.LogInformation("The progress in IsConsentCompetence01 for patient id {id} has been set.", informedconsentcompetence.Id);
+        }
+
         try
         {
             await aContext.SaveChangesAsync();
@@ -262,6 +269,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.FixCombination3Unknown = entry.FixCombination3Unknown;
             existEntry.FixCombinationMixUnknown = entry.FixCombinationMixUnknown;
             existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.Id);
+        if (patient != null)
+        {
+            patient.IsPreStudyTreatment02 = true;
+            _logger.LogInformation("The progress in IsPreStudyTreatment02 for patient id {id} has been set.", entry.Id);
         }
 
         try
@@ -319,6 +333,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             DemographyHistory.DiagnosisKidneyDType = demographyhistory.DiagnosisKidneyDType;
         }
 
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == demographyhistory.Id);
+        if (patient != null)
+        {
+            patient.IsDemographicsHistory03 = true;
+            _logger.LogInformation("The progress in IsDemographicsHistory03 for patient id {id} has been set.", demographyhistory.Id);
+        }
+
         try
         {
             await aContext.SaveChangesAsync();
@@ -363,6 +384,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.Measurement3Dtk = entry.Measurement3Dtk;
             existEntry.Measurement3Sf = entry.Measurement3Sf;
             existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.Id);
+        if (patient != null)
+        {
+            patient.IsDemographicsHistory03 = true;
+            _logger.LogInformation("The progress in IsDemographicsHistory03 for patient id {id} has been set.", entry.Id);
         }
 
         try
@@ -420,6 +448,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.ModifiedAt = DateTime.Now;
         }
 
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.Id);
+        if (patient != null)
+        {
+            patient.IsVisit205 = true;
+            _logger.LogInformation("The progress in IsVisit205 for patient id {id} has been set.", entry.Id);
+        }
+
         try
         {
             await aContext.SaveChangesAsync();
@@ -461,6 +496,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.ModifiedAt = DateTime.Now;
         }
 
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.Id);
+        if (patient != null)
+        {
+            patient.IsDemographicsHistory03 = true;
+            _logger.LogInformation("The progress in IsDemographicsHistory03 for patient id {id} has been set.", entry.Id);
+        }
+
         try
         {
             await aContext.SaveChangesAsync();
@@ -492,6 +534,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.IsIssuingRecorder = entry.IsIssuingRecorder;
             existEntry.IsPressureGauge = entry.IsPressureGauge;
             existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.Id);
+        if (patient != null)
+        {
+            patient.IsVisit104 = true;
+            _logger.LogInformation("The progress in IsVisit104 for patient id {id} has been set.", entry.Id);
         }
 
         try
@@ -531,6 +580,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.ModifiedAt = DateTime.Now;
         }
 
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.Id);
+        if (patient != null)
+        {
+            patient.IsVisit205 = true;
+            _logger.LogInformation("The progress in IsVisit205 for patient id {id} has been set.", entry.Id);
+        }
+
         try
         {
             await aContext.SaveChangesAsync();
@@ -558,6 +614,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.IsOmronMonitor = entry.IsOmronMonitor;
             existEntry.OmronNumber = entry.OmronNumber;
             existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.Id);
+        if (patient != null)
+        {
+            patient.IsHomeMonitoring06 = true;
+            _logger.LogInformation("The progress in IsHomeMonitoring06 for patient id {id} has been set.", entry.Id);
         }
 
         try
@@ -596,6 +659,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
                 aContext.TreatmentDyslipidemiaDrugs.Add(new() { PatientId = patientId, DrugId = entry, CreatedAt = DateTime.Now });
         }
 
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == patientId);
+        if (patient != null)
+        {
+            patient.IsPreStudyTreatment02 = true;
+            _logger.LogInformation("The progress in IsPreStudyTreatment02 for patient id {id} has been set.", patientId);
+        }
+
         try
         {
             await aContext.SaveChangesAsync();
@@ -627,6 +697,26 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.NumberEvening = entry.NumberEvening;
             existEntry.IsUnknown = entry.IsUnknown;
             existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.PatientId);
+        if (patient != null)
+        {
+            switch (entry.VisitNumber)
+            {
+                case VisitEnum.before:
+                    patient.IsPreStudyTreatment02 = true;
+                    _logger.LogInformation("The progress in IsPreStudyTreatment02 for patient id {id} has been set.", entry.PatientId);
+                    break;
+                case VisitEnum.first:
+                    patient.IsVisit104 = true;
+                    _logger.LogInformation("The progress in IsVisit104 for patient id {id} has been set.", entry.PatientId);
+                    break;
+                case VisitEnum.second:
+                    patient.IsVisit205 = true;
+                    _logger.LogInformation("The progress in IsVisit205 for patient id {id} has been set.", entry.PatientId);
+                    break;
+            }
         }
 
         try
@@ -664,6 +754,26 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.NumberEvening = entry.NumberEvening;
             existEntry.IsUnknown = entry.IsUnknown;
             existEntry.ModifiedAt = DateTime.Now;
+        }
+
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.PatientId);
+        if (patient != null)
+        {
+            switch (entry.VisitNumber)
+            {
+                case VisitEnum.before:
+                    patient.IsPreStudyTreatment02 = true;
+                    _logger.LogInformation("The progress in IsPreStudyTreatment02 for patient id {id} has been set.", entry.PatientId);
+                    break;
+                case VisitEnum.first:
+                    patient.IsVisit104 = true;
+                    _logger.LogInformation("The progress in IsVisit104 for patient id {id} has been set.", entry.PatientId);
+                    break;
+                case VisitEnum.second:
+                    patient.IsVisit205 = true;
+                    _logger.LogInformation("The progress in IsVisit205 for patient id {id} has been set.", entry.PatientId);
+                    break;
+            }
         }
 
         try
@@ -713,6 +823,13 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             existEntry.ModifiedAt = DateTime.Now;
         }
 
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == entry.PatientId);
+        if (patient != null)
+        {
+            patient.IsHomeMonitoring06 = true;
+            _logger.LogInformation("The progress in IsHomeMonitoring06 for patient id {id} has been set.", entry.PatientId);
+        }
+
         try
         {
             await aContext.SaveChangesAsync();
@@ -729,6 +846,7 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         using var scope = _scopeFactory.CreateScope();
         var aContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+        var patient = aContext.Patients.FirstOrDefault(i => i.Id == patientId);
         switch (visitNum)
         {
             case VisitEnum.before:
@@ -738,6 +856,11 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
                     before.FixCombination3Unknown = unknowns.FixCombination3Unknown;
                     before.FixCombinationMixUnknown = unknowns.FixCombinationMixUnknown;
                     _logger.LogInformation("The TreatmentBefore for patient {id} has been updated.", patientId);
+                    if (patient != null)
+                    { 
+                        patient.IsPreStudyTreatment02 = true;
+                        _logger.LogInformation("The progress in IsPreStudyTreatment02 for patient id {id} has been set.", patientId);
+                    }
                 }
                 break;
             case VisitEnum.first:
@@ -747,6 +870,11 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
                     visit1.FixCombination3Unknown = unknowns.FixCombination3Unknown;
                     visit1.FixCombinationMixUnknown = unknowns.FixCombinationMixUnknown;
                     _logger.LogInformation("The Treatment1Visit for patient {id} has been updated.", patientId);
+                    if (patient != null)
+                    {
+                        patient.IsVisit104 = true;
+                        _logger.LogInformation("The progress in IsVisit104 for patient id {id} has been set.", patientId);
+                    }
                 }
                 break;
             case VisitEnum.second:
@@ -756,6 +884,11 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
                     visit2.FixCombination3Unknown = unknowns.FixCombination3Unknown;
                     visit2.FixCombinationMixUnknown = unknowns.FixCombinationMixUnknown;
                     _logger.LogInformation("The Treatment2Visit for patient {id} has been updated.", patientId);
+                    if (patient != null)
+                    {
+                        patient.IsVisit205 = true;
+                        _logger.LogInformation("The progress in IsVisit205 for patient id {id} has been set.", patientId);
+                    }
                 }
                 break;
         }

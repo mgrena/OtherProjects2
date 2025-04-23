@@ -3,6 +3,7 @@
 @using Servier.Pressure.Data.Models
 @using Servier.Pressure.Data.Lists
 @using Servier.Pressure.Helpers
+@using Servier.Pressure.Services
 @using Servier.Pressure.Services.Pages
 
 @attribute [StreamRendering(true)]
@@ -12,6 +13,7 @@
 @inject IToastNotificationService ToastService
 @inject AppState AppState
 @implements IDisposable
+@inject SurveyProgressService ProgressService
 
 @if (@AppState.TreatmentChanged)
 {
@@ -504,7 +506,21 @@
         if (!result.Success)
             Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
         else
+        {
             ModifyToast();
+            switch (visitNum)
+            {
+                case VisitEnum.before:
+                    ProgressService.UpdateField("IsPreStudyTreatment02", true);
+                    break;
+                case VisitEnum.first:
+                    ProgressService.UpdateField("IsVisit104", true);
+                    break;
+                case VisitEnum.second:
+                    ProgressService.UpdateField("IsVisit205", true);
+                    break;
+            }
+        }
     }
 
     private async Task MonotherapyGrid_EditModelSaving(GridEditModelSavingEventArgs e)
@@ -558,7 +574,21 @@
         if (!result.Success)
             Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
         else
+        {
             ModifyToast();
+            switch (visitNum)
+            {
+                case VisitEnum.before:
+                    ProgressService.UpdateField("IsPreStudyTreatment02", true);
+                    break;
+                case VisitEnum.first:
+                    ProgressService.UpdateField("IsVisit104", true);
+                    break;
+                case VisitEnum.second:
+                    ProgressService.UpdateField("IsVisit205", true);
+                    break;
+            }
+        }
         await LoadMultitherapyData();
     }
     private async Task OnAntihypertensive2RowResetClick(TreatmentMultitherapy therapy)
@@ -719,7 +749,21 @@
         if (!result.Success)
             Message = string.Format("Chyba: {0} {1}", result.ErrorMessage, result.AdditionalInfo);
         else
+        {
             ModifyToast();
+            switch (visitNum)
+            {
+                case VisitEnum.before:
+                    ProgressService.UpdateField("IsPreStudyTreatment02", true);
+                    break;
+                case VisitEnum.first:
+                    ProgressService.UpdateField("IsVisit104", true);
+                    break;
+                case VisitEnum.second:
+                    ProgressService.UpdateField("IsVisit205", true);
+                    break;
+            }
+        }
     }
     private string GetMonotherapyText(MonotherapyEnum item)
     {

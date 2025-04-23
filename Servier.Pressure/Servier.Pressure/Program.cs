@@ -35,6 +35,7 @@ builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<WorkplaceService>();
 builder.Services.AddScoped<QuestionnaireService>();
 builder.Services.AddSingleton<AppState>();
+builder.Services.AddSingleton<SurveyProgressService>();
 
 // add authentication
 builder.Services.AddAuthentication(options => {

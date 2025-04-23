@@ -2,9 +2,14 @@
 
 @using Microsoft.AspNetCore.Authorization
 @using Servier.Pressure.Components.Pages.Components
+@using Servier.Pressure.Services
+@using Servier.Pressure.Services.Pages
 
 @attribute [Authorize]
 @rendermode InteractiveServer
+
+@inject PatientService PatientService
+@inject SurveyProgressService ProgressService
 
 <PageTitle>Electronic case report</PageTitle>
 
@@ -25,4 +30,22 @@
 @code {
     [Parameter]
     public required string patientId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ProgressService.Reset();
+
+        var patient = await PatientService.GetPatientByIdAsync(patientId);
+        if (patient != null)
+        {
+            Dictionary<string, bool> fieldStates = [];
+            fieldStates.Add("IsConsentCompetence01", patient.IsConsentCompetence01);
+            fieldStates.Add("IsPreStudyTreatment02", patient.IsPreStudyTreatment02);
+            fieldStates.Add("IsDemographicsHistory03", patient.IsDemographicsHistory03);
+            fieldStates.Add("IsVisit104", patient.IsVisit104);
+            fieldStates.Add("IsVisit205", patient.IsVisit205);
+            fieldStates.Add("IsHomeMonitoring06", patient.IsHomeMonitoring06);
+            ProgressService.LoadFields(fieldStates);
+        }
+    }
 }

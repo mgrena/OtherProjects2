@@ -34,6 +34,19 @@ public class Patient
     [Column("patient", TypeName = "nvarchar"), StringLength(255)]
     public string? PatientName { get; set; }
 
+    [Column("filling_01_info")]
+    public bool IsConsentCompetence01 { get; set; } = false;
+    [Column("filling_02_before")]
+    public bool IsPreStudyTreatment02 { get; set; } = false;
+    [Column("filling_03_demogr")]
+    public bool IsDemographicsHistory03 { get; set; } = false;
+    [Column("filling_04_visit1")]
+    public bool IsVisit104 { get; set; } = false;
+    [Column("filling_05_visit2")]
+    public bool IsVisit205 { get; set; } = false;
+    [Column("filling_06_measure")]
+    public bool IsHomeMonitoring06 { get; set; } = false;
+
     [Column("modified_at")]
     public required DateTime ModifiedAt { get; set; } = DateTime.Now;
 
@@ -45,5 +58,13 @@ public class Patient
 
     [NotMapped]
     public string? Doctor { get; set; }
-
+    [NotMapped]
+    public int ProgressPercentage 
+    {
+        get
+        {
+            var filled = typeof(Patient).GetProperties().Where(p => p.PropertyType == typeof(bool)).Count(p => (bool)p.GetValue(this)!);
+            return (int)((double)filled / 6 * 100);
+        }
+    }
 }
