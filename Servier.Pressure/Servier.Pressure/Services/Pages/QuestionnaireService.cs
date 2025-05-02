@@ -218,6 +218,7 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
         else
         {
             _logger.LogInformation("The informed consent competence with id {id} has been updated.", informedconsentcompetence.Id);
+            InformedConsentCompetence.VisitDate = informedconsentcompetence.VisitDate;
             InformedConsentCompetence.IsConsent = informedconsentcompetence.IsConsent;
             InformedConsentCompetence.IsAdult = informedconsentcompetence.IsAdult;
             InformedConsentCompetence.IsStableHypertension = informedconsentcompetence.IsStableHypertension;
@@ -226,6 +227,7 @@ public class QuestionnaireService(IServiceScopeFactory scopeFactory, ILogger<Que
             InformedConsentCompetence.IsResistantHypertension = informedconsentcompetence.IsResistantHypertension;
             InformedConsentCompetence.IsClinicalTrial = informedconsentcompetence.IsClinicalTrial;
             InformedConsentCompetence.IsPregnant = informedconsentcompetence.IsPregnant;
+            InformedConsentCompetence.ModifiedAt = DateTime.Now;
         }
 
         var patient = aContext.Patients.FirstOrDefault(i => i.Id == informedconsentcompetence.Id);
