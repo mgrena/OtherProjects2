@@ -23,7 +23,7 @@ public class APIClient : IAPIClient
             aClient.ClientCredentials.UserName.Password = Password;
 
             var aTask = await aClient.getProductsAsync();
-            IList<ProductApi> aList = aTask.@return.ToList().Select(i => new ProductApi()
+            IList<ProductApi> aList = [.. aTask.@return.ToList().Select(i => new ProductApi()
             {
                 DistrId = ClientId,
                 ProductIdInt = i.productId,
@@ -34,7 +34,7 @@ public class APIClient : IAPIClient
                 VAT = (decimal)i.VAT,
                 ProducerName = i.supplierId,
                 Available = !i.finished
-            }).ToList();
+            })];
             aResult.RetunObjects.Add(aMethodName, aList);
 
             aClient.Close();
