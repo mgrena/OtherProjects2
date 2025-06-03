@@ -10,15 +10,15 @@ public class LaboratoryTest
     [Column("id", TypeName = "nvarchar"), StringLength(450)]
     public required string Id { get; set; }
 
-    [Column("cholesterol", TypeName = "decimal(4,1)")]
+    [Column("cholesterol", TypeName = "decimal(5,2)")]
     public decimal Cholesterol { get; set; } = 0;
     [Column("cholesterol_unknown")]
     public bool CholesterolUnknown { get; set; } = false;
-    [Column("ldl", TypeName = "decimal(4,1)")]
+    [Column("ldl", TypeName = "decimal(5,2)")]
     public decimal LDL { get; set; } = 0;
     [Column("ldl_unknown")]
     public bool LDLUnknown { get; set; } = false;
-    [Column("hdl", TypeName = "decimal(4,1)")]
+    [Column("hdl", TypeName = "decimal(5,2)")]
     public decimal HDL { get; set; } = 0;
     [Column("hdl_unknown")]
     public bool HDLUnknown { get; set; } = false;

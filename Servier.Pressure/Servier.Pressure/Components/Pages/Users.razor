@@ -268,7 +268,7 @@ else
         {
             if (DataSource != null && e.VisibleIndex >= 0 && e.VisibleIndex < DataSource.Count)
             {
-                var user = Grid.GetDataItem(e.VisibleIndex) as ApplicationUser;
+                var user = Grid!.GetDataItem(e.VisibleIndex) as ApplicationUser;
                 if (user != null && user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTimeOffset.UtcNow)
                 {
                     e.Style = "color:gray;font-style:italic;";
