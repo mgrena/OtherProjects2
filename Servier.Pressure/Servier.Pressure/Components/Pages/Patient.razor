@@ -92,10 +92,10 @@
                                                       RenderStyle="ButtonRenderStyle.Link"
                                                       title="Zobraziť dotazník"
                                                       Click="@(async () => Navigation.NavigateTo($"/questionnaire/1info/{patient.Id}"))" />
-                                            <DxButton IconCssClass="grid-icon grid-icon-delete"
+                                            @* <DxButton IconCssClass="grid-icon grid-icon-delete"
                                                       RenderStyle="ButtonRenderStyle.Link"
                                                       title="Vymazať používateľa"
-                                                      Click="@(() => patientsGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" />
+                                                      Click="@(() => patientsGrid!.ShowRowDeleteConfirmation(gridContext.VisibleIndex))" /> *@
                                         </div>
                                     </CellDisplayTemplate>
                                     <CellEditTemplate Context="editContext">
