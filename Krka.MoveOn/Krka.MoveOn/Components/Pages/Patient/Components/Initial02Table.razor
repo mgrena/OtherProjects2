@@ -129,7 +129,7 @@
         Inits = await InitialService.GetQuestionnaireInitial02(questionnaireId);
         ProgressPercentage = Inits.Count > 0 ? 100 : 0;
         dialActiveIngredient = await InitialService.GetDialActiveIngredientAsync();
-        init_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).OrderBy(d => d.Name).ToList();
+        init_1_Answer = dialActiveIngredient.Where(d => d.Type_q == 1).OrderBy(d => d.Name != "žiadne").ThenBy(d => d.Name).ToList();
 
     }
 

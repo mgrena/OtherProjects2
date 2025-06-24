@@ -183,6 +183,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 9, Indication_id = null, Type_q = 1, Name = "Rotigotín", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 10, Indication_id = null, Type_q = 1, Name = "Apomorfín", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
         modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 11, Indication_id = null, Type_q = 1, Name = "Amantadín", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
+        modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 91, Indication_id = null, Type_q = 1, Name = "žiadne", CreatedAt = new(2025, 6, 24), ModifiedAt = new(2025, 6, 24) });
 
         //news - Poruchy močenia
         modelBuilder.Entity<DialActiveIngredient>().HasData(new DialActiveIngredient() { Id = 12, Indication_id = 1, Type_q = 2, Name = "Solifenacín", CreatedAt = new(2024, 10, 10), ModifiedAt = new(2024, 10, 10) });
