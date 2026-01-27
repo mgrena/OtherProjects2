@@ -217,9 +217,9 @@
             <div class="simple-table" style="border: 1px solid black; border-color: #dfdfdf; border-bottom: none; padding: 10px;">
                 @if (((Data.Patient)SelectedDataItem).GDPRConfirmation && ((Data.Patient)SelectedDataItem).InfoConfirmation)
                 {
-                    @if (hasQuestionnaires)
+                    if (Questionnaires != null && Questionnaires.Any())
                     {
-                        @foreach (var questionnaire in Questionnaires)
+                        foreach (var questionnaire in Questionnaires)
                         {
                             <div style="margin-bottom: 6px;">
                                 <DxMenu Orientation="@Orientation.Horizontal" CollapseItemsToHamburgerMenu="false">
