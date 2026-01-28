@@ -92,7 +92,10 @@
 
             <Columns>
                 <DxGridDataColumn FieldName="PatientCode" Caption="Identifikačný kód pacienta" />
-                <DxGridDataColumn FieldName="CreatedAt" Caption="Vytvorený" />
+                <DxGridDataColumn FieldName="Gen1" Caption="Dátum 1. návštevy" />
+                <DxGridDataColumn FieldName="Date2st" Caption="Dátum 2. návštevy" />
+                <DxGridDataColumn FieldName="Date3st" Caption="Dátum 3. návštevy" />
+
                 @if (isAdminOrOffice || isMultiWorkplace)
                 {
                     <DxGridDataColumn FieldName="Doctor" Caption="Lekár" TextAlignment="GridTextAlignment.Center" />

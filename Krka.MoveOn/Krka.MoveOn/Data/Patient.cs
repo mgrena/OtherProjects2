@@ -61,6 +61,13 @@ namespace Krka.MoveOn.Data
         [Column("result_progress_percentage", TypeName = "int")]
         public int ResultProgressPercentage { get; set; } = 0;
 
+        [NotMapped]
+        public DateTime? Gen1 { get; set; }
 
+        [NotMapped]
+        public DateTime? Date2st { get; set; }
+
+        [NotMapped]
+        public DateTime? Date3st { get; set; }
     }
 }
